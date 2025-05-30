@@ -1,240 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Cooke - Featured Meteorology Research</title>
-    <style>
-        /* Base reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Cooke - Featured Meteorology Research</title>
+  <style>
+    /* Base reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            flex: 1;
-        }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      flex: 1;
+    }
 
-        header {
-            text-align: center;
-            padding: 60px 0 40px;
-            border-bottom: 1px solid #222;
-            margin-bottom: 40px;
-        }
+    header {
+      text-align: center;
+      padding: 60px 0 40px;
+      border-bottom: 1px solid #222;
+      margin-bottom: 40px;
+    }
 
-        header h1 {
-            font-size: 2.5em;
-            font-weight: 300;
-            letter-spacing: -1px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
+    header h1 {
+      font-size: 2.5em;
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
 
-        header h1 a {
-            color: inherit;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
+    header h1 a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
 
-        header .subtitle {
-            color: #888;
-            font-size: 1.1em;
-        }
+    header .subtitle {
+      color: #888;
+      font-size: 1.1em;
+    }
 
-        nav {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-        nav a {
-            color: #ccc;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.1em;
-            padding: 5px 0;
-            border-bottom: 2px solid transparent;
-            transition: color 0.3s, border-bottom-color 0.3s;
-        }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1.1em;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.3s, border-bottom-color 0.3s;
+    }
 
-        nav a:hover, nav a.active {
-            color: #fff;
-            border-bottom-color: #fff;
-        }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
 
-        .content-section {
-            animation: fadeIn 0.8s ease forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+    .content-section {
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
 
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .section-title {
-            font-size: 1.8em;
-            font-weight: 300;
-            color: #fff;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-        }
+    .section-title {
+      font-size: 1.8em;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 15px;
+    }
 
-        .research-list {
-            list-style: none;
-        }
+    .research-list {
+      list-style: none;
+    }
 
-        .research-list li {
-            background: #111;
-            margin-bottom: 20px;
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 3px solid #333;
-            transition: background 0.3s, border-left-color 0.3s;
-        }
+    .research-list li {
+      background: #111;
+      margin-bottom: 20px;
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 3px solid #333;
+      transition: background 0.3s, border-left-color 0.3s;
+      max-width: 100%;
+    }
 
-        .research-list li:hover {
-            background: #151515;
-            border-left-color: #666;
-        }
+    .research-list li:hover {
+      background: #151515;
+      border-left-color: #666;
+    }
 
-        .research-title {
-            font-size: 1.3em;
-            font-weight: 500;
-            color: #fff;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
+    .research-title {
+      font-size: 1.3em;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
 
-        .research-summary {
-            font-size: 1em;
-            color: #ccc;
-            margin-bottom: 15px;
-        }
+    .research-summary {
+      font-size: 1em;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
 
-        .research-link {
-            color: #ccc;
-            text-decoration: none;
-            font-size: 0.9em;
-            border-bottom: 1px solid #444;
-            transition: color 0.3s, border-bottom-color 0.3s;
-            padding: 2px 0;
-        }
+    .research-link {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9em;
+      border-bottom: 1px solid #444;
+      transition: color 0.3s, border-bottom-color 0.3s;
+    }
 
-        .research-link:hover {
-            color: #fff;
-            border-bottom-color: #fff;
-        }
+    .research-link:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
 
-        .research-media {
-            margin-top: 15px;
-        }
+    .research-media {
+      margin-top: 15px;
+    }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-        }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+    }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            color: #666;
-            font-size: 0.9em;
-            border-top: 1px solid #222;
-            margin-top: 80px;
-        }
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+      font-size: 0.9em;
+      border-top: 1px solid #222;
+      margin-top: 80px;
+    }
 
-        footer a {
-            color: #999;
-            text-decoration: none;
-            border-bottom: 1px solid #444;
-            transition: color 0.3s, border-bottom-color 0.3s;
-        }
+    footer a {
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      transition: color 0.3s, border-bottom-color 0.3s;
+    }
 
-        footer a:hover {
-            color: #fff;
-            border-bottom-color: #fff;
-        }
+    footer a:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
 
-        @media (max-width: 768px) {
-            .container { padding: 15px; }
-            header h1 { font-size: 2em; }
-            .section-title { font-size: 1.5em; }
-            .research-list li { padding: 20px; }
-            nav a { margin: 0 8px; font-size: 0.95em; }
-        }
+    @media (max-width: 768px) {
+      .container { padding: 15px; }
+      header h1 { font-size: 2em; }
+      .section-title { font-size: 1.5em; }
+      .research-list li { padding: 20px; }
+      nav a { margin: 0 8px; font-size: 0.95em; }
+    }
 
-        @media (max-width: 480px) {
-            nav a { margin: 0 5px; font-size: 0.85em; }
-            .research-title { font-size: 1.1em; }
-        }
-    </style>
+    @media (max-width: 480px) {
+      nav a { margin: 0 5px; font-size: 0.85em; }
+      .research-title { font-size: 1.1em; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><a href="index.html">Alex Cooke</a></h1>
-            <p class="subtitle">Meteorology Research</p>
-        </div>
-        <nav>
-            <a href="index.html">About</a>
-            <a href="meteorology.html" class="active">Meteorology</a>
-            <a href="music.html">Music</a>
-            <a href="presentations.html">Presentations</a>
-        </nav>
-        <div class="content-section">
-            <h2 class="section-title">Featured Research Projects</h2>
-            <ul class="research-list">
-                <li>
-                    <div class="research-title">Real-time enhanced tornado warning product guidance based on tornado debris signature height and population density</div>
-                    <div class="research-summary">M.S. thesis that uses tornado debris signature height, storm motion vectors, and population data to issue real-time guidance on issuing PDS tornado warnings and tornado emergencies in order to reduce forecaster load in high-stress situations and increase warning accuracy.</div>
-                    <a href="thesis.pdf" class="research-link">Download Thesis (PDF)</a>
-                    <div class="research-media">
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/wXif8tmphe4" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="research-title">Tornado Parameters in the Caribou, ME County Warning Area</div>
-                    <div class="research-summary">Project analyzing tornado occurrence, intensity, and path characteristics in Caribou, Maine, using principal component analysis and regularized regression to overcome challenges posed by a sparse dataset and numerous correlated environmental parameters. The research identifies key meteorological predictors, particularly lower atmospheric conditions like lifting condensation level and critical angle, to enhance operational forecasting accuracy in a northern, low-frequency tornado environment.</div>
-                    <div class="research-media">
-                        <img src="path/to/placeholder.jpg" alt="Placeholder image" style="max-width:100%;border-radius:4px;">
-                    </div>
-                </li>
-                <li>
-                    <div class="research-title">Statistical Analysis of QLCS Tornado Environments in the Memphis County Warning Area</div>
-                    <div class="research-summary">Project analyzing meteorological predictors of quasi-linear convective system (QLCS) tornadoes in the Memphis County Warning Area, employing principal component analysis and regularized regression to handle high-dimensional data from a limited number of events. The research identifies mid-level lapse rates as a key predictor of QLCS tornado frequency.</div>
-                    <div class="research-media">
-                        <img src="path/to/placeholder.jpg" alt="Placeholder image" style="max-width:100%;border-radius:4px;">
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <footer>
-            <p>&copy; 2025 Alex Cooke. All rights reserved.</p>
-        </footer>
+  <div class="container">
+    <header>
+      <h1><a href="index.html">Alex Cooke</a></h1>
+      <p class="subtitle">Meteorology Research</p>
+    </header>
+
+    <nav>
+      <a href="index.html">About</a>
+      <a href="meteorology.html" class="active">Meteorology</a>
+      <a href="music.html">Music</a>
+      <a href="presentations.html">Presentations</a>
+    </nav>
+
+    <div class="content-section">
+      <h2 class="section-title">Featured Research Projects</h2>
+      <ul class="research-list">
+        <li>
+          <div class="research-title">Real-time enhanced tornado warning product guidance based on tornado debris signature height and population density</div>
+          <div class="research-summary">M.S. thesis that uses tornado debris signature height, storm motion vectors, and population data to issue real-time guidance on issuing PDS tornado warnings and tornado emergencies in order to reduce forecaster load in high-stress situations and increase warning accuracy.</div>
+          <a href="thesis.pdf" class="research-link">Download Thesis (PDF)</a>
+          <div class="research-media">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/wXif8tmphe4" allowfullscreen></iframe>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="research-title">Tornado Parameters in the Caribou, ME County Warning Area</div>
+          <div class="research-summary">Project analyzing tornado occurrence, intensity, and path characteristics in Caribou, Maine, using principal component analysis and regularized regression to overcome challenges posed by a sparse dataset and numerous correlated environmental parameters. The research identifies key meteorological predictors, particularly lower atmospheric conditions like lifting condensation level and critical angle, to enhance operational forecasting accuracy in a northern, low-frequency tornado environment.</div>
+          <div class="research-media">
+            <img src="path/to/placeholder.jpg" alt="Placeholder image" style="max-width:100%;border-radius:4px;">
+          </div>
+        </li>
+        <li>
+          <div class="research-title">Statistical Analysis of QLCS Tornado Environments in the Memphis County Warning Area</div>
+          <div class="research-summary">Project analyzing meteorological predictors of quasi-linear convective system (QLCS) tornadoes in the Memphis County Warning Area, employing principal component analysis and regularized regression to handle high-dimensional data from a limited number of events. The research identifies mid-level lapse rates as a key predictor of QLCS tornado frequency.</div>
+          <div class="research-media">
+            <img src="path/to/placeholder.jpg" alt="Placeholder image" style="max-width:100%;border-radius:4px;">
+          </div>
+        </li>
+      </ul>
     </div>
+
+    <footer>
+      <p>&copy; 2025 Alex Cooke. All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 </html>
