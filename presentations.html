@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Cooke - Presentations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 1px solid #222;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        h1 a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        h1 a:hover {
+            opacity: 0.7;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1em;
+        }
+
+        nav {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+            display: inline-block;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .content-section {
+            text-align: left;
+            padding: 40px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 300;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .presentations-list {
+            list-style: none;
+            margin: 30px 0;
+            padding-left: 0;
+        }
+
+        .presentations-list li {
+            background: #111;
+            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 3px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .presentations-list li:hover {
+            background: #151515;
+            border-left-color: #666;
+        }
+
+        .presentation-title {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .presentation-details {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .presentation-description {
+            color: #aaa;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .presentation-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .presentation-link {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.9em;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+            padding: 2px 0;
+        }
+
+        .presentation-link:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .year-group {
+            margin-bottom: 50px;
+        }
+
+        .year-header {
+            font-size: 1.5em;
+            color: #fff;
+            margin-bottom: 25px;
+            font-weight: 400;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #222;
+            margin-top: 100px;
+        }
+
+        footer a {
+            color: #999;
+            text-decoration: none;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 1024px) {
+            nav a {
+                margin: 0 10px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            nav a {
+                margin: 0 8px;
+                font-size: 0.95em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .content-section {
+                padding: 30px 0;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .presentations-list li {
+                padding: 20px;
+            }
+
+            .presentation-title {
+                font-size: 1.1em;
+            }
+
+            .presentation-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                margin: 0 5px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="index.html">Alex Cooke</a></h1>
+            <p class="subtitle">Research</p>
+        </header>
+
+        <nav>
+            <a href="index.html">About</a>
+            <a href="meteorology.html">Meteorology</a>
+            <a href="music.html">Music</a>
+            <a href="presentations.html" class="active">Presentations</a>
+        </nav>
+
+        <div class="content-section">
+            <h2 class="section-title">Major Projects, Publications, Presentations, and Grants</h2>
+            
+            <div class="year-group">
+                <h3 class="year-header">2025</h3>
+                <ul class="presentations-list">
+                    <li>
+                        <div class="presentation-title">Tornado Parameters and Principal Component Analysis in the Caribou, ME County Warning Area</div>
+                        <div class="presentation-details">National Weather Service: Caribou, ME • May 2025</div>
+                        <div class="presentation-description">
+                            Project analyzing tornado occurrence, intensity, and path characteristics in Caribou, Maine, using principal component analysis and regularized regression to overcome challenges posed by a sparse dataset and numerous correlated environmental parameters. The research identifies key meteorological predictors, particularly lower atmospheric conditions like lifting condensation level and critical angle, to enhance operational forecasting accuracy in a northern, low-frequency tornado environment. Project included 60-minute presentation and workshop for forecasters.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Public Transit Accessibility and Equity in Leavenworth, KS: A GIS Assessment</div>
+                        <div class="presentation-details">Mississippi State University • May 2025</div>
+                        <div class="presentation-description">
+                            GIS-based analysis assessing public transit accessibility and equity in Leavenworth, KS, using spatial analysis, demographic overlays, and suitability modeling to identify underserved neighborhoods and optimal locations for transit improvements. Developed custom ArcPy toolboxes and employed advanced geoprocessing workflows to generate actionable insights, supporting urban planning decisions aimed at enhancing equitable transit service coverage.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Real-time enhanced tornado warning product guidance based on tornado debris signature height and population density</div>
+                        <div class="presentation-details">Mississippi State University • March 2025</div>
+                        <div class="presentation-description">
+                            M.S. thesis that uses tornado debris signature height, storm motion vectors, and population data to issue real-time guidance on issues PDS tornado warnings and tornado emergencies in order to reduce forecaster load in high-stress situations and increase warning accuracy.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Statistical Analysis of QLCS Tornado Environments in the Memphis County Warning Area</div>
+                        <div class="presentation-details">National Weather Service: Memphis, TN • March 2025</div>
+                        <div class="presentation-description">
+                            Project analyzing meteorological predictors of quasi-linear convective system (QLCS) tornadoes in the Memphis County Warning Area, employing principal component analysis and regularized regression to handle high-dimensional data from a limited number of events. The research identifies mid-level lapse rates as a key predictor of QLCS tornado frequency, improving model accuracy and providing critical insights for operational forecasting despite inherent analytical challenges. Project included 40-minute presentation.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">2025 American Meteorological Society Annual Meeting Student Grant</div>
+                        <div class="presentation-details">American Meteorological Society • January 2025</div>
+                        <div class="presentation-description">
+                            Received student grant from American Meteorological Society to attend 2025 Annual Meeting and assist presenters with any technical requirements.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="year-group">
+                <h3 class="year-header">2024</h3>
+                <ul class="presentations-list">
+                    <li>
+                        <div class="presentation-title">Examination of Evolution of Growing Season Length in the Spokane, Washington Area</div>
+                        <div class="presentation-details">National Weather Service: Spokane, WA • August 2024</div>
+                        <div class="presentation-description">
+                            Statistical analysis of growing season length evolution in approximately 40 areas in Spokane, Washington area. Project included 30-minute presentation.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Comprehensive Severe Weather Safety Plan</div>
+                        <div class="presentation-details">Cleveland Institute of Music • August 2024</div>
+                        <div class="presentation-description">
+                            Developed and authored a detailed 12-section Severe Weather Safety Plan for an educational institution with 500 occupants, addressing multiple weather threats specific to the Cleveland area and incorporating best practices for emergency preparedness, communication, and response as part of emergency preparedness grant.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">The Impact of Climate Oscillations on Normalized Burn Ratio in the Spokane, Washington Area</div>
+                        <div class="presentation-details">Mississippi State University and National Weather Service: Spokane, WA • July 2024</div>
+                        <div class="presentation-description">
+                            Examination of relationship between large-scale climate oscillations and fire season severity in Spokane, Washington area in order to establish statistical predictors for operational purposes. Project included 30-minute presentation for NWS Spokane Office.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">December 9, 2023 Severe Weather Outbreak Analysis</div>
+                        <div class="presentation-details">Mississippi State University • July 2024</div>
+                        <div class="presentation-description">
+                            15-minute presentation on December 9, 2023 severe weather outbreak with accompanying 15-page paper. Topics included synoptic analysis, parameter analysis, sounding and satellite analysis, and radar analysis.
+                        </div>
+                        <div class="presentation-links">
+                            <a href="https://www.youtube.com/watch?v=ovrGgNiGHdU" target="_blank" class="presentation-link">View Presentation</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Communicating Uncertainty Information in Dynamic Tornado Environments</div>
+                        <div class="presentation-details">Mississippi State University • April 2024</div>
+                        <div class="presentation-description">
+                            15-minute presentation on communication of dynamic tornado warning information in real-time environments for the purposes of maximizing public trust and encouraging correct action.
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Greensburg Tornado Radar Analysis</div>
+                        <div class="presentation-details">Mississippi State University • April 2024</div>
+                        <div class="presentation-description">
+                            12-minute presentation on radar analysis of 2007 Greensburg tornado. Topics included unusual reflectivity characteristics, three-dimensional analysis, velocity analysis, X-Pol data analysis, and use of wide range of radar products to describe meteorological phenomena.
+                        </div>
+                        <div class="presentation-links">
+                            <a href="https://www.youtube.com/watch?v=kp6Mq2Ag9Qg" target="_blank" class="presentation-link">View Presentation</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Crystals of Sound: Applying the Physics of Phase Transitions to Musical Intonation</div>
+                        <div class="presentation-details">Case Western Reserve University and Cleveland Institute of Music • April 2024</div>
+                        <div class="presentation-description">
+                            Co-author of "Crystals of sound: applying the physics of phase transitions to musical intonation" published in Empirical Musicology Review.
+                        </div>
+                        <div class="presentation-links">
+                            <a href="https://doi.org/10.18061/emr.v19i2.9140" target="_blank" class="presentation-link">View Publication</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="year-group">
+                <h3 class="year-header">2023</h3>
+                <ul class="presentations-list">
+                    <li>
+                        <div class="presentation-title">April 1, 2023 Severe Weather Outbreak Analysis</div>
+                        <div class="presentation-details">Mississippi State University • December 2023</div>
+                        <div class="presentation-description">
+                            40-minute presentation on April 1, 2023 severe weather outbreak. Topics included synoptic analysis, parameter analysis, sounding and satellite analysis, and radar analysis.
+                        </div>
+                        <div class="presentation-links">
+                            <a href="https://www.youtube.com/watch?v=RDuhX2KhCkA" target="_blank" class="presentation-link">View Presentation</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="presentation-title">Embracing a Culture of Assessment at an Arts Conservatory</div>
+                        <div class="presentation-details">Indiana University Assessment Institute • October 2023</div>
+                        <div class="presentation-description">
+                            Presentation given at the 2023 IUPUI Assessment Institute on the process of creating a successful structure of assessment-based practices at the Cleveland Institute of Music.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="year-group">
+                <h3 class="year-header">2022</h3>
+                <ul class="presentations-list">
+                    <li>
+                        <div class="presentation-title">Emerging Horizons Initiative</div>
+                        <div class="presentation-details">Case Western Reserve University and Cleveland Institute of Music • April 2022</div>
+                        <div class="presentation-description">
+                            $11,000 grant for investigating connections between physics of phase transition and musical tuning systems. Developed algorithm for stochastic generation of music that culminated in concert and film scoring software. Wrote piece co-composed by algorithm, representing future possibilities of AI-assisted composition.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="year-group">
+                <h3 class="year-header">2017</h3>
+                <ul class="presentations-list">
+                    <li>
+                        <div class="presentation-title">Algorithmic Stochastic Music</div>
+                        <div class="presentation-details">Case Western Reserve University • May 2017</div>
+                        <div class="presentation-description">
+                            M.S. thesis developing an algorithmic stochastic music system using probability-driven harmonic transitions to generate tonally coherent music that can dynamically recognize and shift tonal centers. Employs entropy analysis and stochastic matrices to model harmonic progressions and melodic modulations, enabling applications ranging from automated music composition to analytical tools for music theory and film scoring.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                <a href="mailto:alex.cooke@noaa.gov">alex.cooke@noaa.gov</a>
+                <span style="margin: 0 20px; color: #444;">•</span>
+                <a href="tel:440-867-8470">(440) 867-8470</a>
+                <span style="margin: 0 20px; color: #444;">•</span>
+                <a href="https://www.ametsoc.org" target="_blank">American Meteorological Society</a>
+            </p>
+            <p style="margin-top: 15px;">
+                &copy; 2025 Alex Cooke. All rights reserved.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

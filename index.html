@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Cooke - Research</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 1px solid #222;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        h1 a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        h1 a:hover {
+            opacity: 0.7;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1em;
+        }
+
+        nav {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+            display: inline-block;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .content-section {
+            text-align: left;
+            padding: 40px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 300;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .about-text {
+            font-size: 1.1em;
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .about-text a {
+            color: #ccc;
+            text-decoration: none;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        .about-text a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .presentations-list {
+            list-style: none;
+            margin: 30px 0;
+            padding-left: 0;
+        }
+
+        .presentations-list li {
+            background: #111;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .presentations-list li:hover {
+            background: #151515;
+            border-left-color: #666;
+        }
+
+        .presentation-title {
+            font-size: 1.2em;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .presentation-details {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        .presentation-description {
+            color: #aaa;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .presentation-link {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.9em;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        .presentation-link:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #222;
+            margin-top: 100px;
+        }
+
+        footer a {
+            color: #999;
+            text-decoration: none;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 1024px) {
+            nav a {
+                margin: 0 10px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            nav a {
+                margin: 0 8px;
+                font-size: 0.95em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .about-text {
+                font-size: 1.05em;
+            }
+
+            .content-section {
+                padding: 30px 0;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .presentations-list li {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                margin: 0 5px;
+                font-size: 0.85em;
+            }
+
+            .presentation-title {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="index.html">Alex Cooke</a></h1>
+            <p class="subtitle">Research</p>
+        </header>
+
+        <nav>
+            <a href="index.html" class="active">About</a>
+            <a href="meteorology.html">Meteorology</a>
+            <a href="music.html">Music</a>
+            <a href="presentations.html">Presentations</a>
+        </nav>
+
+        <div class="content-section">
+            <h2 class="section-title">About</h2>
+            <p class="about-text">
+                I am currently pursuing a Master of Science in Geosciences with a concentration in Applied Meteorology from <a href="https://www.msstate.edu" target="_blank">Mississippi State University</a>, where I maintain a 4.00 GPA. My research focuses on real-time enhanced tornado warning systems, specifically developing guidance based on tornado debris signature height and population density to improve warning accuracy and reduce forecaster workload during high-stress situations.
+            </p>
+            <p class="about-text">
+                As a National Weather Service student volunteer, I have gained extensive operational experience at multiple Weather Forecast Offices, including <a href="https://www.weather.gov/otx/" target="_blank">Spokane, Washington</a>, <a href="https://www.weather.gov/meg/" target="_blank">Memphis, Tennessee</a>, and <a href="https://www.weather.gov/car/" target="_blank">Caribou, Maine</a>. My work includes leading forecast discussions, writing official area forecast discussions, statistical analysis of tornadic environments, and developing training materials in R statistical software and principal component analysis.
+            </p>
+            <p class="about-text">
+                My research interests encompass severe weather analysis, operational meteorology, statistical modeling of atmospheric phenomena, and the intersection of meteorological forecasting with public safety applications. I have particular expertise in tornado parameter analysis, quasi-linear convective system environments, and climate oscillation impacts on regional weather patterns.
+            </p>
+            <p class="about-text">
+                Beyond meteorology, I bring a unique interdisciplinary perspective through my background in mathematics, music composition, and educational leadership. I currently serve as Editor-in-Chief at <a href="https://www.fstoppers.com" target="_blank">Fstoppers</a> and hold faculty positions at the <a href="https://www.cim.edu" target="_blank">Cleveland Institute of Music</a>, where I direct curriculum development and teach theory and composition.
+            </p>
+        </div>
+
+        <footer>
+            <p>
+                <a href="mailto:alex.cooke@noaa.gov">alex.cooke@noaa.gov</a>
+                <span style="margin: 0 20px; color: #444;">•</span>
+                <a href="tel:440-867-8470">(440) 867-8470</a>
+                <span style="margin: 0 20px; color: #444;">•</span>
+                <a href="https://www.ametsoc.org" target="_blank">American Meteorological Society</a>
+            </p>
+            <p style="margin-top: 15px;">
+                &copy; 2025 Alex Cooke. All rights reserved.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
