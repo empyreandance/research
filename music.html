@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Research</title>
+  <style>
+    /* Base reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 0 40px;
+      border-bottom: 1px solid #222;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    header h1 a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    header .subtitle {
+      color: #888;
+      font-size: 1.1em;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1.1em;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.3s, border-bottom-color 0.3s;
+    }
+
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    .content-section {
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 15px;
+    }
+
+    .research-item {
+      background: #111;
+      padding: 30px;
+      border-radius: 8px;
+      border-left: 3px solid #333;
+      transition: background 0.3s, border-left-color 0.3s;
+    }
+
+    .research-item:hover {
+      background: #151515;
+      border-left-color: #666;
+    }
+
+    .research-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .research-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .research-title {
+      font-size: 1.4em;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    .research-summary {
+      font-size: 1em;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .research-link {
+      display: inline-block;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ccc;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      padding: 4px 0;
+      transition: color 0.3s, border-bottom-color 0.3s;
+      align-self: flex-start;
+    }
+
+    .research-link:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .media-item {
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    .media-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Three media items - adjust grid for better layout */
+    .media-grid.three-items {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .media-grid.three-items .media-item:first-child {
+      grid-column: 1 / -1;
+    }
+
+    /* Two media items */
+    .media-grid.two-items {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+      font-size: 0.9em;
+      border-top: 1px solid #222;
+      margin-top: 80px;
+    }
+
+    footer a {
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      transition: color 0.3s, border-bottom-color 0.3s;
+    }
+
+    footer a:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container { 
+        padding: 15px; 
+        max-width: 900px;
+      }
+      
+      header h1 { font-size: 2em; }
+      .section-title { font-size: 1.5em; }
+      
+      .research-item { padding: 25px; }
+      
+      .research-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .media-grid.three-items {
+        grid-template-columns: 1fr;
+      }
+      
+      .media-grid.three-items .media-item:first-child {
+        grid-column: 1;
+      }
+      
+      nav a { margin: 0 8px; font-size: 0.95em; }
+    }
+
+    @media (max-width: 480px) {
+      nav a { margin: 0 5px; font-size: 0.85em; }
+      .research-title { font-size: 1.2em; }
+      .research-item { padding: 20px; }
+      .research-content { gap: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="https://www.alexcooke.co">Alex Cooke</a></h1>
+      <p class="subtitle">Research</p>
+    </header>
+
+    <nav>
+      <a href="index.html">About</a>
+      <a href="meteorology.html">Meteorology</a>
+      <a href="music.html" class="active">Music</a>
+      <a href="presentations.html">Presentations</a>
+    </nav>
+
+    <div class="content-section">
+      <h2 class="section-title">Featured Music Research</h2>
+      
+      <div class="research-item">
+        <div class="research-content">
+          <div class="research-info">
+            <div class="research-title">Your Music Research Project Title</div>
+            <div class="research-summary">
+              This is where you'll describe your music research project. You can include details about the methodology, objectives, findings, and significance of your work. This summary will appear on the left side of the layout on desktop and tablet devices, then stack above the media on mobile devices for optimal readability across all screen sizes.
+            </div>
+            <a href="music-research.pdf" class="research-link">Download Research (PDF)</a>
+          </div>
+          
+          <div class="media-grid three-items">
+            <div class="media-item">
+              <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="media-item">
+              <img src="https://via.placeholder.com/400x300/333333/cccccc?text=Research+Image+1" alt="Music research visualization">
+            </div>
+            <div class="media-item">
+              <img src="https://via.placeholder.com/400x300/333333/cccccc?text=Research+Image+2" alt="Music research data">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        <a href="contact.html" style="color: #999; text-decoration: none; border-bottom: 1px solid #444; transition: all 0.3s ease;">Contact Me</a>
+        <span style="margin: 0 20px; color: #444;">•</span>
+        &copy; 2025 Alex Cooke. All rights reserved.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
