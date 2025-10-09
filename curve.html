@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jack's Gentle Curve Calculator</title>
+  <title>Gentle Curve Calculator</title>
   <style>
     body {
       margin: 24px;
@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-  <h1>Jack's Grade Curve Calculator</h1>
+  <h1>Grade Curve Calculator</h1>
   <p style="max-width:600px">
     Use this tool to gently curve grades: tell it your highest and lowest original scores,
     what you want those to become, and then adjust the slider to control how much help
@@ -193,9 +193,31 @@ Sky 48`;
     }
 
     function draw(){
-      const p = params(); if (!p){ ctx.clearRect(0,0,chart.width,chart.height); return; }
+      const p = params(); 
       const W = chart.width, Hc = chart.height;
       ctx.clearRect(0,0,W,Hc);
+      
+      if (!p){ 
+        // Draw error message when settings are invalid
+        ctx.save();
+        ctx.fillStyle = "#f5f5f5";
+        ctx.fillRect(0, 0, W, Hc);
+        ctx.strokeStyle = "rgba(0,0,0,0.1)";
+        ctx.strokeRect(0, 0, W, Hc);
+        
+        ctx.font = "16px system-ui";
+        ctx.fillStyle = "#b10000";
+        ctx.textAlign = "center";
+        ctx.fillText("⚠️ Settings too aggressive", W/2, Hc/2 - 20);
+        
+        ctx.font = "14px system-ui";
+        ctx.fillStyle = "#666";
+        ctx.fillText("This would make better students score worse.", W/2, Hc/2 + 10);
+        ctx.fillText("Lower the slider or adjust target scores.", W/2, Hc/2 + 30);
+        ctx.restore();
+        return; 
+      }
+      
       ctx.save();
       ctx.translate(40,10);
       const w = W - 60, h = Hc - 40;
