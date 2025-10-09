@@ -84,7 +84,10 @@ class GradeCurveCalculator extends HTMLElement {
         <div class="row" style="margin-top:10px;">
           <div class="field" style="min-width:240px; flex:1;">
             <label for="k"><strong>Help the lower scores</strong> <span id="kLabel" class="hint">(gentle)</span></label>
-            <input id="k" type="range" min="0.5" max="4" step="0.1" value="2" />
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="k" type="range" min="0.5" max="4" step="0.1" value="2" style="flex:1;" />
+              <input id="kNum" type="number" min="0.5" max="4" step="0.1" value="2" style="width:70px; padding:6px 8px;" />
+            </div>
             <div class="hint">Slide left for a gradual curve. Slide right to boost struggling students more.</div>
           </div>
           <label class="hint" style="display:flex; align-items:center; gap:8px;">
@@ -114,7 +117,7 @@ class GradeCurveCalculator extends HTMLElement {
 
   connectedCallback(){
     const $ = s => this.shadowRoot.querySelector(s);
-    const Hraw=$('#Hraw'), Lraw=$('#Lraw'), Hadj=$('#Hadj'), Ladj=$('#Ladj'), kIn=$('#k');
+    const Hraw=$('#Hraw'), Lraw=$('#Lraw'), Hadj=$('#Hadj'), Ladj=$('#Ladj'), kIn=$('#k'), kNum=$('#kNum');
     const kLabel=$('#kLabel'), cap=$('#cap'), scores=$('#scores'), out=$('#output'), msg=$('#msg');
     const chart=$('#chart');
     const ctx=chart.getContext('2d');
@@ -135,7 +138,13 @@ Sky 48`;
       draw();
     });
 
-    [Hraw, Lraw, Hadj, Ladj, kIn, cap].forEach(el => el.addEventListener('input', ()=> { draw(); msg.textContent=""; }));
+    [Hraw, Lraw, Hadj, Ladj, kIn, kNum, cap].forEach(el => el.addEventListener('input', ()=> { 
+      // Sync slider and number input
+      if (el === kIn) kNum.value = kIn.value;
+      if (el === kNum) kIn.value = kNum.value;
+      draw(); 
+      msg.textContent=""; 
+    }));
     draw();
 
     computeBtn.addEventListener('click', ()=>{
@@ -199,22 +208,23 @@ Sky 48`;
       
       if (!p){ 
         // Draw error message when settings are invalid
-        ctx.save();
         ctx.fillStyle = "#f5f5f5";
         ctx.fillRect(0, 0, W, Hc);
         ctx.strokeStyle = "rgba(0,0,0,0.1)";
+        ctx.lineWidth = 1;
         ctx.strokeRect(0, 0, W, Hc);
         
-        ctx.font = "16px system-ui";
-        ctx.fillStyle = "#b10000";
         ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        ctx.font = "bold 16px system-ui";
+        ctx.fillStyle = "#b10000";
         ctx.fillText("⚠️ Settings too aggressive", W/2, Hc/2 - 20);
         
         ctx.font = "14px system-ui";
         ctx.fillStyle = "#666";
         ctx.fillText("This would make better students score worse.", W/2, Hc/2 + 10);
         ctx.fillText("Lower the slider or adjust target scores.", W/2, Hc/2 + 30);
-        ctx.restore();
         return; 
       }
       
