@@ -97,7 +97,7 @@ class GradeCurveCalculator extends HTMLElement {
 
         <div class="row" style="margin-top:8px;">
           <div class="field" style="flex:2; min-width:280px;">
-            <label for="scores">Paste scores (comma, space, or line breaks). Names are okay: “Jamie 82”.</label>
+            <label for="scores">Paste scores (comma, space, or line breaks). Names are okay: "Jamie 82".</label>
             <textarea id="scores" placeholder="e.g. Casey 98&#10;Riley 91&#10;Avery 73&#10;Morgan 62&#10;Drew 54" style="min-height:120px;"></textarea>
             <div id="msg" class="hint"></div>
           </div>
@@ -121,10 +121,17 @@ class GradeCurveCalculator extends HTMLElement {
     const computeBtn=$('#compute'), exampleBtn=$('#example');
 
     exampleBtn.addEventListener('click', ()=>{
-      scores.value = [
-        "Casey 98","Riley 91","Jordan 88","Alex 84","Blair 80",
-        "Avery 73","Taylor 70","Quinn 66","Morgan 62","Drew 54","Sky 48"
-      ].join("\\n");
+      scores.value = `Casey 98
+Riley 91
+Jordan 88
+Alex 84
+Blair 80
+Avery 73
+Taylor 70
+Quinn 66
+Morgan 62
+Drew 54
+Sky 48`;
       draw();
     });
 
@@ -160,6 +167,16 @@ class GradeCurveCalculator extends HTMLElement {
 
       const a_high = Ha - H;
       const a_low  = La - L;
+
+      // Check for monotonicity: the curve should never make better scores worse
+      // The constraint is: (H - L) >= k * (a_low - a_high)
+      const span = H - L;
+      const boost_diff = a_low - a_high;
+      if (boost_diff > 0 && span < k * boost_diff) {
+        const max_safe_k = (span / boost_diff).toFixed(2);
+        msg.innerHTML = `<span class='warn'>⚠️ These settings may invert score order! Try k ≤ ${max_safe_k} or adjust your target scores.</span>`;
+        return null;
+      }
 
       return { H, L, Ha, La, k, cap: !!cap.checked, a_high, a_low };
     }
@@ -206,7 +223,7 @@ class GradeCurveCalculator extends HTMLElement {
     function parseScores(text){
       if(!text)return[];
       return text.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean).map(line=>{
-        const m=line.match(/^(.*?)(-?\\d+(\\.\\d+)?)\\s*$/);
+        const m=line.match(/^(.*?)(-?\d+(\.\d+)?)\s*$/);
         if(m){return{name:(m[1]||"").trim(),score:Number(m[2])};}
         return null;
       }).filter(Boolean);
