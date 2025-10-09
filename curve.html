@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gentle Curve Calculator2</title>
+  <title>Jack's Gentle Curve Calculator</title>
   <style>
     body {
       margin: 24px;
@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-  <h1>Grade Curve Calculator</h1>
+  <h1>Jack's Grade Curve Calculator</h1>
   <p style="max-width:600px">
     Use this tool to gently curve grades: tell it your highest and lowest original scores,
     what you want those to become, and then adjust the slider to control how much help
@@ -65,19 +65,19 @@ class GradeCurveCalculator extends HTMLElement {
         <div class="grid">
           <div class="field">
             <label for="Hraw">Highest original score</label>
-            <input id="Hraw" type="number" step="0.1" value="100" />
+            <input id="Hraw" type="number" step="0.5" value="100" />
           </div>
           <div class="field">
             <label for="Lraw">Lowest original score</label>
-            <input id="Lraw" type="number" step="0.1" value="50" />
+            <input id="Lraw" type="number" step="0.5" value="50" />
           </div>
           <div class="field">
             <label for="Hadj">What should the highest become?</label>
-            <input id="Hadj" type="number" step="0.1" value="101" />
+            <input id="Hadj" type="number" step="0.5" value="101" />
           </div>
           <div class="field">
             <label for="Ladj">What should the lowest become?</label>
-            <input id="Ladj" type="number" step="0.1" value="65" />
+            <input id="Ladj" type="number" step="0.5" value="65" />
           </div>
         </div>
 
@@ -85,7 +85,7 @@ class GradeCurveCalculator extends HTMLElement {
           <div class="field" style="min-width:240px; flex:1;">
             <label for="k"><strong>Help the lower scores</strong> <span id="kLabel" class="hint">(gentle)</span></label>
             <input id="k" type="range" min="0.5" max="4" step="0.1" value="2" />
-            <div class="hint">Left = more even help. Right = stronger help for the lowest scores.</div>
+            <div class="hint">Slide left for a gradual curve. Slide right to boost struggling students more.</div>
           </div>
           <label class="hint" style="display:flex; align-items:center; gap:8px;">
             <input id="cap" type="checkbox" checked /> Cap final scores at 100
@@ -146,8 +146,9 @@ Sky 48`;
 
       const computed = rows.map(r=>{
         const add = addedPoints(r.score, p);
-        const final = p.cap ? Math.min(100, r.score + add) : (r.score + add);
-        return { name:r.name, score:r.score, add, curved: final };
+        const rawFinal = p.cap ? Math.min(100, r.score + add) : (r.score + add);
+        const curved = roundHalf(rawFinal);
+        return { name:r.name, score:r.score, add: roundHalf(add), curved };
       });
 
       const stats = summarize(computed);
@@ -184,6 +185,7 @@ Sky 48`;
     function num(v,d){ const x = Number(v); return Number.isFinite(x) ? x : d; }
     function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
     function clamp01(x){ return clamp(x,0,1); }
+    function roundHalf(x){ return Math.round(x * 2) / 2; }
 
     function addedPoints(s,p){
       const x = clamp01((s - p.L) / (p.H - p.L));
@@ -240,7 +242,7 @@ Sky 48`;
     }
 
     function tableHTML(rows,stats,p){
-      const fmt2=x=>(Math.round(x*100)/100).toFixed(2);
+      const fmt2=x=>(Math.round(x*10)/10).toFixed(1);
       return `
         <table>
           <thead>
@@ -257,7 +259,7 @@ Sky 48`;
         </table>`;
     }
 
-    function fmt(x){return (Math.round(x*100)/100).toFixed(2);}
+    function fmt(x){return (Math.round(x*10)/10).toFixed(1);}
   }
 }
 customElements.define('grade-curve-calculator', GradeCurveCalculator);
