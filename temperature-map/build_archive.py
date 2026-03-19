@@ -307,15 +307,16 @@ def generate_archive_html(maps):
 
     <nav>
       <a href="index.html">About</a>
-      <a href="meteorology.html" class="active">Meteorology</a>
+      <a href="meteorology.html">Meteorology</a>
       <a href="music.html">Music</a>
       <a href="presentations.html">Presentations</a>
+      <a href="maps-and-tools.html" class="active">Maps &amp; Tools</a>
     </nav>
 
     <div class="subnav">
-      <a href="meteorology.html">Meteorology</a>
-      <span class="separator">&rsaquo;</span>
       <a href="maps-and-tools.html">Maps &amp; Tools</a>
+      <span class="separator">&rsaquo;</span>
+      <a href="temperature-calendar.html">Temperature Calendar</a>
       <span class="separator">&rsaquo;</span>
       <span class="current">Archive</span>
     </div>
