@@ -1,0 +1,35 @@
+# =============================================================================
+# Temperature Calendar Map — Python Dependencies
+# =============================================================================
+# Install these with:  pip install -r requirements.txt
+#
+# If you hit errors installing cartopy, see the README for platform-specific
+# instructions (it needs some C libraries installed first).
+# =============================================================================
+
+# --- Core scientific computing ---
+numpy>=1.24
+scipy>=1.10
+
+# --- Working with gridded data and NetCDF files ---
+xarray>=2023.1
+netcdf4>=1.6
+
+# --- Reading GRIB2 weather forecast files ---
+# cfgrib needs the 'eccodes' C library installed on your system.
+# On Mac:   brew install eccodes
+# On Linux: sudo apt-get install libeccodes-dev
+cfgrib>=0.9.10
+
+# --- Making maps ---
+cartopy>=0.21
+matplotlib>=3.7
+
+# --- Image optimization for archive JPEGs ---
+Pillow>=9.0
+
+# --- HTTP requests to the ACIS API ---
+requests>=2.28
+
+# --- Progress bars so you can see what's happening ---
+tqdm>=4.64

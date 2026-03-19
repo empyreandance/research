@@ -1,0 +1,100 @@
+# =============================================================================
+# Daily Temperature Calendar Map
+# =============================================================================
+# This workflow runs every morning, generates a new Temperature Calendar
+# Anomaly map, and commits it to the repo so GitHub Pages serves it.
+#
+# It can also be triggered manually from the Actions tab (workflow_dispatch).
+# =============================================================================
+
+name: Daily Temperature Map
+
+on:
+  schedule:
+    # Run at 12:00 UTC every day (7 AM Eastern / 4 AM Pacific).
+    # The NDFD forecast updates overnight, so by noon UTC the day's
+    # forecast is well-established.
+    - cron: "0 12 * * *"
+
+  # Allow manual triggering from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  generate-map:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. Check out the repository ---
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      # --- 2. Set up Python ---
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # --- 3. Install system dependencies ---
+      # eccodes is a C library needed by cfgrib to read GRIB2 files.
+      # On Ubuntu (which GitHub Actions runners use), it's called libeccodes-dev.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeccodes-dev
+
+      # --- 4. Cache Python packages ---
+      # This saves ~2-3 minutes on subsequent runs by reusing installed packages.
+      # The cache key is based on the requirements.txt hash — if you change
+      # dependencies, the cache rebuilds automatically.
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('temperature-map/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # --- 5. Install Python dependencies ---
+      - name: Install Python packages
+        run: |
+          pip install -r temperature-map/requirements.txt
+
+      # --- 6. Run the daily map generator ---
+      - name: Generate temperature map
+        run: |
+          cd temperature-map
+          python daily_run.py
+
+      # --- 7. Copy maps to the site's assets folder ---
+      # Latest PNGs (full 300 DPI) for the main site and WFOs.
+      # Archive JPEGs (150 DPI, compressed) for the gallery.
+      - name: Copy maps to site assets
+        run: |
+          mkdir -p assets/regions
+          mkdir -p assets/archive
+          cp temperature-map/output/temp_anomaly_latest.png assets/temp_anomaly_latest.png
+          cp temperature-map/output/regions/temp_anomaly_*_latest.png assets/regions/ 2>/dev/null || true
+          cp temperature-map/output/archive/*.jpg assets/archive/ 2>/dev/null || true
+
+      # --- 8. Rebuild the archive page ---
+      # Scans the assets/archive folder for dated JPEGs and generates
+      # a gallery page so visitors can browse past maps.
+      - name: Build archive page
+        run: |
+          cd temperature-map
+          python build_archive.py --assets-dir ../assets/archive --output ../archive.html
+
+      # --- 9. Commit and push ---
+      # This uses a bot identity so the automated commits don't clutter
+      # your personal commit history.
+      - name: Commit and push
+        run: |
+          git config user.name "Temperature Map Bot"
+          git config user.email "bot@temperature-map.local"
+          git add assets/temp_anomaly_latest.png
+          git add assets/regions/ 2>/dev/null || true
+          git add assets/archive/ 2>/dev/null || true
+          git add archive.html
+          # Only commit if there are changes (avoids errors on re-runs)
+          git diff --staged --quiet || git commit -m "Update temperature map for $(date +%Y-%m-%d)"
+          git push
