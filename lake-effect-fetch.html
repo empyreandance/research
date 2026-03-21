@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Great Lakes Fetch Map – Alex Cooke</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg-primary: #0b0f14; --bg-panel: #111820; --bg-card: #182030;
+      --border: #1e2a3a; --text-primary: #e8ecf1; --text-secondary: #8899aa;
+      --text-dim: #556677; --accent-cool: #3399ff; --accent-yellow: #ffcc00;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .app-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-panel); border-bottom: 1px solid var(--border); z-index: 1000; flex-wrap: wrap; gap: 8px; }
+    .app-title { font-size: 1.05em; font-weight: 600; letter-spacing: -0.3px; }
+    .app-title span { color: var(--text-secondary); font-weight: 300; }
+    .lake-selector { display: flex; gap: 4px; }
+    .lake-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); border-radius: 5px; padding: 3px 10px; font-size: 0.8em; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .lake-btn:hover { border-color: #445566; color: var(--text-primary); }
+    .lake-btn.active { background: var(--accent-cool); border-color: var(--accent-cool); color: #fff; }
+    .header-right { display: flex; align-items: center; gap: 12px; font-size: 0.85em; flex-wrap: wrap; }
+    .layer-toggle { display: flex; align-items: center; gap: 5px; font-size: 0.8em; color: var(--text-secondary); cursor: pointer; user-select: none; }
+    .layer-toggle input[type="checkbox"] { cursor: pointer; }
+    .opacity-ctrl { display: flex; align-items: center; gap: 5px; font-size: 0.8em; color: var(--text-secondary); }
+    .opacity-ctrl input[type="range"] { width: 60px; height: 3px; -webkit-appearance: none; background: var(--border); border-radius: 2px; cursor: pointer; }
+    .opacity-ctrl input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-cool); border: none; cursor: pointer; }
+    .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #444; margin-right: 5px; vertical-align: middle; }
+    .status-dot.loading { background: var(--accent-yellow); animation: pulse 1s infinite; }
+    .status-dot.ready { background: #33cc66; }
+    @keyframes pulse { 50% { opacity: 0.4; } }
+    .map-container { flex: 1; position: relative; }
+    #map { width: 100%; height: 100%; background: var(--bg-primary); }
+    .legend { position: absolute; bottom: 80px; left: 10px; background: rgba(17,24,32,0.92); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; z-index: 1000; font-size: 0.88em; }
+    .legend-title { font-weight: 600; margin-bottom: 8px; font-size: 1.05em; }
+    .legend-bar { width: 200px; height: 14px; border-radius: 4px; margin: 6px 0 4px; }
+    .legend-labels { display: flex; justify-content: space-between; color: var(--text-dim); font-size: 0.85em; }
+    .cursor-readout { position: absolute; bottom: 80px; left: 240px; background: rgba(17,24,32,0.92); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; z-index: 1000; font-size: 0.82em; display: none; pointer-events: none; min-width: 180px; }
+    .cursor-readout.visible { display: block; }
+    .cursor-readout-title { font-weight: 600; font-size: 0.9em; margin-bottom: 6px; color: var(--text-secondary); }
+    .lake-info { position: absolute; top: 10px; right: 10px; background: rgba(17,24,32,0.92); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; z-index: 1000; font-size: 0.82em; min-width: 200px; display: none; }
+    .lake-info.visible { display: block; }
+    .lake-info-title { font-weight: 600; font-size: 1.05em; margin-bottom: 8px; }
+    .lake-stat { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .lake-stat:last-child { border-bottom: none; }
+    .lake-stat-label { color: var(--text-secondary); }
+    .lake-stat-value { font-weight: 500; }
+    .disclaimer { position: absolute; bottom: 80px; right: 10px; font-size: 0.65em; color: var(--text-dim); z-index: 1000; max-width: 220px; text-align: right; font-style: italic; }
+    .timeline-container { background: var(--bg-panel); border-top: 1px solid var(--border); padding: 8px 16px 12px; z-index: 1000; }
+    .timeline-current { text-align: center; font-size: 0.9em; font-weight: 500; margin-bottom: 6px; }
+    .timeline-current .time-highlight { color: var(--accent-yellow); }
+    .play-controls { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+    .play-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); border-radius: 5px; padding: 3px 12px; font-size: 0.8em; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .play-btn:hover { background: var(--border); }
+    .timeline-slider { -webkit-appearance: none; width: 100%; height: 5px; border-radius: 3px; outline: none; cursor: pointer; }
+    .timeline-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--text-primary); border: 2px solid var(--bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.5); cursor: pointer; }
+    .timeline-ticks { display: flex; justify-content: space-between; font-size: 0.65em; color: var(--text-dim); margin-top: 3px; }
+    .loading-overlay { position: absolute; inset: 0; background: rgba(11,15,20,0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; transition: opacity 0.5s; }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent-cool); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-sub { color: var(--text-secondary); font-size: 0.85em; margin-top: 6px; }
+    .leaflet-control-zoom a { background: var(--bg-panel) !important; color: var(--text-primary) !important; border-color: var(--border) !important; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <div class="app-title">Lake-Effect Fetch Map <span>Great Lakes</span></div>
+    <div class="lake-selector">
+      <button class="lake-btn active" data-lake="all">All Lakes</button>
+      <button class="lake-btn" data-lake="Superior">Superior</button>
+      <button class="lake-btn" data-lake="Michigan">Michigan</button>
+      <button class="lake-btn" data-lake="Huron">Huron</button>
+      <button class="lake-btn" data-lake="Erie">Erie</button>
+      <button class="lake-btn" data-lake="Ontario">Ontario</button>
+    </div>
+    <div class="header-right">
+      <label class="layer-toggle"><input type="checkbox" id="toggleResidence"> Residence time</label>
+      <label class="layer-toggle"><input type="checkbox" id="toggleBarbs" checked> Wind barbs</label>
+      <label class="layer-toggle"><input type="checkbox" id="toggleCursor"> Cursor readout</label>
+      <div class="opacity-ctrl"><span>Opacity</span><input type="range" id="opacitySlider" min="0" max="100" value="75"><span id="opacityVal">75%</span></div>
+      <button class="play-btn" id="btnExportPNG" title="Save current view as PNG">📷 PNG</button>
+      <button class="play-btn" id="btnExportGIF" title="Export animation as GIF">🎬 GIF</button>
+      <span><span class="status-dot loading" id="statusDot"></span><span id="statusText">Loading...</span></span>
+    </div>
+  </div>
+  <div class="map-container">
+    <div id="map"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <div>Loading lake and wind data...</div>
+      <div class="loading-sub" id="loadingDetail">Fetching lake shorelines...</div>
+    </div>
+    <div class="lake-info" id="lakeInfo">
+      <div class="lake-info-title" id="lakeInfoTitle"></div>
+      <div class="lake-stat"><span class="lake-stat-label">Avg wind dir</span><span class="lake-stat-value" id="liWindDir">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Avg wind speed</span><span class="lake-stat-value" id="liWindSpd">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Max fetch</span><span class="lake-stat-value" id="liMaxFetch">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Lake SST</span><span class="lake-stat-value" id="liSST">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Avg air temp</span><span class="lake-stat-value" id="liAirTemp">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Lake–air ΔT</span><span class="lake-stat-value" id="liDeltaT">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Max residence</span><span class="lake-stat-value" id="liResidence">—</span></div>
+    </div>
+    <div class="legend" id="legendPanel">
+      <div class="legend-title" id="legendTitle">Fetch Distance</div>
+      <div class="legend-bar" id="legendBar" style="background: linear-gradient(to right, #0d1926, #994400, #ff5500, #ff0044);"></div>
+      <div class="legend-labels" id="legendLabels"><span>0 km</span><span>80</span><span>160</span><span>250+</span></div>
+    </div>
+    <div class="disclaimer">
+      <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
+      Independent project, not an official NWS/NOAA product.<br>Wind: NWS + ECCC HRDPS · SST: GLERL climatology · 850mb: ECCC HRDPS<br>Shoreline: Natural Earth 10m (public domain)
+    </div>
+    <div class="cursor-readout" id="cursorReadout">
+      <div class="cursor-readout-title">Cursor Readout</div>
+      <div class="lake-stat"><span class="lake-stat-label">Position</span><span class="lake-stat-value" id="crPos">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Wind dir</span><span class="lake-stat-value" id="crWindDir">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Wind speed</span><span class="lake-stat-value" id="crWindSpd">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Fetch</span><span class="lake-stat-value" id="crFetch">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Residence</span><span class="lake-stat-value" id="crResidence">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Lake SST</span><span class="lake-stat-value" id="crSST">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">2m air temp</span><span class="lake-stat-value" id="crAirTemp">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">850 mb temp</span><span class="lake-stat-value" id="crTemp850">—</span></div>
+      <div class="lake-stat"><span class="lake-stat-label">Lake–air ΔT</span><span class="lake-stat-value" id="crDeltaT">—</span></div>
+    </div>
+  </div>
+  <div class="timeline-container">
+    <div class="timeline-current"><span class="time-highlight" id="timeDisplay">Loading...</span></div>
+    <div class="play-controls">
+      <button class="play-btn" id="btnPrev">◂</button>
+      <button class="play-btn" id="btnPlay">▶ Play</button>
+      <button class="play-btn" id="btnNext">▸</button>
+    </div>
+    <input type="range" class="timeline-slider" id="timeSlider" min="0" max="72" value="24" step="1">
+    <div class="timeline-ticks" id="timelineTicks"></div>
+  </div>
+
+  <!-- GIF settings modal -->
+  <div id="gifModal" style="display:none; position:fixed; inset:0; background:rgba(11,15,20,0.88); z-index:4000; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif;">
+    <div style="background:#111820; border:1px solid #1e2a3a; border-radius:10px; padding:24px 28px; min-width:300px; color:#e8ecf1;">
+      <div style="font-weight:600; font-size:1.1em; margin-bottom:16px;">GIF Export Settings</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.85em; color:#8899aa; display:block; margin-bottom:4px;">Start (hours from now)</label>
+        <input type="number" id="gifStart" value="-24" min="-24" max="47" style="width:100%; padding:6px 10px; background:#182030; border:1px solid #1e2a3a; border-radius:5px; color:#e8ecf1; font-family:inherit; font-size:0.95em;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.85em; color:#8899aa; display:block; margin-bottom:4px;">End (hours from now)</label>
+        <input type="number" id="gifEnd" value="48" min="-23" max="48" style="width:100%; padding:6px 10px; background:#182030; border:1px solid #1e2a3a; border-radius:5px; color:#e8ecf1; font-family:inherit; font-size:0.95em;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:0.85em; color:#8899aa; display:block; margin-bottom:4px;">Time step (hours)</label>
+        <select id="gifStep" style="width:100%; padding:6px 10px; background:#182030; border:1px solid #1e2a3a; border-radius:5px; color:#e8ecf1; font-family:inherit; font-size:0.95em;">
+          <option value="1">1 hour</option>
+          <option value="2">2 hours</option>
+          <option value="3" selected>3 hours</option>
+          <option value="6">6 hours</option>
+          <option value="12">12 hours</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button id="gifCancel" class="play-btn" style="padding:6px 16px;">Cancel</button>
+        <button id="gifGo" class="play-btn" style="padding:6px 16px; background:#3399ff; border-color:#3399ff;">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export progress overlay -->
+  <div id="exportOverlay" style="display:none; position:fixed; inset:0; background:rgba(11,15,20,0.92); z-index:5000; flex-direction:column; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; color:#e8ecf1;">
+    <div id="exportMsg" style="font-size:1.1em; margin-bottom:12px;">Exporting...</div>
+    <div style="width:300px; height:6px; background:#1e2a3a; border-radius:3px; overflow:hidden;">
+      <div id="exportBar" style="width:0%; height:100%; background:#3399ff; border-radius:3px; transition:width 0.2s;"></div>
+    </div>
+    <div id="exportDetail" style="font-size:0.8em; color:#8899aa; margin-top:8px;"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+  <script>
+  (function() {
+    "use strict";
+
+    const HOURS_PAST = 24, HOURS_FUTURE = 48, TOTAL_SLOTS = 72;
+
+    // ===== WIND GRID (141 pts: 116 US via NWS + 25 Canadian via ECCC HRDPS) =====
+    const WIND_POINTS = [
+      // Superior — US south shore: 2 rows × 10 cols
+      {lat:46.65,lon:-91.8,lake:"Superior",src:"nws"},{lat:46.65,lon:-91.0,lake:"Superior",src:"nws"},
+      {lat:46.65,lon:-90.2,lake:"Superior",src:"nws"},{lat:46.65,lon:-89.4,lake:"Superior",src:"nws"},
+      {lat:46.65,lon:-88.6,lake:"Superior",src:"nws"},{lat:46.65,lon:-87.8,lake:"Superior",src:"nws"},
+      {lat:46.65,lon:-87.0,lake:"Superior",src:"nws"},{lat:46.65,lon:-86.2,lake:"Superior",src:"nws"},
+      {lat:46.65,lon:-85.4,lake:"Superior",src:"nws"},{lat:46.65,lon:-84.8,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-91.8,lake:"Superior",src:"nws"},{lat:47.15,lon:-91.0,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-90.2,lake:"Superior",src:"nws"},{lat:47.15,lon:-89.4,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-88.6,lake:"Superior",src:"nws"},{lat:47.15,lon:-87.8,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-87.0,lake:"Superior",src:"nws"},{lat:47.15,lon:-86.2,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-85.4,lake:"Superior",src:"nws"},{lat:47.15,lon:-84.8,lake:"Superior",src:"nws"},
+      // Superior — CA north shore
+      {lat:47.7,lon:-89.5,lake:"Superior",src:"eccc"},{lat:47.7,lon:-88.5,lake:"Superior",src:"eccc"},
+      {lat:47.7,lon:-87.5,lake:"Superior",src:"eccc"},{lat:47.7,lon:-86.5,lake:"Superior",src:"eccc"},
+      {lat:47.7,lon:-85.5,lake:"Superior",src:"eccc"},{lat:48.1,lon:-88.0,lake:"Superior",src:"eccc"},
+      {lat:48.1,lon:-87.0,lake:"Superior",src:"eccc"},{lat:48.1,lon:-86.0,lake:"Superior",src:"eccc"},
+      // Michigan — entirely US
+      {lat:41.8,lon:-87.3,lake:"Michigan",src:"nws"},{lat:41.8,lon:-86.7,lake:"Michigan",src:"nws"},
+      {lat:41.8,lon:-86.1,lake:"Michigan",src:"nws"},{lat:42.3,lon:-87.3,lake:"Michigan",src:"nws"},
+      {lat:42.3,lon:-86.7,lake:"Michigan",src:"nws"},{lat:42.3,lon:-86.1,lake:"Michigan",src:"nws"},
+      {lat:42.8,lon:-87.3,lake:"Michigan",src:"nws"},{lat:42.8,lon:-86.7,lake:"Michigan",src:"nws"},
+      {lat:42.8,lon:-86.1,lake:"Michigan",src:"nws"},{lat:43.3,lon:-87.3,lake:"Michigan",src:"nws"},
+      {lat:43.3,lon:-86.7,lake:"Michigan",src:"nws"},{lat:43.3,lon:-86.1,lake:"Michigan",src:"nws"},
+      {lat:43.8,lon:-87.3,lake:"Michigan",src:"nws"},{lat:43.8,lon:-86.7,lake:"Michigan",src:"nws"},
+      {lat:43.8,lon:-86.1,lake:"Michigan",src:"nws"},{lat:44.3,lon:-87.3,lake:"Michigan",src:"nws"},
+      {lat:44.3,lon:-86.7,lake:"Michigan",src:"nws"},{lat:44.3,lon:-86.1,lake:"Michigan",src:"nws"},
+      {lat:44.8,lon:-87.3,lake:"Michigan",src:"nws"},{lat:44.8,lon:-86.7,lake:"Michigan",src:"nws"},
+      {lat:44.8,lon:-86.1,lake:"Michigan",src:"nws"},{lat:45.3,lon:-87.3,lake:"Michigan",src:"nws"},
+      {lat:45.3,lon:-86.7,lake:"Michigan",src:"nws"},{lat:45.3,lon:-86.1,lake:"Michigan",src:"nws"},
+      // Huron — US west side
+      {lat:43.3,lon:-83.2,lake:"Huron",src:"nws"},{lat:43.3,lon:-82.7,lake:"Huron",src:"nws"},
+      {lat:43.3,lon:-82.2,lake:"Huron",src:"nws"},{lat:43.8,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:43.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:43.8,lon:-82.2,lake:"Huron",src:"nws"},
+      {lat:44.3,lon:-83.2,lake:"Huron",src:"nws"},{lat:44.3,lon:-82.7,lake:"Huron",src:"nws"},
+      {lat:44.3,lon:-82.2,lake:"Huron",src:"nws"},{lat:44.8,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:44.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:44.8,lon:-82.2,lake:"Huron",src:"nws"},
+      {lat:45.2,lon:-83.2,lake:"Huron",src:"nws"},{lat:45.2,lon:-82.7,lake:"Huron",src:"nws"},
+      {lat:45.2,lon:-82.2,lake:"Huron",src:"nws"},{lat:45.6,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:45.6,lon:-82.7,lake:"Huron",src:"nws"},{lat:45.6,lon:-82.2,lake:"Huron",src:"nws"},
+      // Huron — CA east side / Georgian Bay
+      {lat:43.5,lon:-81.5,lake:"Huron",src:"eccc"},{lat:44.0,lon:-81.2,lake:"Huron",src:"eccc"},
+      {lat:44.5,lon:-81.0,lake:"Huron",src:"eccc"},{lat:45.0,lon:-81.3,lake:"Huron",src:"eccc"},
+      {lat:45.5,lon:-81.8,lake:"Huron",src:"eccc"},{lat:45.8,lon:-82.3,lake:"Huron",src:"eccc"},
+      // Erie — US south shore
+      {lat:41.6,lon:-83.0,lake:"Erie",src:"nws"},{lat:41.6,lon:-82.3,lake:"Erie",src:"nws"},
+      {lat:41.6,lon:-81.6,lake:"Erie",src:"nws"},{lat:41.6,lon:-80.9,lake:"Erie",src:"nws"},
+      {lat:41.6,lon:-80.2,lake:"Erie",src:"nws"},{lat:41.6,lon:-79.5,lake:"Erie",src:"nws"},
+      {lat:42.1,lon:-83.0,lake:"Erie",src:"nws"},{lat:42.1,lon:-82.3,lake:"Erie",src:"nws"},
+      {lat:42.1,lon:-81.6,lake:"Erie",src:"nws"},{lat:42.1,lon:-80.9,lake:"Erie",src:"nws"},
+      {lat:42.1,lon:-80.2,lake:"Erie",src:"nws"},{lat:42.1,lon:-79.5,lake:"Erie",src:"nws"},
+      {lat:42.5,lon:-79.2,lake:"Erie",src:"nws"},
+      // Erie — CA north shore
+      {lat:42.4,lon:-81.8,lake:"Erie",src:"eccc"},{lat:42.4,lon:-81.0,lake:"Erie",src:"eccc"},
+      {lat:42.5,lon:-80.2,lake:"Erie",src:"eccc"},{lat:42.6,lon:-79.5,lake:"Erie",src:"eccc"},
+      {lat:42.8,lon:-79.0,lake:"Erie",src:"eccc"},
+      // Ontario — US south shore
+      {lat:43.3,lon:-79.2,lake:"Ontario",src:"nws"},{lat:43.3,lon:-78.4,lake:"Ontario",src:"nws"},
+      {lat:43.3,lon:-77.6,lake:"Ontario",src:"nws"},{lat:43.3,lon:-76.8,lake:"Ontario",src:"nws"},
+      {lat:43.3,lon:-76.2,lake:"Ontario",src:"nws"},{lat:43.6,lon:-79.2,lake:"Ontario",src:"nws"},
+      {lat:43.6,lon:-78.4,lake:"Ontario",src:"nws"},{lat:43.6,lon:-77.6,lake:"Ontario",src:"nws"},
+      {lat:43.6,lon:-76.8,lake:"Ontario",src:"nws"},{lat:43.6,lon:-76.2,lake:"Ontario",src:"nws"},
+      // Ontario — CA north shore
+      {lat:43.8,lon:-79.0,lake:"Ontario",src:"eccc"},{lat:43.9,lon:-78.2,lake:"Ontario",src:"eccc"},
+      {lat:44.0,lon:-77.3,lake:"Ontario",src:"eccc"},{lat:44.1,lon:-76.5,lake:"Ontario",src:"eccc"},
+      {lat:43.7,lon:-79.3,lake:"Ontario",src:"eccc"},{lat:44.0,lon:-76.8,lake:"Ontario",src:"eccc"},
+      // Mid-lake points (NWS grids extend over water)
+      // Superior mid-lake
+      {lat:46.9,lon:-91.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-90.5,lake:"Superior",src:"nws"},
+      {lat:46.9,lon:-89.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-88.5,lake:"Superior",src:"nws"},
+      {lat:46.9,lon:-87.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-86.5,lake:"Superior",src:"nws"},
+      {lat:46.9,lon:-85.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-84.8,lake:"Superior",src:"nws"},
+      // Michigan mid-lake
+      {lat:42.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:42.5,lon:-86.4,lake:"Michigan",src:"nws"},
+      {lat:43.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:43.5,lon:-86.4,lake:"Michigan",src:"nws"},
+      {lat:44.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:44.5,lon:-86.4,lake:"Michigan",src:"nws"},
+      {lat:45.0,lon:-86.4,lake:"Michigan",src:"nws"},
+      // Huron mid-lake
+      {lat:43.5,lon:-82.0,lake:"Huron",src:"nws"},{lat:44.0,lon:-82.0,lake:"Huron",src:"nws"},
+      {lat:44.5,lon:-82.0,lake:"Huron",src:"nws"},{lat:45.0,lon:-82.0,lake:"Huron",src:"nws"},
+      {lat:45.5,lon:-82.0,lake:"Huron",src:"nws"},
+      // Erie mid-lake
+      {lat:41.9,lon:-82.5,lake:"Erie",src:"nws"},{lat:41.9,lon:-81.8,lake:"Erie",src:"nws"},
+      {lat:41.9,lon:-81.0,lake:"Erie",src:"nws"},{lat:41.9,lon:-80.3,lake:"Erie",src:"nws"},
+      {lat:41.9,lon:-79.8,lake:"Erie",src:"nws"},{lat:41.9,lon:-79.2,lake:"Erie",src:"nws"},
+      // Ontario mid-lake
+      {lat:43.5,lon:-79.0,lake:"Ontario",src:"nws"},{lat:43.5,lon:-78.2,lake:"Ontario",src:"nws"},
+      {lat:43.5,lon:-77.5,lake:"Ontario",src:"nws"},{lat:43.5,lon:-76.8,lake:"Ontario",src:"nws"},
+      {lat:43.5,lon:-76.3,lake:"Ontario",src:"nws"},
+    ];
+
+    const LAKE_VIEWS = {
+      all:{center:[44.0,-84.5],zoom:6}, Superior:{center:[47.0,-88.0],zoom:7},
+      Michigan:{center:[43.7,-86.8],zoom:7}, Huron:{center:[44.5,-82.2],zoom:7},
+      Erie:{center:[42.2,-81.2],zoom:8}, Ontario:{center:[43.7,-77.8],zoom:8}
+    };
+    const LAKE_SST = {
+      Superior:[33,33,33,34,38,45,55,62,60,53,45,38],
+      Michigan:[35,33,34,38,45,58,68,73,70,60,50,40],
+      Huron:[34,33,33,36,42,53,63,68,66,57,48,39],
+      Erie:[35,33,34,40,50,63,73,76,73,62,52,42],
+      Ontario:[36,34,34,38,44,55,65,71,68,59,50,42]
+    };
+    function lakeSST(lake, date) {
+      const t = LAKE_SST[lake]; if(!t) return 40;
+      const m = date.getMonth(), nm = (m+1)%12;
+      const f = date.getDate() / new Date(date.getFullYear(), m+1, 0).getDate();
+      return t[m]*(1-f) + t[nm]*f;
+    }
+
+    // ===== LAKE POLYGON DATA — loaded at runtime =====
+    const LAKE_POLYGONS = {}; // name → [[lat,lon],...] outer ring
+    const LAKE_RINGS = {};    // name → [ring, ring, ...] (outer + holes)
+
+    // Resolve any NE feature name to our short lake name
+    function resolveNEName(props) {
+      // Try multiple property fields
+      const candidates = [
+        props.name, props.Name, props.NAME,
+        props.name_en, props.label, props.name1, props.Name1,
+      ].filter(Boolean);
+
+      for (const raw of candidates) {
+        const s = raw.trim();
+        // Exact matches
+        if (/^(Lake )?Superior$/i.test(s) || s === 'L. Superior') return 'Superior';
+        if (/^(Lake )?Michigan$/i.test(s) || s === 'L. Michigan') return 'Michigan';
+        if (/^(Lake )?Huron$/i.test(s) || s === 'L. Huron') return 'Huron';
+        if (/^(Lake )?Erie$/i.test(s) || s === 'L. Erie') return 'Erie';
+        if (/^(Lake )?Ontario$/i.test(s) || s === 'L. Ontario') return 'Ontario';
+        if (/Michigan.?Huron|Huron.?Michigan/i.test(s)) return 'Michigan-Huron';
+      }
+      return null;
+    }
+
+    async function loadLakePolygons() {
+      const detail = document.getElementById('loadingDetail');
+      detail.textContent = 'Fetching lake shorelines (Natural Earth 10m)...';
+      const urls = [
+        'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_lakes.geojson',
+        'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_lakes.geojson',
+      ];
+      let data = null;
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) continue;
+          data = await resp.json();
+          console.log(`Loaded from ${url}: ${data.features.length} features`);
+          break;
+        } catch(e) { console.warn(`Failed ${url}:`, e.message); }
+      }
+      if (!data) { detail.textContent = 'Shoreline fetch failed'; return false; }
+
+      // Log scale rank 0–1 features for debugging if Great Lakes aren't found
+      const bigLakes = [];
+      for (const feature of data.features) {
+        const shortName = resolveNEName(feature.properties);
+        if (shortName) {
+          console.log(`Matched: "${feature.properties.name}" → ${shortName} (scalerank ${feature.properties.scalerank})`);
+          if (shortName === 'Michigan-Huron') { splitMichiganHuron(feature.geometry); continue; }
+          extractPolygon(shortName, feature.geometry);
+        } else if ((feature.properties.scalerank || 99) <= 1) {
+          bigLakes.push(feature.properties.name || feature.properties.Name || '(unnamed)');
+        }
+      }
+      if (bigLakes.length) console.log('Unmatched large lakes (scalerank ≤1):', bigLakes.join(', '));
+
+      const found = Object.keys(LAKE_POLYGONS);
+      console.log('Lakes loaded:', found.join(', '), '— vertices:', found.map(n => `${n}:${LAKE_POLYGONS[n].length}`).join(', '));
+      detail.textContent = `Loaded ${found.length} lake shorelines`;
+      return found.length >= 3;
+    }
+
+    function extractPolygon(name, geom) {
+      if (geom.type === 'Polygon') {
+        LAKE_POLYGONS[name] = geom.coordinates[0].map(c => [c[1], c[0]]);
+        LAKE_RINGS[name] = geom.coordinates.map(r => r.map(c => [c[1], c[0]]));
+      } else if (geom.type === 'MultiPolygon') {
+        // Use largest polygon
+        let best = null, maxLen = 0;
+        for (const poly of geom.coordinates) {
+          if (poly[0].length > maxLen) { maxLen = poly[0].length; best = poly; }
+        }
+        if (best) {
+          LAKE_POLYGONS[name] = best[0].map(c => [c[1], c[0]]);
+          LAKE_RINGS[name] = best.map(r => r.map(c => [c[1], c[0]]));
+        }
+      }
+    }
+
+    function splitMichiganHuron(geom) {
+      let polys = geom.type === 'Polygon' ? [geom.coordinates] : geom.coordinates;
+      polys.sort((a, b) => b[0].length - a[0].length);
+      for (let i = 0; i < Math.min(polys.length, 2); i++) {
+        const outer = polys[i][0];
+        let lonSum = 0;
+        for (const c of outer) lonSum += c[0];
+        const avgLon = lonSum / outer.length;
+        const lakeName = avgLon < -84.0 ? 'Michigan' : 'Huron';
+        LAKE_POLYGONS[lakeName] = outer.map(c => [c[1], c[0]]);
+        LAKE_RINGS[lakeName] = polys[i].map(r => r.map(c => [c[1], c[0]]));
+      }
+    }
+
+    // ===== SIMPLIFIED POLYGONS for fetch ray-marching =====
+    // Douglas-Peucker simplification — NE 10m has thousands of verts per lake,
+    // but fetch ray-march only needs ~200 for adequate accuracy
+    const LAKE_SIMPLE_RINGS = {}; // simplified version of LAKE_RINGS for fast PIP
+
+    function dpSimplify(ring, epsilon) {
+      if (ring.length <= 2) return ring;
+      let maxDist = 0, maxIdx = 0;
+      const [s, e] = [ring[0], ring[ring.length-1]];
+      for (let i = 1; i < ring.length-1; i++) {
+        const d = perpDist(ring[i], s, e);
+        if (d > maxDist) { maxDist = d; maxIdx = i; }
+      }
+      if (maxDist > epsilon) {
+        const left = dpSimplify(ring.slice(0, maxIdx+1), epsilon);
+        const right = dpSimplify(ring.slice(maxIdx), epsilon);
+        return left.slice(0, -1).concat(right);
+      }
+      return [s, e];
+    }
+
+    function perpDist(p, a, b) {
+      const dx = b[1]-a[1], dy = b[0]-a[0];
+      const len2 = dx*dx + dy*dy;
+      if (len2 === 0) return Math.sqrt((p[0]-a[0])**2 + (p[1]-a[1])**2);
+      const t = Math.max(0, Math.min(1, ((p[1]-a[1])*dx + (p[0]-a[0])*dy) / len2));
+      return Math.sqrt((p[0] - (a[0]+t*dy))**2 + (p[1] - (a[1]+t*dx))**2);
+    }
+
+    function buildSimplifiedPolygons() {
+      const epsilon = 0.015; // ~1.5 km simplification tolerance
+      for (const name of Object.keys(LAKE_RINGS)) {
+        LAKE_SIMPLE_RINGS[name] = LAKE_RINGS[name].map(ring => dpSimplify(ring, epsilon));
+        const origTotal = LAKE_RINGS[name].reduce((s,r) => s+r.length, 0);
+        const simpTotal = LAKE_SIMPLE_RINGS[name].reduce((s,r) => s+r.length, 0);
+        console.log(`${name}: simplified ${origTotal} → ${simpTotal} vertices for ray-march`);
+      }
+    }
+
+    // ===== INTERIOR GRIDS =====
+    const LAKE_GRIDS = {};
+    const GRID_RES = 0.04;
+
+    function ptInRing(lat, lon, ring) {
+      let inside = false;
+      for (let i = 0, j = ring.length-1; i < ring.length; j = i++) {
+        const yi=ring[i][0], xi=ring[i][1], yj=ring[j][0], xj=ring[j][1];
+        if (((yi>lat)!==(yj>lat)) && (lon<(xj-xi)*(lat-yi)/(yj-yi)+xi)) inside=!inside;
+      }
+      return inside;
+    }
+
+    // Full-res PIP (for grid building and base fill)
+    function ptInPoly(lat, lon, lakeName) {
+      const rings = LAKE_RINGS[lakeName];
+      if (!rings||!rings.length) return false;
+      if (!ptInRing(lat, lon, rings[0])) return false;
+      for (let i=1; i<rings.length; i++) { if (ptInRing(lat, lon, rings[i])) return false; }
+      return true;
+    }
+
+    // Fast simplified PIP (for fetch ray-march — called thousands of times)
+    function ptInPolyFast(lat, lon, lakeName) {
+      const rings = LAKE_SIMPLE_RINGS[lakeName];
+      if (!rings||!rings.length) return false;
+      if (!ptInRing(lat, lon, rings[0])) return false;
+      for (let i=1; i<rings.length; i++) { if (ptInRing(lat, lon, rings[i])) return false; }
+      return true;
+    }
+
+    function buildLakeGrids() {
+      for (const name of Object.keys(LAKE_POLYGONS)) {
+        const poly = LAKE_POLYGONS[name];
+        let minLat=90,maxLat=-90,minLon=180,maxLon=-180;
+        for (const p of poly) { if(p[0]<minLat)minLat=p[0]; if(p[0]>maxLat)maxLat=p[0]; if(p[1]<minLon)minLon=p[1]; if(p[1]>maxLon)maxLon=p[1]; }
+        const pts = [];
+        for (let lat=minLat; lat<=maxLat; lat+=GRID_RES) {
+          for (let lon=minLon; lon<=maxLon; lon+=GRID_RES) {
+            if (ptInPolyFast(lat, lon, name)) pts.push({lat, lon});
+          }
+        }
+        LAKE_GRIDS[name] = { points: pts };
+        console.log(`${name}: ${pts.length} grid cells`);
+      }
+    }
+
+    // Barb display grid — evenly spaced across full lake surface (including Canadian side)
+    const BARB_GRIDS = {};
+    const BARB_RES = 0.35; // ~39 km spacing — gives nice even coverage
+
+    function buildBarbGrids() {
+      for (const name of Object.keys(LAKE_POLYGONS)) {
+        const poly = LAKE_POLYGONS[name];
+        let minLat=90,maxLat=-90,minLon=180,maxLon=-180;
+        for (const p of poly) { if(p[0]<minLat)minLat=p[0]; if(p[0]>maxLat)maxLat=p[0]; if(p[1]<minLon)minLon=p[1]; if(p[1]>maxLon)maxLon=p[1]; }
+        const pts = [];
+        for (let lat=minLat+BARB_RES/2; lat<=maxLat; lat+=BARB_RES) {
+          for (let lon=minLon+BARB_RES/2; lon<=maxLon; lon+=BARB_RES) {
+            if (ptInPolyFast(lat, lon, name)) pts.push({lat, lon});
+          }
+        }
+        BARB_GRIDS[name] = pts;
+        console.log(`${name}: ${pts.length} barb positions`);
+      }
+    }
+
+    // ===== STATE =====
+    let map, currentTimeIndex=HOURS_PAST, isPlaying=false, playInterval=null;
+    let timeSlots=[], windData={}, vizLayers=[], lakeBasePolys=[];
+    let windGenerated = null; // Date when wind_data.json was created
+    let selectedLake="all", showResidence=false, showBarbs=true, fillOpacity=0.75;
+    let showCursor=false;
+    let shorelinePolys = []; // Leaflet polygon strokes
+
+    // Canvas overlay for the colored grid cells
+    let canvasOverlay = null;
+    let cachedCellData = []; // {lat,lon,r,g,b} — reused for opacity/mode changes
+
+    // ===== MAP =====
+    function initMap() {
+      map = L.map('map', {center:[44.0,-84.5], zoom:6, zoomControl:true, attributionControl:false});
+
+      // Custom panes for correct z-ordering
+      map.createPane('baseFillPane').style.zIndex = 250;   // lake dark fills
+      map.createPane('shorelinePane').style.zIndex = 350;   // shoreline outlines
+      map.createPane('labelsPane').style.zIndex = 650;      // city/road labels (above everything)
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {maxZoom:13, subdomains:'abcd', crossOrigin:'anonymous'}).addTo(map);
+    }
+    function addLakeBaseFills() {
+      // Dark base fills (hide basemap water color)
+      for (const [name, coords] of Object.entries(LAKE_POLYGONS)) {
+        const rings = LAKE_RINGS[name] || [coords];
+        L.polygon(rings, {fillColor:'#0d1926', fillOpacity:1, stroke:false, interactive:false, pane:'baseFillPane'}).addTo(map);
+      }
+
+      // Shoreline outlines (always visible)
+      for (const [name, coords] of Object.entries(LAKE_POLYGONS)) {
+        const rings = LAKE_RINGS[name] || [coords];
+        const poly = L.polygon(rings, {fill:false, stroke:true, color:'rgba(51,153,255,0.5)', weight:1.5, interactive:false, pane:'shorelinePane'}).addTo(map);
+        shorelinePolys.push(poly);
+      }
+
+      // Labels tile layer — on custom labelsPane so it's ABOVE the canvas
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {maxZoom:13, subdomains:'abcd', pane:'labelsPane', crossOrigin:'anonymous'}).addTo(map);
+
+      // Canvas overlay — inside overlayPane, using layerPoint coordinates
+      // so it moves correctly with the pane during drag.
+      canvasOverlay = L.DomUtil.create('canvas', 'fetch-canvas');
+      canvasOverlay.style.cssText = 'pointer-events:none;';
+      map.getPane('overlayPane').appendChild(canvasOverlay);
+      resizeCanvas();
+      map.on('move zoom viewreset resize', redrawCanvas);
+
+      // Cursor readout — mousemove handler
+      map.on('mousemove', onCursorMove);
+      map.on('mouseout', () => { document.getElementById('cursorReadout').classList.remove('visible'); });
+    }
+
+    function resizeCanvas() {
+      const size = map.getSize();
+      canvasOverlay.width = size.x;
+      canvasOverlay.height = size.y;
+    }
+
+    function redrawCanvas() {
+      resizeCanvas();
+      const ctx = canvasOverlay.getContext('2d');
+      ctx.clearRect(0, 0, canvasOverlay.width, canvasOverlay.height);
+
+      // Position canvas at current view's top-left in layer coordinates
+      // This makes it track correctly during pane CSS transforms (drag)
+      const topLeft = map.containerPointToLayerPoint([0, 0]);
+      L.DomUtil.setPosition(canvasOverlay, topLeft);
+
+      const half = GRID_RES / 2;
+      for (const cell of cachedCellData) {
+        const nw = map.latLngToLayerPoint([cell.lat+half, cell.lon-half]);
+        const se = map.latLngToLayerPoint([cell.lat-half, cell.lon+half]);
+        const x = nw.x - topLeft.x;
+        const y = nw.y - topLeft.y;
+        const w = se.x - nw.x;
+        const h = se.y - nw.y;
+        if (x + w < 0 || x > canvasOverlay.width || y + h < 0 || y > canvasOverlay.height) continue;
+        ctx.fillStyle = `rgba(${cell.r},${cell.g},${cell.b},${fillOpacity})`;
+        ctx.fillRect(x, y, Math.max(w, 1), Math.max(h, 1));
+      }
+    }
+
+    function buildTimeSlots() {
+      const now = new Date(); now.setMinutes(0,0,0);
+      timeSlots = [];
+      for (let h=-HOURS_PAST; h<=HOURS_FUTURE; h++) timeSlots.push(new Date(now.getTime()+h*3600000));
+    }
+
+    // ===== CURSOR READOUT =====
+    let cursorThrottle = 0;
+    function onCursorMove(e) {
+      if (!showCursor) return;
+      const now = Date.now();
+      if (now - cursorThrottle < 80) return; // throttle to ~12fps
+      cursorThrottle = now;
+
+      const lat = e.latlng.lat, lon = e.latlng.lng;
+      const panel = document.getElementById('cursorReadout');
+      const targetTime = timeSlots[currentTimeIndex];
+      if (!targetTime) { panel.classList.remove('visible'); return; }
+
+      // Find which lake this point is in
+      let hitLake = null;
+      for (const name of Object.keys(LAKE_POLYGONS)) {
+        if (ptInPolyFast(lat, lon, name)) { hitLake = name; break; }
+      }
+      if (!hitLake) { panel.classList.remove('visible'); return; }
+
+      panel.classList.add('visible');
+      document.getElementById('crPos').textContent = `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
+
+      const cellWind = idwFull(lat, lon, hitLake);
+      if (!cellWind) {
+        document.getElementById('crWindDir').textContent = '—';
+        document.getElementById('crWindSpd').textContent = '—';
+        document.getElementById('crFetch').textContent = '—';
+        document.getElementById('crResidence').textContent = '—';
+        document.getElementById('crSST').textContent = '—';
+        document.getElementById('crAirTemp').textContent = '—';
+        document.getElementById('crTemp850').textContent = '—';
+        document.getElementById('crDeltaT').textContent = '—';
+        return;
+      }
+
+      const result = computeFetchDiscretized(lat, lon, hitLake);
+      const sst = lakeSST(hitLake, targetTime);
+
+      document.getElementById('crWindDir').textContent = `${cellWind.dir.toFixed(0)}°`;
+      document.getElementById('crWindSpd').textContent = `${cellWind.spdKt.toFixed(0)} kt`;
+      document.getElementById('crFetch').textContent = `${result.fetchKm.toFixed(0)} km`;
+      document.getElementById('crResidence').textContent = `${result.residenceH.toFixed(1)} h`;
+      document.getElementById('crSST').textContent = `${sst.toFixed(0)}°F`;
+      document.getElementById('crAirTemp').textContent = cellWind.airTempF !== null ? `${cellWind.airTempF.toFixed(0)}°F` : '—';
+      document.getElementById('crTemp850').textContent = cellWind.temp850F !== null ? `${cellWind.temp850F.toFixed(0)}°F` : '—';
+      const deltaT = cellWind.airTempF !== null ? sst - cellWind.airTempF : null;
+      document.getElementById('crDeltaT').textContent = deltaT !== null ? `${deltaT.toFixed(1)}°F` : '—';
+    }
+
+    // ===== WIND DATA LOADING =====
+    // Strategy: load pre-computed wind_data.json first (built by GitHub Actions hourly).
+    // Fall back to direct NWS API calls if the JSON is missing, stale (>3h), or fails.
+
+    const WIND_JSON_URL = 'wind_data.json'; // same directory as the HTML
+    const WIND_STALE_MS = 6 * 3600 * 1000; // consider stale after 6 hours
+
+    function valAt(series, target) {
+      if(!series||!series.length) return null;
+      let best=null, bd=Infinity;
+      for(const e of series){const d=Math.abs(e.time-target.getTime());if(d<bd){bd=d;best=e.value;}}
+      return bd<10800000?best:null; // 3h tolerance for ECCC 3-hourly data
+    }
+
+    // Convert pre-computed JSON series [{t:"ISO",v:num},...] to internal format [{time:ms,value:num},...]
+    function jsonSeriesToInternal(arr) {
+      if (!arr) return [];
+      return arr.map(e => ({time: new Date(e.t).getTime(), value: e.v}));
+    }
+
+    async function loadPrecomputedWind() {
+      const detail = document.getElementById('loadingDetail');
+      detail.textContent = 'Loading pre-computed wind data...';
+      try {
+        const resp = await fetch(WIND_JSON_URL + '?_=' + Date.now()); // cache-bust
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        // Check freshness
+        const generated = new Date(data.generated);
+        windGenerated = generated;
+        const age = Date.now() - generated.getTime();
+        if (age > WIND_STALE_MS) {
+          console.warn(`Wind data is ${(age/3600000).toFixed(1)}h old — falling back to direct API`);
+          return false;
+        }
+
+        // Load into windData
+        let has850 = 0;
+        for (const [idx, d] of Object.entries(data.points)) {
+          windData[parseInt(idx)] = {
+            windDir: jsonSeriesToInternal(d.windDir),
+            windSpd: jsonSeriesToInternal(d.windSpd),
+            temp: jsonSeriesToInternal(d.temp),
+            temp850: d.temp850 ? jsonSeriesToInternal(d.temp850) : null,
+          };
+          if (d.temp850 && d.temp850.length) has850++;
+        }
+
+        const n = Object.keys(windData).length;
+        const ageMin = Math.round(age / 60000);
+        console.log(`Loaded pre-computed wind: ${n}/${data.totalPoints} pts, ${ageMin}min old, ${has850} with 850mb`);
+        detail.textContent = `Wind data loaded (${ageMin}min old)`;
+        return true;
+      } catch(e) {
+        console.warn('Pre-computed wind load failed:', e.message);
+        return false;
+      }
+    }
+
+    // Direct NWS API fallback
+    async function nwsFetch(url) { const r=await fetch(url,{headers:{'User-Agent':'LakeEffectFetchMap/2.0 (research.alexcooke.co)'}}); if(!r.ok)throw new Error(`HTTP ${r.status}`); return r.json(); }
+    function parseTS(prop) {
+      if(!prop||!prop.values) return [];
+      const out=[];
+      for(const e of prop.values){const[iso,dur]=e.validTime.split('/');const start=new Date(iso).getTime();const hm=dur&&dur.match(/PT(\d+)H/);const hrs=hm?parseInt(hm[1]):1;for(let h=0;h<hrs;h++)out.push({time:start+h*3600000,value:e.value});}
+      return out;
+    }
+    async function loadWindPoint(idx) {
+      const pt=WIND_POINTS[idx];
+      if (pt.src === 'eccc') return; // Canadian points only available via pre-computed JSON
+      try { const pd=await nwsFetch(`https://api.weather.gov/points/${pt.lat.toFixed(4)},${pt.lon.toFixed(4)}`); const gd=await nwsFetch(pd.properties.forecastGridData); const p=gd.properties; windData[idx]={windDir:parseTS(p.windDirection),windSpd:parseTS(p.windSpeed),temp:parseTS(p.temperature)}; }
+      catch(e) { console.warn(`Point ${idx} failed: HTTP error`); }
+    }
+    async function loadAllWindDirect() {
+      const detail=document.getElementById('loadingDetail');
+      const nwsPoints = WIND_POINTS.filter(p => p.src === 'nws').length;
+      detail.textContent = `Falling back to NWS API (${nwsPoints} US pts, no Canadian data)...`;
+      const total=WIND_POINTS.length;
+      for(let i=0;i<total;i+=8){const batch=[];for(let j=i;j<Math.min(i+8,total);j++)batch.push(loadWindPoint(j));await Promise.all(batch);const loaded=Object.keys(windData).length;detail.textContent=`${loaded}/${nwsPoints} US wind points loaded`;await new Promise(r=>setTimeout(r,150));}
+    }
+
+    async function loadAllWindData() {
+      // Try pre-computed first, fall back to direct
+      const preloaded = await loadPrecomputedWind();
+      if (!preloaded) {
+        await loadAllWindDirect();
+      }
+
+      document.getElementById('loadingOverlay').classList.add('hidden');
+      const n=Object.keys(windData).length;
+      const total=WIND_POINTS.length;
+      document.getElementById('statusDot').className=n>10?'status-dot ready':'status-dot loading';
+      document.getElementById('statusText').textContent=`${n}/${total} pts`;
+
+      // Update "Forecast created" display
+      if (windGenerated) {
+        const ct = windGenerated.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        document.getElementById('windCreatedTime').textContent = ct;
+      } else {
+        const now = new Date();
+        windGenerated = now;
+        const ct = now.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        document.getElementById('windCreatedTime').textContent = ct + ' (live)';
+      }
+
+      updateViz();
+
+      // Check if 850mb data is missing — fetch from ECCC WMS in background
+      const has850 = Object.values(windData).some(d => d && d.temp850 && d.temp850.length > 0);
+      if (!has850) fetch850mbBackground();
+    }
+
+    async function fetch850mbBackground() {
+      // Query ECCC HRDPS 850mb temp for all loaded points (covers US + CA)
+      // Runs in background after wind data loads. Silently exits on CORS failure (file://).
+      const LAYER = 'HRDPS.CONTINENTAL.PRES_TT.850';
+      const GEOMET = 'https://geo.weather.gc.ca/geomet';
+      const indices = Object.keys(windData).map(Number);
+      if (!indices.length) return;
+
+      // Generate forecast times: every 3h for 48h
+      const now = new Date();
+      const baseH = Math.floor(now.getUTCHours() / 3) * 3;
+      const base = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), baseH));
+      const times = [];
+      for (let h = 1; h <= 48; h += 3) times.push(new Date(base.getTime() + h * 3600000));
+
+      async function queryOne(lat, lon, timeStr) {
+        const e = 0.25;
+        const url = `${GEOMET}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo`
+          + `&BBOX=${lat-e},${lon-e},${lat+e},${lon+e}`
+          + `&CRS=EPSG:4326&WIDTH=10&HEIGHT=10`
+          + `&LAYERS=${LAYER}&QUERY_LAYERS=${LAYER}`
+          + `&INFO_FORMAT=application/json&I=5&J=5&TIME=${timeStr}`;
+        const r = await fetch(url);
+        if (!r.ok) return null;
+        const data = await r.json();
+        const feats = data.features;
+        if (feats && feats[0]) {
+          for (const v of Object.values(feats[0].properties)) {
+            if (typeof v === 'number') return v;
+          }
+        }
+        return null;
+      }
+
+      // Test one point first to check if ECCC is reachable
+      try {
+        const testPt = WIND_POINTS[indices[0]];
+        const testTime = times[0].toISOString().replace('.000','');
+        await queryOne(testPt.lat, testPt.lon, testTime);
+      } catch(e) {
+        return; // CORS or offline — skip silently
+      }
+
+      // Init temp850 series for all points
+      for (const idx of indices) {
+        if (!windData[idx].temp850) windData[idx].temp850 = [];
+      }
+
+      // Fetch all points per timestep, 12 concurrent
+      for (const t of times) {
+        const ts = t.toISOString().replace('.000','');
+        const batch = indices.map(idx => {
+          const pt = WIND_POINTS[idx];
+          return queryOne(pt.lat, pt.lon, ts).then(val => ({idx, val, time: t.getTime()}));
+        });
+        // Process in chunks of 12
+        for (let i = 0; i < batch.length; i += 12) {
+          const results = await Promise.all(batch.slice(i, i + 12));
+          for (const {idx, val, time} of results) {
+            if (val !== null) windData[idx].temp850.push({time, value: val});
+          }
+        }
+      }
+
+      const ok = indices.filter(i => windData[i].temp850 && windData[i].temp850.length > 0).length;
+      if (ok > 0) {
+        console.log(`850mb: loaded for ${ok} points via ECCC WMS`);
+        updateViz();
+      }
+    }
+
+    // ===== PRE-EXTRACTED WIND FIELD =====
+    // Built once per timestep. Avoids repeated valAt() lookups during ray-march.
+    // windField[lakeName] = [{lat, lon, u, v, spd, cosLat}, ...]
+    let windField = {};
+
+    function buildWindField(targetTime) {
+      windField = {};
+      for (const lakeName of Object.keys(LAKE_POLYGONS)) {
+        const pts = [];
+        for (let i = 0; i < WIND_POINTS.length; i++) {
+          if (WIND_POINTS[i].lake !== lakeName) continue;
+          const d = windData[i]; if (!d) continue;
+          const dir = valAt(d.windDir, targetTime), spd = valAt(d.windSpd, targetTime);
+          if (dir === null || spd === null) continue;
+          const rad = (dir * Math.PI) / 180;
+          const temp = valAt(d.temp, targetTime);
+          const temp850 = d.temp850 ? valAt(d.temp850, targetTime) : null;
+          pts.push({
+            lat: WIND_POINTS[i].lat, lon: WIND_POINTS[i].lon,
+            u: -Math.sin(rad) * spd, v: -Math.cos(rad) * spd,
+            spd: spd,
+            cosLat: Math.cos(WIND_POINTS[i].lat * Math.PI / 180),
+            tempC: temp,
+            temp850C: temp850
+          });
+        }
+        windField[lakeName] = pts;
+      }
+    }
+
+    // Fast inline IDW from pre-extracted field. Returns {dir, spdKmh} or null.
+    function idwAtPoint(lat, lon, lakeName) {
+      const pts = windField[lakeName];
+      if (!pts || !pts.length) return null;
+      let uSum = 0, vSum = 0, spdSum = 0, wSum = 0;
+      const cosLat = Math.cos(lat * Math.PI / 180);
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        const dLat = lat - p.lat;
+        const dLon = (lon - p.lon) * cosLat;
+        const w = 1 / (dLat * dLat + dLon * dLon + 0.001);
+        uSum += w * p.u;
+        vSum += w * p.v;
+        spdSum += w * p.spd;
+        wSum += w;
+      }
+      if (wSum === 0) return null;
+      return {
+        dir: (Math.atan2(-uSum / wSum, -vSum / wSum) * 180 / Math.PI + 360) % 360,
+        spdKmh: spdSum / wSum
+      };
+    }
+
+    // Full IDW with temp (used for info panel and cursor readout, not hot path)
+    function idwFull(lat, lon, lakeName) {
+      const pts = windField[lakeName];
+      if (!pts || !pts.length) return null;
+      let uSum = 0, vSum = 0, spdSum = 0, wSum = 0, tempSum = 0, tempW = 0, t850Sum = 0, t850W = 0;
+      const cosLat = Math.cos(lat * Math.PI / 180);
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        const dLat = lat - p.lat;
+        const dLon = (lon - p.lon) * cosLat;
+        const w = 1 / (dLat * dLat + dLon * dLon + 0.001);
+        uSum += w * p.u; vSum += w * p.v; spdSum += w * p.spd; wSum += w;
+        if (p.tempC !== null) { tempSum += w * p.tempC; tempW += w; }
+        if (p.temp850C !== null) { t850Sum += w * p.temp850C; t850W += w; }
+      }
+      if (wSum === 0) return null;
+      return {
+        dir: (Math.atan2(-uSum / wSum, -vSum / wSum) * 180 / Math.PI + 360) % 360,
+        spdKmh: spdSum / wSum,
+        spdKt: (spdSum / wSum) * 0.539957,
+        airTempF: tempW > 0 ? (tempSum / tempW) * 9 / 5 + 32 : null,
+        temp850F: t850W > 0 ? (t850Sum / t850W) * 9 / 5 + 32 : null
+      };
+    }
+
+    // Lake-average wind (for info panel)
+    function avgWindForLake(lakeName) {
+      const pts = windField[lakeName];
+      if (!pts || !pts.length) return null;
+      let uSum = 0, vSum = 0, spdSum = 0, tempSum = 0, tempN = 0;
+      for (const p of pts) {
+        uSum += p.u; vSum += p.v; spdSum += p.spd;
+        if (p.tempC !== null) { tempSum += p.tempC; tempN++; }
+      }
+      const n = pts.length;
+      return {
+        dir: (Math.atan2(-uSum / n, -vSum / n) * 180 / Math.PI + 360) % 360,
+        spdKmh: spdSum / n,
+        spdKt: (spdSum / n) * 0.539957,
+        airTempF: tempN > 0 ? (tempSum / tempN) * 9 / 5 + 32 : null
+      };
+    }
+
+    // ===== DISCRETIZED FETCH + RESIDENCE =====
+    // Traces upwind with ~2 km steps, re-interpolating wind at each step.
+    // Returns {fetchKm, residenceH, startDir, startSpdKmh}
+    const STEP_DEG = 0.018;  // ~2 km step
+    const STEP_KM = 2.0;
+    const MAX_STEPS = 300;   // 300 × 2 km = 600 km max
+
+    function computeFetchDiscretized(lat, lon, lakeName) {
+      let cLat = lat, cLon = lon;
+      let totalDist = 0, totalTime = 0;
+      let startDir = null, startSpd = null;
+
+      for (let i = 0; i < MAX_STEPS; i++) {
+        // Interpolate wind at current position
+        const w = idwAtPoint(cLat, cLon, lakeName);
+        if (!w || w.spdKmh < 0.5) break;  // calm or no data → stop
+
+        if (i === 0) { startDir = w.dir; startSpd = w.spdKmh; }
+
+        // Step upwind
+        const rad = (w.dir * Math.PI) / 180;
+        cLat += Math.cos(rad) * STEP_DEG;
+        cLon += Math.sin(rad) * STEP_DEG / Math.cos(cLat * Math.PI / 180);
+
+        totalDist += STEP_KM;
+        totalTime += STEP_KM / w.spdKmh;  // hours for this step
+
+        // Hit shore?
+        if (!ptInPolyFast(cLat, cLon, lakeName)) break;
+      }
+
+      return {
+        fetchKm: totalDist,
+        residenceH: totalTime,
+        startDir: startDir || 0,
+        startSpdKmh: startSpd || 0
+      };
+    }
+
+    // ===== WIND BARBS (smaller, 26px) =====
+    function windBarbSVG(dirDeg, spdKt) {
+      const s=26,h=s/2;
+      if(spdKt<3) return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg"><circle cx="${h}" cy="${h}" r="3" stroke="rgba(255,255,255,0.7)" stroke-width="1" fill="none"/></svg>`;
+      let svg=`<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(${dirDeg},${h},${h})">`;
+      svg+=`<line x1="${h}" y1="${h}" x2="${h}" y2="3" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/>`;
+      let rem=Math.round(spdKt/5)*5,y=4;
+      while(rem>=50){svg+=`<polygon points="${h},${y} ${h+6},${y+2} ${h},${y+4}" fill="rgba(255,255,255,0.7)"/>`;y+=5;rem-=50;}
+      while(rem>=10){svg+=`<line x1="${h}" y1="${y}" x2="${h+6}" y2="${y-2}" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/>`;y+=3;rem-=10;}
+      if(rem>=5){svg+=`<line x1="${h}" y1="${y}" x2="${h+4}" y2="${y-1.5}" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/>`;}
+      svg+=`</g></svg>`; return svg;
+    }
+
+    // ===== COLORS =====
+    function fetchRGB(km){const t=Math.min(km/250,1);let r,g,b;if(t<0.15){r=60+140*(t/0.15);g=30+40*(t/0.15);b=10;}else if(t<0.4){const s=(t-0.15)/0.25;r=200+55*s;g=70-20*s;b=0;}else if(t<0.7){const s=(t-0.4)/0.3;r=255;g=50-50*s;b=0;}else{const s=(t-0.7)/0.3;r=255;g=0;b=Math.round(40*s);}return{r:Math.round(r),g:Math.round(g),b:Math.round(b)};}
+    function residenceRGB(hours){const t=Math.min(hours/10,1);let r,g,b;if(t<0.2){r=20;g=60+80*(t/0.2);b=150+50*(t/0.2);}else if(t<0.5){const s=(t-0.2)/0.3;r=20+30*s;g=140+60*s;b=200+30*s;}else{const s=(t-0.5)/0.5;r=50+130*s;g=200+55*s;b=230+25*s;}return{r:Math.round(r),g:Math.round(g),b:Math.round(b)};}
+
+    // ===== VIZ =====
+    // Wind barb markers (few enough to stay as Leaflet layers)
+    function clearBarbs(){for(const l of vizLayers)map.removeLayer(l);vizLayers=[];}
+
+    function computeAndDraw(targetTime) {
+      const t0 = performance.now();
+      cachedCellData = [];
+
+      // Pre-extract wind field ONCE for this timestep
+      buildWindField(targetTime);
+
+      const lakes=selectedLake==="all"?Object.keys(LAKE_POLYGONS):[selectedLake];
+      let infoLake=selectedLake!=="all"?selectedLake:null;
+
+      for(const lakeName of lakes){
+        const lakeWind=avgWindForLake(lakeName); if(!lakeWind)continue;
+        const sst=lakeSST(lakeName,targetTime);
+        const grid=LAKE_GRIDS[lakeName]; if(!grid)continue;
+        let lakeMaxFetch=0, lakeMaxResidence=0;
+
+        for(const pt of grid.points){
+          const result = computeFetchDiscretized(pt.lat, pt.lon, lakeName);
+          const fetchKm = result.fetchKm;
+          const residenceH = result.residenceH;
+          if(fetchKm>lakeMaxFetch)lakeMaxFetch=fetchKm;
+          if(residenceH>lakeMaxResidence)lakeMaxResidence=residenceH;
+          if(fetchKm<3)continue;
+          const c=showResidence?residenceRGB(residenceH):fetchRGB(fetchKm);
+          cachedCellData.push({lat:pt.lat, lon:pt.lon, r:c.r, g:c.g, b:c.b});
+        }
+
+        if(lakeName===infoLake||(selectedLake==="all"&&!infoLake))infoLake=lakeName;
+        if(lakeName===infoLake){
+          document.getElementById('lakeInfo').classList.add('visible');
+          document.getElementById('lakeInfoTitle').textContent=`Lake ${lakeName}`;
+          document.getElementById('liWindDir').textContent=`${lakeWind.dir.toFixed(0)}°`;
+          document.getElementById('liWindSpd').textContent=`${lakeWind.spdKt.toFixed(0)} kt`;
+          document.getElementById('liMaxFetch').textContent=`${lakeMaxFetch.toFixed(0)} km`;
+          document.getElementById('liSST').textContent=`${sst.toFixed(0)}°F`;
+          document.getElementById('liAirTemp').textContent=lakeWind.airTempF!==null?`${lakeWind.airTempF.toFixed(0)}°F`:'—';
+          const deltaT=lakeWind.airTempF!==null?sst-lakeWind.airTempF:null;
+          document.getElementById('liDeltaT').textContent=deltaT!==null?`${deltaT.toFixed(1)}°F`:'—';
+          document.getElementById('liResidence').textContent=`${lakeMaxResidence.toFixed(1)} h`;
+        }
+      }
+      if(selectedLake==="all")document.getElementById('lakeInfo').classList.remove('visible');
+
+      // Draw canvas
+      redrawCanvas();
+
+      console.log(`Viz computed: ${cachedCellData.length} cells in ${(performance.now()-t0).toFixed(0)}ms`);
+    }
+
+    function updateViz() {
+      clearBarbs();
+      const targetTime=timeSlots[currentTimeIndex]; if(!targetTime) return;
+
+      computeAndDraw(targetTime);
+
+      // Wind barbs — drawn from IDW interpolation at evenly-spaced positions across full lake
+      if(showBarbs){
+        const lakes=selectedLake==="all"?Object.keys(LAKE_POLYGONS):[selectedLake];
+        for(const lakeName of lakes){
+          const barbPts = BARB_GRIDS[lakeName];
+          if(!barbPts) continue;
+          for(const pt of barbPts){
+            const w = idwAtPoint(pt.lat, pt.lon, lakeName);
+            if(!w) continue;
+            const spdKt = w.spdKmh * 0.539957;
+            vizLayers.push(L.marker([pt.lat,pt.lon],{icon:L.divIcon({html:windBarbSVG(w.dir, spdKt),className:'',iconSize:[26,26],iconAnchor:[13,13]}),interactive:false}).addTo(map));
+          }
+        }
+      }
+
+      if(showResidence){document.getElementById('legendTitle').textContent='Residence Time';document.getElementById('legendBar').style.background='linear-gradient(to right, #0d1926, #1480c8, #40d0f0, #ccffff)';document.getElementById('legendLabels').innerHTML='<span>0 h</span><span>2</span><span>5</span><span>10+</span>';}
+      else{document.getElementById('legendTitle').textContent='Fetch Distance';document.getElementById('legendBar').style.background='linear-gradient(to right, #0d1926, #994400, #ff5500, #ff0044)';document.getElementById('legendLabels').innerHTML='<span>0 km</span><span>80</span><span>160</span><span>250+</span>';}
+
+      const ts=targetTime.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+      const h=currentTimeIndex-HOURS_PAST;
+      document.getElementById('timeDisplay').textContent=`${ts}  ·  ${h===0?'Now':h>0?`+${h}h Forecast`:`${h}h Observed`}`;
+    }
+
+    // Debounce helper — critical for slider dragging
+    let vizDebounceTimer = null;
+    function updateVizDebounced() {
+      if (vizDebounceTimer) cancelAnimationFrame(vizDebounceTimer);
+      vizDebounceTimer = requestAnimationFrame(updateViz);
+    }
+
+    // Fast redraw (opacity change only — skip recomputation)
+    function updateOpacityOnly() {
+      redrawCanvas();
+    }
+
+    // ===== CONTROLS =====
+    function initControls(){
+      document.querySelectorAll('.lake-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.lake-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedLake=btn.dataset.lake;map.flyTo(LAKE_VIEWS[selectedLake].center,LAKE_VIEWS[selectedLake].zoom,{duration:0.8});if(selectedLake==="all")document.getElementById('lakeInfo').classList.remove('visible');updateVizDebounced();});});
+      document.getElementById('toggleResidence').addEventListener('change',e=>{showResidence=e.target.checked;updateVizDebounced();});
+      document.getElementById('toggleBarbs').addEventListener('change',e=>{showBarbs=e.target.checked;updateVizDebounced();});
+      document.getElementById('toggleCursor').addEventListener('change',e=>{
+        showCursor=e.target.checked;
+        if(!showCursor) document.getElementById('cursorReadout').classList.remove('visible');
+      });
+      const opSlider=document.getElementById('opacitySlider'),opVal=document.getElementById('opacityVal');
+      opSlider.addEventListener('input',()=>{fillOpacity=parseInt(opSlider.value)/100;opVal.textContent=opSlider.value+'%';updateOpacityOnly();});
+      const slider=document.getElementById('timeSlider');
+      const pct=(HOURS_PAST/TOTAL_SLOTS*100).toFixed(1);
+      slider.style.background=`linear-gradient(to right, var(--accent-cool) 0%, var(--accent-cool) ${pct}%, var(--accent-yellow) ${pct}%, var(--accent-yellow) 100%)`;
+      slider.addEventListener('input',()=>{currentTimeIndex=parseInt(slider.value);updateVizDebounced();});
+      document.getElementById('btnPrev').addEventListener('click',()=>{if(currentTimeIndex>0){currentTimeIndex--;slider.value=currentTimeIndex;updateVizDebounced();}});
+      document.getElementById('btnNext').addEventListener('click',()=>{if(currentTimeIndex<TOTAL_SLOTS){currentTimeIndex++;slider.value=currentTimeIndex;updateVizDebounced();}});
+      document.getElementById('btnPlay').addEventListener('click',()=>{isPlaying?stopPlay():startPlay();});
+      const ticks=document.getElementById('timelineTicks');
+      for(let h=-HOURS_PAST;h<=HOURS_FUTURE;h+=12){const s=document.createElement('span');s.textContent=h===0?'Now':`${h>0?'+':''}${h}h`;ticks.appendChild(s);}
+    }
+    function startPlay(){isPlaying=true;document.getElementById('btnPlay').textContent='⏸ Pause';const slider=document.getElementById('timeSlider');playInterval=setInterval(()=>{currentTimeIndex=currentTimeIndex>=TOTAL_SLOTS?0:currentTimeIndex+1;slider.value=currentTimeIndex;updateViz();},600);}
+    function stopPlay(){isPlaying=false;document.getElementById('btnPlay').textContent='▶ Play';if(playInterval){clearInterval(playInterval);playInterval=null;}}
+
+    // ===== EXPORT =====
+    document.getElementById('btnExportPNG').addEventListener('click', exportPNG);
+    document.getElementById('btnExportGIF').addEventListener('click', () => {
+      document.getElementById('gifModal').style.display = 'flex';
+    });
+    document.getElementById('gifCancel').addEventListener('click', () => {
+      document.getElementById('gifModal').style.display = 'none';
+    });
+    document.getElementById('gifGo').addEventListener('click', () => {
+      document.getElementById('gifModal').style.display = 'none';
+      exportGIF();
+    });
+
+    function getTimeLabel(slotIndex) {
+      const t = timeSlots[slotIndex];
+      if (!t) return '';
+      const dateStr = t.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+      const timeStr = t.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+      return `Lake-Effect Fetch Map  ·  Valid: ${dateStr} ${timeStr}`;
+    }
+
+    function captureStaticBase(scale) {
+      const S = scale || 2;
+      const size = map.getSize();
+      const c = document.createElement('canvas');
+      c.width = size.x * S; c.height = size.y * S;
+      const ctx = c.getContext('2d');
+      ctx.scale(S, S);
+
+      // Dark background
+      ctx.fillStyle = '#0b0f14';
+      ctx.fillRect(0, 0, size.x, size.y);
+
+      // Map tiles
+      const mapContainer = map.getContainer();
+      const mapRect = mapContainer.getBoundingClientRect();
+      function drawTilesFromPane(pane) {
+        if (!pane) return;
+        const imgs = pane.querySelectorAll('img.leaflet-tile');
+        for (const img of imgs) {
+          if (!img.complete || !img.naturalWidth) continue;
+          // Skip hidden or transitioning tiles
+          const style = window.getComputedStyle(img);
+          if (style.opacity === '0' || style.visibility === 'hidden') continue;
+          const parent = img.closest('.leaflet-tile-container');
+          if (parent) {
+            const ps = window.getComputedStyle(parent);
+            if (ps.opacity === '0' || ps.visibility === 'hidden') continue;
+          }
+          const imgRect = img.getBoundingClientRect();
+          // Skip tiles outside viewport
+          if (imgRect.right < mapRect.left || imgRect.left > mapRect.right ||
+              imgRect.bottom < mapRect.top || imgRect.top > mapRect.bottom) continue;
+          const x = imgRect.left - mapRect.left;
+          const y = imgRect.top - mapRect.top;
+          try { ctx.drawImage(img, x, y, imgRect.width, imgRect.height); } catch(e) {}
+        }
+      }
+      drawTilesFromPane(map.getPane('tilePane'));
+
+      // Lake dark fills
+      ctx.fillStyle = '#0d1926';
+      for (const [name, coords] of Object.entries(LAKE_POLYGONS)) {
+        const rings = LAKE_RINGS[name] || [coords];
+        ctx.beginPath();
+        const outer = rings[0];
+        for (let i = 0; i < outer.length; i++) {
+          const pt = map.latLngToContainerPoint(L.latLng(outer[i][0], outer[i][1]));
+          i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.closePath();
+        for (let r = 1; r < rings.length; r++) {
+          const hole = rings[r];
+          for (let i = hole.length - 1; i >= 0; i--) {
+            const pt = map.latLngToContainerPoint(L.latLng(hole[i][0], hole[i][1]));
+            i === hole.length - 1 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.closePath();
+        }
+        ctx.fill();
+      }
+
+      // Shoreline outlines
+      ctx.strokeStyle = 'rgba(51,153,255,0.5)';
+      ctx.lineWidth = 1.5;
+      for (const [name, coords] of Object.entries(LAKE_POLYGONS)) {
+        const rings = LAKE_RINGS[name] || [coords];
+        for (const ring of rings) {
+          ctx.beginPath();
+          for (let i = 0; i < ring.length; i++) {
+            const pt = map.latLngToContainerPoint(L.latLng(ring[i][0], ring[i][1]));
+            i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
+
+      // Label tiles
+      drawTilesFromPane(map.getPane('labelsPane'));
+
+      return c;
+    }
+
+    function captureFrame(baseCanvas, title, scale) {
+      const S = scale || 2;
+      const size = map.getSize();
+      const c = document.createElement('canvas');
+      c.width = size.x * S; c.height = size.y * S;
+      const ctx = c.getContext('2d');
+
+      // Draw cached static base (tiles + fills + shorelines + labels)
+      if (S === 1) {
+        ctx.drawImage(baseCanvas, 0, 0);
+      } else {
+        ctx.drawImage(baseCanvas, 0, 0);
+      }
+
+      ctx.scale(S, S);
+
+      // Draw the ACTUAL on-screen fetch/residence canvas — not a re-render
+      // This is the canvasOverlay element that redrawCanvas() draws to
+      if (canvasOverlay && canvasOverlay.width > 0) {
+        const mapContainer = map.getContainer();
+        const mapRect = mapContainer.getBoundingClientRect();
+        const canvasRect = canvasOverlay.getBoundingClientRect();
+        const cx = canvasRect.left - mapRect.left;
+        const cy = canvasRect.top - mapRect.top;
+        ctx.drawImage(canvasOverlay, cx, cy, canvasRect.width, canvasRect.height);
+      }
+
+      // Wind barbs — also grab from DOM as SVG images
+      // Actually just re-render barbs since they're lightweight div icons
+      if (showBarbs) {
+        const lakes = selectedLake === 'all' ? Object.keys(LAKE_POLYGONS) : [selectedLake];
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.lineWidth = 1.2;
+        for (const lakeName of lakes) {
+          const barbPts = BARB_GRIDS[lakeName]; if (!barbPts) continue;
+          for (const bpt of barbPts) {
+            const w = idwAtPoint(bpt.lat, bpt.lon, lakeName); if (!w) continue;
+            const spdKt = w.spdKmh * 0.539957;
+            const cpt = map.latLngToContainerPoint(L.latLng(bpt.lat, bpt.lon));
+            drawBarbToCtx(ctx, cpt.x, cpt.y, w.dir, spdKt);
+          }
+        }
+      }
+
+      // Title bar
+      if (title) {
+        ctx.font = '600 13px "DM Sans", Arial, sans-serif';
+        const tw = ctx.measureText(title).width;
+        const tx = (size.x - tw) / 2 - 18;
+        const bw = tw + 36;
+        ctx.fillStyle = 'rgba(17,24,32,0.88)';
+        ctx.strokeStyle = '#1e2a3a';
+        ctx.lineWidth = 1;
+        roundRect(ctx, tx, 10, bw, 34, 6);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#e8ecf1';
+        ctx.fillText(title, tx + 18, 32);
+      }
+
+      // Legend
+      const lx = 10, ly = size.y - 90;
+      ctx.fillStyle = 'rgba(17,24,32,0.92)';
+      ctx.strokeStyle = '#1e2a3a'; ctx.lineWidth = 1;
+      roundRect(ctx, lx, ly, 200, 78, 8); ctx.fill(); ctx.stroke();
+      ctx.font = '600 12px "DM Sans", Arial, sans-serif';
+      ctx.fillStyle = '#e8ecf1';
+      const isRes = showResidence;
+      ctx.fillText(isRes ? 'Residence Time' : 'Fetch Distance', lx + 14, ly + 20);
+      const grd = ctx.createLinearGradient(lx + 14, 0, lx + 186, 0);
+      if (isRes) { grd.addColorStop(0, '#0d1926'); grd.addColorStop(0.4, '#1480c8'); grd.addColorStop(0.7, '#40d0f0'); grd.addColorStop(1, '#ccffff'); }
+      else { grd.addColorStop(0, '#0d1926'); grd.addColorStop(0.3, '#994400'); grd.addColorStop(0.6, '#ff5500'); grd.addColorStop(1, '#ff0044'); }
+      ctx.fillStyle = grd;
+      ctx.fillRect(lx + 14, ly + 30, 172, 14);
+      ctx.font = '400 10px "DM Sans", Arial, sans-serif';
+      ctx.fillStyle = '#8899aa';
+      if (isRes) { ctx.fillText('0 h', lx + 14, ly + 62); ctx.fillText('2', lx + 68, ly + 62); ctx.fillText('5', lx + 120, ly + 62); ctx.fillText('10+', lx + 165, ly + 62); }
+      else { ctx.fillText('0 km', lx + 14, ly + 62); ctx.fillText('80', lx + 68, ly + 62); ctx.fillText('160', lx + 118, ly + 62); ctx.fillText('250+', lx + 160, ly + 62); }
+
+      // Forecast created box (bottom-right)
+      if (windGenerated) {
+        const createdStr = 'Forecast created: ' + windGenerated.toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        ctx.font = '500 10px "DM Sans", Arial, sans-serif';
+        const cw = ctx.measureText(createdStr).width + 20;
+        const bx = size.x - cw - 10, by = size.y - 38;
+        ctx.fillStyle = 'rgba(17,24,32,0.88)';
+        ctx.strokeStyle = '#1e2a3a'; ctx.lineWidth = 1;
+        roundRect(ctx, bx, by, cw, 26, 5); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#c8d0da';
+        ctx.fillText(createdStr, bx + 10, by + 17);
+      }
+
+      // Palette anchor: paint key gradient colors along bottom 2px to force
+      // GIF quantizer to include them in every frame's 256-color palette
+      const anchorColors = isRes
+        ? ['#0d1926','#0f3560','#1480c8','#28a8e0','#40d0f0','#80e8ff','#ccffff']
+        : ['#0d1926','#663300','#994400','#cc4400','#ff5500','#ff2222','#ff0044'];
+      const stripW = Math.floor(size.x / anchorColors.length);
+      for (let i = 0; i < anchorColors.length; i++) {
+        ctx.fillStyle = anchorColors[i];
+        ctx.fillRect(i * stripW, size.y - 2, stripW, 2);
+      }
+
+      return c;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+      ctx.arcTo(x + w, y, x + w, y + r, r); ctx.lineTo(x + w, y + h - r);
+      ctx.arcTo(x + w, y + h, x + w - r, y + h, r); ctx.lineTo(x + r, y + h);
+      ctx.arcTo(x, y + h, x, y + h - r, r); ctx.lineTo(x, y + r);
+      ctx.arcTo(x, y, x + r, y, r); ctx.closePath();
+    }
+
+    function drawBarbToCtx(ctx, cx, cy, dir, spdKt) {
+      if (spdKt < 3) {
+        ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.stroke(); return;
+      }
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(dir * Math.PI / 180);
+      // Staff
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -13); ctx.stroke();
+      let y = -13;
+      let rem = Math.round(spdKt);
+      // Flags (50kt)
+      while (rem >= 50) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(6, y + 2); ctx.lineTo(0, y + 4); ctx.fill();
+        y += 5; rem -= 50;
+      }
+      // Full barbs (10kt)
+      while (rem >= 10) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(6, y - 2); ctx.stroke();
+        y += 3; rem -= 10;
+      }
+      // Half barb (5kt)
+      if (rem >= 5) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(4, y - 1.5); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    async function exportPNG() {
+      const btn = document.getElementById('btnExportPNG');
+      btn.textContent = '⏳...'; btn.disabled = true;
+      try {
+        const base = captureStaticBase(2);
+        const title = getTimeLabel(currentTimeIndex);
+        const canvas = captureFrame(base, title, 2);
+        const link = document.createElement('a');
+        const ts = timeSlots[currentTimeIndex];
+        const dateStr = ts ? ts.toISOString().slice(0,13).replace(/[-T:]/g,'') : 'export';
+        link.download = `lake-fetch-${dateStr}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch(e) {
+        console.error('PNG export failed:', e);
+        alert('PNG export failed — check console');
+      }
+      btn.textContent = '📷 PNG'; btn.disabled = false;
+    }
+
+    async function exportGIF() {
+      if (typeof GIF === 'undefined') { alert('GIF library not loaded.'); return; }
+
+      const startH = parseInt(document.getElementById('gifStart').value);
+      const endH = parseInt(document.getElementById('gifEnd').value);
+      const stepH = parseInt(document.getElementById('gifStep').value);
+
+      if (startH >= endH) { alert('Start must be before end.'); return; }
+
+      const startIdx = Math.max(0, startH + HOURS_PAST);
+      const endIdx = Math.min(TOTAL_SLOTS, endH + HOURS_PAST);
+
+      const btn = document.getElementById('btnExportGIF');
+      btn.disabled = true; btn.textContent = '⏳...';
+      const overlay = document.getElementById('exportOverlay');
+      const bar = document.getElementById('exportBar');
+      const msg = document.getElementById('exportMsg');
+      const detail = document.getElementById('exportDetail');
+      overlay.style.display = 'flex';
+
+      const frames = [];
+      const savedIdx = currentTimeIndex;
+      const slider = document.getElementById('timeSlider');
+      const totalFrames = Math.ceil((endIdx - startIdx) / stepH) + 1;
+      msg.textContent = 'Capturing base map...';
+
+      // Capture static background ONCE at 1x (GIF's 256 colors need fewer pixels)
+      const base = captureStaticBase(1);
+      console.log('Static base captured:', base.width, 'x', base.height);
+
+      try {
+        for (let i = startIdx; i <= endIdx; i += stepH) {
+          currentTimeIndex = i;
+          slider.value = i;
+          updateViz(); // fully synchronous — canvas is complete when this returns
+          await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); // yield 2 frames for progress bar paint
+
+          const title = getTimeLabel(i);
+          const canvas = captureFrame(base, title, 1);
+          frames.push(canvas);
+
+          bar.style.width = Math.round((frames.length / totalFrames) * 60) + '%';
+          detail.textContent = `Frame ${frames.length}/${totalFrames}`;
+        }
+
+        currentTimeIndex = savedIdx;
+        slider.value = savedIdx;
+        updateViz();
+
+        msg.textContent = 'Encoding GIF...';
+        bar.style.width = '60%';
+
+        const workerBlob = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js')
+          .then(r => r.blob()).then(b => URL.createObjectURL(b));
+
+        const gif = new GIF({
+          workers: 2, quality: 1, dither: false, globalPalette: true,
+          width: frames[0].width, height: frames[0].height,
+          workerScript: workerBlob,
+        });
+
+        for (const frame of frames) gif.addFrame(frame, {delay: 400});
+        gif.on('progress', p => { bar.style.width = (60 + p * 40) + '%'; });
+
+        gif.on('finished', blob => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = `lake-fetch-${startH}h-to-${endH}h.gif`;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+          overlay.style.display = 'none';
+          btn.textContent = '🎬 GIF'; btn.disabled = false;
+        });
+
+        gif.render();
+      } catch(e) {
+        console.error('GIF export failed:', e);
+        overlay.style.display = 'none';
+        btn.textContent = '🎬 GIF'; btn.disabled = false;
+        alert('GIF export failed — check console');
+      }
+    }
+
+    // ===== GEOMETRY CACHE =====
+    const CACHE_KEY = 'lake_fetch_geo_v3';
+
+    function saveGeoCache() {
+      try {
+        const payload = {
+          polygons: LAKE_POLYGONS,
+          rings: LAKE_RINGS,
+          simpleRings: LAKE_SIMPLE_RINGS,
+          grids: {},
+          barbGrids: BARB_GRIDS
+        };
+        for (const [name, g] of Object.entries(LAKE_GRIDS)) {
+          payload.grids[name] = g.points;
+        }
+        localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+        console.log('Geometry cached to localStorage');
+      } catch(e) { console.warn('Cache save failed:', e.message); }
+    }
+
+    function loadGeoCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return false;
+        const payload = JSON.parse(raw);
+        if (!payload.polygons || !payload.rings || !payload.simpleRings || !payload.grids || !payload.barbGrids) return false;
+
+        for (const [name, coords] of Object.entries(payload.polygons)) LAKE_POLYGONS[name] = coords;
+        for (const [name, rings] of Object.entries(payload.rings)) LAKE_RINGS[name] = rings;
+        for (const [name, rings] of Object.entries(payload.simpleRings)) LAKE_SIMPLE_RINGS[name] = rings;
+        for (const [name, pts] of Object.entries(payload.grids)) LAKE_GRIDS[name] = { points: pts };
+        for (const [name, pts] of Object.entries(payload.barbGrids)) BARB_GRIDS[name] = pts;
+
+        const lakes = Object.keys(LAKE_POLYGONS);
+        const totalCells = Object.values(LAKE_GRIDS).reduce((s,g) => s + g.points.length, 0);
+        const totalBarbs = Object.values(BARB_GRIDS).reduce((s,g) => s + g.length, 0);
+        console.log(`Restored from cache: ${lakes.join(', ')} (${totalCells} grid cells, ${totalBarbs} barb positions)`);
+        return lakes.length >= 3;
+      } catch(e) {
+        console.warn('Cache load failed:', e.message);
+        localStorage.removeItem(CACHE_KEY);
+        return false;
+      }
+    }
+
+    // ===== LAUNCH =====
+    async function launch() {
+      buildTimeSlots(); initMap(); initControls();
+      const detail = document.getElementById('loadingDetail');
+      let t0 = performance.now();
+
+      // Try loading from cache first
+      const cached = loadGeoCache();
+      if (cached) {
+        console.log(`Cache restore: ${(performance.now()-t0).toFixed(0)}ms`);
+        detail.textContent = 'Restored lake geometry from cache';
+        addLakeBaseFills();
+      } else {
+        // Full build: fetch → simplify → grid
+        detail.textContent = 'Fetching lake shorelines...';
+        const loaded = await loadLakePolygons();
+        console.log(`Shoreline fetch: ${(performance.now()-t0).toFixed(0)}ms`);
+        if (!loaded) { detail.textContent = 'Warning: some lake polygons missing'; }
+        addLakeBaseFills();
+
+        t0 = performance.now();
+        detail.textContent = 'Building simplified polygons...';
+        await new Promise(r=>setTimeout(r,10));
+        buildSimplifiedPolygons();
+        console.log(`Simplification: ${(performance.now()-t0).toFixed(0)}ms`);
+
+        t0 = performance.now();
+        detail.textContent = 'Building interior grids...';
+        await new Promise(r=>setTimeout(r,10));
+        buildLakeGrids();
+        console.log(`Grid building: ${(performance.now()-t0).toFixed(0)}ms`);
+
+        buildBarbGrids();
+
+        // Cache for next time
+        saveGeoCache();
+      }
+
+      // Wind data is always fresh
+      t0 = performance.now();
+      await loadAllWindData();
+      console.log(`Wind loading: ${(performance.now()-t0).toFixed(0)}ms`);
+    }
+    launch();
+  })();
+  </script>
+</body>
+</html>
