@@ -102,7 +102,7 @@ WIND_POINTS = [
 
 NWS_HEADERS = {"User-Agent": "LakeEffectFetchMap/2.0 (research.alexcooke.co)"}
 GEOMET = "https://geo.weather.gc.ca/geomet"
-OUTPUT_PATH = Path(__file__).parent / "wind_data.json"
+OUTPUT_PATH = Path("wind_data.json")  # relative to CWD (repo root when run by Actions)
 
 
 # ===== NWS =====
