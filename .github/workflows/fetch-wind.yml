@@ -24,14 +24,13 @@ jobs:
         run: pip install aiohttp
 
       - name: Fetch wind data
-        run: python fetch_wind.py
+        run: python lake-effect-fetch/fetch_wind.py
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add wind_data.json
-          # Only commit if the file actually changed
           git diff --cached --quiet && echo "No changes" && exit 0
           git commit -m "Update wind data $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
