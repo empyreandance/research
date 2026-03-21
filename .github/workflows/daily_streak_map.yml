@@ -1,0 +1,62 @@
+# =============================================================================
+# Daily Temperature Streak Map
+# =============================================================================
+# Runs every morning alongside the temperature calendar map.
+# Updates the streak state and generates the streak map image.
+# =============================================================================
+
+name: Daily Streak Map
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate-streak-map:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('streak-map/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python packages
+        run: |
+          pip install -r streak-map/requirements.txt
+
+      - name: Generate streak map
+        run: |
+          cd streak-map
+          python daily_streak.py
+
+      - name: Copy maps to site assets
+        run: |
+          mkdir -p assets/streak_regions
+          mkdir -p assets/archive
+          cp streak-map/output/streak_latest.png assets/streak_latest.png
+          cp streak-map/output/streak_regions/streak_*_latest.png assets/streak_regions/ 2>/dev/null || true
+          cp streak-map/output/archive/streak_*.jpg assets/archive/ 2>/dev/null || true
+
+      - name: Commit and push
+        run: |
+          git config user.name "Temperature Map Bot"
+          git config user.email "bot@temperature-map.local"
+          git add assets/streak_latest.png
+          git add assets/streak_regions/ 2>/dev/null || true
+          git add assets/archive/ 2>/dev/null || true
+          git add streak-map/streak_state.nc
+          git diff --staged --quiet || git commit -m "Update streak map for $(date +%Y-%m-%d)"
+          git push
