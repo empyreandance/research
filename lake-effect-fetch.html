@@ -74,21 +74,24 @@
       .header-right { gap: 8px; font-size: 0.75em; }
       .layer-toggle { font-size: 0.7em; }
       .play-btn { padding: 2px 8px; font-size: 0.7em; }
-      .legend { bottom: 8px; left: 50%; transform: translateX(-50%); padding: 6px 12px; font-size: 0.72em; }
+      .legend { bottom: 8px; left: 10px; transform: none; padding: 6px 12px; font-size: 0.72em; }
       .legend-title { font-size: 0.85em; margin-bottom: 4px; }
       .legend-bar { width: 140px; height: 8px; }
       .legend-labels { width: 140px; font-size: 0.75em; }
       .cursor-readout { bottom: 50px; left: 6px; font-size: 0.7em; padding: 6px 10px; min-width: 140px; }
       .disclaimer {
-        bottom: auto; top: 6px; left: 44px; right: 6px;
-        max-width: none; display: flex; align-items: flex-start;
-        gap: 6px; font-size: 0.46em;
+        bottom: auto !important; top: 6px; left: 44px; right: 6px;
+        max-width: none !important; text-align: left !important;
+        display: flex; align-items: flex-start; gap: 8px;
+        font-size: 0.46em;
       }
-      .disclaimer .disclaimer-text { order: 1; flex: 1; min-width: 0; text-align: left; line-height: 1.4; }
+      .disclaimer .disclaimer-text { order: 1; flex: 1 1 0; min-width: 0; line-height: 1.4; }
       .disclaimer #windCreatedBox {
-        order: 2; margin-left: auto; margin-bottom: 0 !important;
-        font-size: 1em !important; padding: 3px 6px !important; white-space: normal; flex-shrink: 0;
-        max-width: 130px !important; text-align: right;
+        order: 2; flex: 0 0 auto;
+        width: 120px !important; max-width: 120px !important;
+        margin: 0 !important; padding: 3px 6px !important;
+        font-size: 0.95em !important; white-space: normal !important;
+        text-align: right;
       }
       .lake-info { font-size: 0.7em; padding: 6px 8px; min-width: 140px; }
       .timeline-container { padding: 3px 10px 6px; }
@@ -112,9 +115,9 @@
       .header-right.expanded { max-height: 80px; padding: 6px 0 2px; }
       .opacity-ctrl span:first-child { display: none; }
       .opacity-ctrl input[type="range"] { width: 30px; }
-      .disclaimer { font-size: 0.38em; left: 44px; }
-      .disclaimer #windCreatedBox { font-size: 0.9em !important; max-width: 110px !important; padding: 3px 5px !important; }
-      .legend { bottom: 6px; left: 50%; transform: translateX(-50%); padding: 5px 8px; font-size: 0.68em; }
+      .disclaimer { font-size: 0.4em; }
+      .disclaimer #windCreatedBox { width: 100px !important; max-width: 100px !important; font-size: 0.85em !important; padding: 2px 4px !important; }
+      .legend { bottom: 6px; left: 6px; transform: none; padding: 5px 8px; font-size: 0.68em; }
       .legend-bar { width: 100px; height: 8px; }
       .legend-labels { width: 100px; font-size: 0.7em; }
       .legend-title { font-size: 0.8em; margin-bottom: 3px; }
