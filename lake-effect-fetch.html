@@ -48,6 +48,7 @@
     .lake-stat-label { color: var(--text-secondary); }
     .lake-stat-value { font-weight: 500; }
     .disclaimer { position: absolute; bottom: 10px; right: 10px; font-size: 0.65em; color: var(--text-dim); z-index: 1000; max-width: 260px; text-align: right; font-style: italic; }
+    .d-br { display: block; } /* line break on desktop */
     .timeline-container { background: var(--bg-panel); border-top: 1px solid var(--border); padding: 8px 16px 12px; z-index: 1000; }
     .timeline-current { text-align: center; font-size: 0.9em; font-weight: 500; margin-bottom: 6px; }
     .timeline-current .time-highlight { color: var(--accent-yellow); }
@@ -86,6 +87,7 @@
         font-size: 0.46em;
       }
       .disclaimer .disclaimer-text { order: 1; flex: 1 1 0; min-width: 0; line-height: 1.4; }
+      .disclaimer .d-br { display: inline; }
       .disclaimer #windCreatedBox {
         order: 2; flex: 0 0 auto;
         width: 120px !important; max-width: 120px !important;
@@ -175,12 +177,7 @@
     </div>
     <div class="disclaimer">
       <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
-      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product.<br>
-      Personal research project by Alex Cooke.<br>
-      Wind: NWS API + ECCC HRDPS via GeoMet<br>
-      SST: GLERL monthly climatology<br>
-      850 mb: ECCC HRDPS · Basemap: CARTO<br>
-      Shoreline: Natural Earth 10m</span>
+      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product. <span class="d-br"></span>Personal research project by Alex Cooke. <span class="d-br"></span>Wind: NWS API + ECCC HRDPS via GeoMet. <span class="d-br"></span>SST: GLERL monthly climatology. <span class="d-br"></span>850 mb: ECCC HRDPS · Basemap: CARTO. <span class="d-br"></span>Shoreline: Natural Earth 10m.</span>
     </div>
     <div class="cursor-readout" id="cursorReadout">
       <div class="cursor-readout-title">Cursor Readout</div>
