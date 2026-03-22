@@ -44,7 +44,7 @@ from config import (
 )
 
 # Import the observation-fetching functions from the backfill script
-from build_streak_history import fetch_observed_maxt, grid_observations
+from build_streak_history import fetch_observed_maxt, grid_observations, qc_observations
 
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -326,14 +326,17 @@ def main():
             print("  WARNING: Very few observations. ACIS may be delayed.")
             print("  Rendering map with current streak state (no update).")
         else:
-            # Grid the observations
-            observed_grid = grid_observations(obs, clim_lons, clim_lats)
-
             # Get the normal for yesterday's DOY
             doy = yesterday.timetuple().tm_yday
             if doy > 365:
                 doy = 365
             normal_grid = clim_normals[doy - 1, :, :]
+
+            # QC the observations
+            obs_clean = qc_observations(obs, clim_normals, clim_lons, clim_lats, doy)
+
+            # Grid the observations
+            observed_grid = grid_observations(obs_clean, clim_lons, clim_lats)
 
             # Update the streak
             streak = update_streak(streak, observed_grid, normal_grid)

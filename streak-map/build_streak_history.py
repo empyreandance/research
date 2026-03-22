@@ -165,6 +165,79 @@ def grid_observations(observations, clim_lons, clim_lats):
     return gridded
 
 
+def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
+    """
+    Quality-control station observations by flagging likely sensor errors.
+
+    A station is discarded if BOTH of these conditions are true:
+      1. Its temperature is more than 40°F below the climatological normal
+         for its location and date
+      2. Its temperature is more than 30°F below the median of all stations
+         within a ±1° lat/lon box
+
+    This catches broken sensors (e.g., 1°F in March when neighbors read 60°F)
+    without flagging legitimate cold events (where neighbors are also cold).
+
+    Parameters
+    ----------
+    observations : list of dict
+        Each dict has 'lat', 'lon', 'maxt'
+    clim_normals : numpy.ndarray
+        3D climatology array, shape (365, nlat, nlon)
+    clim_lons, clim_lats : numpy.ndarray
+        1D coordinate arrays for the climatology grid
+    doy : int
+        Day of year (1-365)
+
+    Returns
+    -------
+    list of dict
+        Filtered observations with bad stations removed
+    """
+    if len(observations) == 0:
+        return observations
+
+    normal_grid = clim_normals[doy - 1, :, :]
+    flagged = 0
+    clean = []
+
+    for obs in observations:
+        # Condition 1: check departure from climatological normal
+        # Find the nearest grid cell for this station
+        lat_idx = np.argmin(np.abs(clim_lats - obs["lat"]))
+        lon_idx = np.argmin(np.abs(clim_lons - obs["lon"]))
+        normal_temp = normal_grid[lat_idx, lon_idx]
+
+        if np.isnan(normal_temp):
+            clean.append(obs)
+            continue
+
+        departure = obs["maxt"] - normal_temp
+
+        # Only check further if observation is way below normal
+        if departure < -40:
+            # Condition 2: check against neighbors within ±1°
+            neighbors = [
+                o["maxt"] for o in observations
+                if o is not obs
+                and abs(o["lat"] - obs["lat"]) <= 1.0
+                and abs(o["lon"] - obs["lon"]) <= 1.0
+            ]
+
+            if len(neighbors) >= 2:
+                neighbor_median = np.median(neighbors)
+                if obs["maxt"] < neighbor_median - 30:
+                    flagged += 1
+                    continue  # Discard this observation
+
+        clean.append(obs)
+
+    if flagged > 0:
+        print(f"    QC: removed {flagged} suspect observation(s)")
+
+    return clean
+
+
 def run_test():
     """Quick test: pull one day of observations and verify."""
     import xarray as xr
@@ -314,13 +387,20 @@ def main():
         if d_str not in all_obs:
             continue  # Skip failed days — streak is unchanged
 
-        # Grid the observations
-        gridded = grid_observations(all_obs[d_str], clim_lons, clim_lats)
-
-        # Get the normal for this day of year
+        # Get the day of year for this date
         doy = d.timetuple().tm_yday
         if doy > 365:
             doy = 365
+
+        # QC the observations
+        obs_clean = qc_observations(
+            all_obs[d_str], clim_normals, clim_lons, clim_lats, doy
+        )
+
+        # Grid the observations
+        gridded = grid_observations(obs_clean, clim_lons, clim_lats)
+
+        # Get the normal for this day of year
         normal = clim_normals[doy - 1, :, :]
 
         # Compare: above normal = positive streak, below = negative
