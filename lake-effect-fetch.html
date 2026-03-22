@@ -1058,12 +1058,33 @@
       const h=currentTimeIndex-HOURS_PAST;
       document.getElementById('timeDisplay').textContent=`${ts}  ·  ${h===0?'Now':h>0?`+${h}h Forecast`:`${h}h Observed`}`;
 
-      // Refresh cursor readout if visible (deferred to not block key events)
+      // Refresh cursor readout if visible — lightweight version (no fetch recompute)
       if (showCursor && lastCursorLatLng) {
-        setTimeout(() => {
-          cursorThrottle = 0;
-          onCursorMove({latlng: lastCursorLatLng});
-        }, 0);
+        const rLat = lastCursorLatLng.lat, rLon = lastCursorLatLng.lng;
+        let hitLake = null;
+        for (const name of Object.keys(LAKE_POLYGONS)) {
+          if (ptInPolyFast(rLat, rLon, name)) { hitLake = name; break; }
+        }
+        if (hitLake) {
+          const w = idwFull(rLat, rLon, hitLake);
+          if (w) {
+            const sst = lakeSST(hitLake, targetTime);
+            document.getElementById('crWindDir').textContent = `${w.dir.toFixed(0)}°`;
+            document.getElementById('crWindSpd').textContent = `${w.spdKt.toFixed(0)} kt`;
+            document.getElementById('crSST').textContent = `${sst.toFixed(0)}°F`;
+            document.getElementById('crAirTemp').textContent = w.airTempF !== null ? `${w.airTempF.toFixed(0)}°F` : '—';
+            document.getElementById('crTemp850').textContent = w.temp850F !== null ? `${w.temp850F.toFixed(0)}°F` : '—';
+            const deltaT = w.airTempF !== null ? sst - w.airTempF : null;
+            document.getElementById('crDeltaT').textContent = deltaT !== null ? `${deltaT.toFixed(1)}°F` : '—';
+            // Defer the expensive fetch/residence computation
+            setTimeout(() => {
+              if (!lastCursorLatLng) return;
+              const result = computeFetchDiscretized(rLat, rLon, hitLake);
+              document.getElementById('crFetch').textContent = `${result.fetchKm.toFixed(0)} km`;
+              document.getElementById('crResidence').textContent = `${result.residenceH.toFixed(1)} h`;
+            }, 50);
+          }
+        }
       }
     }
 
