@@ -63,6 +63,41 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-sub { color: var(--text-secondary); font-size: 0.85em; margin-top: 6px; }
     .leaflet-control-zoom a { background: var(--bg-panel) !important; color: var(--text-primary) !important; border-color: var(--border) !important; }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .app-header { padding: 6px 10px; gap: 4px; }
+      .app-title { font-size: 0.85em; width: 100%; }
+      .lake-selector { gap: 2px; }
+      .lake-btn { padding: 2px 7px; font-size: 0.7em; }
+      .header-right { gap: 8px; font-size: 0.75em; }
+      .layer-toggle { font-size: 0.7em; gap: 3px; }
+      .opacity-ctrl { font-size: 0.7em; }
+      .opacity-ctrl input[type="range"] { width: 40px; }
+      .play-btn { padding: 2px 8px; font-size: 0.7em; }
+      .legend { bottom: 10px; left: 50%; transform: translateX(-50%); padding: 6px 10px; font-size: 0.72em; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+      .legend-title { font-size: 0.85em; margin-bottom: 0; }
+      .legend-bar { width: 100px; height: 8px; margin: 0; }
+      .legend-labels { font-size: 0.7em; }
+      .cursor-readout { bottom: 50px; left: 6px; font-size: 0.7em; padding: 6px 10px; min-width: 150px; }
+      .disclaimer { bottom: auto; top: 10px; right: 6px; font-size: 0.5em; max-width: 180px; }
+      .disclaimer #windCreatedBox { font-size: 1em; padding: 4px 6px; }
+      .lake-info { font-size: 0.72em; padding: 8px 10px; min-width: 160px; }
+      .timeline-container { padding: 4px 10px 8px; }
+      .timeline-current { font-size: 0.78em; margin-bottom: 3px; }
+      .timeline-ticks { font-size: 0.55em; }
+    }
+
+    @media (max-width: 480px) {
+      .app-header { padding: 4px 8px; gap: 3px; }
+      .app-title { font-size: 0.8em; }
+      .app-title span { display: none; }
+      .lake-btn { padding: 2px 5px; font-size: 0.65em; }
+      .header-right { gap: 6px; }
+      .opacity-ctrl span { display: none; }
+      .opacity-ctrl input[type="range"] { width: 30px; }
+      .disclaimer { font-size: 0.45em; max-width: 150px; }
+    }
   </style>
 </head>
 <body>
