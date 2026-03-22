@@ -79,8 +79,16 @@
       .legend-bar { width: 140px; height: 8px; }
       .legend-labels { width: 140px; font-size: 0.75em; }
       .cursor-readout { bottom: 50px; left: 6px; font-size: 0.7em; padding: 6px 10px; min-width: 140px; }
-      .disclaimer { bottom: auto; top: 10px; left: 50px; right: auto; text-align: left; font-size: 0.48em; max-width: calc(100% - 60px); }
-      .disclaimer #windCreatedBox { font-size: 1em; padding: 3px 6px; margin-bottom: 3px; }
+      .disclaimer {
+        bottom: auto; top: 6px; left: 44px; right: 6px;
+        max-width: none; display: flex; align-items: flex-start;
+        gap: 6px; font-size: 0.42em;
+      }
+      .disclaimer .disclaimer-text { order: 1; flex: 1; min-width: 0; text-align: left; }
+      .disclaimer #windCreatedBox {
+        order: 2; margin-left: auto; margin-bottom: 0;
+        font-size: 1.1em; padding: 4px 8px; white-space: nowrap; flex-shrink: 0;
+      }
       .lake-info { font-size: 0.7em; padding: 6px 8px; min-width: 140px; }
       .timeline-container { padding: 3px 10px 6px; }
       .timeline-current { font-size: 0.78em; margin-bottom: 2px; }
@@ -103,7 +111,8 @@
       .header-right.expanded { max-height: 80px; padding: 6px 0 2px; }
       .opacity-ctrl span:first-child { display: none; }
       .opacity-ctrl input[type="range"] { width: 30px; }
-      .disclaimer { font-size: 0.42em; max-width: calc(100% - 60px); }
+      .disclaimer { font-size: 0.38em; left: 44px; }
+      .disclaimer #windCreatedBox { font-size: 1em; padding: 3px 6px; }
       .legend { bottom: 6px; left: 50%; transform: translateX(-50%); padding: 5px 8px; font-size: 0.68em; }
       .legend-bar { width: 100px; height: 8px; }
       .legend-labels { width: 100px; font-size: 0.7em; }
@@ -162,12 +171,12 @@
     </div>
     <div class="disclaimer">
       <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
-      Not an official NWS, NOAA, or ECCC product.<br>
+      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product.<br>
       Personal research project by Alex Cooke.<br>
       Wind: NWS API + ECCC HRDPS via GeoMet<br>
       SST: GLERL monthly climatology<br>
       850 mb: ECCC HRDPS · Basemap: CARTO<br>
-      Shoreline: Natural Earth 10m
+      Shoreline: Natural Earth 10m</span>
     </div>
     <div class="cursor-readout" id="cursorReadout">
       <div class="cursor-readout-title">Cursor Readout</div>
