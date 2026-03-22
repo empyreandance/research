@@ -47,7 +47,7 @@
     .lake-stat:last-child { border-bottom: none; }
     .lake-stat-label { color: var(--text-secondary); }
     .lake-stat-value { font-weight: 500; }
-    .disclaimer { position: absolute; bottom: 80px; right: 10px; font-size: 0.65em; color: var(--text-dim); z-index: 1000; max-width: 220px; text-align: right; font-style: italic; }
+    .disclaimer { position: absolute; bottom: 80px; right: 10px; font-size: 0.65em; color: var(--text-dim); z-index: 1000; max-width: 260px; text-align: right; font-style: italic; }
     .timeline-container { background: var(--bg-panel); border-top: 1px solid var(--border); padding: 8px 16px 12px; z-index: 1000; }
     .timeline-current { text-align: center; font-size: 0.9em; font-weight: 500; margin-bottom: 6px; }
     .timeline-current .time-highlight { color: var(--accent-yellow); }
@@ -110,7 +110,12 @@
     </div>
     <div class="disclaimer">
       <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
-      Independent project, not an official NWS/NOAA product.<br>Wind: NWS + ECCC HRDPS · SST: GLERL climatology · 850mb: ECCC HRDPS<br>Shoreline: Natural Earth 10m (public domain)
+      Not an official NWS, NOAA, or ECCC product.<br>
+      Personal research project by Alex Cooke.<br>
+      Wind: NWS API + ECCC HRDPS via GeoMet<br>
+      SST: GLERL monthly climatology<br>
+      850 mb: ECCC HRDPS · Basemap: CARTO<br>
+      Shoreline: Natural Earth 10m
     </div>
     <div class="cursor-readout" id="cursorReadout">
       <div class="cursor-readout-title">Cursor Readout</div>
@@ -500,6 +505,7 @@
     let windGenerated = null; // Date when wind_data.json was created
     let selectedLake="all", showResidence=false, showBarbs=true, fillOpacity=0.75;
     let showCursor=false;
+    let lastCursorLatLng = null;
     let shorelinePolys = []; // Leaflet polygon strokes
 
     // Canvas overlay for the colored grid cells
@@ -544,7 +550,7 @@
 
       // Cursor readout — mousemove handler
       map.on('mousemove', onCursorMove);
-      map.on('mouseout', () => { document.getElementById('cursorReadout').classList.remove('visible'); });
+      map.on('mouseout', () => { lastCursorLatLng = null; document.getElementById('cursorReadout').classList.remove('visible'); });
     }
 
     function resizeCanvas() {
@@ -592,6 +598,7 @@
       cursorThrottle = now;
 
       const lat = e.latlng.lat, lon = e.latlng.lng;
+      lastCursorLatLng = e.latlng;
       const panel = document.getElementById('cursorReadout');
       const targetTime = timeSlots[currentTimeIndex];
       if (!targetTime) { panel.classList.remove('visible'); return; }
@@ -1049,6 +1056,12 @@
       const ts=targetTime.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
       const h=currentTimeIndex-HOURS_PAST;
       document.getElementById('timeDisplay').textContent=`${ts}  ·  ${h===0?'Now':h>0?`+${h}h Forecast`:`${h}h Observed`}`;
+
+      // Refresh cursor readout if visible (e.g. after arrow key time step)
+      if (showCursor && lastCursorLatLng) {
+        cursorThrottle = 0; // bypass throttle
+        onCursorMove({latlng: lastCursorLatLng});
+      }
     }
 
     // Debounce helper — critical for slider dragging
