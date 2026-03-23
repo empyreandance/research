@@ -780,10 +780,13 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
         ax.add_patch(clip_patch)
 
-        for collection in filled.collections:
-            collection.set_clip_path(clip_patch)
-        for collection in lines.collections:
-            collection.set_clip_path(clip_patch)
+        # Apply clip — handle both old and new matplotlib APIs
+        for artist in [filled, lines]:
+            if hasattr(artist, 'collections'):
+                for col in artist.collections:
+                    col.set_clip_path(clip_patch)
+            else:
+                artist.set_clip_path(clip_patch)
 
     # --- Colorbar ---
     cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
