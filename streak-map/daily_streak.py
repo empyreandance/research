@@ -200,8 +200,8 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         w, e, s, n = region_extent
         pad = 1.0  # Small padding in degrees so contours reach the edge cleanly
         region_mask = (lon2d < w - pad) | (lon2d > e + pad) | (lat2d < s - pad) | (lat2d > n + pad)
-        anomaly = anomaly.copy()
-        anomaly[region_mask] = np.nan
+        streak_smooth = streak_smooth.copy()
+        streak_smooth[region_mask] = np.nan
 
     fill_levels = np.linspace(vmin, vmax, 61)
 
