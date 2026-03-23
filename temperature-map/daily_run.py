@@ -666,9 +666,11 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     )
 
     # --- Determine the display range dynamically from the data ---
-    # Use the actual data extremes, rounded up to the nearest 5 for clean ticks.
-    # Make the scale symmetric around zero so white always means "on schedule."
-    abs_max = np.nanmax(np.abs(anomaly))
+    # Use the 98th percentile of absolute values so a few edge artifacts
+    # (ocean/border cells) don't blow out the scale. The clipping hides them
+    # visually, but we want the scale to reflect actual CONUS values.
+    valid_abs = np.abs(anomaly[~np.isnan(anomaly)])
+    abs_max = np.percentile(valid_abs, 98) if len(valid_abs) > 0 else 30
     # Round up to nearest 5
     abs_max = int(np.ceil(abs_max / 5.0) * 5)
     # Enforce a minimum range so mild days still look good
@@ -746,6 +748,42 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         inline_spacing=5,
         colors="#333333"
     )
+
+    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean
+    import cartopy.io.shapereader as shpreader
+    from matplotlib.path import Path as MplPath
+    from matplotlib.patches import PathPatch
+
+    shapefile = shpreader.natural_earth(
+        resolution='110m', category='cultural', name='admin_0_countries'
+    )
+    reader = shpreader.Reader(shapefile)
+    us_geom = None
+    for record in reader.records():
+        if record.attributes.get('NAME') == 'United States of America' or \
+           record.attributes.get('ISO_A2') == 'US':
+            us_geom = record.geometry
+            break
+
+    if us_geom is not None:
+        projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
+        vertices = []
+        codes = []
+        for geom in projected_geom.geoms:
+            coords = list(geom.exterior.coords)
+            vertices.extend(coords)
+            codes.append(MplPath.MOVETO)
+            codes.extend([MplPath.LINETO] * (len(coords) - 2))
+            codes.append(MplPath.CLOSEPOLY)
+
+        clip_path = MplPath(vertices, codes)
+        clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
+        ax.add_patch(clip_patch)
+
+        for collection in filled.collections:
+            collection.set_clip_path(clip_patch)
+        for collection in lines.collections:
+            collection.set_clip_path(clip_patch)
 
     # --- Colorbar ---
     cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
