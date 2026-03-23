@@ -222,7 +222,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         zorder=2.5
     )
 
-    ax.clabel(
+    clabels = ax.clabel(
         lines,
         inline=True,
         fontsize=9 if is_regional else 7,
@@ -275,6 +275,11 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
             else:
                 artist.set_clip_path(clip_patch)
 
+        # Clip contour labels too
+        if clabels:
+            for txt in clabels:
+                txt.set_clip_path(clip_patch)
+
     # Colorbar
     cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
@@ -301,7 +306,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
              ha="right", fontsize=7, color="#999999")
 
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
-    fig.savefig(output_path, dpi=MAP_DPI, bbox_inches="tight",
+    fig.savefig(output_path, dpi=MAP_DPI,
                 facecolor="white", edgecolor="none")
     plt.close(fig)
 
