@@ -137,7 +137,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    ax = fig.add_axes([0.02, 0.08, 0.96, 0.78], projection=projection)
+    ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
 
     if region_extent:
         w, e, s, n = region_extent
