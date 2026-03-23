@@ -293,53 +293,6 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
                     if not clip_path.contains_point((x, y)):
                         txt.remove()
 
-    # Get the US boundary from Natural Earth
-    shapefile = shpreader.natural_earth(
-        resolution='110m', category='cultural', name='admin_0_countries'
-    )
-    reader = shpreader.Reader(shapefile)
-    us_geom = None
-    for record in reader.records():
-        if record.attributes.get('NAME') == 'United States of America' or \
-           record.attributes.get('ISO_A2') == 'US':
-            us_geom = record.geometry
-            break
-
-    if us_geom is not None:
-        # Convert the geometry to the map's projection and create a clip path
-        projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
-
-        # Build a matplotlib Path from all the polygon parts
-        vertices = []
-        codes = []
-        for geom in projected_geom.geoms:
-            # Get exterior ring
-            coords = list(geom.exterior.coords)
-            vertices.extend(coords)
-            codes.append(MplPath.MOVETO)
-            codes.extend([MplPath.LINETO] * (len(coords) - 2))
-            codes.append(MplPath.CLOSEPOLY)
-
-        clip_path = MplPath(vertices, codes)
-        clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
-        ax.add_patch(clip_patch)
-
-        # Apply clip — handle both old and new matplotlib APIs
-        for artist in [filled, lines]:
-            if hasattr(artist, 'collections'):
-                for col in artist.collections:
-                    col.set_clip_path(clip_patch)
-            else:
-                artist.set_clip_path(clip_patch)
-
-        # Remove contour labels outside CONUS
-        if clabels:
-            for txt in clabels:
-                # Get label position in data coordinates
-                x, y = txt.get_position()
-                if not clip_path.contains_point((x, y)):
-                    txt.remove()
-
     # Colorbar
     cbar_ax = fig.add_axes([0.15, 0.08, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
