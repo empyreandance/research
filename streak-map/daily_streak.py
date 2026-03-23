@@ -275,13 +275,16 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
             else:
                 artist.set_clip_path(clip_patch)
 
-        # Clip contour labels too
+        # Remove contour labels outside CONUS
         if clabels:
             for txt in clabels:
-                txt.set_clip_path(clip_patch)
+                # Get label position in data coordinates
+                x, y = txt.get_position()
+                if not clip_path.contains_point((x, y)):
+                    txt.remove()
 
     # Colorbar
-    cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
+    cbar_ax = fig.add_axes([0.15, 0.08, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_label("Consecutive Days Above (+) or Below (−) Normal High Temperature",
                    fontsize=11, fontweight="bold", labelpad=8)
