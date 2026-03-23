@@ -97,4 +97,5 @@ jobs:
           git add archive.html
           # Only commit if there are changes (avoids errors on re-runs)
           git diff --staged --quiet || git commit -m "Update temperature map for $(date +%Y-%m-%d)"
+          git pull --rebase || true
           git push
