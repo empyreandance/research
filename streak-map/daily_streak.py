@@ -195,6 +195,14 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
 
     lon2d, lat2d = np.meshgrid(clim_lons, clim_lats)
 
+    # For regional maps, mask data outside the region to prevent contour bleed
+    if is_regional and region_extent:
+        w, e, s, n = region_extent
+        pad = 1.0  # Small padding in degrees so contours reach the edge cleanly
+        region_mask = (lon2d < w - pad) | (lon2d > e + pad) | (lat2d < s - pad) | (lat2d > n + pad)
+        anomaly = anomaly.copy()
+        anomaly[region_mask] = np.nan
+
     fill_levels = np.linspace(vmin, vmax, 61)
 
     # Contour lines every 5 days
