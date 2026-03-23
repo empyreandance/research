@@ -231,6 +231,50 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         colors="#333333"
     )
 
+    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean
+    import cartopy.io.shapereader as shpreader
+    from matplotlib.path import Path as MplPath
+    from matplotlib.patches import PathPatch
+
+    # Get the US boundary from Natural Earth
+    shapefile = shpreader.natural_earth(
+        resolution='110m', category='cultural', name='admin_0_countries'
+    )
+    reader = shpreader.Reader(shapefile)
+    us_geom = None
+    for record in reader.records():
+        if record.attributes.get('NAME') == 'United States of America' or \
+           record.attributes.get('ISO_A2') == 'US':
+            us_geom = record.geometry
+            break
+
+    if us_geom is not None:
+        # Convert the geometry to the map's projection and create a clip path
+        projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
+
+        # Build a matplotlib Path from all the polygon parts
+        vertices = []
+        codes = []
+        for geom in projected_geom.geoms:
+            # Get exterior ring
+            coords = list(geom.exterior.coords)
+            vertices.extend(coords)
+            codes.append(MplPath.MOVETO)
+            codes.extend([MplPath.LINETO] * (len(coords) - 2))
+            codes.append(MplPath.CLOSEPOLY)
+
+        clip_path = MplPath(vertices, codes)
+        clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
+        ax.add_patch(clip_patch)
+
+        # Apply clip to filled contours
+        for collection in filled.collections:
+            collection.set_clip_path(clip_patch)
+
+        # Apply clip to contour lines
+        for collection in lines.collections:
+            collection.set_clip_path(clip_patch)
+
     # Colorbar
     cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
