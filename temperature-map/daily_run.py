@@ -736,10 +736,14 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         colors="#333333"
     )
 
-    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean
+    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean.
+    # For regional maps, also intersect with the viewport rectangle so data
+    # from distant states doesn't bleed outside the axes frame.
     import cartopy.io.shapereader as shpreader
     from matplotlib.path import Path as MplPath
     from matplotlib.patches import PathPatch
+    from shapely.geometry import Polygon as ShapelyPolygon
+    from shapely.ops import unary_union
 
     shapefile = shpreader.natural_earth(
         resolution='110m', category='cultural', name='admin_0_countries'
@@ -754,31 +758,68 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
 
     if us_geom is not None:
         projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
-        vertices = []
-        codes = []
+
+        # Build shapely polygons from the projected CONUS boundary
+        conus_polys = []
         for geom in projected_geom.geoms:
-            coords = list(geom.exterior.coords)
-            vertices.extend(coords)
-            codes.append(MplPath.MOVETO)
-            codes.extend([MplPath.LINETO] * (len(coords) - 2))
-            codes.append(MplPath.CLOSEPOLY)
+            try:
+                p = ShapelyPolygon(geom.exterior.coords)
+                if p.is_valid:
+                    conus_polys.append(p)
+            except Exception:
+                pass
 
-        clip_path = MplPath(vertices, codes)
-        clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
-        ax.add_patch(clip_patch)
+        if conus_polys:
+            conus_union = unary_union(conus_polys)
 
-        for artist in [filled, lines]:
-            if hasattr(artist, 'collections'):
-                for col in artist.collections:
-                    col.set_clip_path(clip_patch)
+            if is_regional:
+                # Intersect CONUS with viewport rectangle in projected coords
+                x0, x1 = ax.get_xlim()
+                y0, y1 = ax.get_ylim()
+                viewport = ShapelyPolygon([
+                    (x0, y0), (x1, y0), (x1, y1), (x0, y1)
+                ])
+                clip_geom = viewport.intersection(conus_union)
             else:
-                artist.set_clip_path(clip_patch)
+                clip_geom = conus_union
 
-        if clabels:
-            for txt in clabels:
-                x, y = txt.get_position()
-                if not clip_path.contains_point((x, y)):
-                    txt.remove()
+            # Convert the clip geometry to a matplotlib Path
+            vertices = []
+            codes = []
+
+            def _add_polygon(poly):
+                coords = list(poly.exterior.coords)
+                vertices.extend(coords)
+                codes.append(MplPath.MOVETO)
+                codes.extend([MplPath.LINETO] * (len(coords) - 2))
+                codes.append(MplPath.CLOSEPOLY)
+
+            if clip_geom.geom_type == 'Polygon':
+                _add_polygon(clip_geom)
+            elif clip_geom.geom_type in ('MultiPolygon', 'GeometryCollection'):
+                for g in clip_geom.geoms:
+                    if g.geom_type == 'Polygon':
+                        _add_polygon(g)
+
+            if vertices:
+                clip_path = MplPath(vertices, codes)
+                clip_patch = PathPatch(
+                    clip_path, transform=ax.transData, facecolor='none'
+                )
+                ax.add_patch(clip_patch)
+
+                for artist in [filled, lines]:
+                    if hasattr(artist, 'collections'):
+                        for col in artist.collections:
+                            col.set_clip_path(clip_patch)
+                    else:
+                        artist.set_clip_path(clip_patch)
+
+                if clabels:
+                    for txt in clabels:
+                        x, y = txt.get_position()
+                        if not clip_path.contains_point((x, y)):
+                            txt.remove()
 
     # --- Colorbar ---
     cbar_ax = fig.add_axes([0.15, 0.08, 0.70, 0.025])
