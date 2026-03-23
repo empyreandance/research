@@ -237,61 +237,49 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         colors="#333333"
     )
 
-    if is_regional:
-        # Clip all contour data to the axes boundary
+    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean
+    import cartopy.io.shapereader as shpreader
+    from matplotlib.path import Path as MplPath
+    from matplotlib.patches import PathPatch
+
+    shapefile = shpreader.natural_earth(
+        resolution='110m', category='cultural', name='admin_0_countries'
+    )
+    reader = shpreader.Reader(shapefile)
+    us_geom = None
+    for record in reader.records():
+        if record.attributes.get('NAME') == 'United States of America' or \
+           record.attributes.get('ISO_A2') == 'US':
+            us_geom = record.geometry
+            break
+
+    if us_geom is not None:
+        projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
+        vertices = []
+        codes = []
+        for geom in projected_geom.geoms:
+            coords = list(geom.exterior.coords)
+            vertices.extend(coords)
+            codes.append(MplPath.MOVETO)
+            codes.extend([MplPath.LINETO] * (len(coords) - 2))
+            codes.append(MplPath.CLOSEPOLY)
+
+        clip_path = MplPath(vertices, codes)
+        clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
+        ax.add_patch(clip_patch)
+
         for artist in [filled, lines]:
             if hasattr(artist, 'collections'):
                 for col in artist.collections:
-                    col.set_clip_path(ax.patch)
+                    col.set_clip_path(clip_patch)
             else:
-                artist.set_clip_path(ax.patch)
+                artist.set_clip_path(clip_patch)
+
         if clabels:
             for txt in clabels:
-                txt.set_clip_on(True)
-    else:
-        # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean
-        import cartopy.io.shapereader as shpreader
-        from matplotlib.path import Path as MplPath
-        from matplotlib.patches import PathPatch
-
-        shapefile = shpreader.natural_earth(
-            resolution='110m', category='cultural', name='admin_0_countries'
-        )
-        reader = shpreader.Reader(shapefile)
-        us_geom = None
-        for record in reader.records():
-            if record.attributes.get('NAME') == 'United States of America' or \
-               record.attributes.get('ISO_A2') == 'US':
-                us_geom = record.geometry
-                break
-
-        if us_geom is not None:
-            projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
-            vertices = []
-            codes = []
-            for geom in projected_geom.geoms:
-                coords = list(geom.exterior.coords)
-                vertices.extend(coords)
-                codes.append(MplPath.MOVETO)
-                codes.extend([MplPath.LINETO] * (len(coords) - 2))
-                codes.append(MplPath.CLOSEPOLY)
-
-            clip_path = MplPath(vertices, codes)
-            clip_patch = PathPatch(clip_path, transform=ax.transData, facecolor='none')
-            ax.add_patch(clip_patch)
-
-            for artist in [filled, lines]:
-                if hasattr(artist, 'collections'):
-                    for col in artist.collections:
-                        col.set_clip_path(clip_patch)
-                else:
-                    artist.set_clip_path(clip_patch)
-
-            if clabels:
-                for txt in clabels:
-                    x, y = txt.get_position()
-                    if not clip_path.contains_point((x, y)):
-                        txt.remove()
+                x, y = txt.get_position()
+                if not clip_path.contains_point((x, y)):
+                    txt.remove()
 
     # Colorbar
     cbar_ax = fig.add_axes([0.15, 0.08, 0.70, 0.025])
