@@ -606,7 +606,13 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         print("Rendering map...")
 
     # --- Set up the figure and map projection ---
-    fig = plt.figure(figsize=(MAP_WIDTH_INCHES, MAP_HEIGHT_INCHES))
+    if is_regional and region_extent:
+        w, e, s, n = region_extent
+        aspect = (e - w) / (n - s)
+        fig_w = 10
+        fig = plt.figure(figsize=(fig_w, fig_w / aspect))
+    else:
+        fig = plt.figure(figsize=(MAP_WIDTH_INCHES, MAP_HEIGHT_INCHES))
 
     # Lambert Conformal Conic — the standard projection for US weather maps
     projection = ccrs.LambertConformal(
@@ -679,7 +685,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     # For regional maps, mask data outside the region to prevent contour bleed
     if is_regional and region_extent:
         w, e, s, n = region_extent
-        pad = 1.0  # Small padding in degrees so contours reach the edge cleanly
+        pad = 0.0  # Small padding in degrees so contours reach the edge cleanly
         region_mask = (lon2d < w - pad) | (lon2d > e + pad) | (lat2d < s - pad) | (lat2d > n + pad)
         anomaly = anomaly.copy()
         anomaly[region_mask] = np.nan
