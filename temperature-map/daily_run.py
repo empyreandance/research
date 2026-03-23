@@ -665,30 +665,11 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         "temp_calendar", all_colors, N=n_bins
     )
 
-    # --- Determine the display range dynamically from the data ---
-    # Use the 98th percentile of absolute values so a few edge artifacts
-    # (ocean/border cells) don't blow out the scale. The clipping hides them
-    # visually, but we want the scale to reflect actual CONUS values.
-    valid_abs = np.abs(anomaly[~np.isnan(anomaly)])
-    abs_max = np.percentile(valid_abs, 98) if len(valid_abs) > 0 else 30
-    # Round up to nearest 5
-    abs_max = int(np.ceil(abs_max / 5.0) * 5)
-    # Enforce a minimum range so mild days still look good
-    abs_max = max(abs_max, 20)
-
+    # --- Fixed display range ---
+    abs_max = 150
     vmin = -abs_max
     vmax = abs_max
-
-    # Pick tick spacing based on the range: every 10 for small ranges,
-    # every 15 for medium, every 20 or 30 for very large ranges
-    if abs_max <= 30:
-        tick_spacing = 10
-    elif abs_max <= 60:
-        tick_spacing = 15
-    elif abs_max <= 120:
-        tick_spacing = 20
-    else:
-        tick_spacing = 30
+    tick_spacing = 30
 
     print(f"  Color scale: ±{abs_max} days (ticks every {tick_spacing})")
 
@@ -788,6 +769,11 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
             else:
                 artist.set_clip_path(clip_patch)
 
+        # Clip contour labels too
+        if clabels:
+            for txt in clabels:
+                txt.set_clip_path(clip_patch)
+
     # --- Colorbar ---
     cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
@@ -816,7 +802,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
 
     # --- Save ---
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
-    fig.savefig(output_path, dpi=MAP_DPI, bbox_inches="tight",
+    fig.savefig(output_path, dpi=MAP_DPI,
                 facecolor="white", edgecolor="none")
     plt.close(fig)
 
