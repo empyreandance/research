@@ -839,8 +839,8 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         subtitle = ("How many days ahead or behind is each location's forecast high "
                     "compared to the normal temperature schedule?")
 
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
-    fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
+    ax.set_title(title, fontsize=16, fontweight="bold", pad=20)
+    fig.text(0.5, 0.89, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     # --- Credit line ---
