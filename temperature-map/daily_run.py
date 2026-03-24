@@ -621,7 +621,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
+    ax = fig.add_axes([0.02, 0.16, 0.96, 0.71], projection=projection)
 
     # Set the map extent
     if region_extent:
@@ -839,12 +839,12 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         subtitle = ("How many days ahead or behind is each location's forecast high "
                     "compared to the normal temperature schedule?")
 
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=20)
+    ax.set_title(title, fontsize=16, fontweight="bold", pad=24)
     fig.text(0.5, 0.89, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     # --- Credit line ---
-    fig.text(0.99, 0.01, "Data: NWS NDFD / ACIS 1991-2020 Normals",
+    fig.text(0.5, 0.02, "Data: NWS NDFD / ACIS 1991-2020 Normals",
              ha="right", fontsize=7, color="#999999")
 
     # --- Save ---
