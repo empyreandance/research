@@ -324,7 +324,8 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
                             txt.remove()
 
     # Colorbar
-    cbar_ax = fig.add_axes([0.15, 0.08, 0.70, 0.025])
+    cbar_y = 0.10 if is_regional else 0.08
+    cbar_ax = fig.add_axes([0.15, cbar_y, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_label("Consecutive Days Above (+) or Below (−) Normal High Temperature",
                    fontsize=11, fontweight="bold", labelpad=8)
