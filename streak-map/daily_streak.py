@@ -144,7 +144,14 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
+    if is_regional:
+        fig_h_setup = fig.get_figheight()
+        ax_bottom = 1.5 / fig_h_setup
+        ax_top = 1.0 - 0.85 / fig_h_setup
+        ax = fig.add_axes([0.02, ax_bottom, 0.96, ax_top - ax_bottom],
+                          projection=projection)
+    else:
+        ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
 
     if region_extent:
         w, e, s, n = region_extent
@@ -351,7 +358,11 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
                     "been above or below normal?")
 
     ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
-    fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
+    if is_regional:
+        subtitle_y = 1.0 - (0.55 / fig_h)  # ~0.55 inches from top
+    else:
+        subtitle_y = 0.88
+    fig.text(0.5, subtitle_y, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     fig.text(0.5, credit_y, "Data: ACIS Observations / 1991-2020 Normals",
