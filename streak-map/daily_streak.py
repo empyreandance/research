@@ -143,7 +143,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
+    ax = fig.add_axes([0.02, 0.16, 0.96, 0.71], projection=projection)
 
     if region_extent:
         w, e, s, n = region_extent
@@ -340,11 +340,11 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         subtitle = ("How many consecutive days has each location's high temperature "
                     "been above or below normal?")
 
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=20)
+    ax.set_title(title, fontsize=16, fontweight="bold", pad=24)
     fig.text(0.5, 0.89, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
-    fig.text(0.99, 0.01, "Data: ACIS Observations / 1991-2020 Normals",
+    fig.text(0.5, 0.02, "Data: ACIS Observations / 1991-2020 Normals",
              ha="right", fontsize=7, color="#999999")
 
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
