@@ -340,8 +340,8 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
         subtitle = ("How many consecutive days has each location's high temperature "
                     "been above or below normal?")
 
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
-    fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
+    ax.set_title(title, fontsize=16, fontweight="bold", pad=20)
+    fig.text(0.5, 0.89, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     fig.text(0.99, 0.01, "Data: ACIS Observations / 1991-2020 Normals",
