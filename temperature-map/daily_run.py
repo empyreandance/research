@@ -823,7 +823,15 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
                             txt.remove()
 
     # --- Colorbar ---
-    cbar_y = 0.10 if is_regional else 0.08
+    # Use absolute inch positions from bottom so spacing is consistent
+    # regardless of figure height
+    fig_h = fig.get_figheight()
+    if is_regional:
+        cbar_y = 0.75 / fig_h   # Colorbar ~0.75 inches from bottom
+        credit_y = 0.10 / fig_h  # Credit ~0.10 inches from bottom
+    else:
+        cbar_y = 0.08
+        credit_y = 0.01
     cbar_ax = fig.add_axes([0.15, cbar_y, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_label("Days Ahead (+) or Behind (−) Normal Temperature Schedule",
@@ -846,7 +854,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
              style="italic")
 
     # --- Credit line ---
-    fig.text(0.5, 0.01, "Data: NWS NDFD / ACIS 1991-2020 Normals",
+    fig.text(0.5, credit_y, "Data: NWS NDFD / ACIS 1991-2020 Normals",
              ha="center", fontsize=7, color="#999999")
 
     # --- Save ---
