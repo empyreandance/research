@@ -324,7 +324,15 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
                             txt.remove()
 
     # Colorbar
-    cbar_y = 0.10 if is_regional else 0.08
+    # Use absolute inch positions from bottom so spacing is consistent
+    # regardless of figure height
+    fig_h = fig.get_figheight()
+    if is_regional:
+        cbar_y = 0.75 / fig_h   # Colorbar ~0.75 inches from bottom
+        credit_y = 0.10 / fig_h  # Credit ~0.10 inches from bottom
+    else:
+        cbar_y = 0.08
+        credit_y = 0.01
     cbar_ax = fig.add_axes([0.15, cbar_y, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_label("Consecutive Days Above (+) or Below (−) Normal High Temperature",
@@ -346,7 +354,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
     fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
-    fig.text(0.5, 0.01, "Data: ACIS Observations / 1991-2020 Normals",
+    fig.text(0.5, credit_y, "Data: ACIS Observations / 1991-2020 Normals",
              ha="center", fontsize=7, color="#999999")
 
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
