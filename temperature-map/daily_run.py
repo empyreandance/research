@@ -610,7 +610,8 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         w, e, s, n = region_extent
         aspect = (e - w) / (n - s)
         fig_w = 10
-        fig = plt.figure(figsize=(fig_w, fig_w / aspect))
+        fig_h = fig_w / aspect + 1.5  # Extra space for colorbar and labels
+        fig = plt.figure(figsize=(fig_w, fig_h))
     else:
         fig = plt.figure(figsize=(MAP_WIDTH_INCHES, MAP_HEIGHT_INCHES))
 
@@ -621,7 +622,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    ax = fig.add_axes([0.02, 0.16, 0.96, 0.71], projection=projection)
+    ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
 
     # Set the map extent
     if region_extent:
@@ -839,13 +840,13 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         subtitle = ("How many days ahead or behind is each location's forecast high "
                     "compared to the normal temperature schedule?")
 
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=24)
-    fig.text(0.5, 0.89, subtitle, ha="center", fontsize=10, color="#555555",
+    ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
+    fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     # --- Credit line ---
-    fig.text(0.5, 0.02, "Data: NWS NDFD / ACIS 1991-2020 Normals",
-             ha="right", fontsize=7, color="#999999")
+    fig.text(0.5, 0.01, "Data: NWS NDFD / ACIS 1991-2020 Normals",
+             ha="center", fontsize=7, color="#999999")
 
     # --- Save ---
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
