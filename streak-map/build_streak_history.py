@@ -117,22 +117,25 @@ def fetch_observed_maxt(target_date):
     return observations
 
 
-def grid_observations(observations, clim_lons, clim_lats):
+def grid_observations(observations, clim_lons, clim_lats, field="maxt"):
     """
     Interpolate station observations onto the climatology grid.
 
     Parameters
     ----------
     observations : list of dict
-        Station observations from fetch_observed_maxt()
+        Station observations. Each dict must have 'lat', 'lon', and the
+        key specified by ``field``.
     clim_lons, clim_lats : numpy.ndarray
         1D arrays defining the grid
+    field : str
+        Which key in each observation dict to grid. Default ``"maxt"``
+        for raw temperatures; use ``"departure"`` to grid anomalies.
 
     Returns
     -------
     numpy.ndarray
-        2D array of temperatures on the climatology grid.
-        NaN where no data is available.
+        2D array on the climatology grid. NaN where no data is available.
     """
     from scipy.interpolate import griddata
 
@@ -141,7 +144,7 @@ def grid_observations(observations, clim_lons, clim_lats):
 
     station_lons = np.array([o["lon"] for o in observations])
     station_lats = np.array([o["lat"] for o in observations])
-    station_temps = np.array([o["maxt"] for o in observations])
+    station_temps = np.array([o[field] for o in observations])
     station_points = np.column_stack([station_lons, station_lats])
 
     lon_grid, lat_grid = np.meshgrid(clim_lons, clim_lats)
@@ -236,6 +239,52 @@ def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
         print(f"    QC: removed {flagged} suspect observation(s)")
 
     return clean
+
+
+def compute_departures(observations, clim_normals, clim_lons, clim_lats, doy):
+    """
+    Compute the temperature departure at each station using its nearest
+    climatology grid cell.
+
+    This ensures the above/below-normal comparison happens at the station
+    level *before* spatial interpolation, so the gridding step blends
+    departure values rather than raw temperatures. Without this, stations
+    that are a few degrees below normal can have their signal erased when
+    their raw temperature gets interpolated with warmer neighbors.
+
+    Parameters
+    ----------
+    observations : list of dict
+        Each dict has 'lat', 'lon', 'maxt'
+    clim_normals : numpy.ndarray
+        3D climatology array, shape (365, nlat, nlon)
+    clim_lons, clim_lats : numpy.ndarray
+        1D coordinate arrays for the climatology grid
+    doy : int
+        Day of year (1-365)
+
+    Returns
+    -------
+    list of dict
+        Same observations with an added 'departure' key (obs − normal, in °F).
+        Stations whose nearest normal is NaN are excluded.
+    """
+    normal_grid = clim_normals[doy - 1, :, :]
+    result = []
+
+    for obs in observations:
+        lat_idx = np.argmin(np.abs(clim_lats - obs["lat"]))
+        lon_idx = np.argmin(np.abs(clim_lons - obs["lon"]))
+        normal_temp = normal_grid[lat_idx, lon_idx]
+
+        if np.isnan(normal_temp):
+            continue
+
+        obs_copy = dict(obs)
+        obs_copy["departure"] = obs["maxt"] - normal_temp
+        result.append(obs_copy)
+
+    return result
 
 
 def run_test():
@@ -397,16 +446,20 @@ def main():
             all_obs[d_str], clim_normals, clim_lons, clim_lats, doy
         )
 
-        # Grid the observations
-        gridded = grid_observations(obs_clean, clim_lons, clim_lats)
+        # Compute departures at each station, then grid the departure field.
+        # This ensures the above/below comparison happens at station level
+        # before interpolation, so the signal isn't diluted.
+        obs_with_dep = compute_departures(
+            obs_clean, clim_normals, clim_lons, clim_lats, doy
+        )
+        departure_grid = grid_observations(
+            obs_with_dep, clim_lons, clim_lats, field="departure"
+        )
 
-        # Get the normal for this day of year
-        normal = clim_normals[doy - 1, :, :]
-
-        # Compare: above normal = positive streak, below = negative
-        above = gridded > normal
-        below = gridded < normal
-        equal = ~above & ~below  # Exactly equal to normal
+        # Compare: above normal = positive departure, below = negative
+        above = departure_grid > 0
+        below = departure_grid < 0
+        equal = departure_grid == 0  # Exactly zero departure
 
         # Update streaks:
         # If above and streak was positive → increment
@@ -435,7 +488,7 @@ def main():
         new_streak[equal] = 0
 
         # Preserve NaN from gridding failures
-        nan_mask = np.isnan(gridded) | np.isnan(normal)
+        nan_mask = np.isnan(departure_grid)
         new_streak[nan_mask] = streak[nan_mask]  # Don't update where we have no data
 
         streak = new_streak
