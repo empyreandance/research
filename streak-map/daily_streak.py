@@ -44,34 +44,33 @@ from config import (
 )
 
 # Import the observation-fetching functions from the backfill script
-from build_streak_history import fetch_observed_maxt, grid_observations, qc_observations
+from build_streak_history import fetch_observed_maxt, grid_observations, qc_observations, compute_departures
 
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 
-def update_streak(streak, observed_grid, normal_grid):
+def update_streak(streak, departure_grid):
     """
-    Update the streak array based on today's observed vs. normal.
+    Update the streak array based on today's departure from normal.
 
     Parameters
     ----------
     streak : numpy.ndarray
         Current streak grid. Positive = consecutive above-normal days,
         negative = consecutive below-normal days.
-    observed_grid : numpy.ndarray
-        Gridded observed high temperatures for yesterday
-    normal_grid : numpy.ndarray
-        Climatological normal high for yesterday's day-of-year
+    departure_grid : numpy.ndarray
+        Gridded departure (observed − normal) for yesterday, computed
+        at the station level before interpolation.
 
     Returns
     -------
     numpy.ndarray
         Updated streak grid
     """
-    above = observed_grid > normal_grid
-    below = observed_grid < normal_grid
-    equal = ~above & ~below
+    above = departure_grid > 0
+    below = departure_grid < 0
+    equal = departure_grid == 0
 
     new_streak = np.zeros_like(streak)
 
@@ -91,7 +90,7 @@ def update_streak(streak, observed_grid, normal_grid):
     new_streak[equal] = 0
 
     # Don't update where observations are missing
-    nan_mask = np.isnan(observed_grid) | np.isnan(normal_grid)
+    nan_mask = np.isnan(departure_grid)
     new_streak[nan_mask] = streak[nan_mask]
 
     return new_streak
@@ -438,20 +437,26 @@ def main():
             print("  WARNING: Very few observations. ACIS may be delayed.")
             print("  Rendering map with current streak state (no update).")
         else:
-            # Get the normal for yesterday's DOY
+            # Get the DOY for yesterday
             doy = yesterday.timetuple().tm_yday
             if doy > 365:
                 doy = 365
-            normal_grid = clim_normals[doy - 1, :, :]
 
             # QC the observations
             obs_clean = qc_observations(obs, clim_normals, clim_lons, clim_lats, doy)
 
-            # Grid the observations
-            observed_grid = grid_observations(obs_clean, clim_lons, clim_lats)
+            # Compute departures at each station, then grid the departure
+            # field. This ensures the above/below comparison happens at
+            # station level before interpolation.
+            obs_with_dep = compute_departures(
+                obs_clean, clim_normals, clim_lons, clim_lats, doy
+            )
+            departure_grid = grid_observations(
+                obs_with_dep, clim_lons, clim_lats, field="departure"
+            )
 
             # Update the streak
-            streak = update_streak(streak, observed_grid, normal_grid)
+            streak = update_streak(streak, departure_grid)
 
             print(f"  Updated. Max streak: +{np.nanmax(streak):.0f} / {np.nanmin(streak):.0f}")
 
