@@ -203,7 +203,7 @@ def render_streak_map(streak, clim_lons, clim_lats, run_date, output_path,
     streak_smooth = streak.copy()
     nan_mask = np.isnan(streak_smooth)
     streak_smooth[nan_mask] = 0
-    streak_smooth = gaussian_filter(streak_smooth, sigma=1.0)
+    streak_smooth = gaussian_filter(streak_smooth, sigma=0.5)
     streak_smooth[nan_mask] = np.nan
 
     lon2d, lat2d = np.meshgrid(clim_lons, clim_lats)
