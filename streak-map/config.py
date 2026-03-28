@@ -59,10 +59,10 @@ API_MAX_RETRIES = 3
 # =============================================================================
 
 # How many days to look back when initializing the streak from scratch
-STREAK_BACKFILL_DAYS = 90
+STREAK_BACKFILL_DAYS = 120
 
 # Maximum streak to display on the color scale
-STREAK_MAX_DAYS = 30
+STREAK_MAX_DAYS = 45
 
 
 # =============================================================================
