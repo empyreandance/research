@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EFI / SOT — CWA Viewer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0c0e13;
+    --bg-card: #13161d;
+    --bg-card-alt: #181c25;
+    --border: #252a36;
+    --border-light: #2f3545;
+    --text: #c8cdd8;
+    --text-dim: #6b7280;
+    --text-bright: #e8ecf4;
+    --accent: #60a5fa;
+    --accent-dim: #2563eb;
+
+    /* EFI color scale — bright for dark background */
+    --efi-low: #78b07c;       /* 0.0 - 0.5: not unusual */
+    --efi-mod: #eed535;       /* 0.5 - 0.6: somewhat unusual */
+    --efi-high: #f0a020;      /* 0.6 - 0.8: unusual */
+    --efi-vhigh: #ff4040;     /* 0.8 - 0.9: very unusual */
+    --efi-extreme: #d060ff;   /* 0.9 - 1.0: extremely unusual */
+
+    /* SOT thresholds */
+    --sot-elevated: #f0a020;  /* > 0 */
+    --sot-high: #ff4040;      /* > 1 */
+    --sot-extreme: #c050ff;   /* > 5 */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.5px;
+  }
+  .header-left .subtitle {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-right label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .cwa-select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    min-width: 100px;
+  }
+  .cwa-select:focus { outline: 2px solid var(--accent-dim); }
+
+  /* ---- Meta bar ---- */
+  .meta-bar {
+    padding: 10px 24px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-bar span { white-space: nowrap; }
+
+  /* ---- Main content ---- */
+  .main {
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* ---- Legend ---- */
+  .legend {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ---- Table section ---- */
+  .tables-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 1100px) {
+    .tables-container { grid-template-columns: 1fr; }
+  }
+
+  .table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .table-card-header h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .table-card-header .badge {
+    font-size: 0.68rem;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .table-card-header .badge.full {
+    background: rgba(107, 114, 128, 0.2);
+    color: var(--text-dim);
+  }
+
+  .table-scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+  thead th {
+    background: var(--bg-card-alt);
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+  }
+  thead th:first-child {
+    text-align: left;
+    padding-left: 10px;
+    min-width: 60px;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: rgba(96, 165, 250, 0.04); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td {
+    padding: 8px;
+    text-align: center;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  td:first-child {
+    text-align: left;
+    padding-left: 10px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .param-label {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .param-label .name { font-weight: 500; color: var(--text-bright); font-size: 0.78rem; }
+  .param-label .code { font-size: 0.65rem; color: var(--text-dim); }
+
+  /* Cell with EFI + SOT values stacked */
+  .cell-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+  .efi-val {
+    font-weight: 600;
+    font-size: 0.82rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    min-width: 48px;
+    display: inline-block;
+  }
+  .sot-val {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .sot-val.elevated { color: var(--sot-elevated); font-weight: 500; }
+  .sot-val.high { color: var(--sot-high); font-weight: 600; }
+  .sot-val.extreme { color: var(--sot-extreme); font-weight: 700; }
+
+  /* ---- EFI color classes ---- */
+  .efi-none { color: var(--text-dim); }
+  .efi-low  { color: var(--efi-low); }
+  .efi-mod  { color: #ffe040; background: rgba(255, 224, 64, 0.12); }
+  .efi-high { color: var(--efi-high); background: rgba(240, 160, 32, 0.15); }
+  .efi-vhigh { color: var(--efi-vhigh); background: rgba(255, 64, 64, 0.15); }
+  .efi-extreme { color: var(--efi-extreme); background: rgba(208, 96, 255, 0.18); }
+
+  /* ---- ESAT image reference ---- */
+  .esat-section {
+    margin-top: 24px;
+  }
+  .esat-section h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+  .esat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+  .esat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .esat-card img {
+    width: 100%;
+    display: block;
+    background: #000;
+  }
+  .esat-card .esat-label {
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ---- Map section ---- */
+  .map-section {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+  .map-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .map-section-header h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .map-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .map-controls label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .map-controls select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  #efi-map {
+    width: 100%;
+    max-height: 700px;
+    border-radius: 0;
+    border: none;
+    overflow: hidden;
+    background: #ffffff;
+  }
+  #efi-map svg {
+    width: 100%;
+    display: block;
+  }
+  .map-legend {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  .map-legend-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 2px;
+    overflow: hidden;
+    flex: 1;
+    max-width: 300px;
+  }
+  .map-legend-bar span { flex: 1; }
+
+  /* ---- Footer ---- */
+  .footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 40px;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ---- Loading state ---- */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    color: var(--text-dim);
+    gap: 12px;
+  }
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg {
+    padding: 40px 24px;
+    text-align: center;
+    color: #f87171;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>EFI / SOT Viewer</h1>
+    <div class="subtitle">Extreme Forecast Index &amp; Shift of Tails — clipped to CWA</div>
+  </div>
+  <div class="header-right">
+    <label for="cwa-picker">CWA</label>
+    <select id="cwa-picker" class="cwa-select">
+      <option value="">Loading...</option>
+    </select>
+  </div>
+</div>
+
+<div class="meta-bar" id="meta-bar">
+  <span id="meta-init">—</span>
+  <span id="meta-source">—</span>
+  <span id="meta-generated">—</span>
+</div>
+
+<div class="main">
+  <div class="legend">
+    <span class="legend-title">EFI Scale</span>
+    <div class="legend-item"><div class="legend-swatch" style="background:#4a7c4e"></div> &lt;0.5</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#eab308"></div> 0.5–0.6</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#d97706"></div> 0.6–0.8</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#dc2626"></div> 0.8–0.9</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#7c1d7c"></div> 0.9–1.0</div>
+    <span class="legend-title" style="margin-left:16px">SOT</span>
+    <div class="legend-item"><div class="legend-swatch" style="background:#d97706"></div> &gt;0</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#dc2626"></div> &gt;1</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#9333ea"></div> &gt;5</div>
+  </div>
+
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>Loading EFI data...</span>
+    </div>
+  </div>
+
+  <div class="map-section" id="map-section" style="display:none">
+    <div class="map-section-header">
+      <h3>Map</h3>
+      <div class="map-controls">
+        <label for="map-param">Param</label>
+        <select id="map-param"></select>
+        <label for="map-step">Step</label>
+        <select id="map-step"></select>
+        <span style="margin-left:16px;font-size:0.75rem;">
+          <label><input type="checkbox" id="toggle-counties"> Counties</label>
+          <label style="margin-left:8px;"><input type="checkbox" id="toggle-cities" checked> Cities</label>
+        </span>
+      </div>
+    </div>
+    <div id="esat-title" style="text-align:center;padding:12px 0;font-size:0.95rem;color:#222;line-height:1.5;background:#fff;border:1px solid var(--border);border-bottom:none;border-radius:10px 10px 0 0;font-family:sans-serif;"></div>
+    <div id="efi-map" style="border-radius:0;border-top:none;"></div>
+    <div style="background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:8px 12px;">
+      <div id="esat-colorbar" style="max-width:550px;margin:6px auto;"></div>
+      <div style="text-align:center;font-size:0.7rem;color:#555;margin-top:6px;line-height:1.4;">
+        Relative to the ECMWF reforecasts from a 5 week period (2005 – 2026)<br>
+        centered on the week this forecast was initialized
+        &nbsp;|&nbsp; CWA boundary shown in <span style="color:#00aaaa;font-weight:600;">cyan</span>
+        &nbsp;|&nbsp; ESAT region shown in <span style="color:#888;font-weight:600;">gray</span>
+        &nbsp;|&nbsp; <a href="https://satable.ncep.noaa.gov/efi/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">Open operational ESAT &#8599;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Data: <a href="https://ftp.wpc.ncep.noaa.gov/efi/" target="_blank">WPC/ECMWF EFI</a>
+  &middot; CWA boundaries: NWS GIS
+  &middot; No credentials required
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+// =========================================================================
+//  EFI / SOT Viewer — Client JS
+// =========================================================================
+
+const DATA_URL = "assets/efi/efi_latest.json";
+
+// Parse init_time which may be a nanosecond epoch timestamp or an ISO string.
+function parseInitTime(raw) {
+  if (!raw) return null;
+  // If it's all digits, it's nanoseconds since epoch.
+  if (/^\d+$/.test(String(raw))) {
+    return new Date(Number(raw) / 1000000);  // ns → ms
+  }
+  // Otherwise try as ISO string, trimming nanosecond precision.
+  let s = String(raw);
+  if (s.length > 23 && !s.endsWith("Z")) s = s.substring(0, 19) + "Z";
+  return new Date(s);
+}
+
+// Fallback: if running locally and no JSON exists yet, show instructions.
+// Parameter order matching ESAT columns. 2m Temp (t2i) goes at end since ESAT doesn't show it.
+const PARAM_ORDER = ["capei", "capesi", "ws10i", "fg10i", "mx2ti", "mn2ti", "tpi", "sfi", "t2i"];
+
+// Short column headers matching ESAT exactly.
+const PARAM_SHORT = {
+  capei: "CAPE", capesi: "CAPES", ws10i: "10WS", fg10i: "10WG",
+  mx2ti: "TMAX", mn2ti: "TMIN", tpi: "QPF", sfi: "SNOW", t2i: "2m-T",
+};
+
+// ESAT reference — images are dynamically generated, so we link to the live page.
+const ESAT_URL = "https://satable.ncep.noaa.gov/efi/";
+
+let DATA = null;
+
+// ---- EFI color classification ----
+function efiClass(val) {
+  if (val == null) return "efi-none";
+  const v = Math.abs(val);
+  if (v >= 0.9) return "efi-extreme";
+  if (v >= 0.8) return "efi-vhigh";
+  if (v >= 0.6) return "efi-high";
+  if (v >= 0.5) return "efi-mod";
+  if (v >= 0.01) return "efi-low";
+  return "efi-none";
+}
+
+function sotClass(val) {
+  if (val == null) return "";
+  const v = Math.abs(val);
+  if (v >= 5) return "extreme";
+  if (v >= 1) return "high";
+  if (v > 0) return "elevated";
+  return "";
+}
+
+function formatVal(val) {
+  if (val == null) return "—";
+  return val.toFixed(2);
+}
+
+function formatStep(hours) {
+  const days = hours / 24;
+  if (Number.isInteger(days)) return `Day ${days}`;
+  return `${hours}h`;
+}
+
+// ---- Build a single table (ESAT layout: steps as rows, params as columns) ----
+function buildTable(efiData, sotData, steps, paramNames, label) {
+  if (!efiData || Object.keys(efiData).length === 0) {
+    return `<div class="table-card">
+      <div class="table-card-header">
+        <h2>${label}</h2>
+      </div>
+      <div style="padding:24px;text-align:center;color:var(--text-dim);font-size:0.82rem;">
+        No data available for this CWA.
+      </div>
+    </div>`;
+  }
+
+  // Which params have data?
+  const activeParams = PARAM_ORDER.filter(p => efiData[p]);
+
+  // Which steps have data?
+  const activeSteps = steps.filter(s => {
+    return activeParams.some(p => efiData[p] && efiData[p][s]);
+  });
+
+  // Extract CWA ID from the label (e.g. "HNX CWA Only" → "HNX").
+  const cwaFromLabel = label.split(" ")[0] || "";
+  const isRegion = label.includes('ESAT');
+
+  // Parse init time for the table title and step labels.
+  let initDate = null;
+  let initHourStr = "";
+  let tableTitle = label;  // fallback
+  if (DATA && DATA.init_time) {
+    try {
+      initDate = parseInitTime(DATA.init_time);
+      if (initDate && !isNaN(initDate.getTime())) {
+        const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        initHourStr = `${String(initDate.getUTCHours()).padStart(2,"0")}Z`;
+        tableTitle = `${cwaFromLabel} Table &nbsp; ${months[initDate.getUTCMonth()]} ${initDate.getUTCDate()}, ${initDate.getUTCFullYear()} ${initHourStr} Run`;
+        if (isRegion) tableTitle = `${cwaFromLabel} Region Table &nbsp; ${months[initDate.getUTCMonth()]} ${initDate.getUTCDate()}, ${initDate.getUTCFullYear()} ${initHourStr} Run`;
+      }
+    } catch(e) { console.warn("Title parse error:", e); }
+  }
+
+  let html = `<div class="table-card">
+    <div class="table-card-header">
+      <h2>${tableTitle || label}</h2>
+      <span class="badge ${isRegion ? 'full' : ''}">${isRegion ? 'REGION MAX' : 'CWA MAX'}</span>
+    </div>
+    <div class="table-scroll">
+    <table>
+    <thead><tr>
+      <th style="min-width:60px;">HR</th>`;
+
+  // Column headers = parameter short names.
+  for (const p of activeParams) {
+    html += `<th>${PARAM_SHORT[p] || p}</th>`;
+  }
+  html += `</tr></thead><tbody>`;
+
+  // One row per step.
+  for (const s of activeSteps) {
+    let stepLabel = `<b>${s}</b>`;
+    if (initDate && !isNaN(initDate.getTime())) {
+      const valid = new Date(initDate.getTime() + s * 3600000);
+      const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const d = valid.getUTCDate();
+      const suf = d === 1 || d === 21 || d === 31 ? "st" : d === 2 || d === 22 ? "nd" : d === 3 || d === 23 ? "rd" : "th";
+      const vHour = `${String(valid.getUTCHours()).padStart(2,"0")}Z`;
+      stepLabel = `<b>${s}</b><br><span style="font-size:0.65rem;color:var(--text-dim);">${days[valid.getUTCDay()]} ${d}${suf} ${vHour}</span>`;
+    }
+
+    html += `<tr><td style="text-align:left;padding-left:10px;">${stepLabel}</td>`;
+
+    for (const param of activeParams) {
+      const efiCell = efiData[param] ? efiData[param][s] : null;
+      const efiMax = efiCell ? efiCell.max : null;
+
+      let sotMax = null;
+      if (sotData && sotData[param] && sotData[param][s]) {
+        sotMax = sotData[param][s].max;
+      }
+
+      const cls = efiClass(efiMax);
+      const sCls = sotClass(sotMax);
+
+      // Make cells clickable — updates the map.
+      const clickAttr = `onclick="mapFromTable('${param}',${s})" style="cursor:pointer;"`;
+
+      html += `<td ${clickAttr}><div class="cell-stack">
+        <span class="efi-val ${cls}">${formatVal(efiMax)}</span>`;
+      if (sotMax != null && Math.abs(sotMax) > 0.001) {
+        html += `<span class="sot-val ${sCls}">SOT ${formatVal(sotMax)}</span>`;
+      }
+      html += `</div></td>`;
+    }
+    html += `</tr>`;
+  }
+
+  html += `</tbody></table></div></div>`;
+  return html;
+}
+
+// Click a table cell → update map to that param/step.
+async function mapFromTable(param, step) {
+  const paramSel = document.getElementById("map-param");
+  const stepSel = document.getElementById("map-step");
+  if (paramSel) paramSel.value = param;
+  if (stepSel) stepSel.value = step;
+  const cwa = document.getElementById("cwa-picker").value;
+  await updateMap(cwa, param, step);
+  document.getElementById("map-section").scrollIntoView({ behavior: "smooth" });
+}
+
+// ---- Render everything ----
+function render(cwaId) {
+  const content = document.getElementById("content");
+
+  if (!DATA) {
+    content.innerHTML = `<div class="error-msg">
+      No data loaded. Run <code>python3 fetch_and_process.py</code> to generate data.
+    </div>`;
+    return;
+  }
+
+  const steps = DATA.steps_hours;
+  const paramNames = DATA.param_names;
+
+  let cwaEfi = null, cwaSot = null;
+  let regionEfi = null, regionSot = null;
+  if (cwaId && DATA.by_cwa[cwaId]) {
+    cwaEfi = DATA.by_cwa[cwaId].efi;
+    cwaSot = DATA.by_cwa[cwaId].sot;
+    regionEfi = DATA.by_cwa[cwaId].regional_efi;
+    regionSot = DATA.by_cwa[cwaId].regional_sot;
+  }
+
+  let html = `<div class="tables-container">`;
+  html += buildTable(cwaEfi, cwaSot, steps, paramNames, cwaId ? `${cwaId} CWA Only` : "Select a CWA");
+  html += buildTable(regionEfi, regionSot, steps, paramNames, cwaId ? `${cwaId} ESAT Region` : "ESAT Region");
+  html += `</div>`;
+
+  content.innerHTML = html;
+}
+
+function populateCwaDropdown() {
+  const picker = document.getElementById("cwa-picker");
+  picker.innerHTML = '<option value="">— Select CWA —</option>';
+  if (!DATA || !DATA.cwa_list) return;
+
+  for (const cwa of DATA.cwa_list) {
+    const opt = document.createElement("option");
+    opt.value = cwa;
+    opt.textContent = cwa;
+    picker.appendChild(opt);
+  }
+
+  // Default to HNX if available.
+  if (DATA.cwa_list.includes("HNX")) {
+    picker.value = "HNX";
+  }
+}
+
+function updateMeta() {
+  if (!DATA) return;
+  const initEl = document.getElementById("meta-init");
+  const srcEl = document.getElementById("meta-source");
+  const genEl = document.getElementById("meta-generated");
+
+  if (DATA.init_time) {
+    const d = parseInitTime(DATA.init_time);
+    if (d && !isNaN(d.getTime())) initEl.textContent = `Init: ${d.toUTCString()}`;
+  }
+  srcEl.textContent = `Source: ${DATA.source_file || "—"}`;
+  if (DATA.generated_utc) {
+    const d = new Date(DATA.generated_utc);
+    genEl.textContent = `Processed: ${d.toUTCString()}`;
+  }
+}
+
+function loadEsatImages() {}  // no-op: map section handles everything now
+
+
+// =========================================================================
+//  ESAT-Style Map — D3 Lambert Conformal Conic (matches NWS projection)
+// =========================================================================
+
+// ESAT display names.
+const ESAT_NAMES = {
+  capei: "CAPE", capesi: "CAPES", ws10i: "10m-Wind", fg10i: "10m-Wind-Gust",
+  mx2ti: "Max-Temp", mn2ti: "Min-Temp", tpi: "Total-Precip", sfi: "Snowfall", t2i: "2m-Temp",
+};
+
+const GRID_CACHE = {};
+let mapSvg = null;
+let mapProjection = null;
+let mapPath = null;
+let statesGeoData = null;
+let countiesGeoData = null;
+let citiesData = null;
+const MAP_W = 900, MAP_H = 700;
+
+async function loadCwaGrid(cwaId) {
+  if (!cwaId) return null;
+  if (GRID_CACHE[cwaId]) return GRID_CACHE[cwaId];
+  try {
+    const resp = await fetch(`assets/efi/grids/${cwaId}.json`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    GRID_CACHE[cwaId] = data;
+    return data;
+  } catch(e) {
+    console.warn(`Grid data not available for ${cwaId}:`, e);
+    return null;
+  }
+}
+
+async function loadStates() {
+  if (statesGeoData) return statesGeoData;
+  try {
+    const resp = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json");
+    const us = await resp.json();
+    statesGeoData = topojson.feature(us, us.objects.states);
+    return statesGeoData;
+  } catch(e) {
+    console.warn("Could not load states:", e);
+    return null;
+  }
+}
+
+async function loadCounties() {
+  if (countiesGeoData) return countiesGeoData;
+  try {
+    const resp = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json");
+    const us = await resp.json();
+    countiesGeoData = topojson.feature(us, us.objects.counties);
+    return countiesGeoData;
+  } catch(e) {
+    console.warn("Could not load counties:", e);
+    return null;
+  }
+}
+
+async function loadCities() {
+  if (citiesData) return citiesData;
+  try {
+    const resp = await fetch("assets/efi/us_cities.json");
+    citiesData = await resp.json();
+    return citiesData;
+  } catch(e) {
+    console.warn("Could not load cities:", e);
+    return null;
+  }
+}
+
+function initMap() {
+  const container = document.getElementById("efi-map");
+  container.innerHTML = "";
+  mapSvg = d3.select("#efi-map").append("svg")
+    .attr("viewBox", `0 0 ${MAP_W} ${MAP_H}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("background", "#ffffff");
+
+  // Wrapper group for zoom/pan.
+  const g = mapSvg.append("g").attr("id", "g-map-root");
+  g.append("g").attr("id", "g-contours");
+  g.append("g").attr("id", "g-counties");
+  g.append("g").attr("id", "g-states");
+  g.append("g").attr("id", "g-sot");
+  g.append("g").attr("id", "g-sot-labels");
+  g.append("g").attr("id", "g-cwa");
+  g.append("g").attr("id", "g-region-box");
+  g.append("g").attr("id", "g-cities");
+
+  // Enable zoom/pan.
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 10])
+    .on("zoom", (event) => {
+      g.attr("transform", event.transform);
+      const k = event.transform.k;
+
+      // Progressive city disclosure: lower pop threshold as you zoom in.
+      const popThreshold = 300000 / (k * k * k);
+      g.selectAll(".city-group").each(function() {
+        this.style.display = +this.dataset.pop >= popThreshold ? "" : "none";
+      });
+
+      // Gentle counter-scale: sqrt(k) so fonts grow with zoom but not 1:1.
+      const cs = Math.sqrt(k);
+      g.selectAll("#g-cities text").each(function() {
+        const base = +this.dataset.baseSize || 6;
+        d3.select(this).attr("font-size", (base / cs) + "px");
+      });
+      g.selectAll("#g-cities rect").each(function() {
+        const base = +this.dataset.baseSize || 2;
+        d3.select(this)
+          .attr("width", base / cs).attr("height", base / cs)
+          .attr("x", +this.dataset.cx - base / cs / 2)
+          .attr("y", +this.dataset.cy - base / cs / 2);
+      });
+      g.selectAll("#g-sot-labels text").each(function() {
+        d3.select(this).attr("font-size", (11 / cs) + "px")
+          .attr("stroke-width", (2.5 / cs));
+      });
+    });
+  mapSvg.call(zoom);
+}
+
+function setupProjection(cwaData) {
+  const lats = cwaData.efi.lats;
+  const lons = cwaData.efi.lons;
+  const south = Math.min(lats[0], lats[lats.length - 1]);
+  const north = Math.max(lats[0], lats[lats.length - 1]);
+  const west = Math.min(lons[0], lons[lons.length - 1]);
+  const east = Math.max(lons[0], lons[lons.length - 1]);
+  const centerLon = (west + east) / 2;
+
+  // Build projection with unit scale first.
+  mapProjection = d3.geoConicConformal()
+    .parallels([25, 50])
+    .rotate([-centerLon, 0])
+    .scale(1)
+    .translate([0, 0]);
+
+  // Project the four corners to find bounds.
+  const corners = [
+    mapProjection([west, south]),
+    mapProjection([east, south]),
+    mapProjection([east, north]),
+    mapProjection([west, north]),
+  ];
+  const xs = corners.map(c => c[0]);
+  const ys = corners.map(c => c[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+
+  // Scale to fit SVG with padding.
+  const pad = 30;
+  const scaleX = (MAP_W - 2 * pad) / (maxX - minX);
+  const scaleY = (MAP_H - 2 * pad) / (maxY - minY);
+  const s = Math.min(scaleX, scaleY);
+
+  mapProjection
+    .scale(s)
+    .translate([
+      MAP_W / 2 - s * (minX + maxX) / 2,
+      MAP_H / 2 - s * (minY + maxY) / 2
+    ]);
+
+  mapPath = d3.geoPath(mapProjection);
+}
+
+function transformContourToGeoJSON(contour, lats, lons) {
+  const coords = contour.coordinates.map(polygon =>
+    polygon.map(ring =>
+      ring.map(([x, y]) => {
+        const xi = Math.min(Math.floor(x), lons.length - 2);
+        const xf = x - xi;
+        const lon = lons[xi] * (1 - xf) + lons[Math.min(xi + 1, lons.length - 1)] * xf;
+        const yi = Math.min(Math.floor(y), lats.length - 2);
+        const yf = y - yi;
+        const lat = lats[yi] * (1 - yf) + lats[Math.min(yi + 1, lats.length - 1)] * yf;
+        return [lon, lat];
+      })
+    )
+  );
+  return {
+    type: "Feature",
+    geometry: { type: "MultiPolygon", coordinates: coords },
+    properties: { value: contour.value }
+  };
+}
+
+// Project a GeoJSON feature to an SVG path string manually,
+// bypassing D3's spherical winding rules.
+function projectToSvgPath(geoFeature) {
+  let d = "";
+  const geom = geoFeature.geometry;
+  let polygons;
+  if (geom.type === "MultiPolygon") {
+    polygons = geom.coordinates;
+  } else if (geom.type === "Polygon") {
+    polygons = [geom.coordinates];
+  } else {
+    return "";
+  }
+  for (const polygon of polygons) {
+    for (const ring of polygon) {
+      for (let i = 0; i < ring.length; i++) {
+        const pt = mapProjection(ring[i]);
+        if (!pt) continue;
+        d += (i === 0 ? "M" : "L") + pt[0].toFixed(1) + "," + pt[1].toFixed(1);
+      }
+      d += "Z";
+    }
+  }
+  return d;
+}
+
+function buildColorbar() {
+  const bar = document.getElementById("esat-colorbar");
+  if (!bar) return;
+  const negColors = ["#f18cfa","#c828a0","#7900c9","#0032ff","#6464ff","#b4b4ff","#ebebff"];
+  const negLabels = ["-1","-0.99","-0.95","-0.9","-0.8","-0.7","-0.6","-0.5"];
+  const posColors = ["#f5ffa0","#ffff13","#f0c928","#b48c1d","#960100","#ff0000","#ffaaaa"];
+  const posLabels = ["0.5","0.6","0.7","0.8","0.9","0.95","0.99","1.0"];
+  let html = '<div style="display:flex;align-items:flex-end;">';
+  negColors.forEach((c, i) => {
+    html += `<div style="flex:1;text-align:center;"><div style="height:14px;background:${c};"></div><div style="font-size:9px;color:#666;margin-top:2px;">${negLabels[i]}</div></div>`;
+  });
+  html += `<div style="flex:2;text-align:center;"><div style="height:14px;background:#fff;border-top:1px solid #ccc;border-bottom:1px solid #ccc;"></div><div style="font-size:9px;color:#666;margin-top:2px;">${negLabels[7]}</div></div>`;
+  posColors.forEach((c, i) => {
+    html += `<div style="flex:1;text-align:center;"><div style="height:14px;background:${c};"></div><div style="font-size:9px;color:#666;margin-top:2px;">${posLabels[i]}</div></div>`;
+  });
+  html += `<div style="text-align:center;padding-left:2px;"><div style="height:14px;"></div><div style="font-size:9px;color:#666;margin-top:2px;">${posLabels[7]}</div></div></div>`;
+  bar.innerHTML = html;
+}
+
+function updateEsatTitle(param, stepHours) {
+  const titleEl = document.getElementById("esat-title");
+  if (!titleEl) return;
+  const name = ESAT_NAMES[param] || param;
+  const stepLo = Math.max(0, stepHours - 24);
+  let timeStr = "";
+  if (DATA && DATA.init_time) {
+    try {
+      const init = parseInitTime(DATA.init_time);
+      if (init && !isNaN(init.getTime())) {
+        const vStart = new Date(init.getTime() + stepLo * 3600000);
+        const vEnd = new Date(init.getTime() + stepHours * 3600000);
+        const fmt = d => {
+          const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+          const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+          return `${String(d.getUTCHours()).padStart(2,"0")}Z ${days[d.getUTCDay()]} ${months[d.getUTCMonth()]} ${String(d.getUTCDate()).padStart(2,"0")} ${d.getUTCFullYear()}`;
+        };
+        timeStr = `${fmt(vStart)}  to  ${fmt(vEnd)}`;
+      }
+    } catch(e) {}
+  }
+  titleEl.innerHTML =
+    `ECMWF EFI (shaded) and SOT (contours) for <b>${name}</b> &nbsp;&#8212;&nbsp; ${stepLo}&#8211;${stepHours}-h forecast valid` +
+    (timeStr ? `<br>${timeStr}` : "");
+}
+
+async function updateMap(cwaId, param, stepHours) {
+  if (!mapSvg) return;
+  if (!cwaId) return;
+
+  const cwaData = await loadCwaGrid(cwaId);
+  if (!cwaData) return;
+  const states = await loadStates();
+
+  setupProjection(cwaData);
+
+  mapSvg.select("#g-contours").selectAll("*").remove();
+  mapSvg.select("#g-counties").selectAll("*").remove();
+  mapSvg.select("#g-states").selectAll("*").remove();
+  mapSvg.select("#g-sot").selectAll("*").remove();
+  mapSvg.select("#g-sot-labels").selectAll("*").remove();
+  mapSvg.select("#g-cwa").selectAll("*").remove();
+  mapSvg.select("#g-region-box").selectAll("*").remove();
+  mapSvg.select("#g-cities").selectAll("*").remove();
+
+  const efiGrid = cwaData.efi;
+  if (efiGrid && efiGrid.fields && efiGrid.fields[param]) {
+    const field = efiGrid.fields[param][stepHours];
+    if (field) {
+      const lats = efiGrid.lats;
+      const lons = efiGrid.lons;
+      const width = lons.length;
+      const height = lats.length;
+
+      const flat = [];
+      for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+          flat.push(field[i][j] != null ? field[i][j] : 0);
+        }
+      }
+
+      // --- Positive EFI contours ---
+      const posThresholds = [0.499, 0.599, 0.699, 0.799, 0.899, 0.949, 0.989];
+      const posColors = ["#f5ffa0","#ffff13","#f0c928","#b48c1d","#960100","#ff0000","#ffaaaa"];
+      const posContours = d3.contours().size([width, height]).thresholds(posThresholds)(flat);
+      posContours.forEach((c, idx) => {
+        if (c.coordinates.length === 0) return;
+        const feat = transformContourToGeoJSON(c, lats, lons);
+        const svgD = projectToSvgPath(feat);
+        if (!svgD) return;
+        mapSvg.select("#g-contours").append("path")
+          .attr("d", svgD)
+          .attr("fill", posColors[idx]).attr("fill-opacity", 0.85).attr("stroke", "none");
+      });
+
+      // --- Negative EFI contours ---
+      const negFlat = flat.map(v => -v);
+      const negColors = ["#ebebff","#b4b4ff","#6464ff","#0032ff","#7900c9","#c828a0","#f18cfa"];
+      const negContours = d3.contours().size([width, height]).thresholds(posThresholds)(negFlat);
+      negContours.forEach((c, idx) => {
+        if (c.coordinates.length === 0) return;
+        const feat = transformContourToGeoJSON(c, lats, lons);
+        const svgD = projectToSvgPath(feat);
+        if (!svgD) return;
+        mapSvg.select("#g-contours").append("path")
+          .attr("d", svgD)
+          .attr("fill", negColors[idx]).attr("fill-opacity", 0.85).attr("stroke", "none");
+      });
+
+      // --- SOT contour lines + labels ---
+      let sotField = null;
+      if (cwaData.sot && cwaData.sot.fields) {
+        if (cwaData.sot.fields[param] && cwaData.sot.fields[param][stepHours]) {
+          sotField = cwaData.sot.fields[param][stepHours];
+        }
+      }
+      if (sotField) {
+        const sotFlat = [];
+        for (let i = 0; i < height; i++) {
+          for (let j = 0; j < width; j++) {
+            sotFlat.push(sotField[i][j] != null ? sotField[i][j] : 0);
+          }
+        }
+        const sotLevels = [0, 1, 2, 5, 10];
+        const sotContours = d3.contours().size([width, height]).thresholds(sotLevels)(sotFlat);
+        sotContours.forEach(c => {
+          if (c.coordinates.length === 0 || c.value < 0) return;
+          const feat = transformContourToGeoJSON(c, lats, lons);
+          mapSvg.select("#g-sot").append("path")
+            .attr("d", projectToSvgPath(feat))
+            .attr("fill", "none").attr("stroke", "#000").attr("stroke-width", 1.2).attr("opacity", 0.7);
+
+          // Label on the contour boundary (topmost point).
+          for (const poly of c.coordinates) {
+            if (!poly[0] || poly[0].length < 3) continue;
+            const ring = poly[0];
+            let bestPx = null, bestPy = Infinity;
+            for (const [x, y] of ring) {
+              const xi = Math.min(Math.floor(x), lons.length - 2);
+              const xf = x - xi;
+              const lon = lons[xi] * (1 - xf) + lons[Math.min(xi + 1, lons.length - 1)] * xf;
+              const yi = Math.min(Math.floor(y), lats.length - 2);
+              const yf = y - yi;
+              const lat = lats[yi] * (1 - yf) + lats[Math.min(yi + 1, lats.length - 1)] * yf;
+              const [px, py] = mapProjection([lon, lat]);
+              if (py < bestPy) { bestPx = px; bestPy = py; }
+            }
+            if (bestPx && bestPx > 20 && bestPx < MAP_W - 20 && bestPy > 20 && bestPy < MAP_H - 20) {
+              mapSvg.select("#g-sot-labels").append("text")
+                .attr("x", bestPx).attr("y", bestPy - 2)
+                .attr("text-anchor", "middle").attr("dominant-baseline", "auto")
+                .attr("font-size", "11px").attr("font-weight", "bold")
+                .attr("fill", "#000").attr("stroke", "#fff")
+                .attr("stroke-width", 2.5).attr("paint-order", "stroke")
+                .text(c.value);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  // --- State borders ---
+  if (states) {
+    mapSvg.select("#g-states").selectAll("path")
+      .data(states.features).join("path")
+      .attr("d", mapPath).attr("fill", "none")
+      .attr("stroke", "#888").attr("stroke-width", 0.6);
+  }
+
+  // --- CWA boundary ---
+  const polygon = cwaData.polygon;
+  if (polygon) {
+    const cwaFeat = { type: "Feature", geometry: polygon };
+    mapSvg.select("#g-cwa").append("path")
+      .attr("d", projectToSvgPath(cwaFeat))
+      .attr("fill", "none").attr("stroke", "#00cccc")
+      .attr("stroke-width", 2.5).attr("stroke-dasharray", "10,6");
+  }
+
+  // --- ESAT region bounding box (rectangle in projection plane) ---
+  if (cwaData.efi && cwaData.efi.lats && cwaData.efi.lons) {
+    const gl = cwaData.efi.lats, gn = cwaData.efi.lons;
+    const s = Math.min(gl[0], gl[gl.length-1]), n = Math.max(gl[0], gl[gl.length-1]);
+    const w = Math.min(gn[0], gn[gn.length-1]), e = Math.max(gn[0], gn[gn.length-1]);
+    // Project corners and draw a straight rectangle in SVG space.
+    const corners = [
+      mapProjection([w, s]), mapProjection([e, s]),
+      mapProjection([e, n]), mapProjection([w, n]),
+    ];
+    const xs = corners.map(c => c[0]);
+    const ys = corners.map(c => c[1]);
+    const rx = Math.min(...xs), ry = Math.min(...ys);
+    const rw = Math.max(...xs) - rx, rh = Math.max(...ys) - ry;
+    mapSvg.select("#g-region-box").append("rect")
+      .attr("x", rx).attr("y", ry).attr("width", rw).attr("height", rh)
+      .attr("fill", "none")
+      .attr("stroke", "#888").attr("stroke-width", 1.2).attr("stroke-dasharray", "5,4");
+  }
+
+  // --- Counties (toggle) ---
+  if (document.getElementById("toggle-counties").checked) {
+    const counties = await loadCounties();
+    if (counties) {
+      mapSvg.select("#g-counties").selectAll("path")
+        .data(counties.features).join("path")
+        .attr("d", mapPath).attr("fill", "none")
+        .attr("stroke", "#bbb").attr("stroke-width", 0.3);
+    }
+  }
+
+  // --- Cities (toggle) ---
+  if (document.getElementById("toggle-cities").checked) {
+    const cities = await loadCities();
+    if (cities && cwaData.efi) {
+      const gl = cwaData.efi.lats, gn = cwaData.efi.lons;
+      const south = Math.min(gl[0], gl[gl.length-1]);
+      const north = Math.max(gl[0], gl[gl.length-1]);
+      const west = Math.min(gn[0], gn[gn.length-1]);
+      const east = Math.max(gn[0], gn[gn.length-1]);
+
+      // Filter cities within the grid extent, cap at 200 for SVG performance.
+      const visible = cities.filter(c => 
+        c[1] >= south && c[1] <= north && c[2] >= west && c[2] <= east
+      );
+      visible.sort((a, b) => b[3] - a[3]);
+      const show = visible.slice(0, 1000);
+
+      const cg = mapSvg.select("#g-cities");
+      const defaultThreshold = 300000;
+      const placed = []; // bounding boxes of placed labels
+
+      for (const city of show) {
+        const pt = mapProjection([city[2], city[1]]);
+        if (!pt) continue;
+        const pop = city[3];
+        const sz = pop > 500000 ? 2.5 : pop > 100000 ? 1.8 : pop > 30000 ? 1.2 : pop > 5000 ? 0.9 : 0.7;
+        const fs = pop > 500000 ? 7 : pop > 100000 ? 5.5 : pop > 30000 ? 4.5 : pop > 5000 ? 3.5 : 3;
+
+        // Zoom level where this city first appears: k = cbrt(300000 / pop)
+        const appearK = Math.max(1, Math.cbrt(300000 / Math.max(pop, 1)));
+        // Scale collision box down for cities that only show when zoomed in.
+        const collisionScale = 1 / appearK;
+
+        const labelW = city[0].length * fs * 0.55 * collisionScale;
+        const labelH = fs * 1.3 * collisionScale;
+        const pad = fs * 0.4 * collisionScale; // breathing room
+        const lx = pt[0] + (sz + 1) * collisionScale - pad;
+        const ly = pt[1] - labelH / 2 - pad;
+        const box = { x: lx, y: ly, w: labelW + 2 * pad, h: labelH + 2 * pad };
+
+        const overlaps = placed.some(p =>
+          box.x < p.x + p.w && box.x + box.w > p.x &&
+          box.y < p.y + p.h && box.y + box.h > p.y
+        );
+        if (overlaps) continue;
+        placed.push(box);
+
+        const group = cg.append("g")
+          .attr("class", "city-group")
+          .attr("data-pop", pop)
+          .style("display", pop >= defaultThreshold ? "" : "none");
+
+        group.append("rect")
+          .attr("x", pt[0] - sz/2).attr("y", pt[1] - sz/2)
+          .attr("width", sz).attr("height", sz)
+          .attr("fill", "#333")
+          .attr("data-base-size", sz)
+          .attr("data-cx", pt[0]).attr("data-cy", pt[1]);
+        group.append("text")
+          .attr("x", pt[0] + sz + 1).attr("y", pt[1] + 0.5)
+          .attr("font-size", fs + "px").attr("fill", "#444")
+          .attr("font-family", "sans-serif")
+          .attr("dominant-baseline", "middle")
+          .attr("data-base-size", fs)
+          .text(city[0]);
+      }
+    }
+  }
+
+  updateEsatTitle(param, stepHours);
+}
+
+// Click a table cell -> update map to that param/step.
+async function mapFromTable(param, step) {
+  const paramSel = document.getElementById("map-param");
+  const stepSel = document.getElementById("map-step");
+  if (paramSel) paramSel.value = param;
+  if (stepSel) stepSel.value = step;
+  const cwa = document.getElementById("cwa-picker").value;
+  await updateMap(cwa, param, step);
+  document.getElementById("map-section").scrollIntoView({ behavior: "smooth" });
+}
+
+function populateMapControls(cwaId) {
+  const paramSelect = document.getElementById("map-param");
+  const stepSelect = document.getElementById("map-step");
+  paramSelect.innerHTML = "";
+  for (const p of PARAM_ORDER) {
+    if (DATA.param_names[p]) {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = DATA.param_names[p];
+      paramSelect.appendChild(opt);
+    }
+  }
+  stepSelect.innerHTML = "";
+  for (const s of DATA.steps_hours) {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = formatStep(s);
+    stepSelect.appendChild(opt);
+  }
+  const refresh = async () => {
+    await updateMap(
+      document.getElementById("cwa-picker").value,
+      paramSelect.value,
+      parseInt(stepSelect.value)
+    );
+  };
+  paramSelect.onchange = refresh;
+  stepSelect.onchange = refresh;
+}
+
+// ---- Init ----
+async function init() {
+  try {
+    const resp = await fetch(DATA_URL);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    DATA = await resp.json();
+  } catch (err) {
+    document.getElementById("content").innerHTML = `<div class="error-msg">
+      Could not load <code>${DATA_URL}</code>.<br>
+      Run <code>python3 fetch_and_process.py</code> to generate the data file,<br>
+      then open this page via a local server (e.g. <code>python3 -m http.server 8080</code>).
+    </div>`;
+    return;
+  }
+
+  populateCwaDropdown();
+  updateMeta();
+
+  const picker = document.getElementById("cwa-picker");
+  render(picker.value);
+
+  document.getElementById("map-section").style.display = "block";
+  initMap();
+  buildColorbar();
+  populateMapControls(picker.value);
+
+  await updateMap(
+    picker.value,
+    document.getElementById("map-param").value,
+    parseInt(document.getElementById("map-step").value)
+  );
+
+  picker.addEventListener("change", async () => {
+    render(picker.value);
+    await updateMap(
+      picker.value,
+      document.getElementById("map-param").value,
+      parseInt(document.getElementById("map-step").value)
+    );
+  });
+
+  // Toggle layers re-render the map.
+  const mapRefresh = async () => {
+    await updateMap(
+      document.getElementById("cwa-picker").value,
+      document.getElementById("map-param").value,
+      parseInt(document.getElementById("map-step").value)
+    );
+  };
+  document.getElementById("toggle-counties").addEventListener("change", mapRefresh);
+  document.getElementById("toggle-cities").addEventListener("change", mapRefresh);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+name: Daily EFI Update
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for new EFI data
+        id: check
+        run: |
+          LATEST=$(curl -s --list-only ftp://ftp.wpc.ncep.noaa.gov/efi/ | grep '\.grb2$' | sort | tail -1)
+          echo "Latest on FTP: $LATEST"
+          CURRENT=""
+          if [ -f assets/efi/efi_latest.json ]; then
+            CURRENT=$(python3 -c "import json; print(json.load(open('assets/efi/efi_latest.json')).get('source_file',''))")
+          fi
+          echo "Currently deployed: $CURRENT"
+          if [ "$LATEST" = "$CURRENT" ]; then
+            echo "No new data. Skipping."
+            echo "new_data=false" >> $GITHUB_OUTPUT
+          else
+            echo "New data found!"
+            echo "new_data=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Python
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        run: sudo apt-get update && sudo apt-get install -y libeccodes-dev
+
+      - name: Install Python dependencies
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        run: pip install cfgrib xarray numpy geopandas shapely requests
+
+      - name: Run EFI pipeline
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        working-directory: efi-tool
+        run: python3 fetch_and_process.py
+
+      - name: Copy output to assets
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p assets/efi/grids
+          cp efi-tool/web/data/efi_latest.json assets/efi/
+          cp efi-tool/web/data/grids/*.json assets/efi/grids/
+          cp efi-tool/us_cities.json assets/efi/us_cities.json
+
+      - name: Commit and push
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/efi/
+          git diff --staged --quiet || git commit -m "Update EFI data $(date -u +%Y-%m-%d_%H%MZ)"
+          git push
