@@ -65,4 +65,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add assets/efi/
           git diff --staged --quiet || git commit -m "Update EFI data $(date -u +%Y-%m-%d_%H%MZ)"
+          git pull --rebase
           git push
