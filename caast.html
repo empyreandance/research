@@ -294,6 +294,7 @@
     border-radius: 4px;
     padding: 8px 12px;
     font-size: 0.82rem;
+    gap: 12px;
   }
   .analog-card.severe {
     border-left: 3px solid var(--signal-high);
@@ -301,15 +302,53 @@
   .analog-card.non-severe {
     border-left: 3px solid var(--signal-quiet);
   }
+  .analog-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+  .analog-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
   .analog-date {
     font-family: 'JetBrains Mono', monospace;
     color: var(--text-bright);
   }
-  .analog-meta {
-    display: flex;
-    gap: 12px;
+  .analog-label-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
     color: var(--text-dim);
+    text-transform: lowercase;
+  }
+  .analog-sim {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+  .analog-links {
+    display: flex;
+    gap: 4px;
+  }
+  .analog-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    color: var(--accent);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .analog-links a:hover {
+    background: var(--border);
+    color: var(--text-bright);
   }
 
   /* ---- Map ---- */
@@ -436,7 +475,7 @@
 <script>
 const SIGNALS_URL = 'caast/data/signals.json';
 const ANALOGS_URL = 'caast/data/analogs/';
-const CWA_GEOJSON_URL = 'https://mesonet.agron.iastate.edu/geojson/cwa.php?callback=&js=cwas';
+const CWA_TOPOJSON_URL = 'caast/cwa.topo.json';
 const STATES_URL = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
 const SIGNAL_COLORS = {
@@ -462,13 +501,13 @@ async function loadAll() {
     signals = {};
   }
 
-  // Load CWA polygons via JSONP-style endpoint (IEM serves as JS)
+  // Load CWA polygons from local TopoJSON
   try {
-    const resp = await fetch(CWA_GEOJSON_URL);
-    let text = await resp.text();
-    // Strip the "var cwas = " prefix and trailing semicolon
-    text = text.replace(/^[^{]*/, '').replace(/;\s*$/, '');
-    cwaFeatures = JSON.parse(text);
+    const resp = await fetch(CWA_TOPOJSON_URL);
+    const topo = await resp.json();
+    // Find the first object key (mapshaper names it after the source file)
+    const objectKey = Object.keys(topo.objects)[0];
+    cwaFeatures = topojson.feature(topo, topo.objects[objectKey]);
   } catch (e) {
     console.error('Failed to load CWA polygons', e);
     cwaFeatures = { type: 'FeatureCollection', features: [] };
@@ -585,14 +624,50 @@ async function openDetail(office) {
   }
 }
 
+function buildAfdUrl(productId) {
+  if (!productId) return null;
+  return `https://mesonet.agron.iastate.edu/p.php?pid=${productId}`;
+}
+
+function buildHistoricalAfdUrl(office, datetimeUtc) {
+  // Build IEM AFD viewer URL from office and timestamp
+  // Format: https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=AFDMHX&e=YYYYMMDDHHMI
+  if (!datetimeUtc) return null;
+  const m = datetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (!m) return null;
+  const ts = `${m[1]}${m[2]}${m[3]}${m[4]}${m[5]}`;
+  return `https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=AFD${office}&e=${ts}`;
+}
+
+function buildSpcReportUrl(datetimeUtc) {
+  // SPC daily storm reports use YYMMDD format
+  if (!datetimeUtc) return null;
+  const m = datetimeUtc.match(/^(\d{2})(\d{2})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  return `https://www.spc.noaa.gov/climo/reports/${m[2]}${m[3]}${m[4]}_rpts.html`;
+}
+
+function buildLsrUrl(office, datetimeUtc) {
+  // IEM LSR archive for the office and a 24-hour window starting at the AFD time
+  if (!datetimeUtc) return null;
+  const m = datetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  const sts = `${m[1]}-${m[2]}-${m[3]}T00:00Z`;
+  const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + 7);
+  const ets = date.toISOString().slice(0, 10) + 'T00:00Z';
+  return `https://mesonet.agron.iastate.edu/lsr/?by=wfo&wfo=${office}&sts=${sts}&ets=${ets}`;
+}
+
 function renderDetail(data) {
   const body = document.getElementById('modal-body');
   const sig = data.signal;
   const baseRatePct = sig.base_rate != null ? (sig.base_rate * 100).toFixed(0) + '%' : '—';
-  const severeFracPct = (sig.severe_fraction * 100).toFixed(0) + '%';
   const meanSimText = sig.mean_similarity != null ? sig.mean_similarity.toFixed(3) : '—';
 
   let html = '';
+
+  // Signal summary
   html += '<div class="modal-section"><h4>Signal</h4>';
   html += '<div class="signal-summary">';
   html += `<div class="signal-stat"><div class="label">Level</div><div class="value"><span class="signal-badge badge-${sig.level}">${sig.level.replace('_', ' ')}</span></div></div>`;
@@ -607,23 +682,41 @@ function renderDetail(data) {
     html += '</p></div>';
   }
 
+  // Query AFD with link to full text
   if (data.query_preview) {
-    html += '<div class="modal-section"><h4>Query AFD (preview)</h4>';
+    const fullUrl = buildAfdUrl(data.product_id);
+    html += '<div class="modal-section"><h4>Query AFD (preview) ';
+    if (fullUrl) {
+      html += `<a href="${fullUrl}" target="_blank" rel="noopener" style="font-weight:normal;text-transform:none;letter-spacing:0">→ view full AFD on IEM</a>`;
+    }
+    html += '</h4>';
     html += `<div class="query-preview">${escapeHtml(data.query_preview)}</div></div>`;
   }
 
+  // Top 10 analogs with links
   if (data.analogs && data.analogs.length) {
     html += '<div class="modal-section"><h4>Top 10 historical analogs</h4>';
     html += '<div class="analog-list">';
     for (const a of data.analogs) {
       const date = a.datetime_utc ? a.datetime_utc.slice(0, 10) : '—';
       const cls = a.is_severe ? 'severe' : 'non-severe';
+      const afdLink = buildHistoricalAfdUrl(data.office, a.datetime_utc);
+      const spcLink = buildSpcReportUrl(a.datetime_utc);
+      const lsrLink = buildLsrUrl(data.office, a.datetime_utc);
+
       html += `<div class="analog-card ${cls}">`;
+      html += `<div class="analog-left">`;
       html += `<span class="analog-date">${date}</span>`;
-      html += `<span class="analog-meta">`;
-      html += `<span>${a.label || '—'}</span>`;
-      html += `<span>sim ${a.similarity.toFixed(3)}</span>`;
+      html += `<span class="analog-label-badge">${a.label || '—'}</span>`;
+      html += `</div>`;
+      html += `<div class="analog-right">`;
+      html += `<span class="analog-sim">sim ${a.similarity.toFixed(3)}</span>`;
+      html += `<span class="analog-links">`;
+      if (afdLink) html += `<a href="${afdLink}" target="_blank" rel="noopener" title="View this AFD on IEM">AFD</a>`;
+      if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for this date">LSR</a>`;
+      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for this date">SPC</a>`;
       html += `</span>`;
+      html += `</div>`;
       html += `</div>`;
     }
     html += '</div></div>';
