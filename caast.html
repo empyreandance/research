@@ -721,13 +721,13 @@ function buildHistoricalAfdUrl(office, datetimeUtc) {
 
 function buildSpcReportUrl(datetimeUtc, dayOffset) {
   // SPC daily storm reports use YYMMDD format
-  // dayOffset is the number of days after the AFD that severe weather occurred
+  // dayOffset is the label's day number; shift back by 1 to align with operational day
   if (!datetimeUtc) return null;
   const m = datetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return null;
   const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
   if (dayOffset && dayOffset > 0) {
-    date.setUTCDate(date.getUTCDate() + dayOffset);
+    date.setUTCDate(date.getUTCDate() + dayOffset - 1);
   }
   const yy = String(date.getUTCFullYear()).slice(2);
   const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -750,12 +750,14 @@ function findFirstSevereDay(dailyBreakdown) {
 }
 
 function severeEventDate(afdDatetimeUtc, dayOffset) {
-  // Returns YYYY-MM-DD string for when the severe weather actually occurred
+  // Returns YYYY-MM-DD string for when the severe weather actually occurred.
+  // The labels number days starting from AFD UTC date + 1, but operationally
+  // "day 1" should mean the AFD's same local day. We shift back by 1 to align.
   if (!afdDatetimeUtc || !dayOffset) return null;
   const m = afdDatetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return null;
   const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + dayOffset);
+  date.setUTCDate(date.getUTCDate() + dayOffset - 1);
   return date.toISOString().slice(0, 10);
 }
 
