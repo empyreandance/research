@@ -197,14 +197,22 @@ def ensure_thresholds(s3):
 def ensure_office_metadata(s3):
     """Download office_metadata.json from R2 (verification-derived lift values).
 
-    Falls back to None if not present, in which case lift values come from
-    thresholds.json calibration data.
+    Always re-downloads since this file is tiny (~20KB) and we want to pick up
+    any updates without requiring a cache bump. Falls back to None if download
+    fails, in which case lift values come from thresholds.json calibration data.
     """
     local_path = CACHE_DIR / "office_metadata.json"
+    # Force re-download even if cached
+    if local_path.exists():
+        local_path.unlink()
     try:
-        download_from_r2(s3, "office_metadata.json", local_path)
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        log("Downloading office_metadata.json from R2...")
+        s3.download_file(R2_BUCKET, "office_metadata.json", str(local_path))
         with open(local_path) as f:
-            return json.load(f)
+            data = json.load(f)
+        log(f"  Loaded verification lift data for {len(data)} offices")
+        return data
     except Exception as e:
         log(f"  Office metadata not in R2 yet, using calibration values: {e}")
         return None
@@ -559,6 +567,11 @@ def main():
             md = office_metadata[office]
             base_rate = md["base_rate"]
             lift = md["lift"]
+            # Always overwrite with verification values (they're authoritative)
+            if office not in signals:
+                signals[office] = {"level": None}
+            signals[office]["base_rate"] = float(base_rate)
+            signals[office]["office_lift"] = float(lift)
         else:
             thresh = per_office_thresh.get(office, {})
             base_rate = thresh.get("base_rate")
@@ -566,18 +579,17 @@ def main():
             if base_rate is None or mean_asf is None:
                 continue
             lift = mean_asf - base_rate
-
-        if office not in signals:
-            signals[office] = {
-                "level": None,
-                "base_rate": float(base_rate),
-                "office_lift": float(lift),
-            }
-        else:
-            if signals[office].get("office_lift") is None:
-                signals[office]["office_lift"] = float(lift)
-            if signals[office].get("base_rate") is None:
-                signals[office]["base_rate"] = float(base_rate)
+            if office not in signals:
+                signals[office] = {
+                    "level": None,
+                    "base_rate": float(base_rate),
+                    "office_lift": float(lift),
+                }
+            else:
+                if signals[office].get("office_lift") is None:
+                    signals[office]["office_lift"] = float(lift)
+                if signals[office].get("base_rate") is None:
+                    signals[office]["base_rate"] = float(base_rate)
 
     if not new_afds:
         log("No new AFDs. Writing seeded signals and exiting.")
