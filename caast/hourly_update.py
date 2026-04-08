@@ -444,7 +444,7 @@ def compute_percentile(value, distribution):
     return None
 
 
-def compute_signal(analogs, thresholds, office):
+def compute_signal(analogs, thresholds, office, office_metadata=None):
     """Determine signal level from analog severe fraction vs office baseline."""
     if not analogs:
         return None
@@ -495,9 +495,13 @@ def compute_signal(analogs, thresholds, office):
     # Percentile within office's signal distribution
     percentile = compute_percentile(signal_value, signal_distribution)
 
-    # Office utility (mean lift over baseline) — static per office
+    # Office utility (mean lift over baseline) — prefer verification values
     office_lift = None
-    if mean_asf is not None and base_rate is not None:
+    if office_metadata and office in office_metadata:
+        office_lift = office_metadata[office]["lift"]
+        # Also override base_rate with verification value for consistency
+        base_rate = office_metadata[office]["base_rate"]
+    elif mean_asf is not None and base_rate is not None:
         office_lift = mean_asf - base_rate
 
     return {
@@ -635,13 +639,18 @@ def main():
         analogs = find_analogs(query_emb, corpus, top_k=TOP_K)
 
         # Compute signal
-        signal = compute_signal(analogs, thresholds, office)
+        signal = compute_signal(analogs, thresholds, office, office_metadata)
         if signal is None:
             continue
 
         signal["product_id"] = latest_afd["product_id"]
         signal["afd_time"] = latest_afd["valid"]
         signal["updated"] = now.isoformat()
+        # Preserve seeded verification lift if it exists
+        if office in signals and signals[office].get("office_lift") is not None:
+            signal["office_lift"] = signals[office]["office_lift"]
+        if office in signals and signals[office].get("base_rate") is not None:
+            signal["base_rate"] = signals[office]["base_rate"]
         signals[office] = signal
 
         # Write analogs file
