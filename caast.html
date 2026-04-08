@@ -477,13 +477,34 @@
     </div>
 
     <div class="panel">
-      <h2>About</h2>
+      <h2>About CAAST</h2>
       <p style="font-size:0.82rem;color:var(--text);line-height:1.6">
-        CAAST analyzes recently issued Area Forecast Discussions across all 122 NWS WFOs and finds historical analogs from a 22-year archive (5.2M sections). Signal levels compare today's analog severe weather rate against each office's climatological baseline. Click a CWA to see analogs.
+        CAAST analyzes recently issued Area Forecast Discussions and finds historical AFDs from a 22-year archive (5.2M sections, 2004-2026) that used similar language. Each analog is labeled by what severe weather actually followed within 7 days, so you can see whether the model's pattern match historically preceded severe weather, calmer weather, or something else entirely.
       </p>
       <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.6;margin-top:10px">
         Personal research project, not an official NWS/NOAA product.
       </p>
+
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px">How it works ▾</summary>
+        <div style="margin-top:10px;font-size:0.8rem;line-height:1.6;color:var(--text)">
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">The model.</strong> A 335M-parameter sentence embedder (BAAI/bge-large-en-v1.5) fine-tuned on 1.4 million AFD pairs using contrastive learning. It maps each AFD section to a 1,024-dimensional vector where semantically similar forecasts cluster together.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">Analogs.</strong> When a new AFD arrives, CAAST embeds its Long Term section and finds the 10 historical AFDs from that office whose embeddings are closest by cosine similarity. Duplicates from the same calendar day are collapsed to the highest-similarity match.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">Office baseline.</strong> Each office has its own severe weather climatology — Memphis sees severe weather often, Caribou rarely. The baseline is the fraction of all historical AFDs at that office that preceded severe weather (tornado, severe wind, or severe hail) within 7 days. This is each office's "default" expected severe rate.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">Signal level.</strong> CAAST compares today's analog severe rate to the office baseline. If 9 of 10 analogs were severe but the office baseline is 70%, the signal isn't unusual for that office. If 9 of 10 are severe and the baseline is 30%, that's a meaningful pattern. Thresholds are calibrated per office using percentiles of the historical signal distribution: HIGH = 90th percentile and above, MODERATE = 70th, LOW = typical, QUIET = below 30th.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">Office percentile.</strong> Where today's signal falls in that office's all-time distribution. A 95th percentile reading means CAAST has only seen this level of "severe pattern match" in 5% of past queries for that office.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">Office utility (lift).</strong> The historical mean improvement of CAAST's analog severe rate over the office's blind baseline. A lift of +15 percentage points means CAAST's analogs were 15 points more accurate than guessing the climatology, on average. Higher lift means the model is more useful at that office. Toggle the map to "Office Utility" to see this geographically.</p>
+
+          <p style="margin-bottom:10px"><strong style="color:var(--text-bright)">INSUFFICIENT_MATCH.</strong> When the top-10 mean similarity falls below 0.70, CAAST refuses to fire any signal — the model has nothing comparable in its archive, so any "prediction" would be unreliable. Common for fire weather, frost, and other non-convective discussions that fall outside CAAST's training scope.</p>
+
+          <p style="margin-bottom:0"><strong style="color:var(--text-bright)">Validation.</strong> National average severe precision of 67.1% across 90,750 verification queries (CWA + 100 km buffer, 7-day window), with 74 of 121 offices exceeding 70% precision. Mean lift over baseline: +17.5 percentage points. Lead time decay: 80% Day 1 → 49% Day 7.</p>
+        </div>
+      </details>
     </div>
   </div>
 </div>
