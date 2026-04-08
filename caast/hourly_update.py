@@ -546,7 +546,7 @@ def main():
             continue
 
         # Process the most recent AFD for this office
-        latest_afd = sorted(afds, key=lambda a: a["valid"])[-1]
+        latest_afd = sorted(afds, key=lambda a: a.get("valid") or "")[-1]
         text = fetch_afd_text(latest_afd["product_id"])
         if not text:
             continue
