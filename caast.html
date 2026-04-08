@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAAST — Convective AFD Analog Semantic Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0c0e13;
+    --bg-card: #13161d;
+    --bg-card-alt: #181c25;
+    --border: #252a36;
+    --border-light: #2f3545;
+    --text: #c8cdd8;
+    --text-dim: #6b7280;
+    --text-bright: #e8ecf4;
+    --accent: #60a5fa;
+    --accent-dim: #2563eb;
+
+    /* Signal levels */
+    --signal-high: #ff4040;
+    --signal-moderate: #f0a020;
+    --signal-low: #eed535;
+    --signal-quiet: #4a90e2;
+    --signal-insufficient: #4b5563;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- Header ---- */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.5px;
+  }
+  .header-left .subtitle {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .last-updated {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Disclaimer banner ---- */
+  .disclaimer {
+    background: #2a1010;
+    border-bottom: 1px solid #4a1a1a;
+    padding: 14px 24px;
+    font-size: 0.82rem;
+    color: #fbb;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .disclaimer strong { color: #fdd; }
+
+  /* ---- Layout ---- */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+    padding: 20px 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1024px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .map-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    min-height: 600px;
+    position: relative;
+  }
+  #map { width: 100%; height: 600px; }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .panel h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---- Legend ---- */
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+  .legend-row { display: flex; align-items: center; gap: 10px; }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ---- Highest signals list ---- */
+  .signal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+  .signal-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .signal-item:hover {
+    background: var(--border);
+    border-color: var(--border-light);
+  }
+  .signal-item .office-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .signal-item .signal-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .badge-HIGH { background: var(--signal-high); color: #fff; }
+  .badge-MODERATE { background: var(--signal-moderate); color: #1a1a1a; }
+  .badge-LOW { background: var(--signal-low); color: #1a1a1a; }
+  .badge-QUIET { background: var(--signal-quiet); color: #fff; }
+  .badge-INSUFFICIENT_MATCH { background: var(--signal-insufficient); color: #c8cdd8; }
+
+  /* ---- Detail modal ---- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    max-width: 800px;
+    width: 100%;
+    padding: 24px;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-header h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--text-bright);
+  }
+  .modal-close {
+    background: none;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .modal-close:hover { background: var(--bg-card-alt); }
+  .modal-section {
+    margin-bottom: 18px;
+  }
+  .modal-section h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .signal-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .signal-stat {
+    background: var(--bg-card-alt);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .signal-stat .label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .signal-stat .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--text-bright);
+    margin-top: 4px;
+  }
+  .query-preview {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    white-space: pre-wrap;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .analog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .analog-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+  .analog-card.severe {
+    border-left: 3px solid var(--signal-high);
+  }
+  .analog-card.non-severe {
+    border-left: 3px solid var(--signal-quiet);
+  }
+  .analog-date {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-bright);
+  }
+  .analog-meta {
+    display: flex;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 0.76rem;
+  }
+
+  /* ---- Map ---- */
+  .map-svg { width: 100%; height: 100%; }
+  .cwa-poly {
+    stroke: #1a1d24;
+    stroke-width: 0.4;
+    cursor: pointer;
+    transition: stroke 0.15s, stroke-width 0.15s;
+  }
+  .cwa-poly:hover {
+    stroke: #fff;
+    stroke-width: 1.5;
+  }
+  .state-poly {
+    fill: none;
+    stroke: var(--border-light);
+    stroke-width: 0.8;
+    pointer-events: none;
+  }
+  .map-tooltip {
+    position: absolute;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--text-bright);
+    pointer-events: none;
+    display: none;
+    z-index: 50;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Footer ---- */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer a { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>CAAST</h1>
+    <div class="subtitle">Convective AFD Analog Semantic Tool</div>
+  </div>
+  <div class="header-right">
+    <span class="last-updated" id="last-updated">Loading…</span>
+    <a href="maps-and-tools.html">← Tools</a>
+  </div>
+</div>
+
+<div class="disclaimer">
+  <strong>CAAST is a research tool, not an operational forecast.</strong>
+  It identifies historical AFDs with similar language to recent forecasts — it does not predict weather.
+  Signal levels reflect past pattern matching, not current threat assessment.
+  Always rely on official NWS forecasts, watches, and warnings for weather decisions.
+</div>
+
+<div class="layout">
+  <div class="map-container">
+    <svg id="map" class="map-svg" viewBox="0 0 960 600"></svg>
+    <div class="map-tooltip" id="tooltip"></div>
+  </div>
+
+  <div class="sidebar">
+    <div class="panel">
+      <h2>Signal Legend</h2>
+      <div class="legend">
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-high)"></div>HIGH — strong severe pattern</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-moderate)"></div>MODERATE — elevated pattern</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-low)"></div>LOW — typical pattern</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-quiet)"></div>QUIET — calmer than baseline</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-insufficient)"></div>NO MATCH — outside training scope</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Highest Signals (24h)</h2>
+      <ul class="signal-list" id="signal-list">
+        <li style="color:var(--text-dim);font-size:0.82rem">Loading…</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>About</h2>
+      <p style="font-size:0.82rem;color:var(--text);line-height:1.6">
+        CAAST analyzes recently issued Area Forecast Discussions across all 122 NWS WFOs and finds historical analogs from a 22-year archive (5.2M sections). Signal levels compare today's analog severe weather rate against each office's climatological baseline. Click a CWA to see analogs.
+      </p>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.6;margin-top:10px">
+        Personal research project, not an official NWS/NOAA product.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">—</h3>
+      <button class="modal-close" id="modal-close">CLOSE</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="footer">
+  CAAST V3 — fine-tuned BAAI/bge-large-en-v1.5 with curriculum contrastive learning · 5.24M AFD sections, 2004–2026
+  <br>
+  <a href="https://github.com/empyreandance/research/tree/main/caast">source on github</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script>
+const SIGNALS_URL = 'caast/data/signals.json';
+const ANALOGS_URL = 'caast/data/analogs/';
+const CWA_GEOJSON_URL = 'https://mesonet.agron.iastate.edu/geojson/cwa.php?callback=&js=cwas';
+const STATES_URL = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+
+const SIGNAL_COLORS = {
+  HIGH: '#ff4040',
+  MODERATE: '#f0a020',
+  LOW: '#eed535',
+  QUIET: '#4a90e2',
+  INSUFFICIENT_MATCH: '#4b5563',
+};
+const SIGNAL_ORDER = { HIGH: 0, MODERATE: 1, LOW: 2, QUIET: 3, INSUFFICIENT_MATCH: 4 };
+const NO_DATA_COLOR = '#1a1d24';
+
+let signals = {};
+let cwaFeatures = null;
+
+async function loadAll() {
+  // Load signals
+  try {
+    const resp = await fetch(SIGNALS_URL);
+    signals = await resp.json();
+  } catch (e) {
+    console.error('Failed to load signals', e);
+    signals = {};
+  }
+
+  // Load CWA polygons via JSONP-style endpoint (IEM serves as JS)
+  try {
+    const resp = await fetch(CWA_GEOJSON_URL);
+    let text = await resp.text();
+    // Strip the "var cwas = " prefix and trailing semicolon
+    text = text.replace(/^[^{]*/, '').replace(/;\s*$/, '');
+    cwaFeatures = JSON.parse(text);
+  } catch (e) {
+    console.error('Failed to load CWA polygons', e);
+    cwaFeatures = { type: 'FeatureCollection', features: [] };
+  }
+
+  renderMap();
+  renderSignalList();
+  renderLastUpdated();
+}
+
+function renderMap() {
+  const svg = d3.select('#map');
+  svg.selectAll('*').remove();
+
+  const width = 960, height = 600;
+  const projection = d3.geoAlbersUsa().scale(1200).translate([width / 2, height / 2]);
+  const path = d3.geoPath().projection(projection);
+
+  // States background
+  d3.json(STATES_URL).then(us => {
+    const states = topojson.feature(us, us.objects.states);
+    svg.append('g').selectAll('path')
+      .data(states.features)
+      .enter().append('path')
+      .attr('class', 'state-poly')
+      .attr('d', path);
+  });
+
+  // CWA polygons colored by signal
+  svg.append('g').selectAll('path')
+    .data(cwaFeatures.features || [])
+    .enter().append('path')
+    .attr('class', 'cwa-poly')
+    .attr('d', path)
+    .attr('fill', d => {
+      const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      const sig = signals[code];
+      return sig ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
+    })
+    .on('mouseenter', function(event, d) {
+      const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      const sig = signals[code];
+      const tooltip = document.getElementById('tooltip');
+      tooltip.style.display = 'block';
+      tooltip.style.left = (event.offsetX + 12) + 'px';
+      tooltip.style.top = (event.offsetY + 12) + 'px';
+      tooltip.innerHTML = sig
+        ? `${code}: ${sig.level}<br>${sig.n_severe}/${sig.n_total} severe analogs`
+        : `${code}: no recent data`;
+    })
+    .on('mouseleave', () => {
+      document.getElementById('tooltip').style.display = 'none';
+    })
+    .on('click', (event, d) => {
+      const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      openDetail(code);
+    });
+}
+
+function renderSignalList() {
+  const list = document.getElementById('signal-list');
+  list.innerHTML = '';
+
+  const sorted = Object.entries(signals)
+    .sort((a, b) => {
+      const oa = SIGNAL_ORDER[a[1].level] ?? 9;
+      const ob = SIGNAL_ORDER[b[1].level] ?? 9;
+      if (oa !== ob) return oa - ob;
+      return (b[1].signal_value || 0) - (a[1].signal_value || 0);
+    })
+    .slice(0, 25);
+
+  if (sorted.length === 0) {
+    list.innerHTML = '<li style="color:var(--text-dim);font-size:0.82rem">No recent signals</li>';
+    return;
+  }
+
+  for (const [code, sig] of sorted) {
+    const li = document.createElement('li');
+    li.className = 'signal-item';
+    li.innerHTML = `
+      <span class="office-code">${code}</span>
+      <span class="signal-badge badge-${sig.level}">${sig.level.replace('_', ' ')}</span>
+    `;
+    li.onclick = () => openDetail(code);
+    list.appendChild(li);
+  }
+}
+
+function renderLastUpdated() {
+  const updated = Object.values(signals).map(s => s.updated).filter(Boolean).sort().pop();
+  if (updated) {
+    const dt = new Date(updated);
+    document.getElementById('last-updated').textContent = `Updated ${dt.toUTCString().replace(' GMT', ' UTC')}`;
+  }
+}
+
+async function openDetail(office) {
+  const overlay = document.getElementById('modal-overlay');
+  const title = document.getElementById('modal-title');
+  const body = document.getElementById('modal-body');
+
+  title.textContent = office;
+  body.innerHTML = '<p style="color:var(--text-dim)">Loading…</p>';
+  overlay.classList.add('active');
+
+  try {
+    const resp = await fetch(`${ANALOGS_URL}${office}.json`);
+    if (!resp.ok) throw new Error('No analog file');
+    const data = await resp.json();
+    renderDetail(data);
+  } catch (e) {
+    body.innerHTML = `<p style="color:var(--text-dim)">No recent analysis for ${office}.</p>`;
+  }
+}
+
+function renderDetail(data) {
+  const body = document.getElementById('modal-body');
+  const sig = data.signal;
+  const baseRatePct = sig.base_rate != null ? (sig.base_rate * 100).toFixed(0) + '%' : '—';
+  const severeFracPct = (sig.severe_fraction * 100).toFixed(0) + '%';
+  const meanSimText = sig.mean_similarity != null ? sig.mean_similarity.toFixed(3) : '—';
+
+  let html = '';
+  html += '<div class="modal-section"><h4>Signal</h4>';
+  html += '<div class="signal-summary">';
+  html += `<div class="signal-stat"><div class="label">Level</div><div class="value"><span class="signal-badge badge-${sig.level}">${sig.level.replace('_', ' ')}</span></div></div>`;
+  html += `<div class="signal-stat"><div class="label">Analog severe</div><div class="value">${sig.n_severe} / ${sig.n_total}</div></div>`;
+  html += `<div class="signal-stat"><div class="label">Office baseline</div><div class="value">${baseRatePct}</div></div>`;
+  html += `<div class="signal-stat"><div class="label">Top-K similarity</div><div class="value">${meanSimText}</div></div>`;
+  html += '</div></div>';
+
+  if (sig.level === 'INSUFFICIENT_MATCH') {
+    html += '<div class="modal-section"><p style="color:var(--text-dim);font-size:0.82rem">';
+    html += 'No close historical analog. This AFD is likely outside CAAST\'s training scope (e.g., fire weather, frost, non-convective discussion).';
+    html += '</p></div>';
+  }
+
+  if (data.query_preview) {
+    html += '<div class="modal-section"><h4>Query AFD (preview)</h4>';
+    html += `<div class="query-preview">${escapeHtml(data.query_preview)}</div></div>`;
+  }
+
+  if (data.analogs && data.analogs.length) {
+    html += '<div class="modal-section"><h4>Top 10 historical analogs</h4>';
+    html += '<div class="analog-list">';
+    for (const a of data.analogs) {
+      const date = a.datetime_utc ? a.datetime_utc.slice(0, 10) : '—';
+      const cls = a.is_severe ? 'severe' : 'non-severe';
+      html += `<div class="analog-card ${cls}">`;
+      html += `<span class="analog-date">${date}</span>`;
+      html += `<span class="analog-meta">`;
+      html += `<span>${a.label || '—'}</span>`;
+      html += `<span>sim ${a.similarity.toFixed(3)}</span>`;
+      html += `</span>`;
+      html += `</div>`;
+    }
+    html += '</div></div>';
+  }
+
+  body.innerHTML = html;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+document.getElementById('modal-close').onclick = () =>
+  document.getElementById('modal-overlay').classList.remove('active');
+document.getElementById('modal-overlay').onclick = (e) => {
+  if (e.target.id === 'modal-overlay')
+    document.getElementById('modal-overlay').classList.remove('active');
+};
+
+loadAll();
+</script>
+
+</body>
+</html>
