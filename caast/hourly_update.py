@@ -1,0 +1,525 @@
+#!/usr/bin/env python3
+"""
+hourly_update.py
+================
+Hourly job that fetches new AFDs, embeds their Long Term sections with
+the V3 model, finds historical analogs, computes signal levels, and
+writes updated JSON files for the frontend.
+
+Designed to run under GitHub Actions with corpus and model stored in
+Cloudflare R2.
+
+Environment variables required:
+    R2_ACCESS_KEY_ID
+    R2_SECRET_ACCESS_KEY
+    R2_ENDPOINT
+    R2_BUCKET (default: caast-corpus)
+
+Usage:
+    python scripts/hourly_update.py
+"""
+
+import json
+import os
+import re
+import sys
+import tarfile
+import tempfile
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+import boto3
+import numpy as np
+import requests
+
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+SCRIPT_DIR = Path(__file__).parent
+REPO_ROOT = SCRIPT_DIR.parent
+CACHE_DIR = SCRIPT_DIR / ".caast_cache"
+OUTPUT_DIR = SCRIPT_DIR / "data"
+STATE_FILE = OUTPUT_DIR / "last_run.json"
+SIGNALS_FILE = OUTPUT_DIR / "signals.json"
+ANALOGS_DIR = OUTPUT_DIR / "analogs"
+
+R2_BUCKET = os.environ.get("R2_BUCKET", "caast-corpus")
+R2_ACCESS_KEY = os.environ.get("R2_ACCESS_KEY_ID")
+R2_SECRET_KEY = os.environ.get("R2_SECRET_ACCESS_KEY")
+R2_ENDPOINT = os.environ.get("R2_ENDPOINT")
+
+IEM_BASE_URL = "https://mesonet.agron.iastate.edu/api/1/nws/afos/list.json"
+IEM_TEXT_URL = "https://mesonet.agron.iastate.edu/api/1/nwstext/{pil}"
+
+SEVERE_LABELS = {"tornado", "severe_wind", "severe_hail"}
+TOP_K = 10
+MAX_TEXT_LEN = 1500
+
+# How far back to look for new AFDs (hours) on first run
+INITIAL_LOOKBACK_HOURS = 24
+
+ALL_WFOS = sorted([
+    "AFC", "AFG", "AJK", "ABR", "APX", "ARX", "BIS", "BOU", "CYS", "DDC",
+    "DLH", "DMX", "DTX", "DVN", "EAX", "FGF", "FSD", "GID", "GJT", "GLD",
+    "GRB", "GRR", "ICT", "ILX", "IND", "IWX", "JKL", "LBF", "LMK", "LOT",
+    "LSX", "MKX", "MPX", "MQT", "OAX", "PAH", "PUB", "RIW", "SGF", "TOP",
+    "UNR", "AKQ", "ALY", "BGM", "BOX", "BTV", "BUF", "CAE", "CAR", "CHS",
+    "CLE", "CTP", "GSP", "GYX", "ILM", "ILN", "LWX", "MHX", "OKX", "PBZ",
+    "PHI", "RAH", "RLX", "RNK", "GUM", "HFO", "ABQ", "AMA", "BMX", "BRO",
+    "CRP", "EPZ", "EWX", "FFC", "FWD", "HGX", "HNX", "HUN", "JAN", "JAX",
+    "KEY", "LCH", "LIX", "LUB", "LZK", "MAF", "MEG", "MFL", "MLB", "MOB",
+    "MRX", "OHX", "OUN", "SHV", "SJT", "SJU", "TAE", "TBW", "TSA", "BOI",
+    "BYZ", "EKA", "FGZ", "GGW", "LKN", "LOX", "MFR", "MSO", "MTR", "OTX",
+    "PDT", "PIH", "PQR", "PSR", "REV", "SEW", "SGX", "SLC", "STO", "TFX",
+    "TWC", "VEF",
+])
+
+# Section parsing regexes — V3 trained on long_term, extended, and discussion
+LONG_TERM_START = re.compile(
+    r"^\s*\.?LONG\s*TERM[./\s]",
+    re.IGNORECASE | re.MULTILINE,
+)
+EXTENDED_START = re.compile(
+    r"^\s*\.?EXTENDED[./\s]",
+    re.IGNORECASE | re.MULTILINE,
+)
+DISCUSSION_START = re.compile(
+    r"^\s*\.?DISCUSSION[./\s]",
+    re.IGNORECASE | re.MULTILINE,
+)
+SECTION_END = re.compile(
+    r"(?:^\s*\.[A-Z]|^\s*&&|^\s*\$\$"
+    r"|^(?:SHORT\s*TERM|AVIATION|UPDATE|MARINE|FIRE\s*WEATHER|HYDROLOGY"
+    r"|PRELIMINARY|CLIMATE|SPOTTER|WATCHES|HEADLINES)[.\s/])",
+    re.MULTILINE,
+)
+
+
+def log(msg):
+    print(f"[{datetime.now(timezone.utc).isoformat()}] {msg}", flush=True)
+
+
+# ---------------------------------------------------------------------------
+# R2 client
+# ---------------------------------------------------------------------------
+def get_r2_client():
+    if not all([R2_ACCESS_KEY, R2_SECRET_KEY, R2_ENDPOINT]):
+        raise RuntimeError("R2 credentials not set in environment")
+    return boto3.client(
+        "s3",
+        endpoint_url=R2_ENDPOINT,
+        aws_access_key_id=R2_ACCESS_KEY,
+        aws_secret_access_key=R2_SECRET_KEY,
+        region_name="auto",
+    )
+
+
+def download_from_r2(s3, key, local_path):
+    """Download a file from R2 if not already cached."""
+    local_path = Path(local_path)
+    if local_path.exists() and local_path.stat().st_size > 0:
+        return local_path
+    local_path.parent.mkdir(parents=True, exist_ok=True)
+    log(f"Downloading {key} from R2...")
+    s3.download_file(R2_BUCKET, key, str(local_path))
+    return local_path
+
+
+def ensure_model(s3):
+    """Download and extract the V3 model if not cached."""
+    model_dir = CACHE_DIR / "model" / "finetuned"
+    if (model_dir / "config.json").exists():
+        log(f"Model already cached at {model_dir}")
+        return model_dir
+
+    log("Downloading model from R2...")
+    tar_path = CACHE_DIR / "caast_model.tar.gz"
+    download_from_r2(s3, "model/caast_model.tar.gz", tar_path)
+
+    log("Extracting model...")
+    extract_dir = CACHE_DIR / "model"
+    extract_dir.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(tar_path, "r:gz") as tar:
+        tar.extractall(extract_dir)
+
+    tar_path.unlink()  # save disk space
+    log(f"Model ready at {model_dir}")
+    return model_dir
+
+
+def ensure_office_embeddings(s3, office):
+    """Download and extract one office's embedding shard if not cached."""
+    office_dir = CACHE_DIR / "embeddings" / office
+    if (office_dir / "embeddings.npy").exists():
+        return office_dir
+
+    tar_path = CACHE_DIR / f"{office}.tar.gz"
+    try:
+        download_from_r2(s3, f"embeddings/{office}.tar.gz", tar_path)
+    except Exception as e:
+        log(f"  WARNING: could not download embeddings for {office}: {e}")
+        return None
+
+    extract_dir = CACHE_DIR / "embeddings"
+    extract_dir.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(tar_path, "r:gz") as tar:
+        tar.extractall(extract_dir)
+
+    tar_path.unlink()
+    return office_dir
+
+
+def ensure_labels(s3):
+    """Download and extract the labels directory if not cached."""
+    labels_dir = CACHE_DIR / "labels_cwa_100km"
+    if labels_dir.exists() and any(labels_dir.iterdir()):
+        return labels_dir
+
+    log("Downloading labels from R2...")
+    tar_path = CACHE_DIR / "caast_labels.tar.gz"
+    download_from_r2(s3, "labels/caast_labels.tar.gz", tar_path)
+
+    with tarfile.open(tar_path, "r:gz") as tar:
+        tar.extractall(CACHE_DIR)
+
+    tar_path.unlink()
+    return labels_dir
+
+
+def ensure_thresholds(s3):
+    """Download thresholds.json from R2."""
+    local_path = CACHE_DIR / "thresholds.json"
+    download_from_r2(s3, "thresholds.json", local_path)
+    with open(local_path) as f:
+        return json.load(f)
+
+
+# ---------------------------------------------------------------------------
+# AFD fetching
+# ---------------------------------------------------------------------------
+def load_last_run():
+    if STATE_FILE.exists():
+        with open(STATE_FILE) as f:
+            data = json.load(f)
+        return datetime.fromisoformat(data["last_run"])
+    return datetime.now(timezone.utc) - timedelta(hours=INITIAL_LOOKBACK_HOURS)
+
+
+def save_last_run(ts):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(STATE_FILE, "w") as f:
+        json.dump({"last_run": ts.isoformat()}, f)
+
+
+def fetch_new_afds(since_dt):
+    """Fetch AFDs issued since `since_dt` from IEM for all offices."""
+    new_afds = []
+    since_str = since_dt.strftime("%Y-%m-%dT%H:%MZ")
+
+    for wfo in ALL_WFOS:
+        pil = f"AFD{wfo}"
+        try:
+            r = requests.get(
+                IEM_BASE_URL,
+                params={"pil": pil, "sdate": since_str},
+                timeout=30,
+            )
+            if r.status_code != 200:
+                continue
+            products = r.json().get("data", [])
+            for p in products:
+                new_afds.append({
+                    "wfo": wfo,
+                    "product_id": p.get("product_id"),
+                    "valid": p.get("valid"),
+                })
+        except Exception as e:
+            log(f"  WARNING: IEM fetch failed for {wfo}: {e}")
+            continue
+
+    log(f"Found {len(new_afds)} new AFDs since {since_str}")
+    return new_afds
+
+
+def fetch_afd_text(product_id):
+    """Fetch the full text of an AFD by product ID."""
+    try:
+        r = requests.get(IEM_TEXT_URL.format(pil=product_id), timeout=30)
+        if r.status_code == 200:
+            return r.text
+    except Exception:
+        pass
+    return None
+
+
+def extract_section(text):
+    """Extract the best available section from an AFD.
+    Priority: long_term > extended > discussion. Returns (section_text, section_type)."""
+    for pattern, name in [(LONG_TERM_START, "long_term"),
+                          (EXTENDED_START, "extended"),
+                          (DISCUSSION_START, "discussion")]:
+        m = pattern.search(text)
+        if not m:
+            continue
+        start = m.end()
+        end_m = SECTION_END.search(text[start:])
+        end = start + end_m.start() if end_m else len(text)
+        section = text[start:end].strip()
+        if len(section) >= 50:
+            return section, name
+    return None, None
+
+
+# ---------------------------------------------------------------------------
+# Embedding + search
+# ---------------------------------------------------------------------------
+_MODEL = None
+
+
+def get_model(model_dir):
+    global _MODEL
+    if _MODEL is None:
+        log("Loading V3 model...")
+        from sentence_transformers import SentenceTransformer
+        _MODEL = SentenceTransformer(str(model_dir))
+        log("Model loaded")
+    return _MODEL
+
+
+def load_office_corpus(office_dir, labels_dir, office):
+    """Load embeddings, metadata, and labels for one office."""
+    emb_path = office_dir / "embeddings.npy"
+    meta_path = office_dir / "metadata.jsonl"
+    label_path = labels_dir / f"{office}_labels.jsonl"
+
+    if not all(p.exists() for p in [emb_path, meta_path, label_path]):
+        return None
+
+    embeddings = np.load(emb_path)
+
+    metadata = []
+    with open(meta_path) as f:
+        for line in f:
+            if line.strip():
+                metadata.append(json.loads(line))
+
+    label_lookup = {}
+    with open(label_path) as f:
+        for line in f:
+            if line.strip():
+                r = json.loads(line)
+                key = (r.get("source_file", ""), r["section"])
+                label_lookup[key] = r["label"]
+
+    labels = [label_lookup.get((m.get("source_file", ""), m["section"]))
+              for m in metadata]
+
+    return {
+        "embeddings": embeddings,
+        "metadata": metadata,
+        "labels": labels,
+    }
+
+
+def find_analogs(query_emb, corpus, top_k=TOP_K):
+    """Find top-K analogs by cosine similarity."""
+    embeddings = corpus["embeddings"]
+    metadata = corpus["metadata"]
+    labels = corpus["labels"]
+
+    # L2 normalize
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+    norms[norms == 0] = 1
+    embeddings_norm = embeddings / norms
+    query_norm = query_emb / (np.linalg.norm(query_emb) + 1e-8)
+
+    similarities = embeddings_norm @ query_norm
+
+    top_idx = np.argpartition(-similarities, top_k)[:top_k]
+    top_idx = top_idx[np.argsort(-similarities[top_idx])]
+
+    analogs = []
+    for i in top_idx:
+        label = labels[i]
+        if label is None:
+            continue
+        m = metadata[i]
+        analogs.append({
+            "datetime_utc": m.get("datetime_utc", ""),
+            "source_file": m.get("source_file", ""),
+            "similarity": float(similarities[i]),
+            "label": label,
+            "is_severe": label in SEVERE_LABELS,
+        })
+
+    return analogs[:top_k]
+
+
+MIN_CONFIDENCE_SIMILARITY = 0.70
+
+
+def compute_signal(analogs, thresholds, office):
+    """Determine signal level from analog severe fraction vs office baseline."""
+    if not analogs:
+        return None
+
+    # Confidence check: if top analogs are weakly similar, the model has no
+    # good match in the corpus and any signal is unreliable
+    mean_similarity = float(np.mean([a["similarity"] for a in analogs]))
+    if mean_similarity < MIN_CONFIDENCE_SIMILARITY:
+        return {
+            "level": "INSUFFICIENT_MATCH",
+            "severe_fraction": float(sum(1 for a in analogs if a["is_severe"]) / len(analogs)),
+            "mean_similarity": mean_similarity,
+            "n_severe": sum(1 for a in analogs if a["is_severe"]),
+            "n_total": len(analogs),
+            "reason": f"top-{len(analogs)} mean similarity {mean_similarity:.2f} below confidence floor {MIN_CONFIDENCE_SIMILARITY}",
+        }
+
+    severe_fraction = sum(1 for a in analogs if a["is_severe"]) / len(analogs)
+
+    office_thresh = thresholds.get("per_office", {}).get(office)
+    if office_thresh is None:
+        office_thresh = thresholds["global"]
+        base_rate = None
+    else:
+        base_rate = office_thresh.get("base_rate", 0.5)
+
+    if base_rate is not None:
+        signal_value = severe_fraction - base_rate
+    else:
+        signal_value = severe_fraction - 0.5
+
+    high_thresh = office_thresh.get("thresholds", {}).get("high", office_thresh.get("high", 0))
+    mod_thresh = office_thresh.get("thresholds", {}).get("moderate", office_thresh.get("moderate", 0))
+    low_thresh = office_thresh.get("thresholds", {}).get("low", office_thresh.get("low", 0))
+
+    if signal_value >= high_thresh:
+        level = "HIGH"
+    elif signal_value >= mod_thresh:
+        level = "MODERATE"
+    elif signal_value >= low_thresh:
+        level = "LOW"
+    else:
+        level = "QUIET"
+
+    return {
+        "level": level,
+        "severe_fraction": float(severe_fraction),
+        "mean_similarity": mean_similarity,
+        "base_rate": float(base_rate) if base_rate is not None else None,
+        "signal_value": float(signal_value),
+        "n_severe": sum(1 for a in analogs if a["is_severe"]),
+        "n_total": len(analogs),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+def main():
+    log("=" * 60)
+    log("CAAST hourly update starting")
+
+    s3 = get_r2_client()
+
+    # Setup: download model, labels, thresholds
+    model_dir = ensure_model(s3)
+    labels_dir = ensure_labels(s3)
+    thresholds = ensure_thresholds(s3)
+
+    # Determine window
+    last_run = load_last_run()
+    now = datetime.now(timezone.utc)
+    log(f"Last run: {last_run.isoformat()}")
+    log(f"Current time: {now.isoformat()}")
+
+    # Fetch new AFDs
+    new_afds = fetch_new_afds(last_run)
+    if not new_afds:
+        log("No new AFDs. Exiting.")
+        save_last_run(now)
+        return
+
+    # Group by office
+    by_office = {}
+    for afd in new_afds:
+        by_office.setdefault(afd["wfo"], []).append(afd)
+
+    # Load existing signals if present (to preserve offices with no new AFDs)
+    signals = {}
+    if SIGNALS_FILE.exists():
+        with open(SIGNALS_FILE) as f:
+            signals = json.load(f)
+
+    ANALOGS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Load model
+    model = get_model(model_dir)
+
+    # Process each office that has new AFDs
+    for office, afds in by_office.items():
+        log(f"Processing {office}: {len(afds)} new AFDs")
+
+        office_dir = ensure_office_embeddings(s3, office)
+        if office_dir is None:
+            continue
+
+        corpus = load_office_corpus(office_dir, labels_dir, office)
+        if corpus is None:
+            log(f"  No corpus for {office}, skipping")
+            continue
+
+        # Process the most recent AFD for this office
+        latest_afd = sorted(afds, key=lambda a: a["valid"])[-1]
+        text = fetch_afd_text(latest_afd["product_id"])
+        if not text:
+            continue
+
+        long_term, section_type = extract_section(text)
+        if not long_term:
+            log(f"  No usable section in {latest_afd['product_id']}")
+            continue
+
+        # Embed
+        query_emb = model.encode(long_term[:MAX_TEXT_LEN], convert_to_numpy=True)
+
+        # Find analogs
+        analogs = find_analogs(query_emb, corpus, top_k=TOP_K)
+
+        # Compute signal
+        signal = compute_signal(analogs, thresholds, office)
+        if signal is None:
+            continue
+
+        signal["product_id"] = latest_afd["product_id"]
+        signal["afd_time"] = latest_afd["valid"]
+        signal["updated"] = now.isoformat()
+        signals[office] = signal
+
+        # Write analogs file
+        analog_record = {
+            "office": office,
+            "product_id": latest_afd["product_id"],
+            "afd_time": latest_afd["valid"],
+            "section_type": section_type,
+            "updated": now.isoformat(),
+            "query_preview": long_term[:300],
+            "analogs": analogs,
+            "signal": signal,
+        }
+        with open(ANALOGS_DIR / f"{office}.json", "w") as f:
+            json.dump(analog_record, f, indent=2)
+
+    # Write combined signals file
+    SIGNALS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(SIGNALS_FILE, "w") as f:
+        json.dump(signals, f, indent=2)
+
+    save_last_run(now)
+    log(f"Updated {len(by_office)} offices")
+    log("Done")
+
+
+if __name__ == "__main__":
+    main()
