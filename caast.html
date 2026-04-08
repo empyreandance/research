@@ -728,6 +728,16 @@ function findFirstSevereDay(dailyBreakdown) {
   return null;
 }
 
+function severeEventDate(afdDatetimeUtc, dayOffset) {
+  // Returns YYYY-MM-DD string for when the severe weather actually occurred
+  if (!afdDatetimeUtc || !dayOffset) return null;
+  const m = afdDatetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + dayOffset);
+  return date.toISOString().slice(0, 10);
+}
+
 function buildLsrUrl(office, datetimeUtc) {
   // IEM LSR archive for the office and a 24-hour window starting at the AFD time
   if (!datetimeUtc) return null;
@@ -790,7 +800,8 @@ function renderDetail(data) {
 
       // Find the actual day the severe weather occurred
       const severeDay = findFirstSevereDay(a.daily_breakdown);
-      const dayLabel = severeDay ? ` (day +${severeDay})` : '';
+      const eventDate = severeEventDate(a.datetime_utc, severeDay);
+      const dayLabel = eventDate ? ` on ${eventDate}` : '';
 
       const afdLink = buildHistoricalAfdUrl(data.office, a.datetime_utc);
       const lsrLink = buildLsrUrl(data.office, a.datetime_utc);
@@ -807,7 +818,7 @@ function renderDetail(data) {
       html += `<span class="analog-links">`;
       if (afdLink) html += `<a href="${afdLink}" target="_blank" rel="noopener" title="View this AFD on IEM">AFD</a>`;
       if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for the verification window">LSR</a>`;
-      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for day +${severeDay || 0}">SPC</a>`;
+      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for ${eventDate || 'event date'}">SPC</a>`;
       html += `</span>`;
       html += `</div>`;
       html += `</div>`;
