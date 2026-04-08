@@ -400,6 +400,24 @@
     stroke-width: 0.8;
     pointer-events: none;
   }
+  .lift-office {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    font-weight: 600;
+    fill: #1a1a1a;
+    paint-order: stroke;
+    stroke: rgba(255,255,255,0.6);
+    stroke-width: 1.5px;
+  }
+  .lift-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    fill: #000;
+    paint-order: stroke;
+    stroke: rgba(255,255,255,0.7);
+    stroke-width: 1.5px;
+  }
   .map-tooltip {
     position: absolute;
     background: var(--bg-card-alt);
@@ -459,13 +477,22 @@
 
   <div class="sidebar">
     <div class="panel">
-      <h2>Signal Legend</h2>
-      <div class="legend">
+      <h2 id="legend-title">Signal Legend</h2>
+      <div class="legend" id="legend-signal">
         <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-high)"></div>HIGH — strong severe pattern</div>
         <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-moderate)"></div>MODERATE — elevated pattern</div>
         <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-low)"></div>LOW — typical pattern</div>
         <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-quiet)"></div>QUIET — calmer than baseline</div>
         <div class="legend-row"><div class="legend-swatch" style="background:var(--signal-insufficient)"></div>NO MATCH — outside training scope</div>
+      </div>
+      <div class="legend" id="legend-utility" style="display:none">
+        <div class="legend-row"><div class="legend-swatch" style="background:#2d7a2d"></div>+30 pp or higher — excellent</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#4ea74e"></div>+25 to +30 pp — very strong</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#8bc34a"></div>+20 to +25 pp — strong</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#cddc39"></div>+15 to +20 pp — good</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#ffc107"></div>+10 to +15 pp — moderate</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#ff8a3d"></div>+5 to +10 pp — modest</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#e5533d"></div>0 to +5 pp — marginal</div>
       </div>
     </div>
 
@@ -551,14 +578,17 @@ let currentView = 'signal';  // 'signal' or 'utility'
 
 function utilityColor(lift) {
   // Lift is mean_analog_severe_fraction - base_rate (verification-derived).
+  // Red (low utility) → green (high utility) ramp, distinct from signal colors.
   // Range across calibrated offices: ~+2 to +37 percentage points.
-  // Bands chosen to match the precision lift map.
   if (lift == null) return NO_DATA_COLOR;
-  if (lift >= 0.30) return '#ff4040';   // Excellent (+30pp+)
-  if (lift >= 0.20) return '#f0a020';   // Strong (+20-30pp)
-  if (lift >= 0.10) return '#eed535';   // Good (+10-20pp)
-  if (lift >= 0.00) return '#4a90e2';   // Modest (0-10pp)
-  return '#4b5563';                      // Negative (none expected)
+  if (lift >= 0.30) return '#2d7a2d';   // Dark green (+30pp+)
+  if (lift >= 0.25) return '#4ea74e';   // Green (+25-30pp)
+  if (lift >= 0.20) return '#8bc34a';   // Light green (+20-25pp)
+  if (lift >= 0.15) return '#cddc39';   // Yellow-green (+15-20pp)
+  if (lift >= 0.10) return '#ffc107';   // Amber (+10-15pp)
+  if (lift >= 0.05) return '#ff8a3d';   // Orange (+5-10pp)
+  if (lift >= 0.00) return '#e5533d';   // Red-orange (0-5pp)
+  return '#8b2c2c';                      // Dark red (negative, none expected)
 }
 
 async function loadAll() {
@@ -607,7 +637,8 @@ function renderMap() {
   });
 
   // CWA polygons colored by signal or utility
-  svg.append('g').selectAll('path')
+  const cwaGroup = svg.append('g');
+  cwaGroup.selectAll('path')
     .data(cwaFeatures.features || [])
     .enter().append('path')
     .attr('class', 'cwa-poly')
@@ -620,7 +651,6 @@ function renderMap() {
           ? utilityColor(sig.office_lift)
           : NO_DATA_COLOR;
       }
-      // Signal view: only color if there's an actual level (not just seeded calibration)
       return sig && sig.level ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
     })
     .on('mouseenter', function(event, d) {
@@ -647,6 +677,30 @@ function renderMap() {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
       openDetail(code);
     });
+
+  // Lift value labels (only in utility view)
+  if (currentView === 'utility') {
+    const labelGroup = svg.append('g').attr('class', 'lift-labels').style('pointer-events', 'none');
+    cwaFeatures.features.forEach(d => {
+      const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      const sig = signals[code];
+      if (!sig || sig.office_lift == null) return;
+      const centroid = path.centroid(d);
+      if (!centroid || isNaN(centroid[0])) return;
+      const lift = (sig.office_lift * 100).toFixed(0);
+      const g = labelGroup.append('g').attr('transform', `translate(${centroid[0]},${centroid[1]})`);
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '-0.1em')
+        .attr('class', 'lift-office')
+        .text(code);
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '1em')
+        .attr('class', 'lift-value')
+        .text(`+${lift}`);
+    });
+  }
 }
 
 function renderSignalList() {
@@ -725,13 +779,13 @@ function buildHistoricalAfdUrl(office, datetimeUtc) {
 
 function buildSpcReportUrl(datetimeUtc, dayOffset) {
   // SPC daily storm reports use YYMMDD format
-  // dayOffset is the label's day number; shift back by 1 to align with operational day
+  // dayOffset is the label's day number (1-7 = AFD UTC date + N days)
   if (!datetimeUtc) return null;
   const m = datetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return null;
   const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
   if (dayOffset && dayOffset > 0) {
-    date.setUTCDate(date.getUTCDate() + dayOffset - 1);
+    date.setUTCDate(date.getUTCDate() + dayOffset);
   }
   const yy = String(date.getUTCFullYear()).slice(2);
   const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -825,13 +879,9 @@ function renderDetail(data) {
       const date = a.datetime_utc ? a.datetime_utc.slice(0, 10) : '—';
       const cls = a.is_severe ? 'severe' : 'non-severe';
 
-      // Find the actual day the severe weather occurred (1-indexed in label data,
-      // shifted by -1 in display so day 1 = AFD's same day)
+      // Find the actual day the severe weather occurred
       const severeDay = findFirstSevereDay(a.daily_breakdown);
-      const displayDay = severeDay ? severeDay - 1 : null;
-      const dayLabel = (displayDay !== null && displayDay >= 0)
-        ? ` on day ${displayDay === 0 ? '0 (same day)' : '+' + displayDay}`
-        : '';
+      const dayLabel = severeDay ? ` on day +${severeDay}` : '';
 
       const afdLink = buildHistoricalAfdUrl(data.office, a.datetime_utc);
       const lsrLink = buildLsrUrl(data.office, a.datetime_utc);
@@ -847,7 +897,7 @@ function renderDetail(data) {
       html += `<span class="analog-links">`;
       if (afdLink) html += `<a href="${afdLink}" target="_blank" rel="noopener" title="View this AFD on IEM">AFD</a>`;
       if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for the verification window">LSR</a>`;
-      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for day ${displayDay !== null ? '+' + displayDay : ''}">SPC</a>`;
+      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for day +${severeDay || 0}">SPC</a>`;
       html += `</span>`;
       html += `</div>`;
       html += `</div>`;
@@ -877,6 +927,16 @@ document.querySelectorAll('.toolbar-btn').forEach(btn => {
     document.querySelectorAll('.toolbar-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentView = btn.dataset.view;
+    // Swap legend
+    if (currentView === 'utility') {
+      document.getElementById('legend-title').textContent = 'Office Utility Legend';
+      document.getElementById('legend-signal').style.display = 'none';
+      document.getElementById('legend-utility').style.display = 'flex';
+    } else {
+      document.getElementById('legend-title').textContent = 'Signal Legend';
+      document.getElementById('legend-signal').style.display = 'flex';
+      document.getElementById('legend-utility').style.display = 'none';
+    }
     renderMap();
   };
 });
