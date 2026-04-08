@@ -619,7 +619,8 @@ function renderMap() {
           ? utilityColor(sig.office_lift)
           : NO_DATA_COLOR;
       }
-      return sig ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
+      // Signal view: only color if there's an actual level (not just seeded calibration)
+      return sig && sig.level ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
     })
     .on('mouseenter', function(event, d) {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
@@ -651,7 +652,9 @@ function renderSignalList() {
   const list = document.getElementById('signal-list');
   list.innerHTML = '';
 
+  // Only include offices with an actual signal level (skip seed-only entries)
   const sorted = Object.entries(signals)
+    .filter(([_, sig]) => sig.level)
     .sort((a, b) => {
       const oa = SIGNAL_ORDER[a[1].level] ?? 9;
       const ob = SIGNAL_ORDER[b[1].level] ?? 9;

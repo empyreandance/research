@@ -511,12 +511,8 @@ def main():
 
     # Fetch new AFDs
     new_afds = fetch_new_afds(last_run)
-    if not new_afds:
-        log("No new AFDs. Exiting.")
-        save_last_run(now)
-        return
 
-    # Group by office
+    # Group by office (may be empty)
     by_office = {}
     for afd in new_afds:
         by_office.setdefault(afd["wfo"], []).append(afd)
@@ -526,6 +522,36 @@ def main():
     if SIGNALS_FILE.exists():
         with open(SIGNALS_FILE) as f:
             signals = json.load(f)
+
+    # Seed every calibrated office with static metadata (base rate + lift)
+    # so the Office Utility view works for all 117 calibrated offices, not
+    # just the ones that have processed a new AFD recently.
+    per_office_thresh = thresholds.get("per_office", {})
+    for office, thresh in per_office_thresh.items():
+        base_rate = thresh.get("base_rate")
+        mean_asf = thresh.get("mean_analog_severe_fraction")
+        if base_rate is None or mean_asf is None:
+            continue
+        lift = mean_asf - base_rate
+        if office not in signals:
+            signals[office] = {
+                "level": None,
+                "base_rate": float(base_rate),
+                "office_lift": float(lift),
+            }
+        else:
+            if signals[office].get("office_lift") is None:
+                signals[office]["office_lift"] = float(lift)
+            if signals[office].get("base_rate") is None:
+                signals[office]["base_rate"] = float(base_rate)
+
+    if not new_afds:
+        log("No new AFDs. Writing seeded signals and exiting.")
+        SIGNALS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(SIGNALS_FILE, "w") as f:
+            json.dump(signals, f, indent=2)
+        save_last_run(now)
+        return
 
     ANALOGS_DIR.mkdir(parents=True, exist_ok=True)
 
