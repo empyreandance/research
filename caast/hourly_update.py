@@ -194,6 +194,22 @@ def ensure_thresholds(s3):
         return json.load(f)
 
 
+def ensure_office_metadata(s3):
+    """Download office_metadata.json from R2 (verification-derived lift values).
+
+    Falls back to None if not present, in which case lift values come from
+    thresholds.json calibration data.
+    """
+    local_path = CACHE_DIR / "office_metadata.json"
+    try:
+        download_from_r2(s3, "office_metadata.json", local_path)
+        with open(local_path) as f:
+            return json.load(f)
+    except Exception as e:
+        log(f"  Office metadata not in R2 yet, using calibration values: {e}")
+        return None
+
+
 # ---------------------------------------------------------------------------
 # AFD fetching
 # ---------------------------------------------------------------------------
@@ -498,10 +514,11 @@ def main():
 
     s3 = get_r2_client()
 
-    # Setup: download model, labels, thresholds
+    # Setup: download model, labels, thresholds, office metadata
     model_dir = ensure_model(s3)
     labels_dir = ensure_labels(s3)
     thresholds = ensure_thresholds(s3)
+    office_metadata = ensure_office_metadata(s3)
 
     # Determine window
     last_run = load_last_run()
@@ -524,15 +541,32 @@ def main():
             signals = json.load(f)
 
     # Seed every calibrated office with static metadata (base rate + lift)
-    # so the Office Utility view works for all 117 calibrated offices, not
-    # just the ones that have processed a new AFD recently.
+    # so the Office Utility view works for all calibrated offices, not just
+    # the ones that have processed a new AFD recently.
+    #
+    # Prefer values from office_metadata.json (derived from V3 verification —
+    # matches the published precision map and uses the same dedup methodology
+    # as the deployed tool). Fall back to thresholds.json calibration values
+    # if office_metadata isn't available.
     per_office_thresh = thresholds.get("per_office", {})
-    for office, thresh in per_office_thresh.items():
-        base_rate = thresh.get("base_rate")
-        mean_asf = thresh.get("mean_analog_severe_fraction")
-        if base_rate is None or mean_asf is None:
-            continue
-        lift = mean_asf - base_rate
+    seed_offices = set(per_office_thresh.keys())
+    if office_metadata:
+        seed_offices |= set(office_metadata.keys())
+
+    for office in seed_offices:
+        # Verification numbers (preferred)
+        if office_metadata and office in office_metadata:
+            md = office_metadata[office]
+            base_rate = md["base_rate"]
+            lift = md["lift"]
+        else:
+            thresh = per_office_thresh.get(office, {})
+            base_rate = thresh.get("base_rate")
+            mean_asf = thresh.get("mean_analog_severe_fraction")
+            if base_rate is None or mean_asf is None:
+                continue
+            lift = mean_asf - base_rate
+
         if office not in signals:
             signals[office] = {
                 "level": None,

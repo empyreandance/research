@@ -550,14 +550,15 @@ let cwaFeatures = null;
 let currentView = 'signal';  // 'signal' or 'utility'
 
 function utilityColor(lift) {
-  // Lift is mean_analog_severe_fraction - base_rate
-  // Higher = more useful (CAAST adds more signal over baseline)
+  // Lift is mean_analog_severe_fraction - base_rate (verification-derived).
+  // Range across calibrated offices: ~+2 to +37 percentage points.
+  // Bands chosen to match the precision lift map.
   if (lift == null) return NO_DATA_COLOR;
-  if (lift >= 0.20) return '#ff4040';
-  if (lift >= 0.10) return '#f0a020';
-  if (lift >= 0.05) return '#eed535';
-  if (lift >= 0.00) return '#4a90e2';
-  return '#4b5563';
+  if (lift >= 0.30) return '#ff4040';   // Excellent (+30pp+)
+  if (lift >= 0.20) return '#f0a020';   // Strong (+20-30pp)
+  if (lift >= 0.10) return '#eed535';   // Good (+10-20pp)
+  if (lift >= 0.00) return '#4a90e2';   // Modest (0-10pp)
+  return '#4b5563';                      // Negative (none expected)
 }
 
 async function loadAll() {
@@ -824,14 +825,16 @@ function renderDetail(data) {
       const date = a.datetime_utc ? a.datetime_utc.slice(0, 10) : '—';
       const cls = a.is_severe ? 'severe' : 'non-severe';
 
-      // Find the actual day the severe weather occurred
+      // Find the actual day the severe weather occurred (1-indexed in label data,
+      // shifted by -1 in display so day 1 = AFD's same day)
       const severeDay = findFirstSevereDay(a.daily_breakdown);
-      const eventDate = severeEventDate(a.datetime_utc, severeDay);
-      const dayLabel = eventDate ? ` on ${eventDate}` : '';
+      const displayDay = severeDay ? severeDay - 1 : null;
+      const dayLabel = (displayDay !== null && displayDay >= 0)
+        ? ` on day ${displayDay === 0 ? '0 (same day)' : '+' + displayDay}`
+        : '';
 
       const afdLink = buildHistoricalAfdUrl(data.office, a.datetime_utc);
       const lsrLink = buildLsrUrl(data.office, a.datetime_utc);
-      // SPC link points to the actual severe weather day, not the AFD day
       const spcLink = buildSpcReportUrl(a.datetime_utc, severeDay || 0);
 
       html += `<div class="analog-card ${cls}">`;
@@ -844,7 +847,7 @@ function renderDetail(data) {
       html += `<span class="analog-links">`;
       if (afdLink) html += `<a href="${afdLink}" target="_blank" rel="noopener" title="View this AFD on IEM">AFD</a>`;
       if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for the verification window">LSR</a>`;
-      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for ${eventDate || 'event date'}">SPC</a>`;
+      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for day ${displayDay !== null ? '+' + displayDay : ''}">SPC</a>`;
       html += `</span>`;
       html += `</div>`;
       html += `</div>`;
