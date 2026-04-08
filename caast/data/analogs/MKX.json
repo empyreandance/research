@@ -3,13 +3,13 @@
   "product_id": "202604081125-KMKX-FXUS63-AFDMKX-AAA",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-08T16:34:21.971283+00:00",
+  "updated": "2026-04-08T17:13:10.185114+00:00",
   "query_preview": "..\nIssued 1127 PM CDT Tue Apr 7 2026\n\nSaturday night through Tuesday:\n\nAn organized area of low pressure will develop into the northern\nGreat Plains and MN this weekend into early next week with swly\nflow aloft becoming established over the region. This will bring\na period of showers and storms into",
   "analogs": [
     {
       "datetime_utc": "2005-09-25T08:33Z",
       "source_file": "MKX_2005_25_0833.txt",
-      "similarity": 0.9680410623550415,
+      "similarity": 0.9680410027503967,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -91,6 +91,53 @@
       }
     },
     {
+      "datetime_utc": "2020-05-21T23:29Z",
+      "source_file": "MKX_2020_21_2329.txt",
+      "similarity": 0.958984375,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 20,
+            "severe_wind": 6,
+            "severe_hail": 3,
+            "flood": 3
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 6
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 22,
+            "severe_hail": 3
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2020-05-22T03:01Z",
       "source_file": "MKX_2020_22_0301.txt",
       "similarity": 0.958984375,
@@ -140,56 +187,9 @@
       }
     },
     {
-      "datetime_utc": "2020-05-21T23:29Z",
-      "source_file": "MKX_2020_21_2329.txt",
-      "similarity": 0.958984375,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 20,
-            "severe_wind": 6,
-            "severe_hail": 3,
-            "flood": 3
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 6
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 22,
-            "severe_hail": 3
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2012-04-09T19:36Z",
       "source_file": "MKX_2012_09_1936.txt",
-      "similarity": 0.9555159211158752,
+      "similarity": 0.95551598072052,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -230,7 +230,7 @@
     {
       "datetime_utc": "2017-04-23T04:28Z",
       "source_file": "MKX_2017_23_0428.txt",
-      "similarity": 0.9518815279006958,
+      "similarity": 0.9518816471099854,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -269,7 +269,7 @@
     {
       "datetime_utc": "2017-04-22T23:52Z",
       "source_file": "MKX_2017_22_2352.txt",
-      "similarity": 0.9518815279006958,
+      "similarity": 0.9518816471099854,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -445,7 +445,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.6,
-    "mean_similarity": 0.9477595865726471,
+    "mean_similarity": 0.947759610414505,
     "base_rate": 0.5278065630397236,
     "signal_value": 0.07219343696027636,
     "percentile": 50,
@@ -454,6 +454,6 @@
     "n_total": 10,
     "product_id": "202604081125-KMKX-FXUS63-AFDMKX-AAA",
     "afd_time": null,
-    "updated": "2026-04-08T16:34:21.971283+00:00"
+    "updated": "2026-04-08T17:13:10.185114+00:00"
   }
 }

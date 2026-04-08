@@ -3,7 +3,7 @@
   "product_id": "202604081416-KLWX-FXUS61-AFDLWX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T16:34:21.971283+00:00",
+  "updated": "2026-04-08T17:13:10.185114+00:00",
   "query_preview": "..\nKEY MESSAGE 1...Freeze Watches remain in effect for many \nlocations tonight.\n\nHigh pressure continues to build to our north across Upstate NY\nearly this morning. Sunny skies are forecast for all today, \nwith temperatures climbing into the 50s. Winds will start out \nnortheasterly, but turn more so",
   "analogs": [
     {
@@ -64,7 +64,7 @@
     {
       "datetime_utc": "2005-09-28T19:05Z",
       "source_file": "LWX_2005_28_1905.txt",
-      "similarity": 0.8387426137924194,
+      "similarity": 0.8387426733970642,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -105,7 +105,7 @@
     {
       "datetime_utc": "2018-07-03T19:11Z",
       "source_file": "LWX_2018_03_1911.txt",
-      "similarity": 0.8365848660469055,
+      "similarity": 0.8365849256515503,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -155,7 +155,7 @@
     {
       "datetime_utc": "2018-07-04T02:04Z",
       "source_file": "LWX_2018_04_0204.txt",
-      "similarity": 0.8365848660469055,
+      "similarity": 0.8365849256515503,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -238,7 +238,7 @@
     {
       "datetime_utc": "2014-01-16T15:03Z",
       "source_file": "LWX_2014_16_1503.txt",
-      "similarity": 0.78794264793396,
+      "similarity": 0.7879425287246704,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -287,7 +287,7 @@
     {
       "datetime_utc": "2013-10-23T08:04Z",
       "source_file": "LWX_2013_23_0804.txt",
-      "similarity": 0.769564151763916,
+      "similarity": 0.7695642709732056,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -326,9 +326,9 @@
       }
     },
     {
-      "datetime_utc": "2006-04-17T07:26Z",
-      "source_file": "LWX_2006_17_0726.txt",
-      "similarity": 0.7114405035972595,
+      "datetime_utc": "2006-04-17T15:40Z",
+      "source_file": "LWX_2006_17_1540.txt",
+      "similarity": 0.7114405632019043,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -426,49 +426,41 @@
       }
     },
     {
-      "datetime_utc": "2009-07-11T19:35Z",
-      "source_file": "LWX_2009_11_1935.txt",
-      "similarity": 0.6647381782531738,
+      "datetime_utc": "2009-07-12T06:41Z",
+      "source_file": "LWX_2009_12_0641.txt",
+      "similarity": 0.6647382378578186,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 5,
-            "severe_wind": 5,
-            "winter": 1
+            "severe_wind": 23,
+            "severe_hail": 10
           }
         },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 23,
-            "severe_hail": 10
+            "severe_wind": 1
           }
         },
         "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 5,
             "severe_wind": 6
           }
         },
-        "6": {
+        "5": {
           "label": "tornado",
           "counts": {
             "severe_wind": 42,
@@ -476,6 +468,10 @@
             "tornado": 3,
             "severe_hail": 7
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     }
@@ -483,7 +479,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.782877242565155,
+    "mean_similarity": 0.7828772723674774,
     "base_rate": 0.5958263093646458,
     "signal_value": 0.1041736906353542,
     "percentile": 60,
@@ -492,6 +488,6 @@
     "n_total": 10,
     "product_id": "202604081416-KLWX-FXUS61-AFDLWX",
     "afd_time": null,
-    "updated": "2026-04-08T16:34:21.971283+00:00"
+    "updated": "2026-04-08T17:13:10.185114+00:00"
   }
 }
