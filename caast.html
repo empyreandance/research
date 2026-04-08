@@ -103,8 +103,39 @@
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 16px;
-    min-height: 600px;
+    min-height: 640px;
     position: relative;
+  }
+  .map-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .toolbar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .toolbar-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .toolbar-btn:hover { border-color: var(--border-light); color: var(--text-bright); }
+  .toolbar-btn.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #fff;
   }
   #map { width: 100%; height: 600px; }
 
@@ -417,6 +448,11 @@
 
 <div class="layout">
   <div class="map-container">
+    <div class="map-toolbar">
+      <div class="toolbar-label">View:</div>
+      <button class="toolbar-btn active" data-view="signal">Today's Signal</button>
+      <button class="toolbar-btn" data-view="utility">Office Utility</button>
+    </div>
     <svg id="map" class="map-svg" viewBox="0 0 960 600"></svg>
     <div class="map-tooltip" id="tooltip"></div>
   </div>
@@ -490,6 +526,18 @@ const NO_DATA_COLOR = '#1a1d24';
 
 let signals = {};
 let cwaFeatures = null;
+let currentView = 'signal';  // 'signal' or 'utility'
+
+function utilityColor(lift) {
+  // Lift is mean_analog_severe_fraction - base_rate
+  // Higher = more useful (CAAST adds more signal over baseline)
+  if (lift == null) return NO_DATA_COLOR;
+  if (lift >= 0.20) return '#ff4040';
+  if (lift >= 0.10) return '#f0a020';
+  if (lift >= 0.05) return '#eed535';
+  if (lift >= 0.00) return '#4a90e2';
+  return '#4b5563';
+}
 
 async function loadAll() {
   // Load signals
@@ -536,7 +584,7 @@ function renderMap() {
       .attr('d', path);
   });
 
-  // CWA polygons colored by signal
+  // CWA polygons colored by signal or utility
   svg.append('g').selectAll('path')
     .data(cwaFeatures.features || [])
     .enter().append('path')
@@ -545,6 +593,11 @@ function renderMap() {
     .attr('fill', d => {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
       const sig = signals[code];
+      if (currentView === 'utility') {
+        return sig && sig.office_lift != null
+          ? utilityColor(sig.office_lift)
+          : NO_DATA_COLOR;
+      }
       return sig ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
     })
     .on('mouseenter', function(event, d) {
@@ -554,9 +607,15 @@ function renderMap() {
       tooltip.style.display = 'block';
       tooltip.style.left = (event.offsetX + 12) + 'px';
       tooltip.style.top = (event.offsetY + 12) + 'px';
-      tooltip.innerHTML = sig
-        ? `${code}: ${sig.level}<br>${sig.n_severe}/${sig.n_total} severe analogs`
-        : `${code}: no recent data`;
+      if (currentView === 'utility') {
+        tooltip.innerHTML = sig && sig.office_lift != null
+          ? `${code}<br>utility: +${(sig.office_lift * 100).toFixed(1)} pp`
+          : `${code}: no calibration data`;
+      } else {
+        tooltip.innerHTML = sig
+          ? `${code}: ${sig.level}<br>${sig.n_severe}/${sig.n_total} severe analogs`
+          : `${code}: no recent data`;
+      }
     })
     .on('mouseleave', () => {
       document.getElementById('tooltip').style.display = 'none';
@@ -639,12 +698,34 @@ function buildHistoricalAfdUrl(office, datetimeUtc) {
   return `https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=AFD${office}&e=${ts}`;
 }
 
-function buildSpcReportUrl(datetimeUtc) {
+function buildSpcReportUrl(datetimeUtc, dayOffset) {
   // SPC daily storm reports use YYMMDD format
+  // dayOffset is the number of days after the AFD that severe weather occurred
   if (!datetimeUtc) return null;
-  const m = datetimeUtc.match(/^(\d{2})(\d{2})-(\d{2})-(\d{2})/);
+  const m = datetimeUtc.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return null;
-  return `https://www.spc.noaa.gov/climo/reports/${m[2]}${m[3]}${m[4]}_rpts.html`;
+  const date = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
+  if (dayOffset && dayOffset > 0) {
+    date.setUTCDate(date.getUTCDate() + dayOffset);
+  }
+  const yy = String(date.getUTCFullYear()).slice(2);
+  const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(date.getUTCDate()).padStart(2, '0');
+  return `https://www.spc.noaa.gov/climo/reports/${yy}${mm}${dd}_rpts.html`;
+}
+
+function findFirstSevereDay(dailyBreakdown) {
+  // Returns the day offset (1-7) when the first severe weather occurred,
+  // or null if no severe day in breakdown
+  const SEVERE = new Set(['tornado', 'severe_wind', 'severe_hail']);
+  if (!dailyBreakdown) return null;
+  const sorted = Object.entries(dailyBreakdown).sort((a, b) => Number(a[0]) - Number(b[0]));
+  for (const [day, info] of sorted) {
+    if (info && SEVERE.has(info.label)) {
+      return Number(day);
+    }
+  }
+  return null;
 }
 
 function buildLsrUrl(office, datetimeUtc) {
@@ -664,16 +745,24 @@ function renderDetail(data) {
   const sig = data.signal;
   const baseRatePct = sig.base_rate != null ? (sig.base_rate * 100).toFixed(0) + '%' : '—';
   const meanSimText = sig.mean_similarity != null ? sig.mean_similarity.toFixed(3) : '—';
+  const percentileText = sig.percentile != null ? `${sig.percentile}th` : '—';
+  const liftText = sig.office_lift != null ? `${(sig.office_lift * 100).toFixed(1)} pp` : '—';
 
   let html = '';
 
-  // Signal summary
+  // Signal summary — top row: signal stats
   html += '<div class="modal-section"><h4>Signal</h4>';
   html += '<div class="signal-summary">';
   html += `<div class="signal-stat"><div class="label">Level</div><div class="value"><span class="signal-badge badge-${sig.level}">${sig.level.replace('_', ' ')}</span></div></div>`;
   html += `<div class="signal-stat"><div class="label">Analog severe</div><div class="value">${sig.n_severe} / ${sig.n_total}</div></div>`;
-  html += `<div class="signal-stat"><div class="label">Office baseline</div><div class="value">${baseRatePct}</div></div>`;
+  html += `<div class="signal-stat"><div class="label">Office percentile</div><div class="value">${percentileText}</div></div>`;
   html += `<div class="signal-stat"><div class="label">Top-K similarity</div><div class="value">${meanSimText}</div></div>`;
+  html += '</div>';
+
+  // Office context row
+  html += '<div class="signal-summary" style="margin-top:10px">';
+  html += `<div class="signal-stat"><div class="label">Office baseline</div><div class="value">${baseRatePct}</div></div>`;
+  html += `<div class="signal-stat"><div class="label">Office utility (lift)</div><div class="value">${liftText}</div></div>`;
   html += '</div></div>';
 
   if (sig.level === 'INSUFFICIENT_MATCH') {
@@ -682,7 +771,6 @@ function renderDetail(data) {
     html += '</p></div>';
   }
 
-  // Query AFD with link to full text
   if (data.query_preview) {
     const fullUrl = buildAfdUrl(data.product_id);
     html += '<div class="modal-section"><h4>Query AFD (preview) ';
@@ -693,28 +781,33 @@ function renderDetail(data) {
     html += `<div class="query-preview">${escapeHtml(data.query_preview)}</div></div>`;
   }
 
-  // Top 10 analogs with links
   if (data.analogs && data.analogs.length) {
-    html += '<div class="modal-section"><h4>Top 10 historical analogs</h4>';
+    html += '<div class="modal-section"><h4>Top 10 historical analogs <span style="font-weight:normal;text-transform:none;letter-spacing:0;color:var(--text-dim)">(deduplicated by date)</span></h4>';
     html += '<div class="analog-list">';
     for (const a of data.analogs) {
       const date = a.datetime_utc ? a.datetime_utc.slice(0, 10) : '—';
       const cls = a.is_severe ? 'severe' : 'non-severe';
+
+      // Find the actual day the severe weather occurred
+      const severeDay = findFirstSevereDay(a.daily_breakdown);
+      const dayLabel = severeDay ? ` (day +${severeDay})` : '';
+
       const afdLink = buildHistoricalAfdUrl(data.office, a.datetime_utc);
-      const spcLink = buildSpcReportUrl(a.datetime_utc);
       const lsrLink = buildLsrUrl(data.office, a.datetime_utc);
+      // SPC link points to the actual severe weather day, not the AFD day
+      const spcLink = buildSpcReportUrl(a.datetime_utc, severeDay || 0);
 
       html += `<div class="analog-card ${cls}">`;
       html += `<div class="analog-left">`;
       html += `<span class="analog-date">${date}</span>`;
-      html += `<span class="analog-label-badge">${a.label || '—'}</span>`;
+      html += `<span class="analog-label-badge">${a.label || '—'}${dayLabel}</span>`;
       html += `</div>`;
       html += `<div class="analog-right">`;
       html += `<span class="analog-sim">sim ${a.similarity.toFixed(3)}</span>`;
       html += `<span class="analog-links">`;
       if (afdLink) html += `<a href="${afdLink}" target="_blank" rel="noopener" title="View this AFD on IEM">AFD</a>`;
-      if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for this date">LSR</a>`;
-      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for this date">SPC</a>`;
+      if (lsrLink) html += `<a href="${lsrLink}" target="_blank" rel="noopener" title="Local Storm Reports for the verification window">LSR</a>`;
+      if (spcLink && a.is_severe) html += `<a href="${spcLink}" target="_blank" rel="noopener" title="SPC storm reports for day +${severeDay || 0}">SPC</a>`;
       html += `</span>`;
       html += `</div>`;
       html += `</div>`;
@@ -737,6 +830,16 @@ document.getElementById('modal-overlay').onclick = (e) => {
   if (e.target.id === 'modal-overlay')
     document.getElementById('modal-overlay').classList.remove('active');
 };
+
+// View toggle
+document.querySelectorAll('.toolbar-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.toolbar-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    renderMap();
+  };
+});
 
 loadAll();
 </script>

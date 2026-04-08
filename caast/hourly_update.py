@@ -304,28 +304,39 @@ def load_office_corpus(office_dir, labels_dir, office):
                 metadata.append(json.loads(line))
 
     label_lookup = {}
+    daily_lookup = {}
     with open(label_path) as f:
         for line in f:
             if line.strip():
                 r = json.loads(line)
                 key = (r.get("source_file", ""), r["section"])
                 label_lookup[key] = r["label"]
+                daily_lookup[key] = r.get("daily_breakdown", {})
 
     labels = [label_lookup.get((m.get("source_file", ""), m["section"]))
               for m in metadata]
+    daily_breakdowns = [daily_lookup.get((m.get("source_file", ""), m["section"]), {})
+                        for m in metadata]
 
     return {
         "embeddings": embeddings,
         "metadata": metadata,
         "labels": labels,
+        "daily_breakdowns": daily_breakdowns,
     }
 
 
 def find_analogs(query_emb, corpus, top_k=TOP_K):
-    """Find top-K analogs by cosine similarity."""
+    """Find top-K analogs by cosine similarity, deduplicating by date.
+
+    AFDs are reissued multiple times per day with nearly identical text.
+    We collapse all sections from the same office on the same day to the
+    single highest-similarity match, then take the top K unique days.
+    """
     embeddings = corpus["embeddings"]
     metadata = corpus["metadata"]
     labels = corpus["labels"]
+    daily_breakdowns = corpus["daily_breakdowns"]
 
     # L2 normalize
     norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
@@ -335,27 +346,78 @@ def find_analogs(query_emb, corpus, top_k=TOP_K):
 
     similarities = embeddings_norm @ query_norm
 
-    top_idx = np.argpartition(-similarities, top_k)[:top_k]
-    top_idx = top_idx[np.argsort(-similarities[top_idx])]
+    # Sort all by similarity descending, then walk and deduplicate by date
+    order = np.argsort(-similarities)
 
+    seen_dates = set()
     analogs = []
-    for i in top_idx:
+    for i in order:
         label = labels[i]
         if label is None:
             continue
+
         m = metadata[i]
+        dt_str = m.get("datetime_utc", "")
+        if not dt_str:
+            continue
+
+        # Date key: YYYY-MM-DD
+        date_key = dt_str[:10]
+        if date_key in seen_dates:
+            continue
+        seen_dates.add(date_key)
+
         analogs.append({
-            "datetime_utc": m.get("datetime_utc", ""),
+            "datetime_utc": dt_str,
             "source_file": m.get("source_file", ""),
             "similarity": float(similarities[i]),
             "label": label,
             "is_severe": label in SEVERE_LABELS,
+            "daily_breakdown": daily_breakdowns[i],
         })
 
-    return analogs[:top_k]
+        if len(analogs) >= top_k:
+            break
+
+    return analogs
 
 
 MIN_CONFIDENCE_SIMILARITY = 0.70
+
+
+def compute_percentile(value, distribution):
+    """Estimate percentile of value within an office's signal distribution.
+
+    Distribution is the dict from thresholds.json with keys min/p10/p30/p50/p70/p90/max.
+    Uses piecewise linear interpolation between known percentiles.
+    """
+    if not distribution:
+        return None
+    points = [
+        (distribution.get("min", -1.0), 0),
+        (distribution.get("p10"), 10),
+        (distribution.get("p30"), 30),
+        (distribution.get("p50"), 50),
+        (distribution.get("p70"), 70),
+        (distribution.get("p90"), 90),
+        (distribution.get("max", 1.0), 100),
+    ]
+    points = [(v, p) for v, p in points if v is not None]
+    if not points:
+        return None
+    if value <= points[0][0]:
+        return 0
+    if value >= points[-1][0]:
+        return 100
+    for i in range(len(points) - 1):
+        v0, p0 = points[i]
+        v1, p1 = points[i + 1]
+        if v0 <= value <= v1:
+            if v1 == v0:
+                return int(p0)
+            frac = (value - v0) / (v1 - v0)
+            return int(round(p0 + frac * (p1 - p0)))
+    return None
 
 
 def compute_signal(analogs, thresholds, office):
@@ -363,8 +425,7 @@ def compute_signal(analogs, thresholds, office):
     if not analogs:
         return None
 
-    # Confidence check: if top analogs are weakly similar, the model has no
-    # good match in the corpus and any signal is unreliable
+    # Confidence check
     mean_similarity = float(np.mean([a["similarity"] for a in analogs]))
     if mean_similarity < MIN_CONFIDENCE_SIMILARITY:
         return {
@@ -382,8 +443,12 @@ def compute_signal(analogs, thresholds, office):
     if office_thresh is None:
         office_thresh = thresholds["global"]
         base_rate = None
+        signal_distribution = None
+        mean_asf = None
     else:
         base_rate = office_thresh.get("base_rate", 0.5)
+        signal_distribution = office_thresh.get("signal_distribution")
+        mean_asf = office_thresh.get("mean_analog_severe_fraction")
 
     if base_rate is not None:
         signal_value = severe_fraction - base_rate
@@ -403,12 +468,22 @@ def compute_signal(analogs, thresholds, office):
     else:
         level = "QUIET"
 
+    # Percentile within office's signal distribution
+    percentile = compute_percentile(signal_value, signal_distribution)
+
+    # Office utility (mean lift over baseline) — static per office
+    office_lift = None
+    if mean_asf is not None and base_rate is not None:
+        office_lift = mean_asf - base_rate
+
     return {
         "level": level,
         "severe_fraction": float(severe_fraction),
         "mean_similarity": mean_similarity,
         "base_rate": float(base_rate) if base_rate is not None else None,
         "signal_value": float(signal_value),
+        "percentile": percentile,
+        "office_lift": float(office_lift) if office_lift is not None else None,
         "n_severe": sum(1 for a in analogs if a["is_severe"]),
         "n_total": len(analogs),
     }
