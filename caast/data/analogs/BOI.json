@@ -3,16 +3,20 @@
   "product_id": "202604081217-KBOI-FXUS65-AFDBOI",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "/Saturday through Wednesday/...\nIssued 317 AM MDT WED APR 8 2026\nAn unsettled pattern will continue through the long term\nperiod. Another low will move in quickly behind the quickly \neroding low on Friday night. Long range deterministic and \nensemble models disagree on the path of the low as it move",
   "analogs": [
     {
       "datetime_utc": "2020-10-15T02:48Z",
       "source_file": "BOI_2020_15_0248.txt",
-      "similarity": 0.9579604864120483,
+      "similarity": 0.9579604268074036,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -34,10 +38,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -47,9 +47,13 @@
       "datetime_utc": "2023-08-15T15:39Z",
       "source_file": "BOI_2023_15_1539.txt",
       "similarity": 0.8703470230102539,
-      "label": "severe_wind",
-      "is_severe": true,
+      "label": "flood",
+      "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -57,14 +61,12 @@
         "2": {
           "label": "flood",
           "counts": {
-            "flood": 3
+            "flood": 4
           }
         },
         "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -77,23 +79,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
-          }
         }
       }
     },
     {
       "datetime_utc": "2011-01-24T04:40Z",
       "source_file": "BOI_2011_24_0440.txt",
-      "similarity": 0.6448085904121399,
+      "similarity": 0.6448084115982056,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "winter",
           "counts": {
@@ -119,10 +118,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
@@ -130,9 +125,13 @@
       "datetime_utc": "2004-06-22T17:40Z",
       "source_file": "BOI_2004_22_1740.txt",
       "similarity": 0.6331459283828735,
-      "label": "severe_wind",
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -146,46 +145,45 @@
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
         },
-        "6": {
+        "5": {
           "label": "quiet",
           "counts": {}
         },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 15,
-            "flood": 8
-          }
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2023-04-11T09:19Z",
       "source_file": "BOI_2023_11_0919.txt",
-      "similarity": 0.6190977692604065,
+      "similarity": 0.6190977096557617,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
         "1": {
           "label": "flood",
           "counts": {
-            "flood": 2
+            "winter": 2,
+            "flood": 1
           }
         },
         "2": {
           "label": "winter",
           "counts": {
-            "winter": 12
+            "winter": 10
           }
         },
         "3": {
@@ -201,10 +199,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -213,10 +207,14 @@
     {
       "datetime_utc": "2004-05-27T16:27Z",
       "source_file": "BOI_2004_27_1627.txt",
-      "similarity": 0.6150898337364197,
+      "similarity": 0.6150897741317749,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -238,10 +236,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -250,10 +244,14 @@
     {
       "datetime_utc": "2024-07-06T02:24Z",
       "source_file": "BOI_2024_06_0224.txt",
-      "similarity": 0.6004660129547119,
-      "label": "severe_wind",
-      "is_severe": true,
+      "similarity": 0.6004657745361328,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -277,22 +275,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
         }
       }
     },
     {
       "datetime_utc": "2024-07-05T20:00Z",
       "source_file": "BOI_2024_05_2000.txt",
-      "similarity": 0.6004660129547119,
+      "similarity": 0.6004657745361328,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -314,10 +310,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -326,10 +318,14 @@
     {
       "datetime_utc": "2010-04-29T17:22Z",
       "source_file": "BOI_2010_29_1722.txt",
-      "similarity": 0.5930958986282349,
+      "similarity": 0.5930957794189453,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -345,26 +341,18 @@
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 2,
+            "severe_wind": 3,
             "winter": 1
           }
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "winter",
           "counts": {
-            "winter": 4
-          }
-        },
-        "7": {
-          "label": "winter",
-          "counts": {
-            "winter": 15
+            "winter": 12
           }
         }
       }
@@ -376,6 +364,10 @@
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -399,23 +391,19 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.4,
-    "mean_similarity": 0.6720124065876008,
-    "n_severe": 4,
+    "severe_fraction": 0.2,
+    "mean_similarity": 0.672012311220169,
+    "n_severe": 2,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.67 below confidence floor 0.7",
     "product_id": "202604081217-KBOI-FXUS65-AFDBOI",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

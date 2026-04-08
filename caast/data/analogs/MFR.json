@@ -3,21 +3,25 @@
   "product_id": "202604081152-KMFR-FXUS66-AFDMFR",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..There will be two distinct patterns during the\nforecast period. The first begins today as low pressure \napproaches the northern California coast and lingers there through\nFriday. This is a classic thunderstorm pattern in the warmer \nmonths and, with spring well underway, the forecast features dail",
   "analogs": [
     {
       "datetime_utc": "2025-07-26T21:00Z",
       "source_file": "MFR_2025_26_2100.txt",
-      "similarity": 0.9604252576828003,
+      "similarity": 0.9604253172874451,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -30,20 +34,15 @@
         "4": {
           "label": "severe_wind",
           "counts": {
+            "severe_hail": 1,
             "severe_wind": 1
           }
         },
         "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
           "label": "quiet",
           "counts": {}
         },
-        "7": {
+        "6": {
           "label": "quiet",
           "counts": {}
         }
@@ -52,10 +51,14 @@
     {
       "datetime_utc": "2016-06-25T03:05Z",
       "source_file": "MFR_2016_25_0305.txt",
-      "similarity": 0.9025159478187561,
+      "similarity": 0.9025160074234009,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -77,10 +80,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -93,6 +92,10 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -114,10 +117,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2,
@@ -133,6 +132,10 @@
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -156,20 +159,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2023-09-27T03:40Z",
       "source_file": "MFR_2023_27_0340.txt",
-      "similarity": 0.8211884498596191,
+      "similarity": 0.8211883902549744,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -195,20 +198,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2011-12-11T04:13Z",
       "source_file": "MFR_2011_11_0413.txt",
-      "similarity": 0.8022239208221436,
+      "similarity": 0.8022239804267883,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -218,13 +221,15 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
         },
         "4": {
           "label": "winter",
           "counts": {
-            "winter": 3
+            "winter": 1
           }
         },
         "5": {
@@ -232,10 +237,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -248,17 +249,24 @@
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "winter": 16,
+            "flood": 3
+          }
+        },
         "1": {
           "label": "flood",
           "counts": {
             "winter": 2,
-            "flood": 8
+            "flood": 5
           }
         },
         "2": {
           "label": "winter",
           "counts": {
-            "winter": 4
+            "winter": 3
           }
         },
         "3": {
@@ -268,29 +276,24 @@
           }
         },
         "4": {
-          "label": "winter",
+          "label": "flood",
           "counts": {
-            "winter": 12
+            "winter": 12,
+            "flood": 1
           }
         },
         "5": {
           "label": "flood",
           "counts": {
-            "flood": 2,
-            "winter": 1
+            "flood": 1,
+            "winter": 2
           }
         },
         "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 11
-          }
-        },
-        "7": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 9,
-            "winter": 38
+            "winter": 10,
+            "severe_hail": 2
           }
         }
       }
@@ -298,10 +301,14 @@
     {
       "datetime_utc": "2012-08-10T15:52Z",
       "source_file": "MFR_2012_10_1552.txt",
-      "similarity": 0.7683057188987732,
+      "similarity": 0.768305778503418,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -323,10 +330,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -339,10 +342,16 @@
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 10
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
-            "winter": 14
+            "winter": 4
           }
         },
         "2": {
@@ -364,10 +373,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -380,11 +385,15 @@
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "winter",
           "counts": {
-            "winter": 2
+            "winter": 6
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -403,16 +412,10 @@
           "counts": {}
         },
         "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "7": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 2,
-            "winter": 3
+            "winter": 4
           }
         }
       }
@@ -421,7 +424,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.4,
-    "mean_similarity": 0.8331976056098938,
+    "mean_similarity": 0.8331976234912872,
     "base_rate": 0.35342715514785483,
     "signal_value": 0.04657284485214519,
     "percentile": 50,
@@ -430,6 +433,6 @@
     "n_total": 10,
     "product_id": "202604081152-KMFR-FXUS66-AFDMFR",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

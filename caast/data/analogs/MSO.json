@@ -3,7 +3,7 @@
   "product_id": "202604081025-KMSO-FXUS65-AFDMSO",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\n\nKEY MESSAGES:\n\n- Rain and snow showers return this weekend, especially in the \n  mountains. Thunderstorms are possible on Saturday afternoon.\n\n- A return to more seasonal temperatures by Sunday and Monday\n  along with the unsettled weather. \n\nFor today, the region will be under general westerly ",
   "analogs": [
     {
@@ -13,10 +13,16 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 23
+          }
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 8,
+            "severe_wind": 1,
             "severe_hail": 1
           }
         },
@@ -33,21 +39,15 @@
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 22,
+            "severe_wind": 102,
             "severe_hail": 1
           }
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 80
-          }
-        },
-        "6": {
           "label": "quiet",
           "counts": {}
         },
-        "7": {
+        "6": {
           "label": "quiet",
           "counts": {}
         }
@@ -60,6 +60,10 @@
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -69,13 +73,15 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
         },
         "4": {
           "label": "winter",
           "counts": {
-            "winter": 23
+            "winter": 21
           }
         },
         "5": {
@@ -87,20 +93,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2008-11-08T04:46Z",
       "source_file": "MSO_2008_08_0446.txt",
-      "similarity": 0.8803550601005554,
+      "similarity": 0.8803550004959106,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -122,10 +128,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -134,16 +136,20 @@
     {
       "datetime_utc": "2024-09-25T18:51Z",
       "source_file": "MSO_2024_25_1851.txt",
-      "similarity": 0.8630924820899963,
+      "similarity": 0.8630925416946411,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 43,
-            "severe_hail": 1
+            "severe_wind": 58,
+            "severe_hail": 2
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -162,10 +168,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -174,14 +176,20 @@
     {
       "datetime_utc": "2007-01-06T21:45Z",
       "source_file": "MSO_2007_06_2145.txt",
-      "similarity": 0.8450998067855835,
+      "similarity": 0.8450997471809387,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 18
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
-            "winter": 6
+            "winter": 3
           }
         },
         "2": {
@@ -193,20 +201,18 @@
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         },
         "5": {
           "label": "winter",
           "counts": {
-            "winter": 7
+            "winter": 6
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -215,22 +221,27 @@
     {
       "datetime_utc": "2009-08-29T03:51Z",
       "source_file": "MSO_2009_29_0351.txt",
-      "similarity": 0.8101195096969604,
+      "similarity": 0.81011962890625,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_hail",
           "counts": {
-            "flood": 1,
             "severe_hail": 7
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 2,
+            "severe_wind": 2
           }
         },
         "2": {
           "label": "severe_wind",
           "counts": {
-            "flood": 1,
-            "severe_wind": 3
+            "severe_wind": 1
           }
         },
         "3": {
@@ -246,10 +257,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -262,22 +269,28 @@
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
-            "winter": 27
+            "winter": 25
           }
         },
         "2": {
           "label": "winter",
           "counts": {
-            "winter": 11
+            "winter": 30
           }
         },
         "3": {
           "label": "winter",
           "counts": {
-            "winter": 27
+            "winter": 8
           }
         },
         "4": {
@@ -291,24 +304,26 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2012-01-19T15:47Z",
       "source_file": "MSO_2012_19_1547.txt",
-      "similarity": 0.7872401475906372,
+      "similarity": 0.7872400283813477,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 117
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
-            "winter": 98
+            "winter": 81
           }
         },
         "2": {
@@ -321,7 +336,7 @@
         "3": {
           "label": "winter",
           "counts": {
-            "winter": 20
+            "winter": 19
           }
         },
         "4": {
@@ -331,19 +346,15 @@
           }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
         },
         "6": {
           "label": "winter",
           "counts": {
-            "winter": 15
-          }
-        },
-        "7": {
-          "label": "winter",
-          "counts": {
-            "winter": 6
+            "winter": 14
           }
         }
       }
@@ -351,10 +362,16 @@
     {
       "datetime_utc": "2021-02-10T22:18Z",
       "source_file": "MSO_2021_10_2218.txt",
-      "similarity": 0.768640398979187,
+      "similarity": 0.7686403393745422,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 3
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
@@ -370,31 +387,25 @@
         "3": {
           "label": "winter",
           "counts": {
-            "winter": 26
+            "winter": 28
           }
         },
         "4": {
           "label": "winter",
           "counts": {
-            "winter": 4
+            "winter": 2
           }
         },
         "5": {
           "label": "winter",
           "counts": {
-            "winter": 41
+            "winter": 52
           }
         },
         "6": {
           "label": "winter",
           "counts": {
-            "winter": 60
-          }
-        },
-        "7": {
-          "label": "winter",
-          "counts": {
-            "winter": 14
+            "winter": 53
           }
         }
       }
@@ -402,20 +413,26 @@
     {
       "datetime_utc": "2013-02-16T16:49Z",
       "source_file": "MSO_2013_16_1649.txt",
-      "similarity": 0.7667133808135986,
+      "similarity": 0.7667135000228882,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
-            "winter": 13
+            "winter": 19
           }
         },
         "2": {
           "label": "winter",
           "counts": {
-            "winter": 22
+            "winter": 14
           }
         },
         "3": {
@@ -435,13 +452,9 @@
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "winter",
           "counts": {
-            "winter": 33
+            "winter": 6
           }
         }
       }
@@ -459,6 +472,6 @@
     "n_total": 10,
     "product_id": "202604081025-KMSO-FXUS65-AFDMSO",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

@@ -3,7 +3,7 @@
   "product_id": "202604081134-KCLE-FXUS61-AFDCLE",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\nKEY MESSAGE 1... \nQuiet, dry, and warmer today as high pressure begins to push\neastward and usher in southerly return flow. Highs today will \nbe roughly 15-20 degrees warmer compared to Tuesday as they top \nout in the mid to upper 50s. As the high exits to the east,\nsurface low pressure and accom",
   "analogs": [
     {
@@ -13,18 +13,22 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 3,
+            "severe_wind": 15,
             "flood": 1
           }
         },
-        "2": {
+        "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
+            "severe_wind": 3
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -43,32 +47,34 @@
           "counts": {
             "flood": 5
           }
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2007-12-20T04:57Z",
-      "source_file": "CLE_2007_20_0457.txt",
-      "similarity": 0.9198046326637268,
+      "datetime_utc": "2007-12-20T02:58Z",
+      "source_file": "CLE_2007_20_0258.txt",
+      "similarity": 0.919804573059082,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 11
+          }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 16
+            "severe_wind": 5
           }
         },
         "4": {
@@ -84,20 +90,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2011-10-01T13:35Z",
       "source_file": "CLE_2011_01_1335.txt",
-      "similarity": 0.9185729026794434,
+      "similarity": 0.9185728430747986,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -119,10 +125,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -131,15 +133,19 @@
     {
       "datetime_utc": "2004-05-30T08:16Z",
       "source_file": "CLE_2004_30_0816.txt",
-      "similarity": 0.9096871614456177,
+      "similarity": 0.9096870422363281,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 2
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "severe_hail",
@@ -162,20 +168,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2004-06-11T08:13Z",
       "source_file": "CLE_2004_11_0813.txt",
-      "similarity": 0.8070987462997437,
+      "similarity": 0.8070986270904541,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -191,15 +197,13 @@
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 13,
+            "severe_wind": 16,
             "severe_hail": 1
           }
         },
         "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -210,20 +214,20 @@
           "counts": {
             "severe_wind": 3
           }
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2004-04-20T19:57Z",
       "source_file": "CLE_2004_20_1957.txt",
-      "similarity": 0.7753608226776123,
+      "similarity": 0.7753607630729675,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -245,10 +249,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -257,10 +257,14 @@
     {
       "datetime_utc": "2004-04-22T15:11Z",
       "source_file": "CLE_2004_22_1511.txt",
-      "similarity": 0.7088686227798462,
+      "similarity": 0.7088685631752014,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -284,20 +288,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2007-06-30T23:16Z",
-      "source_file": "CLE_2007_30_2316.txt",
-      "similarity": 0.6730661988258362,
+      "datetime_utc": "2007-06-30T19:26Z",
+      "source_file": "CLE_2007_30_1926.txt",
+      "similarity": 0.673066258430481,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -318,17 +322,52 @@
           "label": "severe_wind",
           "counts": {
             "severe_hail": 2,
-            "severe_wind": 5,
+            "severe_wind": 6,
             "flood": 8
           }
         },
         "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2007-07-01T05:34Z",
+      "source_file": "CLE_2007_01_0534.txt",
+      "similarity": 0.673066258430481,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
+            "severe_hail": 2,
+            "severe_wind": 6,
+            "flood": 8
           }
         },
-        "7": {
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
           "label": "quiet",
           "counts": {}
         }
@@ -337,14 +376,21 @@
     {
       "datetime_utc": "2007-06-01T01:47Z",
       "source_file": "CLE_2007_01_0147.txt",
-      "similarity": 0.6730661988258362,
+      "similarity": 0.673066258430481,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "severe_hail": 1
+          }
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 17,
+            "severe_wind": 16,
             "severe_hail": 7
           }
         },
@@ -352,14 +398,13 @@
           "label": "severe_wind",
           "counts": {
             "severe_wind": 6,
-            "flood": 2,
+            "flood": 3,
             "severe_hail": 1
           }
         },
         "3": {
           "label": "severe_hail",
           "counts": {
-            "flood": 1,
             "severe_hail": 2
           }
         },
@@ -372,59 +417,10 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 34,
-            "severe_wind": 88,
-            "flood": 3
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2007-07-01T05:34Z",
-      "source_file": "CLE_2007_01_0534.txt",
-      "similarity": 0.6730661988258362,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 5,
-            "flood": 8
-          }
-        },
-        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
@@ -432,7 +428,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.7999609112739563,
+    "mean_similarity": 0.7999608814716339,
     "base_rate": 0.5369886086609637,
     "signal_value": 0.1630113913390363,
     "percentile": 57,
@@ -441,6 +437,6 @@
     "n_total": 10,
     "product_id": "202604081134-KCLE-FXUS61-AFDCLE",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

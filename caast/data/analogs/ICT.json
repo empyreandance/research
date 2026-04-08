@@ -3,36 +3,43 @@
   "product_id": "202604081046-KICT-FXUS63-AFDICT",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\nIssued at 219 AM CDT Wed Apr 8 2026\n\nA clipper system moving eastward along the Canadian border will \ndrive a cold front southward into the Central Plains today. This \nfront is progged to arrive over our central KS counties in the 21-\n22Z timeframe. South of the front, breezy southerly winds are ",
   "analogs": [
     {
       "datetime_utc": "2006-06-21T20:20Z",
       "source_file": "ICT_2006_21_2020.txt",
-      "similarity": 0.9373340606689453,
-      "label": "severe_wind",
+      "similarity": 0.9373341202735901,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 60,
+            "tornado": 2,
+            "flood": 2,
+            "severe_wind": 33
+          }
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 50,
-            "flood": 2,
-            "severe_wind": 39
+            "severe_hail": 14,
+            "severe_wind": 6,
+            "flood": 1
           }
         },
         "2": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 4,
-            "flood": 2
+            "flood": 1,
+            "severe_wind": 1
           }
         },
         "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "severe_hail",
@@ -45,15 +52,9 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_hail": 18,
-            "severe_wind": 2,
-            "flood": 2
+            "severe_hail": 1
           }
         }
       }
@@ -61,10 +62,16 @@
     {
       "datetime_utc": "2004-07-28T20:01Z",
       "source_file": "ICT_2004_28_2001.txt",
-      "similarity": 0.9341146349906921,
+      "similarity": 0.9341146945953369,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -91,10 +98,6 @@
             "severe_hail": 1,
             "severe_wind": 7
           }
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
@@ -102,9 +105,13 @@
       "datetime_utc": "2005-09-06T08:21Z",
       "source_file": "ICT_2005_06_0821.txt",
       "similarity": 0.9267357587814331,
-      "label": "tornado",
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -128,15 +135,7 @@
         "6": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 4
-          }
-        },
-        "7": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 46,
-            "tornado": 4,
-            "severe_wind": 6
+            "severe_hail": 7
           }
         }
       }
@@ -144,38 +143,44 @@
     {
       "datetime_utc": "2006-06-20T20:19Z",
       "source_file": "ICT_2006_20_2019.txt",
-      "similarity": 0.9236733913421631,
+      "similarity": 0.9236734509468079,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "severe_hail": 3
+          }
+        },
         "1": {
           "label": "tornado",
           "counts": {
-            "severe_wind": 3,
-            "severe_hail": 23,
-            "tornado": 2
+            "severe_hail": 60,
+            "tornado": 2,
+            "flood": 2,
+            "severe_wind": 33
           }
         },
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 50,
-            "flood": 2,
-            "severe_wind": 39
+            "severe_hail": 14,
+            "severe_wind": 6,
+            "flood": 1
           }
         },
         "3": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 4,
-            "flood": 2
+            "flood": 1,
+            "severe_wind": 1
           }
         },
         "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "severe_hail",
@@ -184,10 +189,6 @@
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -200,6 +201,10 @@
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -221,10 +226,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -234,9 +235,13 @@
       "datetime_utc": "2005-09-05T08:01Z",
       "source_file": "ICT_2005_05_0801.txt",
       "similarity": 0.9047659635543823,
-      "label": "severe_hail",
-      "is_severe": true,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -260,12 +265,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 4
-          }
         }
       }
     },
@@ -276,6 +275,10 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
@@ -302,15 +305,8 @@
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 4,
-            "severe_wind": 3
-          }
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 17,
-            "severe_hail": 9
+            "severe_hail": 9,
+            "severe_wind": 20
           }
         }
       }
@@ -322,6 +318,10 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -348,20 +348,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2005-09-08T08:26Z",
       "source_file": "ICT_2005_08_0826.txt",
-      "similarity": 0.8774514198303223,
+      "similarity": 0.877451479434967,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -377,30 +377,23 @@
         "4": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 4
+            "severe_hail": 7
           }
         },
         "5": {
           "label": "tornado",
           "counts": {
-            "severe_hail": 46,
+            "severe_hail": 56,
             "tornado": 4,
-            "severe_wind": 6
+            "severe_wind": 40,
+            "flood": 2
           }
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 34,
-            "severe_hail": 18,
-            "flood": 2
-          }
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "flood": 3,
+            "severe_hail": 8,
+            "flood": 2,
             "severe_wind": 4
           }
         }
@@ -413,23 +406,30 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 17,
+            "severe_wind": 11
+          }
         },
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 25,
-            "severe_wind": 11
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
+            "severe_hail": 8,
             "flood": 6,
             "severe_wind": 1
           }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -440,14 +440,9 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 16,
-            "flood": 1
+            "severe_hail": 9
           }
         }
       }
@@ -455,16 +450,16 @@
   ],
   "signal": {
     "level": "LOW",
-    "severe_fraction": 0.9,
-    "mean_similarity": 0.9081640839576721,
+    "severe_fraction": 0.8,
+    "mean_similarity": 0.90816410779953,
     "base_rate": 0.6148465343901272,
-    "signal_value": 0.28515346560987287,
-    "percentile": 63,
+    "signal_value": 0.1851534656098729,
+    "percentile": 57,
     "office_lift": 0.03033519285228703,
-    "n_severe": 9,
+    "n_severe": 8,
     "n_total": 10,
     "product_id": "202604081046-KICT-FXUS63-AFDICT",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

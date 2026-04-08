@@ -3,7 +3,7 @@
   "product_id": "202604080827-KEKA-FXUS66-AFDEKA",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..An approaching closed 500mb low is tracking east \nnearing the California coast Wednesday. The low has tapped into some \nsubtropical moisture, bringing precipitable water values 200% of \nnormal. With surface CAPE ramping up in the interior (some models \nnear 1000J/kg), and surface based lifted indi",
   "analogs": [
     {
@@ -13,15 +13,19 @@
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "quiet",
           "counts": {}
         },
-        "2": {
+        "1": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -36,10 +40,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -49,15 +49,19 @@
       "datetime_utc": "2018-02-22T22:32Z",
       "source_file": "EKA_2018_22_2232_1.txt",
       "similarity": 0.9294979572296143,
-      "label": "severe_wind",
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 1,
-            "winter": 1
+            "winter": 94,
+            "severe_hail": 5
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "winter",
@@ -66,33 +70,27 @@
           }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         },
         "4": {
           "label": "severe_hail",
           "counts": {
-            "winter": 28,
-            "severe_hail": 6
+            "winter": 27,
+            "severe_hail": 7
           }
         },
         "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
           "label": "quiet",
           "counts": {}
         },
-        "7": {
-          "label": "severe_wind",
+        "6": {
+          "label": "flood",
           "counts": {
-            "flood": 6,
-            "winter": 7,
-            "severe_hail": 3,
-            "severe_wind": 1
+            "flood": 2,
+            "winter": 1
           }
         }
       }
@@ -100,15 +98,19 @@
     {
       "datetime_utc": "2014-08-18T21:46Z",
       "source_file": "EKA_2014_18_2146.txt",
-      "similarity": 0.9256125688552856,
+      "similarity": 0.9256124496459961,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -127,10 +129,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -139,10 +137,14 @@
     {
       "datetime_utc": "2011-08-10T21:19Z",
       "source_file": "EKA_2011_10_2119.txt",
-      "similarity": 0.858794093132019,
+      "similarity": 0.8587939739227295,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -164,10 +166,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -176,10 +174,14 @@
     {
       "datetime_utc": "2016-12-29T22:50Z",
       "source_file": "EKA_2016_29_2250.txt",
-      "similarity": 0.8581956624984741,
+      "similarity": 0.8581955432891846,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -191,44 +193,44 @@
         "3": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 4,
-            "winter": 8
+            "severe_hail": 6,
+            "winter": 11
           }
         },
         "4": {
           "label": "severe_hail",
           "counts": {
-            "winter": 46,
+            "winter": 53,
             "severe_hail": 6
           }
         },
         "5": {
-          "label": "severe_hail",
+          "label": "flood",
           "counts": {
-            "severe_hail": 2,
-            "winter": 31
+            "winter": 59,
+            "flood": 9
           }
         },
         "6": {
           "label": "flood",
           "counts": {
-            "winter": 54,
-            "flood": 12
+            "flood": 3,
+            "winter": 16
           }
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2010-04-16T10:06Z",
       "source_file": "EKA_2010_16_1006.txt",
-      "similarity": 0.7952978610992432,
+      "similarity": 0.7952977418899536,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -254,20 +256,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2025-06-08T20:52Z",
       "source_file": "EKA_2025_08_2052.txt",
-      "similarity": 0.7898460626602173,
+      "similarity": 0.7898459434509277,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -289,10 +291,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -301,10 +299,14 @@
     {
       "datetime_utc": "2015-10-10T10:45Z",
       "source_file": "EKA_2015_10_1045.txt",
-      "similarity": 0.7722286581993103,
+      "similarity": 0.7722285389900208,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -326,10 +328,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -338,10 +336,14 @@
     {
       "datetime_utc": "2015-10-03T11:48Z",
       "source_file": "EKA_2015_03_1148.txt",
-      "similarity": 0.7546207904815674,
+      "similarity": 0.7546206712722778,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -365,40 +367,37 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2019-01-15T23:08Z",
       "source_file": "EKA_2019_15_2308.txt",
-      "similarity": 0.7472083568572998,
+      "similarity": 0.7472082376480103,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "flood",
           "counts": {
-            "flood": 10
+            "flood": 26
           }
         },
         "2": {
           "label": "severe_hail",
           "counts": {
-            "flood": 24,
-            "severe_hail": 11,
-            "winter": 2
+            "flood": 8,
+            "severe_hail": 12,
+            "winter": 3
           }
         },
         "3": {
-          "label": "severe_hail",
-          "counts": {
-            "winter": 1,
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "flood",
@@ -411,16 +410,10 @@
           "counts": {
             "flood": 3,
             "severe_hail": 1,
-            "winter": 1
+            "winter": 3
           }
         },
         "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 2
-          }
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -430,7 +423,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.5,
-    "mean_similarity": 0.8410522043704987,
+    "mean_similarity": 0.841052109003067,
     "base_rate": 0.29440948693126817,
     "signal_value": 0.20559051306873183,
     "percentile": 80,
@@ -439,6 +432,6 @@
     "n_total": 10,
     "product_id": "202604080827-KEKA-FXUS66-AFDEKA",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

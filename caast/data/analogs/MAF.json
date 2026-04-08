@@ -3,54 +3,55 @@
   "product_id": "202604081133-KMAF-FXUS64-AFDMAF",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\n(Thursday night through Tuesday)\nIssued at 348 AM CDT Wed Apr 8 2026\n\nLate Thursday, any daytime activity should be winding down, but this \nbreak in activity will be somewhat short lived. Rain chances \nincrease from west to east over the course of Friday and into \nSaturday an upper low moves into",
   "analogs": [
     {
       "datetime_utc": "2013-06-02T23:39Z",
       "source_file": "MAF_2013_02_2339.txt",
-      "similarity": 0.9710303544998169,
+      "similarity": 0.9710304737091064,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 6
+            "severe_wind": 8,
+            "severe_hail": 3
           }
         },
-        "2": {
+        "1": {
           "label": "quiet",
           "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 13,
+            "severe_wind": 1
+          }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 13,
-            "severe_wind": 3
+            "severe_wind": 86,
+            "severe_hail": 25
           }
         },
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 85,
-            "severe_hail": 25
+            "severe_wind": 1
           }
         },
         "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 2,
+            "severe_hail": 4,
             "severe_wind": 2
           }
         },
-        "7": {
+        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2
@@ -65,6 +66,10 @@
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -72,19 +77,19 @@
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 4
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 14,
+            "severe_wind": 18,
             "severe_hail": 3
           }
         },
-        "4": {
+        "3": {
           "label": "quiet",
           "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
         },
         "5": {
           "label": "severe_hail",
@@ -95,17 +100,9 @@
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 8,
-            "severe_wind": 6
-          }
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "winter": 4,
-            "severe_wind": 1,
-            "flood": 16,
-            "severe_hail": 3
+            "severe_hail": 6,
+            "severe_wind": 7,
+            "flood": 2
           }
         }
       }
@@ -113,48 +110,49 @@
     {
       "datetime_utc": "2010-05-14T00:11Z",
       "source_file": "MAF_2010_14_0011.txt",
-      "similarity": 0.8835177421569824,
-      "label": "severe_wind",
+      "similarity": 0.883517861366272,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 31,
+            "tornado": 1,
+            "flood": 5
+          }
+        },
         "1": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 6
+            "severe_hail": 3
           }
         },
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 5,
-            "flood": 4,
+            "severe_hail": 2,
+            "flood": 5,
             "severe_wind": 2
           }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 39,
-            "flood": 4,
+            "severe_hail": 46,
+            "flood": 6,
             "severe_wind": 16
           }
         },
         "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 7,
-            "flood": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -163,10 +161,14 @@
     {
       "datetime_utc": "2005-03-04T10:44Z",
       "source_file": "MAF_2005_04_1044.txt",
-      "similarity": 0.8789842128753662,
+      "similarity": 0.8789843320846558,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -188,10 +190,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -200,23 +198,28 @@
     {
       "datetime_utc": "2008-08-15T08:47Z",
       "source_file": "MAF_2008_15_0847.txt",
-      "similarity": 0.8746857643127441,
+      "similarity": 0.8746858239173889,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2,
-            "flood": 3,
+            "flood": 3
+          }
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
             "severe_hail": 2
           }
         },
@@ -229,10 +232,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -241,21 +240,26 @@
     {
       "datetime_utc": "2005-08-04T08:27Z",
       "source_file": "MAF_2005_04_0827.txt",
-      "similarity": 0.8556538820266724,
+      "similarity": 0.8556540608406067,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
-          "label": "flood",
+        "0": {
+          "label": "severe_wind",
           "counts": {
+            "severe_wind": 1,
             "flood": 3
           }
         },
-        "2": {
+        "1": {
           "label": "flood",
           "counts": {
             "flood": 1
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -264,23 +268,18 @@
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1,
-            "severe_hail": 3
+            "severe_wind": 2,
+            "severe_hail": 4,
+            "flood": 4
           }
         },
         "5": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "flood": 4,
-            "severe_hail": 2,
-            "severe_wind": 1
+            "severe_hail": 1
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -289,21 +288,23 @@
     {
       "datetime_utc": "2007-08-08T19:00Z",
       "source_file": "MAF_2007_08_1900.txt",
-      "similarity": 0.8484700918197632,
+      "similarity": 0.8484704494476318,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 2
+            "severe_hail": 3
           }
         },
         "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -320,20 +321,22 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2008-07-16T19:56Z",
       "source_file": "MAF_2008_16_1956.txt",
-      "similarity": 0.8305925726890564,
+      "similarity": 0.830592691898346,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
         "1": {
           "label": "flood",
           "counts": {
@@ -359,20 +362,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2008-07-18T05:46Z",
       "source_file": "MAF_2008_18_0546.txt",
-      "similarity": 0.8304837942123413,
+      "similarity": 0.8304839134216309,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -394,10 +397,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -406,43 +405,42 @@
     {
       "datetime_utc": "2012-10-10T18:17Z",
       "source_file": "MAF_2012_10_1817.txt",
-      "similarity": 0.8277621269226074,
+      "similarity": 0.8277623653411865,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "quiet",
           "counts": {}
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 4
+          }
         },
         "2": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 7
+            "severe_hail": 4
           }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 8,
-            "severe_wind": 4
+            "severe_hail": 13,
+            "severe_wind": 5
           }
         },
         "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 6,
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -452,7 +450,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.8739416301250458,
+    "mean_similarity": 0.8739417731761933,
     "base_rate": 0.545299080337463,
     "signal_value": 0.15470091966253696,
     "percentile": 60,
@@ -461,6 +459,6 @@
     "n_total": 10,
     "product_id": "202604081133-KMAF-FXUS64-AFDMAF",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

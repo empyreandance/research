@@ -3,16 +3,20 @@
   "product_id": "202604080637-KHNX-FXUS66-AFDHNX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\nWednesday will bring a transition in the overall synoptic\npattern to central California, going from a weak high pressure\nridge to the downstream portion of an approaching cutoff low\npressure system. Southwesterly flow with the prevailing flow\nwill maintain above-average temperatures across the re",
   "analogs": [
     {
       "datetime_utc": "2008-09-18T16:04Z",
       "source_file": "HNX_2008_18_1604.txt",
-      "similarity": 0.9366022348403931,
+      "similarity": 0.9366018772125244,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -34,10 +38,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -46,14 +46,20 @@
     {
       "datetime_utc": "2014-05-20T09:52Z",
       "source_file": "HNX_2014_20_0952.txt",
-      "similarity": 0.8577737808227539,
+      "similarity": 0.8577731847763062,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "winter",
           "counts": {
             "winter": 3
+          }
+        },
+        "1": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
           }
         },
         "2": {
@@ -61,14 +67,12 @@
           "counts": {
             "severe_wind": 1,
             "severe_hail": 1,
-            "flood": 1
+            "flood": 6
           }
         },
         "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 5
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -79,10 +83,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -91,10 +91,16 @@
     {
       "datetime_utc": "2014-04-02T03:06Z",
       "source_file": "HNX_2014_02_0306.txt",
-      "similarity": 0.736465334892273,
-      "label": "quiet",
+      "similarity": 0.7364646196365356,
+      "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 4
+          }
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -118,26 +124,26 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2013-08-26T04:12Z",
       "source_file": "HNX_2013_26_0412.txt",
-      "similarity": 0.7182824611663818,
+      "similarity": 0.7182817459106445,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1,
             "flood": 6
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -159,17 +165,11 @@
         "5": {
           "label": "severe_hail",
           "counts": {
-            "flood": 4,
+            "flood": 7,
             "severe_hail": 2
           }
         },
         "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -178,10 +178,17 @@
     {
       "datetime_utc": "2016-01-19T06:54Z",
       "source_file": "HNX_2016_19_0654.txt",
-      "similarity": 0.7131708860397339,
-      "label": "winter",
+      "similarity": 0.713170051574707,
+      "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 2,
+            "winter": 3
+          }
+        },
         "1": {
           "label": "winter",
           "counts": {
@@ -199,20 +206,16 @@
         "4": {
           "label": "winter",
           "counts": {
-            "winter": 18
+            "winter": 24
           }
         },
         "5": {
           "label": "winter",
           "counts": {
-            "winter": 7
+            "winter": 1
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -221,25 +224,29 @@
     {
       "datetime_utc": "2011-06-03T04:31Z",
       "source_file": "HNX_2011_03_0431.txt",
-      "similarity": 0.7110426425933838,
+      "similarity": 0.711042046546936,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 1
+            "winter": 1,
+            "flood": 8,
+            "severe_wind": 1
           }
         },
         "3": {
-          "label": "severe_wind",
+          "label": "winter",
           "counts": {
-            "flood": 8,
-            "severe_wind": 1,
             "winter": 10
           }
         },
@@ -254,20 +261,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2009-09-16T16:01Z",
       "source_file": "HNX_2009_16_1601.txt",
-      "similarity": 0.7061823606491089,
+      "similarity": 0.7061817646026611,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -289,10 +296,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -301,10 +304,14 @@
     {
       "datetime_utc": "2013-10-19T21:26Z",
       "source_file": "HNX_2013_19_2126.txt",
-      "similarity": 0.7035987377166748,
+      "similarity": 0.7035982608795166,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -326,10 +333,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -338,10 +341,14 @@
     {
       "datetime_utc": "2014-10-17T10:33Z",
       "source_file": "HNX_2014_17_1033.txt",
-      "similarity": 0.7029399871826172,
+      "similarity": 0.7029392719268799,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -363,10 +370,6 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "quiet",
           "counts": {}
         }
@@ -375,10 +378,14 @@
     {
       "datetime_utc": "2009-03-27T16:40Z",
       "source_file": "HNX_2009_27_1640.txt",
-      "similarity": 0.7019156813621521,
-      "label": "winter",
+      "similarity": 0.7019151449203491,
+      "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -402,12 +409,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "winter",
-          "counts": {
-            "winter": 2
-          }
         }
       }
     }
@@ -415,7 +416,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.3,
-    "mean_similarity": 0.7487974107265473,
+    "mean_similarity": 0.748796796798706,
     "base_rate": 0.32636533242876525,
     "signal_value": -0.026365332428765265,
     "percentile": 50,
@@ -424,6 +425,6 @@
     "n_total": 10,
     "product_id": "202604080637-KHNX-FXUS66-AFDHNX",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }

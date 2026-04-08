@@ -3,7 +3,7 @@
   "product_id": "202604081049-KAPX-FXUS63-AFDAPX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T15:49:31.019241+00:00",
+  "updated": "2026-04-08T16:34:21.971283+00:00",
   "query_preview": "..\nIssued at 253 AM EDT Wed Apr 8 2026\n\nCurrent water vapor satellite shows large areas of generally drier \nconditions this morning over the CONUS. OOz RAOBs confirm this, with \nmost PWATs around a half inch or less over the central plains, SE \nUS, and OH River Valley. Most of the moisture is aloft,",
   "analogs": [
     {
@@ -13,6 +13,10 @@
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -36,20 +40,20 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2008-10-22T06:39Z",
-      "source_file": "APX_2008_22_0639.txt",
+      "datetime_utc": "2008-10-22T14:35Z",
+      "source_file": "APX_2008_22_1435.txt",
       "similarity": 0.9240468144416809,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "quiet",
           "counts": {}
@@ -75,33 +79,35 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2011-07-25T11:04Z",
-      "source_file": "APX_2011_25_1104.txt",
-      "similarity": 0.9114295244216919,
+      "datetime_utc": "2011-07-25T07:30Z",
+      "source_file": "APX_2011_25_0730.txt",
+      "similarity": 0.9114296436309814,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
           "label": "flood",
           "counts": {
             "flood": 3
           }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -115,10 +121,6 @@
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 4,
@@ -131,9 +133,17 @@
       "datetime_utc": "2007-08-23T08:33Z",
       "source_file": "APX_2007_23_0833.txt",
       "similarity": 0.8963863849639893,
-      "label": "severe_wind",
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 2,
+            "severe_wind": 1,
+            "severe_hail": 2
+          }
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
@@ -155,29 +165,29 @@
         "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 2
+            "severe_wind": 3
           }
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 28,
-            "severe_hail": 9
+            "severe_hail": 9,
+            "severe_wind": 27
           }
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2008-06-07T08:03Z",
       "source_file": "APX_2008_07_0803.txt",
-      "similarity": 0.8881219625473022,
+      "similarity": 0.888122022151947,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "tornado",
           "counts": {
@@ -203,33 +213,33 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
           "label": "tornado",
           "counts": {
             "tornado": 3,
             "severe_wind": 8,
             "severe_hail": 7,
-            "flood": 18
+            "flood": 13
           }
         },
-        "7": {
-          "label": "severe_hail",
+        "6": {
+          "label": "flood",
           "counts": {
-            "severe_hail": 4
+            "flood": 5
           }
         }
       }
     },
     {
-      "datetime_utc": "2008-08-21T14:24Z",
-      "source_file": "APX_2008_21_1424.txt",
+      "datetime_utc": "2008-08-21T08:01Z",
+      "source_file": "APX_2008_21_0801.txt",
       "similarity": 0.8740016222000122,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
@@ -239,14 +249,12 @@
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 9
+            "severe_wind": 10
           }
         },
         "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -259,32 +267,30 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2006-05-29T02:58Z",
       "source_file": "APX_2006_29_0258.txt",
-      "similarity": 0.8739706873893738,
+      "similarity": 0.873970627784729,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
         "1": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 6,
-            "severe_wind": 13
+            "severe_wind": 15
           }
         },
         "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -305,10 +311,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
@@ -319,6 +321,12 @@
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
         "1": {
           "label": "severe_hail",
           "counts": {
@@ -344,8 +352,47 @@
         "6": {
           "label": "quiet",
           "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2011-12-20T03:22Z",
+      "source_file": "APX_2011_20_0322.txt",
+      "similarity": 0.8223063945770264,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
         },
-        "7": {
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
+        },
+        "3": {
+          "label": "winter",
+          "counts": {
+            "winter": 7
+          }
+        },
+        "4": {
+          "label": "winter",
+          "counts": {
+            "winter": 12
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
           "label": "quiet",
           "counts": {}
         }
@@ -354,51 +401,14 @@
     {
       "datetime_utc": "2011-12-19T20:59Z",
       "source_file": "APX_2011_19_2059.txt",
-      "similarity": 0.8223064541816711,
+      "similarity": 0.8223063945770264,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
-        "1": {
+        "0": {
           "label": "quiet",
           "counts": {}
         },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "winter",
-          "counts": {
-            "winter": 4
-          }
-        },
-        "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 17
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "7": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2011-12-20T06:06Z",
-      "source_file": "APX_2011_20_0606.txt",
-      "similarity": 0.8223064541816711,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
         "1": {
           "label": "quiet",
           "counts": {}
@@ -410,28 +420,24 @@
         "3": {
           "label": "winter",
           "counts": {
-            "winter": 4
+            "winter": 2
           }
         },
         "4": {
           "label": "winter",
           "counts": {
-            "winter": 17
+            "winter": 7
           }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 12
+          }
         },
         "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "7": {
-          "label": "winter",
-          "counts": {
-            "winter": 5
-          }
         }
       }
     }
@@ -448,6 +454,6 @@
     "n_total": 10,
     "product_id": "202604081049-KAPX-FXUS63-AFDAPX",
     "afd_time": null,
-    "updated": "2026-04-08T15:49:31.019241+00:00"
+    "updated": "2026-04-08T16:34:21.971283+00:00"
   }
 }
