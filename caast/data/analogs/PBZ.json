@@ -3,13 +3,13 @@
   "product_id": "202604080629-KPBZ-FXUS61-AFDPBZ",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-08T08:23:49.275386+00:00",
+  "updated": "2026-04-08T10:20:41.216960+00:00",
   "query_preview": "..\nKEY MESSAGE 1... \nHigh pressure shifting east across the region and over the New\nEngland coast through Thursday brings dry weather and warming\ntemperatures to the area. An upper trough and associated \nsurface low cross from the upper Midwest into eastern Ontario \nduring that time, with a trailing",
   "analogs": [
     {
       "datetime_utc": "2015-08-08T02:22Z",
       "source_file": "PBZ_2015_08_0222.txt",
-      "similarity": 0.8945883512496948,
+      "similarity": 0.8945887088775635,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -52,7 +52,7 @@
     {
       "datetime_utc": "2004-05-20T19:00Z",
       "source_file": "PBZ_2004_20_1900.txt",
-      "similarity": 0.8842435479164124,
+      "similarity": 0.8842437267303467,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,7 +102,7 @@
     {
       "datetime_utc": "2004-04-12T07:55Z",
       "source_file": "PBZ_2004_12_0755.txt",
-      "similarity": 0.8012794256210327,
+      "similarity": 0.8012803196907043,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -139,7 +139,7 @@
     {
       "datetime_utc": "2007-03-24T23:20Z",
       "source_file": "PBZ_2007_24_2320.txt",
-      "similarity": 0.7826648950576782,
+      "similarity": 0.7826656699180603,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -179,7 +179,7 @@
     {
       "datetime_utc": "2004-07-20T15:20Z",
       "source_file": "PBZ_2004_20_1520.txt",
-      "similarity": 0.7727369070053101,
+      "similarity": 0.7727376222610474,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -216,7 +216,7 @@
     {
       "datetime_utc": "2004-03-28T20:26Z",
       "source_file": "PBZ_2004_28_2026.txt",
-      "similarity": 0.7515607476234436,
+      "similarity": 0.75156170129776,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -253,7 +253,7 @@
     {
       "datetime_utc": "2020-11-28T00:46Z",
       "source_file": "PBZ_2020_28_0046.txt",
-      "similarity": 0.7485018968582153,
+      "similarity": 0.7485028505325317,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -296,7 +296,7 @@
     {
       "datetime_utc": "2005-04-19T06:45Z",
       "source_file": "PBZ_2005_19_0645_1.txt",
-      "similarity": 0.7312555909156799,
+      "similarity": 0.7312564253807068,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -333,53 +333,9 @@
       }
     },
     {
-      "datetime_utc": "2016-06-28T19:08Z",
-      "source_file": "PBZ_2016_28_1908.txt",
-      "similarity": 0.7267690896987915,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 10,
-            "flood": 3
-          }
-        },
-        "7": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2016-06-29T01:33Z",
       "source_file": "PBZ_2016_29_0133.txt",
-      "similarity": 0.7267690896987915,
+      "similarity": 0.7267699241638184,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -421,12 +377,56 @@
           }
         }
       }
+    },
+    {
+      "datetime_utc": "2016-06-28T23:51Z",
+      "source_file": "PBZ_2016_28_2351.txt",
+      "similarity": 0.7267699241638184,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 10,
+            "flood": 3
+          }
+        },
+        "7": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
     }
   ],
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.6,
-    "mean_similarity": 0.782036954164505,
+    "mean_similarity": 0.7820376873016357,
     "base_rate": 0.5485557908942663,
     "signal_value": 0.05144420910573366,
     "percentile": 50,
@@ -435,6 +435,6 @@
     "n_total": 10,
     "product_id": "202604080629-KPBZ-FXUS61-AFDPBZ",
     "afd_time": null,
-    "updated": "2026-04-08T08:23:49.275386+00:00"
+    "updated": "2026-04-08T10:20:41.216960+00:00"
   }
 }
