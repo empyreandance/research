@@ -1,15 +1,15 @@
 {
   "office": "GRB",
-  "product_id": "202604090410-KGRB-FXUS63-AFDGRB",
+  "product_id": "202604090750-KGRB-FXUS63-AFDGRB",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-09T06:02:22.168581+00:00",
-  "query_preview": "..\nIssued at 958 AM CDT Wed Apr 8 2026\n\nRadar shows any remnants of the wintry mix from this morning \ndeparting the area to the east as of early this afternoon. \nHowever, we will only be afforded a brief dry spell before better \nsaturation returns late this afternoon into this evening with the \npass",
+  "updated": "2026-04-09T08:00:52.375592+00:00",
+  "query_preview": "..\nIssued at 249 AM CDT Thu Apr 9 2026\n\nThe last remnants of the frontal band of rain was exiting east\ncentral WI early this morning, followed by clearing skies over\nmost of the region. An upper low was moving through southern\nOntario, and CAA and subsidence on the south flank of this system\nwas gen",
   "analogs": [
     {
       "datetime_utc": "2012-05-31T23:33Z",
       "source_file": "GRB_2012_31_2333.txt",
-      "similarity": 0.9697622060775757,
+      "similarity": 0.9779351949691772,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -46,7 +46,7 @@
     {
       "datetime_utc": "2004-05-24T15:02Z",
       "source_file": "GRB_2004_24_1502.txt",
-      "similarity": 0.8918312191963196,
+      "similarity": 0.9119237661361694,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -85,7 +85,7 @@
     {
       "datetime_utc": "2007-08-12T10:12Z",
       "source_file": "GRB_2007_12_1012.txt",
-      "similarity": 0.8649730682373047,
+      "similarity": 0.8967252373695374,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -126,9 +126,9 @@
       }
     },
     {
-      "datetime_utc": "2017-07-10T17:33Z",
-      "source_file": "GRB_2017_10_1733.txt",
-      "similarity": 0.8449433445930481,
+      "datetime_utc": "2017-07-10T09:10Z",
+      "source_file": "GRB_2017_10_0910.txt",
+      "similarity": 0.8723234534263611,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -176,7 +176,7 @@
     {
       "datetime_utc": "2005-10-08T02:08Z",
       "source_file": "GRB_2005_08_0208.txt",
-      "similarity": 0.8287062644958496,
+      "similarity": 0.838768482208252,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -213,7 +213,7 @@
     {
       "datetime_utc": "2012-07-01T19:59Z",
       "source_file": "GRB_2012_01_1959.txt",
-      "similarity": 0.7125038504600525,
+      "similarity": 0.7540304660797119,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -262,7 +262,7 @@
     {
       "datetime_utc": "2012-07-02T04:06Z",
       "source_file": "GRB_2012_02_0406.txt",
-      "similarity": 0.7125038504600525,
+      "similarity": 0.7540304660797119,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -311,7 +311,7 @@
     {
       "datetime_utc": "2006-06-19T08:59Z",
       "source_file": "GRB_2006_19_0859.txt",
-      "similarity": 0.6806163787841797,
+      "similarity": 0.7146740555763245,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -360,7 +360,7 @@
     {
       "datetime_utc": "2005-10-09T20:28Z",
       "source_file": "GRB_2005_09_2028.txt",
-      "similarity": 0.6582961678504944,
+      "similarity": 0.6814467906951904,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -395,20 +395,26 @@
       }
     },
     {
-      "datetime_utc": "2022-09-11T09:09Z",
-      "source_file": "GRB_2022_11_0909.txt",
-      "similarity": 0.6551030874252319,
-      "label": "severe_hail",
+      "datetime_utc": "2025-05-15T11:31Z",
+      "source_file": "GRB_2025_15_1131.txt",
+      "similarity": 0.6774013042449951,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "flood": 8,
+            "severe_wind": 44,
+            "severe_hail": 123,
+            "tornado": 14
+          }
         },
         "1": {
-          "label": "flood",
+          "label": "severe_wind",
           "counts": {
-            "flood": 1
+            "severe_wind": 35,
+            "severe_hail": 2
           }
         },
         "2": {
@@ -428,10 +434,8 @@
           "counts": {}
         },
         "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     }
@@ -439,15 +443,15 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.7819239437580109,
+    "mean_similarity": 0.807925921678543,
     "base_rate": 0.46778572547381614,
     "signal_value": 0.22446091996031947,
     "percentile": 57,
     "office_lift": 0.1350542745261838,
     "n_severe": 7,
     "n_total": 10,
-    "product_id": "202604090410-KGRB-FXUS63-AFDGRB",
+    "product_id": "202604090750-KGRB-FXUS63-AFDGRB",
     "afd_time": null,
-    "updated": "2026-04-09T06:02:22.168581+00:00"
+    "updated": "2026-04-09T08:00:52.375592+00:00"
   }
 }
