@@ -1,15 +1,15 @@
 {
   "office": "PUB",
-  "product_id": "202604082031-KPUB-FXUS65-AFDPUB",
+  "product_id": "202604082344-KPUB-FXUS65-AFDPUB",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-08T23:06:18.713256+00:00",
-  "query_preview": "/THURSDAY NIGHT THROUGH TUESDAY/...\nIssued at 230 PM MDT Wed Apr 8 2026\n\nThursday night and Friday...will feature a cold front pushing back\nacross the plains, leading to increasing low level moisture and \nclouds across the plains through the morning. Latest model data \ndoes indicate a modest to mode",
+  "updated": "2026-04-08T23:59:08.817281+00:00",
+  "query_preview": "/THURSDAY NIGHT THROUGH WEDNESDAY/...\nIssued at 230 PM MDT Wed Apr 8 2026\n\nThursday night and Friday...will feature a cold front pushing back\nacross the plains, leading to increasing low level moisture and \nclouds across the plains through the morning. Latest model data \ndoes indicate a modest to mo",
   "analogs": [
     {
       "datetime_utc": "2005-04-03T20:37Z",
       "source_file": "PUB_2005_03_2037.txt",
-      "similarity": 0.9519201517105103,
+      "similarity": 0.9158191680908203,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -44,9 +44,94 @@
       }
     },
     {
+      "datetime_utc": "2011-10-14T05:27Z",
+      "source_file": "PUB_2011_14_0527.txt",
+      "similarity": 0.9153103828430176,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2005-08-23T20:29Z",
+      "source_file": "PUB_2005_23_2029.txt",
+      "similarity": 0.91353440284729,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 17
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 2
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 5
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2007-06-18T09:48Z",
       "source_file": "PUB_2007_18_0948.txt",
-      "similarity": 0.9498635530471802,
+      "similarity": 0.9108420610427856,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -92,7 +177,7 @@
     {
       "datetime_utc": "2011-10-18T04:58Z",
       "source_file": "PUB_2011_18_0458.txt",
-      "similarity": 0.9494086503982544,
+      "similarity": 0.9085484743118286,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -127,17 +212,15 @@
       }
     },
     {
-      "datetime_utc": "2011-10-17T21:04Z",
-      "source_file": "PUB_2011_17_2104.txt",
-      "similarity": 0.9392200708389282,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2008-07-30T23:16Z",
+      "source_file": "PUB_2008_30_2316.txt",
+      "similarity": 0.9067944288253784,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -148,66 +231,28 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2009-08-03T20:25Z",
-      "source_file": "PUB_2009_03_2025.txt",
-      "similarity": 0.9389398097991943,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
         },
-        "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 11
-          }
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 4
-          }
-        },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
         },
         "6": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 14
+            "severe_hail": 9,
+            "severe_wind": 2
           }
         }
       }
@@ -215,7 +260,7 @@
     {
       "datetime_utc": "2011-06-05T21:07Z",
       "source_file": "PUB_2011_05_2107_1.txt",
-      "similarity": 0.933768630027771,
+      "similarity": 0.9053144454956055,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -256,15 +301,17 @@
       }
     },
     {
-      "datetime_utc": "2011-10-14T10:46Z",
-      "source_file": "PUB_2011_14_1046.txt",
-      "similarity": 0.9322339296340942,
+      "datetime_utc": "2011-10-17T21:04Z",
+      "source_file": "PUB_2011_17_2104.txt",
+      "similarity": 0.8949131369590759,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         },
         "1": {
           "label": "quiet",
@@ -275,10 +322,8 @@
           "counts": {}
         },
         "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -297,7 +342,7 @@
     {
       "datetime_utc": "2011-03-20T11:36Z",
       "source_file": "PUB_2011_20_1136.txt",
-      "similarity": 0.9314113855361938,
+      "similarity": 0.8937149047851562,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -343,86 +388,48 @@
       }
     },
     {
-      "datetime_utc": "2009-10-11T20:57Z",
-      "source_file": "PUB_2009_11_2057.txt",
-      "similarity": 0.9312489032745361,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2006-06-08T19:34Z",
-      "source_file": "PUB_2006_08_1934.txt",
-      "similarity": 0.929054856300354,
+      "datetime_utc": "2009-08-03T20:25Z",
+      "source_file": "PUB_2009_03_2025.txt",
+      "similarity": 0.8920584917068481,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
+            "severe_wind": 2
           }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 6,
-            "severe_wind": 2
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 11
           }
         },
         "3": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 17
+            "severe_hail": 4
           }
         },
         "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 9
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
           "counts": {}
         },
         "6": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_wind": 3
+            "severe_hail": 14
           }
         }
       }
@@ -430,16 +437,16 @@
   ],
   "signal": {
     "level": "LOW",
-    "severe_fraction": 0.5,
-    "mean_similarity": 0.9387069940567017,
+    "severe_fraction": 0.6,
+    "mean_similarity": 0.9056849896907806,
     "base_rate": 0.5409568190758617,
-    "signal_value": -0.04095681907586168,
-    "percentile": 40,
+    "signal_value": 0.059043180924138294,
+    "percentile": 50,
     "office_lift": 0.2646431809241383,
-    "n_severe": 5,
+    "n_severe": 6,
     "n_total": 10,
-    "product_id": "202604082031-KPUB-FXUS65-AFDPUB",
+    "product_id": "202604082344-KPUB-FXUS65-AFDPUB",
     "afd_time": null,
-    "updated": "2026-04-08T23:06:18.713256+00:00"
+    "updated": "2026-04-08T23:59:08.817281+00:00"
   }
 }
