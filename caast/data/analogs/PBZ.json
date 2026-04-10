@@ -3,13 +3,13 @@
   "product_id": "202604101712-KPBZ-FXUS61-AFDPBZ",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-10T22:00:42.067410+00:00",
+  "updated": "2026-04-10T23:01:06.252730+00:00",
   "query_preview": "..\nKEY MESSAGE 1... \nThere is high confidence in the upper air pattern featuring\nsoutheast CONUS ridging that extends into the Ohio River Valley\nSunday into next week. The combination of the height rises and\nwarm advection within southwest near surface flow pushes returns\narea temperature consistent",
   "analogs": [
     {
       "datetime_utc": "2004-05-20T19:00Z",
       "source_file": "PBZ_2004_20_1900.txt",
-      "similarity": 0.9238802790641785,
+      "similarity": 0.923880398273468,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -60,7 +60,7 @@
     {
       "datetime_utc": "2015-08-08T02:22Z",
       "source_file": "PBZ_2015_08_0222.txt",
-      "similarity": 0.8151019811630249,
+      "similarity": 0.8151021003723145,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -100,7 +100,7 @@
     {
       "datetime_utc": "2004-04-12T07:55Z",
       "source_file": "PBZ_2004_12_0755.txt",
-      "similarity": 0.686121940612793,
+      "similarity": 0.6861220598220825,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -174,7 +174,7 @@
     {
       "datetime_utc": "2007-03-24T23:20Z",
       "source_file": "PBZ_2007_24_2320.txt",
-      "similarity": 0.6324529647827148,
+      "similarity": 0.6324529051780701,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -208,6 +208,49 @@
         "6": {
           "label": "quiet",
           "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-08-07T23:46Z",
+      "source_file": "PBZ_2025_07_2346.txt",
+      "similarity": 0.6322202682495117,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 2,
+            "severe_wind": 4
+          }
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "flood": 12,
+            "severe_hail": 2
+          }
         }
       }
     },
@@ -255,51 +298,8 @@
       }
     },
     {
-      "datetime_utc": "2025-08-07T16:28Z",
-      "source_file": "PBZ_2025_07_1628.txt",
-      "similarity": 0.6322202682495117,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 2,
-            "severe_wind": 4
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "flood": 12,
-            "severe_hail": 2
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2016-09-08T13:48Z",
-      "source_file": "PBZ_2016_08_1348.txt",
+      "datetime_utc": "2016-09-08T11:34Z",
+      "source_file": "PBZ_2016_08_1134.txt",
       "similarity": 0.6164752840995789,
       "label": "severe_wind",
       "is_severe": true,
@@ -377,8 +377,8 @@
       }
     },
     {
-      "datetime_utc": "2022-04-13T05:03Z",
-      "source_file": "PBZ_2022_13_0503.txt",
+      "datetime_utc": "2022-04-13T11:33Z",
+      "source_file": "PBZ_2022_13_1133.txt",
       "similarity": 0.6085149049758911,
       "label": "severe_wind",
       "is_severe": true,
@@ -425,13 +425,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.6804856896400452,
+    "mean_similarity": 0.6804857194423676,
     "n_severe": 7,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.68 below confidence floor 0.7",
     "product_id": "202604101712-KPBZ-FXUS61-AFDPBZ",
     "afd_time": null,
-    "updated": "2026-04-10T22:00:42.067410+00:00",
+    "updated": "2026-04-10T23:01:06.252730+00:00",
     "office_lift": 0.005100305898671054,
     "base_rate": 0.544319694101329
   }
