@@ -1,15 +1,15 @@
 {
   "office": "ILX",
-  "product_id": "202604100514-KILX-FXUS63-AFDILX",
+  "product_id": "202604100819-KILX-FXUS63-AFDILX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-10T08:04:54.086601+00:00",
-  "query_preview": "..\nIssued at 245 PM CDT Thu Apr 9 2026\n\nAt 19Z/2 pm, a frontal boundary was over northern IL, just \nnorth of the Galesburg airport, near Lacon airport and just\nnorth of Kankakee airport. The front extended back over nw MO \nand along the KS/NE border to 1010 mb low pressure in \neastcentral CO. Radar ",
+  "updated": "2026-04-10T09:44:28.359749+00:00",
+  "query_preview": "..(through next Friday)\nIssued at 316 AM CDT Fri Apr 10 2026\n\nA weakening line of thunderstorms is currently observed on \nradar, aligned with a surface cold front stretching from Quincy \nto Kankakee. Infrared satellite imagery indicates that cloud \ntops are warming, and both convective activity and ",
   "analogs": [
     {
-      "datetime_utc": "2010-09-18T04:36Z",
-      "source_file": "ILX_2010_18_0436.txt",
-      "similarity": 0.9417888522148132,
+      "datetime_utc": "2010-09-18T01:36Z",
+      "source_file": "ILX_2010_18_0136.txt",
+      "similarity": 0.8864601850509644,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -51,9 +51,9 @@
       }
     },
     {
-      "datetime_utc": "2010-09-17T20:00Z",
-      "source_file": "ILX_2010_17_2000.txt",
-      "similarity": 0.9417888522148132,
+      "datetime_utc": "2010-09-17T23:27Z",
+      "source_file": "ILX_2010_17_2327.txt",
+      "similarity": 0.8864601850509644,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -97,7 +97,7 @@
     {
       "datetime_utc": "2013-08-16T04:50Z",
       "source_file": "ILX_2013_16_0450.txt",
-      "similarity": 0.8510838150978088,
+      "similarity": 0.8061112761497498,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -136,7 +136,7 @@
     {
       "datetime_utc": "2013-08-15T23:12Z",
       "source_file": "ILX_2013_15_2312.txt",
-      "similarity": 0.8510838150978088,
+      "similarity": 0.8061112761497498,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -173,7 +173,7 @@
     {
       "datetime_utc": "2006-08-14T19:32Z",
       "source_file": "ILX_2006_14_1932.txt",
-      "similarity": 0.7723073363304138,
+      "similarity": 0.7371266484260559,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -213,9 +213,9 @@
       }
     },
     {
-      "datetime_utc": "2023-01-26T17:54Z",
-      "source_file": "ILX_2023_26_1754_1.txt",
-      "similarity": 0.7551769614219666,
+      "datetime_utc": "2023-01-26T09:10Z",
+      "source_file": "ILX_2023_26_0910.txt",
+      "similarity": 0.7271112203598022,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -262,7 +262,7 @@
     {
       "datetime_utc": "2007-02-20T16:51Z",
       "source_file": "ILX_2007_20_1651.txt",
-      "similarity": 0.7422535419464111,
+      "similarity": 0.7028661966323853,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -303,7 +303,7 @@
     {
       "datetime_utc": "2024-08-30T01:59Z",
       "source_file": "ILX_2024_30_0159.txt",
-      "similarity": 0.7226638793945312,
+      "similarity": 0.6711448431015015,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -344,7 +344,7 @@
     {
       "datetime_utc": "2024-08-29T23:41Z",
       "source_file": "ILX_2024_29_2341.txt",
-      "similarity": 0.7226638793945312,
+      "similarity": 0.6711448431015015,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -383,19 +383,25 @@
       }
     },
     {
-      "datetime_utc": "2007-02-19T20:59Z",
-      "source_file": "ILX_2007_19_2059.txt",
-      "similarity": 0.6903339624404907,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2020-05-17T12:04Z",
+      "source_file": "ILX_2020_17_1204.txt",
+      "similarity": 0.632865309715271,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "flood": 18,
+            "tornado": 5,
+            "severe_wind": 1
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "2": {
           "label": "quiet",
@@ -410,15 +416,16 @@
           "counts": {}
         },
         "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 137
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
-          "label": "winter",
+          "label": "tornado",
           "counts": {
-            "winter": 6
+            "severe_hail": 15,
+            "tornado": 8,
+            "severe_wind": 12,
+            "flood": 1
           }
         }
       }
@@ -426,16 +433,16 @@
   ],
   "signal": {
     "level": "LOW",
-    "severe_fraction": 0.6,
-    "mean_similarity": 0.7991144895553589,
+    "severe_fraction": 0.7,
+    "mean_similarity": 0.7527401983737946,
     "base_rate": 0.6120785297380734,
-    "signal_value": -0.02106667952985064,
-    "percentile": 43,
+    "signal_value": 0.07893332047014934,
+    "percentile": 50,
     "office_lift": 0.001961470261926501,
-    "n_severe": 6,
+    "n_severe": 7,
     "n_total": 10,
-    "product_id": "202604100514-KILX-FXUS63-AFDILX",
+    "product_id": "202604100819-KILX-FXUS63-AFDILX",
     "afd_time": null,
-    "updated": "2026-04-10T08:04:54.086601+00:00"
+    "updated": "2026-04-10T09:44:28.359749+00:00"
   }
 }

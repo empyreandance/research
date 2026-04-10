@@ -1,15 +1,15 @@
 {
   "office": "BUF",
-  "product_id": "202604100618-KBUF-FXUS61-AFDBUF",
+  "product_id": "202604100931-KBUF-FXUS61-AFDBUF",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-10T08:04:54.086601+00:00",
-  "query_preview": "..\nKEY MESSAGE 1...A cold front will bring a period of showers this \nafternoon and evening.\n\nA mid level trough will advance east across Ontario and Quebec \ntoday, with an associated frontal zone providing a focus for rain \nacross the eastern Great Lakes. The surface front will stall across \nthe are",
+  "updated": "2026-04-10T09:44:28.359749+00:00",
+  "query_preview": "..\nKEY MESSAGE 1...A cold front will bring a period of showers this \nafternoon and evening.\n\nA mid level trough will advance east across Ontario and Quebec \ntoday, with an associated frontal zone providing a focus for rain \nacross the eastern Great Lakes. The surface front will briefly \nretreat back",
   "analogs": [
     {
       "datetime_utc": "2021-08-28T17:51Z",
       "source_file": "BUF_2021_28_1751.txt",
-      "similarity": 0.7534681558609009,
+      "similarity": 0.7498915791511536,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -48,9 +48,9 @@
       }
     },
     {
-      "datetime_utc": "2012-10-10T08:02Z",
-      "source_file": "BUF_2012_10_0802.txt",
-      "similarity": 0.6163400411605835,
+      "datetime_utc": "2012-10-11T03:42Z",
+      "source_file": "BUF_2012_11_0342.txt",
+      "similarity": 0.6172124147415161,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -85,9 +85,9 @@
       }
     },
     {
-      "datetime_utc": "2012-10-11T17:51Z",
-      "source_file": "BUF_2012_11_1751.txt",
-      "similarity": 0.6163400411605835,
+      "datetime_utc": "2012-10-10T22:40Z",
+      "source_file": "BUF_2012_10_2240.txt",
+      "similarity": 0.6172124147415161,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -122,9 +122,9 @@
       }
     },
     {
-      "datetime_utc": "2013-12-25T15:24Z",
-      "source_file": "BUF_2013_25_1524.txt",
-      "similarity": 0.5976386070251465,
+      "datetime_utc": "2013-12-25T15:35Z",
+      "source_file": "BUF_2013_25_1535.txt",
+      "similarity": 0.5945636630058289,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -169,7 +169,7 @@
     {
       "datetime_utc": "2013-12-26T00:02Z",
       "source_file": "BUF_2013_26_0002.txt",
-      "similarity": 0.5976386070251465,
+      "similarity": 0.5945636630058289,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -212,9 +212,9 @@
       }
     },
     {
-      "datetime_utc": "2011-02-15T20:29Z",
-      "source_file": "BUF_2011_15_2029.txt",
-      "similarity": 0.5673751831054688,
+      "datetime_utc": "2011-02-15T11:24Z",
+      "source_file": "BUF_2011_15_1124.txt",
+      "similarity": 0.573180079460144,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -255,7 +255,7 @@
     {
       "datetime_utc": "2011-02-16T04:48Z",
       "source_file": "BUF_2011_16_0448_1.txt",
-      "similarity": 0.5673751831054688,
+      "similarity": 0.573180079460144,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -296,7 +296,7 @@
     {
       "datetime_utc": "2009-04-22T07:06Z",
       "source_file": "BUF_2009_22_0706.txt",
-      "similarity": 0.5632728338241577,
+      "similarity": 0.5687782764434814,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -335,7 +335,7 @@
     {
       "datetime_utc": "2009-04-21T19:37Z",
       "source_file": "BUF_2009_21_1937_1.txt",
-      "similarity": 0.5632728338241577,
+      "similarity": 0.5687782764434814,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -374,11 +374,11 @@
       }
     },
     {
-      "datetime_utc": "2007-11-17T07:57Z",
-      "source_file": "BUF_2007_17_0757.txt",
-      "similarity": 0.5576086044311523,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2010-07-31T05:45Z",
+      "source_file": "BUF_2010_31_0545.txt",
+      "similarity": 0.5596803426742554,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -393,12 +393,17 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_wind": 1
+          }
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "5": {
           "label": "quiet",
@@ -413,14 +418,14 @@
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.3,
-    "mean_similarity": 0.6000330090522766,
-    "n_severe": 3,
+    "severe_fraction": 0.4,
+    "mean_similarity": 0.601704078912735,
+    "n_severe": 4,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.60 below confidence floor 0.7",
-    "product_id": "202604100618-KBUF-FXUS61-AFDBUF",
+    "product_id": "202604100931-KBUF-FXUS61-AFDBUF",
     "afd_time": null,
-    "updated": "2026-04-10T08:04:54.086601+00:00",
+    "updated": "2026-04-10T09:44:28.359749+00:00",
     "office_lift": 0.06369099319847815,
     "base_rate": 0.4425690068015219
   }
