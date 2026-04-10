@@ -1,15 +1,15 @@
 {
   "office": "TSA",
-  "product_id": "202604092336-KTSA-FXUS64-AFDTSA",
+  "product_id": "202604100511-KTSA-FXUS64-AFDTSA",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-09T23:57:54.565910+00:00",
-  "query_preview": "..\n(Saturday through Thursday) \nIssued at 1151 AM CDT Thu Apr 9 2026\n\nA relatively quiet day is in store on Saturday as the boundary \nlifts back north of the local region and forcing for storms is \nmainly confined to western Oklahoma and Texas through the day \nSaturday. Beginning Saturday night into",
+  "updated": "2026-04-10T06:12:38.716495+00:00",
+  "query_preview": "..\n(Saturday through Thursday)\nIssued at 1134 PM CDT Thu Apr 9 2026\n\nThe front/outflow will retreat back north Saturday morning, and the \nremainder of the day is expected to be relatively quiet with low \nafternoon shower/storm chances. South winds will increase and become \na little gusty by afternoo",
   "analogs": [
     {
       "datetime_utc": "2005-11-09T03:07Z",
       "source_file": "TSA_2005_09_0307.txt",
-      "similarity": 0.9098305702209473,
+      "similarity": 0.9177185297012329,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -57,7 +57,7 @@
     {
       "datetime_utc": "2017-06-08T02:35Z",
       "source_file": "TSA_2017_08_0235.txt",
-      "similarity": 0.8998340368270874,
+      "similarity": 0.8976061344146729,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -100,7 +100,7 @@
     {
       "datetime_utc": "2006-06-26T17:08Z",
       "source_file": "TSA_2006_26_1708.txt",
-      "similarity": 0.873232901096344,
+      "similarity": 0.8721703290939331,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -135,64 +135,57 @@
       }
     },
     {
-      "datetime_utc": "2009-05-07T09:42Z",
-      "source_file": "TSA_2009_07_0942.txt",
-      "similarity": 0.8681706786155701,
+      "datetime_utc": "2009-07-15T19:17Z",
+      "source_file": "TSA_2009_15_1917.txt",
+      "similarity": 0.8497092723846436,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 37
+            "severe_wind": 24,
+            "flood": 1,
+            "severe_hail": 1
           }
         },
         "1": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "severe_wind": 105,
-            "severe_hail": 36,
-            "flood": 19,
-            "tornado": 15
+            "severe_hail": 22,
+            "severe_wind": 26,
+            "flood": 1
           }
         },
         "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 5,
-            "tornado": 2,
-            "severe_hail": 11,
-            "flood": 16
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "flood": 12,
-            "tornado": 1,
-            "severe_hail": 5
+            "severe_hail": 8,
+            "severe_wind": 1
           }
         },
         "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "flood": 9,
-            "severe_hail": 54
+            "severe_wind": 45,
+            "severe_hail": 19,
+            "winter": 1,
+            "flood": 5
           }
         },
         "6": {
           "label": "tornado",
           "counts": {
-            "severe_wind": 90,
-            "severe_hail": 73,
-            "tornado": 9,
-            "flood": 5
+            "flood": 10,
+            "tornado": 1
           }
         }
       }
@@ -200,7 +193,7 @@
     {
       "datetime_utc": "2009-06-09T15:59Z",
       "source_file": "TSA_2009_09_1559.txt",
-      "similarity": 0.8668719530105591,
+      "similarity": 0.8472771048545837,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -265,57 +258,64 @@
       }
     },
     {
-      "datetime_utc": "2009-07-15T19:17Z",
-      "source_file": "TSA_2009_15_1917.txt",
-      "similarity": 0.8561606407165527,
+      "datetime_utc": "2009-05-07T09:42Z",
+      "source_file": "TSA_2009_07_0942.txt",
+      "similarity": 0.8467103242874146,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 24,
-            "flood": 1,
-            "severe_hail": 1
+            "severe_wind": 37
           }
         },
         "1": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 22,
-            "severe_wind": 26,
-            "flood": 1
+            "severe_wind": 105,
+            "severe_hail": 36,
+            "flood": 19,
+            "tornado": 15
           }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 5,
+            "tornado": 2,
+            "severe_hail": 11,
+            "flood": 16
+          }
         },
         "3": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 8,
-            "severe_wind": 1
+            "flood": 12,
+            "tornado": 1,
+            "severe_hail": 5
           }
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "5": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_wind": 45,
-            "severe_hail": 19,
-            "winter": 1,
-            "flood": 5
+            "flood": 9,
+            "severe_hail": 54
           }
         },
         "6": {
           "label": "tornado",
           "counts": {
-            "flood": 10,
-            "tornado": 1
+            "severe_wind": 90,
+            "severe_hail": 73,
+            "tornado": 9,
+            "flood": 5
           }
         }
       }
@@ -323,7 +323,7 @@
     {
       "datetime_utc": "2017-07-03T20:35Z",
       "source_file": "TSA_2017_03_2035.txt",
-      "similarity": 0.8518526554107666,
+      "similarity": 0.830708920955658,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -375,7 +375,7 @@
     {
       "datetime_utc": "2016-04-16T20:22Z",
       "source_file": "TSA_2016_16_2022.txt",
-      "similarity": 0.8477572798728943,
+      "similarity": 0.8271836042404175,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -413,9 +413,55 @@
       }
     },
     {
+      "datetime_utc": "2020-06-16T15:48Z",
+      "source_file": "TSA_2020_16_1548.txt",
+      "similarity": 0.8093091249465942,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 4
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2009-04-29T07:52Z",
       "source_file": "TSA_2009_29_0752.txt",
-      "similarity": 0.826835036277771,
+      "similarity": 0.8059855699539185,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -472,71 +518,20 @@
           }
         }
       }
-    },
-    {
-      "datetime_utc": "2017-08-05T20:49Z",
-      "source_file": "TSA_2017_05_2049.txt",
-      "similarity": 0.823406457901001,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 9,
-            "flood": 5,
-            "severe_wind": 41,
-            "tornado": 6
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 16
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        }
-      }
     }
   ],
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.8623952209949494,
+    "mean_similarity": 0.8504378914833068,
     "base_rate": 0.6678787549862961,
     "signal_value": 0.22625980299042092,
     "percentile": 70,
     "office_lift": -0.008678754986296111,
     "n_severe": 9,
     "n_total": 10,
-    "product_id": "202604092336-KTSA-FXUS64-AFDTSA",
+    "product_id": "202604100511-KTSA-FXUS64-AFDTSA",
     "afd_time": null,
-    "updated": "2026-04-09T23:57:54.565910+00:00"
+    "updated": "2026-04-10T06:12:38.716495+00:00"
   }
 }
