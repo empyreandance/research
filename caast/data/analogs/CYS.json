@@ -3,7 +3,7 @@
   "product_id": "202604110832-KCYS-FXUS65-AFDCYS",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-11T09:07:29.354878+00:00",
+  "updated": "2026-04-11T10:02:09.866707+00:00",
   "query_preview": "/MONDAY THROUGH FRIDAY/...\nIssued at 212 PM MDT Fri Apr 10 2026\n\nMonday starts an active weather pattern where the \nIntermountain West could see a meager tenth of an inch over the \ncourse of 5 days with some isolated areas getting a couple tenths. A \nweak shortwave will push through Monday ahead of ",
   "analogs": [
     {
@@ -46,7 +46,7 @@
     {
       "datetime_utc": "2005-10-21T09:23Z",
       "source_file": "CYS_2005_21_0923.txt",
-      "similarity": 0.695915937423706,
+      "similarity": 0.6959158778190613,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -81,8 +81,51 @@
       }
     },
     {
-      "datetime_utc": "2011-02-05T23:45Z",
-      "source_file": "CYS_2011_05_2345.txt",
+      "datetime_utc": "2011-02-06T04:45Z",
+      "source_file": "CYS_2011_06_0445.txt",
+      "similarity": 0.6815227270126343,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 58
+          }
+        },
+        "1": {
+          "label": "winter",
+          "counts": {
+            "winter": 56
+          }
+        },
+        "2": {
+          "label": "winter",
+          "counts": {
+            "winter": 61
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2011-02-05T22:12Z",
+      "source_file": "CYS_2011_05_2212.txt",
       "similarity": 0.6815227270126343,
       "label": "winter",
       "is_severe": false,
@@ -126,100 +169,9 @@
       }
     },
     {
-      "datetime_utc": "2011-02-06T01:46Z",
-      "source_file": "CYS_2011_06_0146.txt",
-      "similarity": 0.6815227270126343,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 58
-          }
-        },
-        "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 56
-          }
-        },
-        "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 61
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2015-07-26T02:48Z",
-      "source_file": "CYS_2015_26_0248.txt",
-      "similarity": 0.6755018830299377,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 8,
-            "severe_wind": 5
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 21,
-            "severe_hail": 17
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 7,
-            "severe_wind": 5
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2015-07-25T20:39Z",
       "source_file": "CYS_2015_25_2039.txt",
-      "similarity": 0.6755018830299377,
+      "similarity": 0.675501823425293,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -261,6 +213,54 @@
         "6": {
           "label": "quiet",
           "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2015-07-26T02:48Z",
+      "source_file": "CYS_2015_26_0248.txt",
+      "similarity": 0.675501823425293,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 8,
+            "severe_wind": 5
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 21,
+            "severe_hail": 17
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 7,
+            "severe_wind": 5
+          }
         }
       }
     },
@@ -312,7 +312,7 @@
     {
       "datetime_utc": "2005-11-10T10:01Z",
       "source_file": "CYS_2005_10_1001.txt",
-      "similarity": 0.6549232602119446,
+      "similarity": 0.6549233198165894,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -398,7 +398,7 @@
     {
       "datetime_utc": "2004-05-09T09:59Z",
       "source_file": "CYS_2004_09_0959.txt",
-      "similarity": 0.6428290605545044,
+      "similarity": 0.6428291201591492,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -444,13 +444,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.5,
-    "mean_similarity": 0.6782989501953125,
+    "mean_similarity": 0.678298944234848,
     "n_severe": 5,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.68 below confidence floor 0.7",
     "product_id": "202604110832-KCYS-FXUS65-AFDCYS",
     "afd_time": null,
-    "updated": "2026-04-11T09:07:29.354878+00:00",
+    "updated": "2026-04-11T10:02:09.866707+00:00",
     "office_lift": 0.039123213614969066,
     "base_rate": 0.5033967863850309
   }

@@ -3,13 +3,13 @@
   "product_id": "202604110904-KSGX-FXUS66-AFDSGX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-11T09:07:29.354878+00:00",
+  "updated": "2026-04-11T10:02:09.866707+00:00",
   "query_preview": "..FOR EXTREME SOUTHWESTERN CALIFORNIA INCLUDING ORANGE...\nSAN DIEGO...WESTERN RIVERSIDE AND SOUTHWESTERN SAN BERNARDINO\nCOUNTIES...\n\nToday through tomorrow night...\n\nOnshore flow out of the southwest is becoming enhanced by troughing \nupstream which is advancing towards the region. This has allowed ",
   "analogs": [
     {
       "datetime_utc": "2013-02-05T17:30Z",
       "source_file": "SGX_2013_05_1730.txt",
-      "similarity": 0.6705539226531982,
+      "similarity": 0.670553982257843,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -53,7 +53,7 @@
     {
       "datetime_utc": "2009-07-31T16:05Z",
       "source_file": "SGX_2009_31_1605.txt",
-      "similarity": 0.6524897217750549,
+      "similarity": 0.6524897813796997,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -90,7 +90,7 @@
     {
       "datetime_utc": "2010-08-27T04:08Z",
       "source_file": "SGX_2010_27_0408.txt",
-      "similarity": 0.6371101140975952,
+      "similarity": 0.6371102333068848,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -127,30 +127,30 @@
       }
     },
     {
-      "datetime_utc": "2018-08-15T04:16Z",
-      "source_file": "SGX_2018_15_0416.txt",
-      "similarity": 0.61864173412323,
+      "datetime_utc": "2018-08-14T20:52Z",
+      "source_file": "SGX_2018_14_2052.txt",
+      "similarity": 0.6186418533325195,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 1,
             "severe_wind": 3
           }
         },
-        "1": {
+        "2": {
           "label": "tornado",
           "counts": {
             "flood": 9,
             "severe_wind": 1,
             "tornado": 1
           }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -171,30 +171,30 @@
       }
     },
     {
-      "datetime_utc": "2018-08-14T20:52Z",
-      "source_file": "SGX_2018_14_2052.txt",
-      "similarity": 0.61864173412323,
+      "datetime_utc": "2018-08-15T04:16Z",
+      "source_file": "SGX_2018_15_0416.txt",
+      "similarity": 0.6186418533325195,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 1,
             "severe_wind": 3
           }
         },
-        "2": {
+        "1": {
           "label": "tornado",
           "counts": {
             "flood": 9,
             "severe_wind": 1,
             "tornado": 1
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -217,7 +217,7 @@
     {
       "datetime_utc": "2007-02-04T05:28Z",
       "source_file": "SGX_2007_04_0528.txt",
-      "similarity": 0.6184322237968445,
+      "similarity": 0.6184322834014893,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -252,8 +252,8 @@
       }
     },
     {
-      "datetime_utc": "2004-08-26T15:55Z",
-      "source_file": "SGX_2004_26_1555.txt",
+      "datetime_utc": "2004-08-26T20:36Z",
+      "source_file": "SGX_2004_26_2036.txt",
       "similarity": 0.610682487487793,
       "label": "quiet",
       "is_severe": false,
@@ -328,7 +328,7 @@
     {
       "datetime_utc": "2008-09-05T03:57Z",
       "source_file": "SGX_2008_05_0357_1.txt",
-      "similarity": 0.6084532737731934,
+      "similarity": 0.6084533333778381,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -366,19 +366,25 @@
       }
     },
     {
-      "datetime_utc": "2016-12-01T04:42Z",
-      "source_file": "SGX_2017_01_0442_1.txt",
-      "similarity": 0.589999794960022,
-      "label": "quiet",
+      "datetime_utc": "2016-12-31T21:30Z",
+      "source_file": "SGX_2016_31_2130.txt",
+      "similarity": 0.5899998545646667,
+      "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2,
+            "winter": 1
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "winter": 7,
+            "flood": 1
+          }
         },
         "2": {
           "label": "quiet",
@@ -393,8 +399,10 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "6": {
           "label": "quiet",
@@ -406,13 +414,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.5,
-    "mean_similarity": 0.6235687494277954,
+    "mean_similarity": 0.6235688149929046,
     "n_severe": 5,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.62 below confidence floor 0.7",
     "product_id": "202604110904-KSGX-FXUS66-AFDSGX",
     "afd_time": null,
-    "updated": "2026-04-11T09:07:29.354878+00:00",
+    "updated": "2026-04-11T10:02:09.866707+00:00",
     "office_lift": 0.030517505445591453,
     "base_rate": 0.24074249455440855
   }
