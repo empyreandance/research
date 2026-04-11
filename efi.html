@@ -439,6 +439,10 @@
   <span id="meta-generated">—</span>
 </div>
 
+<div id="esat-warning" style="display:none; max-width:1400px; margin:12px auto; padding:12px 16px; background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.4); border-radius:8px; color:#eab308; font-size:0.85rem; line-height:1.5;">
+  <strong>⚠ ESAT endpoint unavailable</strong> — The Region Table values are computed from GRIB grid data as a fallback instead of pulled from the operational ESAT endpoint. Values should be close to official ESAT output but may differ slightly due to regional definition differences. CWA-clipped values in the left table are unaffected.
+</div>
+
 <div class="main">
   <div class="legend">
     <span class="legend-title">EFI Scale</span>
@@ -738,6 +742,12 @@ function updateMeta() {
   if (DATA.generated_utc) {
     const d = new Date(DATA.generated_utc);
     genEl.textContent = `Processed: ${d.toUTCString()}`;
+  }
+
+  // Show warning banner if ESAT endpoint was unavailable.
+  const warning = document.getElementById("esat-warning");
+  if (warning) {
+    warning.style.display = (DATA.esat_available === false) ? "block" : "none";
   }
 }
 

@@ -792,12 +792,16 @@ def main():
             print("no grid points in CWA")
 
     # 5. Build the output JSON.
+    # Track whether ESAT endpoint was available (affects frontend warning).
+    esat_available = len(esat_cache) > 0
     output = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "init_time": init_time,
         "steps_hours": sorted(steps),
         "source_file": grib_path.name,
         "param_names": EFI_PARAM_NAMES,
+        "esat_available": esat_available,
+        "esat_cwa_count": len(esat_cache),
         "by_cwa": cwa_results,
         "cwa_list": sorted(cwa_results.keys()),
     }
