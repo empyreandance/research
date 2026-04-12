@@ -3,7 +3,7 @@
   "product_id": "202604120845-KDTX-FXUS63-AFDDTX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-12T15:58:02.413639+00:00",
+  "updated": "2026-04-12T17:01:03.557718+00:00",
   "query_preview": "..\n\nActive stretch of weather starting today which will persist through \nmuch of the coming week. A strong upper low over the West Coast will \nslowly drift eastward over the next few days, reaching the Plains on \nWednesday. Meanwhile, a surface low develops over the Central Plains \nand moves very li",
   "analogs": [
     {
@@ -51,7 +51,7 @@
     {
       "datetime_utc": "2024-06-13T19:35Z",
       "source_file": "DTX_2024_13_1935.txt",
-      "similarity": 0.9575745463371277,
+      "similarity": 0.9575746059417725,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -98,13 +98,17 @@
       }
     },
     {
-      "datetime_utc": "2015-06-22T04:08Z",
-      "source_file": "DTX_2015_22_0408.txt",
-      "similarity": 0.8654970526695251,
+      "datetime_utc": "2015-06-21T23:33Z",
+      "source_file": "DTX_2015_21_2333.txt",
+      "similarity": 0.8654971122741699,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
           "label": "tornado",
           "counts": {
             "severe_hail": 4,
@@ -113,49 +117,41 @@
             "flood": 1
           }
         },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3
           }
         },
-        "4": {
+        "5": {
           "label": "quiet",
           "counts": {}
         },
-        "5": {
+        "6": {
           "label": "severe_wind",
           "counts": {
             "flood": 16,
             "severe_wind": 1
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2015-06-21T19:57Z",
-      "source_file": "DTX_2015_21_1957.txt",
-      "similarity": 0.8654970526695251,
+      "datetime_utc": "2015-06-22T04:08Z",
+      "source_file": "DTX_2015_22_0408.txt",
+      "similarity": 0.8654971122741699,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "tornado",
           "counts": {
             "severe_hail": 4,
@@ -164,30 +160,34 @@
             "flood": 1
           }
         },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3
           }
         },
-        "5": {
+        "4": {
           "label": "quiet",
           "counts": {}
         },
-        "6": {
+        "5": {
           "label": "severe_wind",
           "counts": {
             "flood": 16,
             "severe_wind": 1
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
@@ -274,7 +274,7 @@
     {
       "datetime_utc": "2008-08-27T11:05Z",
       "source_file": "DTX_2008_27_1105_1.txt",
-      "similarity": 0.8598955869674683,
+      "similarity": 0.8598957061767578,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -311,7 +311,7 @@
     {
       "datetime_utc": "2008-07-19T07:55Z",
       "source_file": "DTX_2008_19_0755.txt",
-      "similarity": 0.8309939503669739,
+      "similarity": 0.8309938907623291,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -357,9 +357,54 @@
       }
     },
     {
-      "datetime_utc": "2011-07-23T23:39Z",
-      "source_file": "DTX_2011_23_2339.txt",
-      "similarity": 0.809921383857727,
+      "datetime_utc": "2011-07-24T03:53Z",
+      "source_file": "DTX_2011_24_0353.txt",
+      "similarity": 0.8099213242530823,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 18,
+            "severe_wind": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 4,
+            "severe_wind": 9
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2011-07-23T19:53Z",
+      "source_file": "DTX_2011_23_1953.txt",
+      "similarity": 0.8099213242530823,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -402,57 +447,12 @@
           "counts": {}
         }
       }
-    },
-    {
-      "datetime_utc": "2011-07-24T03:53Z",
-      "source_file": "DTX_2011_24_0353.txt",
-      "similarity": 0.809921383857727,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 18,
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 4,
-            "severe_wind": 9
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
     }
   ],
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.8688305258750916,
+    "mean_similarity": 0.8688305377960205,
     "base_rate": 0.47690083996945565,
     "signal_value": 0.41919930184356935,
     "percentile": 80,
@@ -461,6 +461,6 @@
     "n_total": 10,
     "product_id": "202604120845-KDTX-FXUS63-AFDDTX",
     "afd_time": null,
-    "updated": "2026-04-12T15:58:02.413639+00:00"
+    "updated": "2026-04-12T17:01:03.557718+00:00"
   }
 }
