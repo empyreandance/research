@@ -3,13 +3,13 @@
   "product_id": "202604130049-KABR-FXUS63-AFDABR-AAB",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-13T03:57:23.947574+00:00",
+  "updated": "2026-04-13T06:31:12.337859+00:00",
   "query_preview": "..\nIssued at 236 PM CDT Sun Apr 12 2026\n\nMuch of the area seeing 30-35 mph wind gusts this afternoon, with a \nfew areas even closer to 40 mph. RH values not quite as low as \nexpected across the southwest CWA, but they are dropping through the \nmid/upper 20s percent with several more hours of heating",
   "analogs": [
     {
       "datetime_utc": "2024-01-23T19:47Z",
       "source_file": "ABR_2024_23_1947_1.txt",
-      "similarity": 0.6919513940811157,
+      "similarity": 0.6919515132904053,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -46,7 +46,7 @@
     {
       "datetime_utc": "2009-05-04T15:48Z",
       "source_file": "ABR_2009_04_1548.txt",
-      "similarity": 0.6701210737228394,
+      "similarity": 0.6701210141181946,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -125,7 +125,7 @@
     {
       "datetime_utc": "2006-09-04T14:52Z",
       "source_file": "ABR_2006_04_1452.txt",
-      "similarity": 0.6469592452049255,
+      "similarity": 0.6469591856002808,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -204,43 +204,6 @@
       }
     },
     {
-      "datetime_utc": "2015-03-09T20:40Z",
-      "source_file": "ABR_2015_09_2040.txt",
-      "similarity": 0.6265815496444702,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2015-03-10T09:09Z",
       "source_file": "ABR_2015_10_0909.txt",
       "similarity": 0.6265815496444702,
@@ -278,9 +241,46 @@
       }
     },
     {
+      "datetime_utc": "2015-03-09T20:40Z",
+      "source_file": "ABR_2015_09_2040.txt",
+      "similarity": 0.6265815496444702,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2014-12-06T21:45Z",
       "source_file": "ABR_2014_06_2145.txt",
-      "similarity": 0.6262176632881165,
+      "similarity": 0.6262177228927612,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -363,34 +363,27 @@
       }
     },
     {
-      "datetime_utc": "2007-06-12T19:44Z",
-      "source_file": "ABR_2007_12_1944.txt",
-      "similarity": 0.6139273643493652,
+      "datetime_utc": "2007-06-13T02:03Z",
+      "source_file": "ABR_2007_13_0203.txt",
+      "similarity": 0.6139274835586548,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2,
-            "flood": 14
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
         },
-        "4": {
+        "3": {
           "label": "tornado",
           "counts": {
             "severe_hail": 13,
@@ -398,7 +391,7 @@
             "flood": 1
           }
         },
-        "5": {
+        "4": {
           "label": "tornado",
           "counts": {
             "severe_wind": 29,
@@ -406,6 +399,10 @@
             "tornado": 5,
             "flood": 2
           }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -417,13 +414,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.5,
-    "mean_similarity": 0.6401066780090332,
+    "mean_similarity": 0.6401066958904267,
     "n_severe": 5,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.64 below confidence floor 0.7",
     "product_id": "202604130049-KABR-FXUS63-AFDABR-AAB",
     "afd_time": null,
-    "updated": "2026-04-13T03:57:23.947574+00:00",
+    "updated": "2026-04-13T06:31:12.337859+00:00",
     "office_lift": 0.22505237066278827,
     "base_rate": 0.4365676293372117
   }

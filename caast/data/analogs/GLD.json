@@ -3,13 +3,13 @@
   "product_id": "202604130310-KGLD-FXUS63-AFDGLD",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-13T03:57:23.947574+00:00",
+  "updated": "2026-04-13T06:31:12.337859+00:00",
   "query_preview": "/WEDNESDAY THROUGH SUNDAY/...\nIssued at 100 PM MDT Sun Apr 12 2026\n\nShortwave trough axis will be traversing the area on Wednesday \nwith widely scattered light rain showers in the wraparound. \nDespite the slightly cooler temperatures behind the associated \ncold front, northwest winds gusting 20-30 m",
   "analogs": [
     {
       "datetime_utc": "2004-06-06T03:20Z",
       "source_file": "GLD_2004_06_0320.txt",
-      "similarity": 0.9268469214439392,
+      "similarity": 0.9268466830253601,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -60,7 +60,7 @@
     {
       "datetime_utc": "2006-06-29T09:09Z",
       "source_file": "GLD_2006_29_0909.txt",
-      "similarity": 0.9080716371536255,
+      "similarity": 0.9080711007118225,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -107,9 +107,9 @@
       }
     },
     {
-      "datetime_utc": "2017-07-20T11:48Z",
-      "source_file": "GLD_2017_20_1148.txt",
-      "similarity": 0.9045723676681519,
+      "datetime_utc": "2017-07-20T10:15Z",
+      "source_file": "GLD_2017_20_1015.txt",
+      "similarity": 0.9045716524124146,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -154,7 +154,7 @@
     {
       "datetime_utc": "2007-09-19T08:46Z",
       "source_file": "GLD_2007_19_0846.txt",
-      "similarity": 0.8918854594230652,
+      "similarity": 0.8918848037719727,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -194,7 +194,7 @@
     {
       "datetime_utc": "2004-12-02T09:41Z",
       "source_file": "GLD_2004_02_0941.txt",
-      "similarity": 0.889610230922699,
+      "similarity": 0.8896099328994751,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -231,7 +231,7 @@
     {
       "datetime_utc": "2005-09-05T07:26Z",
       "source_file": "GLD_2005_05_0726.txt",
-      "similarity": 0.8894391655921936,
+      "similarity": 0.8894384503364563,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -279,7 +279,7 @@
     {
       "datetime_utc": "2007-08-10T16:40Z",
       "source_file": "GLD_2007_10_1640.txt",
-      "similarity": 0.8810232877731323,
+      "similarity": 0.8810224533081055,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -320,7 +320,7 @@
     {
       "datetime_utc": "2007-06-20T08:47Z",
       "source_file": "GLD_2007_20_0847.txt",
-      "similarity": 0.8780453205108643,
+      "similarity": 0.8780444860458374,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -371,7 +371,7 @@
     {
       "datetime_utc": "2004-07-09T20:35Z",
       "source_file": "GLD_2004_09_2035.txt",
-      "similarity": 0.8776030540466309,
+      "similarity": 0.8776021003723145,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -412,17 +412,15 @@
       }
     },
     {
-      "datetime_utc": "2008-04-17T20:00Z",
-      "source_file": "GLD_2008_17_2000.txt",
-      "similarity": 0.8739795684814453,
-      "label": "severe_wind",
+      "datetime_utc": "2008-04-18T06:34Z",
+      "source_file": "GLD_2008_18_0634.txt",
+      "similarity": 0.8739787936210632,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -441,14 +439,18 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 39,
             "severe_wind": 1
+          }
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 40,
+            "severe_wind": 7,
+            "tornado": 3
           }
         }
       }
@@ -457,7 +459,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.8921077013015747,
+    "mean_similarity": 0.8921070456504822,
     "base_rate": 0.5554927387724815,
     "signal_value": 0.3394721034592417,
     "percentile": 60,
@@ -466,6 +468,6 @@
     "n_total": 10,
     "product_id": "202604130310-KGLD-FXUS63-AFDGLD",
     "afd_time": null,
-    "updated": "2026-04-13T03:57:23.947574+00:00"
+    "updated": "2026-04-13T06:31:12.337859+00:00"
   }
 }
