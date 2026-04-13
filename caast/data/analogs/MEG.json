@@ -3,13 +3,13 @@
   "product_id": "202604131724-KMEG-FXUS64-AFDMEG",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-13T17:24:13.275071+00:00",
+  "updated": "2026-04-13T19:43:46.237023+00:00",
   "query_preview": "..\n(This evening through next Sunday)\nIssued at 1223 PM CDT Mon Apr 13 2026\n\nA fairly static upper air pattern will prevail over the CONUS\nthis week, characterized by an anonymously strong ridge over the\nGulf and the Southeast, and negative upper height anomalies over\nthe intermountain west. Through",
   "analogs": [
     {
       "datetime_utc": "2013-12-18T16:26Z",
       "source_file": "MEG_2013_18_1626.txt",
-      "similarity": 0.9825539588928223,
+      "similarity": 0.9825538396835327,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -53,7 +53,7 @@
     {
       "datetime_utc": "2018-06-30T23:54Z",
       "source_file": "MEG_2018_30_2354.txt",
-      "similarity": 0.9672538042068481,
+      "similarity": 0.9672538638114929,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,8 +102,8 @@
       }
     },
     {
-      "datetime_utc": "2013-04-16T10:57Z",
-      "source_file": "MEG_2013_16_1057.txt",
+      "datetime_utc": "2013-04-16T17:43Z",
+      "source_file": "MEG_2013_16_1743.txt",
       "similarity": 0.9650079607963562,
       "label": "tornado",
       "is_severe": true,
@@ -149,7 +149,7 @@
     {
       "datetime_utc": "2009-01-27T18:16Z",
       "source_file": "MEG_2009_27_1816.txt",
-      "similarity": 0.9597448110580444,
+      "similarity": 0.9597448706626892,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -188,8 +188,8 @@
       }
     },
     {
-      "datetime_utc": "2011-06-23T14:47Z",
-      "source_file": "MEG_2011_23_1447.txt",
+      "datetime_utc": "2011-06-23T18:04Z",
+      "source_file": "MEG_2011_23_1804.txt",
       "similarity": 0.951587975025177,
       "label": "severe_wind",
       "is_severe": true,
@@ -293,7 +293,7 @@
     {
       "datetime_utc": "2018-08-08T15:22Z",
       "source_file": "MEG_2018_08_1522.txt",
-      "similarity": 0.9473679661750793,
+      "similarity": 0.9473680257797241,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -340,7 +340,7 @@
     {
       "datetime_utc": "2008-09-01T10:07Z",
       "source_file": "MEG_2008_01_1007.txt",
-      "similarity": 0.9427863359451294,
+      "similarity": 0.942786455154419,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -383,51 +383,9 @@
       }
     },
     {
-      "datetime_utc": "2007-11-07T21:30Z",
-      "source_file": "MEG_2007_07_2130.txt",
-      "similarity": 0.9331315159797668,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 6,
-            "severe_wind": 4
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2007-11-08T08:19Z",
       "source_file": "MEG_2007_08_0819.txt",
-      "similarity": 0.9331315159797668,
+      "similarity": 0.9331315755844116,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -468,12 +426,54 @@
           }
         }
       }
+    },
+    {
+      "datetime_utc": "2007-11-07T21:30Z",
+      "source_file": "MEG_2007_07_2130.txt",
+      "similarity": 0.9331315755844116,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 4
+          }
+        }
+      }
     }
   ],
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.9533353805541992,
+    "mean_similarity": 0.9533354103565216,
     "base_rate": 0.6625872058649639,
     "signal_value": 0.23002246659571957,
     "percentile": 70,
@@ -482,6 +482,6 @@
     "n_total": 10,
     "product_id": "202604131724-KMEG-FXUS64-AFDMEG",
     "afd_time": null,
-    "updated": "2026-04-13T17:24:13.275071+00:00"
+    "updated": "2026-04-13T19:43:46.237023+00:00"
   }
 }
