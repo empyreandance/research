@@ -3,13 +3,13 @@
   "product_id": "202604131109-KPBZ-FXUS61-AFDPBZ",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-13T15:50:25.111703+00:00",
+  "updated": "2026-04-13T17:24:13.275071+00:00",
   "query_preview": "..\nKEY MESSAGE 1... \nRidging aloft continues to dominate the headlines, as a 500mb \nridge near 2 standard deviations above normal for this time of \nyear will spur high temperatures nearly 3 standard deviations \nabove normal this week. The core of the ridge anchored across \nthe Southeast and eastern ",
   "analogs": [
     {
       "datetime_utc": "2004-05-20T19:00Z",
       "source_file": "PBZ_2004_20_1900.txt",
-      "similarity": 0.9096581935882568,
+      "similarity": 0.9096583127975464,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -60,7 +60,7 @@
     {
       "datetime_utc": "2015-08-08T02:22Z",
       "source_file": "PBZ_2015_08_0222.txt",
-      "similarity": 0.8320367336273193,
+      "similarity": 0.832036554813385,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -100,7 +100,7 @@
     {
       "datetime_utc": "2004-04-12T07:55Z",
       "source_file": "PBZ_2004_12_0755.txt",
-      "similarity": 0.7074397206306458,
+      "similarity": 0.7074394226074219,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -135,9 +135,9 @@
       }
     },
     {
-      "datetime_utc": "2004-07-20T08:24Z",
-      "source_file": "PBZ_2004_20_0824.txt",
-      "similarity": 0.662861704826355,
+      "datetime_utc": "2004-07-20T15:20Z",
+      "source_file": "PBZ_2004_20_1520.txt",
+      "similarity": 0.6628615260124207,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -172,9 +172,9 @@
       }
     },
     {
-      "datetime_utc": "2016-09-08T11:34Z",
-      "source_file": "PBZ_2016_08_1134.txt",
-      "similarity": 0.6383445858955383,
+      "datetime_utc": "2016-09-08T17:35Z",
+      "source_file": "PBZ_2016_08_1735.txt",
+      "similarity": 0.6383444666862488,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -214,9 +214,9 @@
       }
     },
     {
-      "datetime_utc": "2025-08-07T16:28Z",
-      "source_file": "PBZ_2025_07_1628.txt",
-      "similarity": 0.6381493806838989,
+      "datetime_utc": "2025-08-07T17:48Z",
+      "source_file": "PBZ_2025_07_1748.txt",
+      "similarity": 0.638149082660675,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -259,7 +259,7 @@
     {
       "datetime_utc": "2025-08-08T04:35Z",
       "source_file": "PBZ_2025_08_0435.txt",
-      "similarity": 0.6381493806838989,
+      "similarity": 0.638149082660675,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -302,7 +302,7 @@
     {
       "datetime_utc": "2004-03-28T20:26Z",
       "source_file": "PBZ_2004_28_2026.txt",
-      "similarity": 0.6362875699996948,
+      "similarity": 0.636287271976471,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -339,7 +339,7 @@
     {
       "datetime_utc": "2007-03-24T23:20Z",
       "source_file": "PBZ_2007_24_2320.txt",
-      "similarity": 0.6354514360427856,
+      "similarity": 0.6354513168334961,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -377,44 +377,48 @@
       }
     },
     {
-      "datetime_utc": "2016-06-29T01:33Z",
-      "source_file": "PBZ_2016_29_0133.txt",
-      "similarity": 0.6209133863449097,
+      "datetime_utc": "2016-06-28T23:51Z",
+      "source_file": "PBZ_2016_28_2351.txt",
+      "similarity": 0.6209131479263306,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 3,
+            "flood": 1
+          }
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 11,
             "flood": 3
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
@@ -422,13 +426,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.6919292092323304,
+    "mean_similarity": 0.691929018497467,
     "n_severe": 7,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.69 below confidence floor 0.7",
     "product_id": "202604131109-KPBZ-FXUS61-AFDPBZ",
     "afd_time": null,
-    "updated": "2026-04-13T15:50:25.111703+00:00",
+    "updated": "2026-04-13T17:24:13.275071+00:00",
     "office_lift": 0.005100305898671054,
     "base_rate": 0.544319694101329
   }
