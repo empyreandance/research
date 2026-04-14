@@ -1,15 +1,15 @@
 {
   "office": "MHX",
-  "product_id": "202604141037-KMHX-FXUS62-AFDMHX",
+  "product_id": "202604141750-KMHX-FXUS62-AFDMHX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-14T17:39:49.338950+00:00",
+  "updated": "2026-04-14T19:45:38.789411+00:00",
   "query_preview": "..\nKEY MESSAGE 1...Persistent upper level ridging and a warm \nsouthwest low-level flow regime will continue to strongly favor \nwell above normal temperatures through the remainder of the \nweek. Each day will carry at least some potential for record-\ntying or record-breaking temperatures. For a littl",
   "analogs": [
     {
       "datetime_utc": "2011-08-26T09:00Z",
       "source_file": "MHX_2011_26_0900.txt",
-      "similarity": 0.8841701745986938,
+      "similarity": 0.8867632746696472,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -56,7 +56,7 @@
     {
       "datetime_utc": "2011-06-25T08:16Z",
       "source_file": "MHX_2011_25_0816.txt",
-      "similarity": 0.8183358907699585,
+      "similarity": 0.8301938772201538,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,7 +102,7 @@
     {
       "datetime_utc": "2006-03-15T00:43Z",
       "source_file": "MHX_2006_15_0043.txt",
-      "similarity": 0.7251856923103333,
+      "similarity": 0.7362708449363708,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -139,7 +139,7 @@
     {
       "datetime_utc": "2011-04-22T20:19Z",
       "source_file": "MHX_2011_22_2019.txt",
-      "similarity": 0.6442297697067261,
+      "similarity": 0.64832603931427,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -183,7 +183,7 @@
     {
       "datetime_utc": "2004-07-29T00:26Z",
       "source_file": "MHX_2004_29_0026.txt",
-      "similarity": 0.6362225413322449,
+      "similarity": 0.6324255466461182,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -220,7 +220,7 @@
     {
       "datetime_utc": "2004-02-02T08:15Z",
       "source_file": "MHX_2004_02_0815.txt",
-      "similarity": 0.6278416514396667,
+      "similarity": 0.6283813714981079,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -257,7 +257,7 @@
     {
       "datetime_utc": "2006-06-03T00:09Z",
       "source_file": "MHX_2006_03_0009.txt",
-      "similarity": 0.6188873648643494,
+      "similarity": 0.6217782497406006,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -305,9 +305,9 @@
       }
     },
     {
-      "datetime_utc": "2006-10-16T19:44Z",
-      "source_file": "MHX_2006_16_1944.txt",
-      "similarity": 0.618855357170105,
+      "datetime_utc": "2006-10-16T19:59Z",
+      "source_file": "MHX_2006_16_1959.txt",
+      "similarity": 0.6089681386947632,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -344,7 +344,7 @@
     {
       "datetime_utc": "2004-06-18T14:21Z",
       "source_file": "MHX_2004_18_1421_1.txt",
-      "similarity": 0.6101992130279541,
+      "similarity": 0.6074882745742798,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -379,27 +379,35 @@
       }
     },
     {
-      "datetime_utc": "2004-03-04T19:34Z",
-      "source_file": "MHX_2004_04_1934_1.txt",
-      "similarity": 0.6038974523544312,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2016-06-02T20:38Z",
+      "source_file": "MHX_2016_02_2038.txt",
+      "similarity": 0.6051377058029175,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "flood": 3
+          }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 22,
+            "severe_hail": 7
+          }
         },
         "4": {
           "label": "quiet",
@@ -418,14 +426,14 @@
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.4,
-    "mean_similarity": 0.6787825107574463,
-    "n_severe": 4,
+    "severe_fraction": 0.5,
+    "mean_similarity": 0.680573332309723,
+    "n_severe": 5,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.68 below confidence floor 0.7",
-    "product_id": "202604141037-KMHX-FXUS62-AFDMHX",
+    "product_id": "202604141750-KMHX-FXUS62-AFDMHX",
     "afd_time": null,
-    "updated": "2026-04-14T17:39:49.338950+00:00",
+    "updated": "2026-04-14T19:45:38.789411+00:00",
     "office_lift": -0.11314055747180013,
     "base_rate": 0.5152605574718001
   }

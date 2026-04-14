@@ -1,15 +1,15 @@
 {
   "office": "MEG",
-  "product_id": "202604141101-KMEG-FXUS64-AFDMEG",
+  "product_id": "202604141756-KMEG-FXUS64-AFDMEG",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-14T17:39:49.338950+00:00",
-  "query_preview": "..\n(Tonight through next Monday)\nIssued at 1058 PM CDT Mon Apr 13 2026\n\nDry conditions are anticipated Tuesday and Wednesday as upper\nlevel ridging continues to build into the Mid-South. Above normal\ntemperatures will be in place both days as highs soar into the\nlow and mid 80s. For context, our nor",
+  "updated": "2026-04-14T19:45:38.789411+00:00",
+  "query_preview": "..\n(This evening through next Monday)\nIssued at 1255 PM CDT Tue Apr 14 2026\n\nThe primary weather story through Friday remains the well-above\nnormal temperatures. The near-record warmth is courtesy of an\nanonymously strong upper level ridge extending from the Gulf\nthrough the Southeast. Over the Mids",
   "analogs": [
     {
       "datetime_utc": "2013-12-18T16:26Z",
       "source_file": "MEG_2013_18_1626.txt",
-      "similarity": 0.9746918678283691,
+      "similarity": 0.9487918615341187,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -51,9 +51,95 @@
       }
     },
     {
+      "datetime_utc": "2009-01-27T18:16Z",
+      "source_file": "MEG_2009_27_1816.txt",
+      "similarity": 0.9473058581352234,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 59
+          }
+        },
+        "1": {
+          "label": "winter",
+          "counts": {
+            "winter": 31
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2013-04-16T17:43Z",
+      "source_file": "MEG_2013_16_1743.txt",
+      "similarity": 0.9431933164596558,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 6
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 10,
+            "tornado": 9,
+            "severe_hail": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2018-06-30T23:54Z",
       "source_file": "MEG_2018_30_2354.txt",
-      "similarity": 0.9626107215881348,
+      "similarity": 0.9350138306617737,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,72 +188,29 @@
       }
     },
     {
-      "datetime_utc": "2013-04-16T17:43Z",
-      "source_file": "MEG_2013_16_1743.txt",
-      "similarity": 0.9614429473876953,
+      "datetime_utc": "2018-03-19T19:33Z",
+      "source_file": "MEG_2018_19_1933.txt",
+      "similarity": 0.9208360314369202,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 6
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "2": {
           "label": "tornado",
           "counts": {
-            "severe_wind": 10,
-            "tornado": 9,
-            "severe_hail": 1
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2009-01-27T18:16Z",
-      "source_file": "MEG_2009_27_1816.txt",
-      "similarity": 0.9566037058830261,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 59
+            "severe_hail": 31,
+            "tornado": 5,
+            "severe_wind": 21
           }
         },
         "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 31
-          }
-        },
-        "2": {
           "label": "quiet",
           "counts": {}
+        },
+        "2": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         },
         "3": {
           "label": "quiet",
@@ -178,19 +221,24 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 6
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
         }
       }
     },
     {
       "datetime_utc": "2011-06-23T14:47Z",
       "source_file": "MEG_2011_23_1447.txt",
-      "similarity": 0.9463260769844055,
+      "similarity": 0.91853266954422,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -243,29 +291,68 @@
       }
     },
     {
-      "datetime_utc": "2018-03-19T19:33Z",
-      "source_file": "MEG_2018_19_1933.txt",
-      "similarity": 0.9411529302597046,
-      "label": "tornado",
+      "datetime_utc": "2007-11-08T08:19Z",
+      "source_file": "MEG_2007_08_0819.txt",
+      "similarity": 0.9077107906341553,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 31,
-            "tornado": 5,
-            "severe_wind": 21
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "winter",
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
           "counts": {
-            "winter": 1
+            "severe_hail": 1
           }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 4
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 25,
+            "severe_wind": 15
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2007-11-07T21:30Z",
+      "source_file": "MEG_2007_07_2130.txt",
+      "similarity": 0.9077107906341553,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -276,16 +363,16 @@
           "counts": {}
         },
         "5": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_hail": 5,
-            "severe_wind": 6
+            "severe_hail": 1
           }
         },
         "6": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 2
+            "severe_hail": 6,
+            "severe_wind": 4
           }
         }
       }
@@ -293,7 +380,7 @@
     {
       "datetime_utc": "2018-08-08T15:22Z",
       "source_file": "MEG_2018_08_1522.txt",
-      "similarity": 0.9356862306594849,
+      "similarity": 0.9061592221260071,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -338,64 +425,24 @@
       }
     },
     {
-      "datetime_utc": "2008-09-01T10:07Z",
-      "source_file": "MEG_2008_01_1007.txt",
-      "similarity": 0.9300209283828735,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "flood": 2,
-            "tornado": 2
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "flood": 8,
-            "tornado": 2
-          }
-        },
-        "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2007-11-07T21:30Z",
-      "source_file": "MEG_2007_07_2130.txt",
-      "similarity": 0.926589846611023,
+      "datetime_utc": "2025-08-13T11:43Z",
+      "source_file": "MEG_2025_13_1143.txt",
+      "similarity": 0.9014458656311035,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 1
+          }
         },
         "2": {
           "label": "quiet",
@@ -406,65 +453,22 @@
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 6,
             "severe_wind": 4
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2007-11-08T08:19Z",
-      "source_file": "MEG_2007_08_0819.txt",
-      "similarity": 0.926589846611023,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
           }
         },
         "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 6,
-            "severe_wind": 4
+            "severe_wind": 3
           }
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 25,
-            "severe_wind": 15
+            "severe_wind": 32,
+            "severe_hail": 1
           }
         }
       }
@@ -473,15 +477,15 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.946171510219574,
+    "mean_similarity": 0.9236700236797333,
     "base_rate": 0.6625872058649639,
     "signal_value": 0.23002246659571957,
     "percentile": 70,
     "office_lift": -0.026927205864963777,
     "n_severe": 9,
     "n_total": 10,
-    "product_id": "202604141101-KMEG-FXUS64-AFDMEG",
+    "product_id": "202604141756-KMEG-FXUS64-AFDMEG",
     "afd_time": null,
-    "updated": "2026-04-14T17:39:49.338950+00:00"
+    "updated": "2026-04-14T19:45:38.789411+00:00"
   }
 }
