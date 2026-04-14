@@ -3,12 +3,12 @@
   "product_id": "202604140544-KGJT-FXUS65-AFDGJT",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-14T08:10:09.924434+00:00",
+  "updated": "2026-04-14T09:54:27.976859+00:00",
   "query_preview": "..\nIssued at 1105 PM MDT Mon Apr 13 2026\n\nModels are in good agreement with each other and with satellite \nimagery for the most part. One notable difference is that the \nsatellite imagery shows the shortwave over southeastern Idaho to be \ndeeper, down into the H500 and even H700 levels, and a more w",
   "analogs": [
     {
-      "datetime_utc": "2021-08-10T18:05Z",
-      "source_file": "GJT_2021_10_1805.txt",
+      "datetime_utc": "2021-08-10T11:24Z",
+      "source_file": "GJT_2021_10_1124.txt",
       "similarity": 0.7933269739151001,
       "label": "severe_wind",
       "is_severe": true,
@@ -46,6 +46,53 @@
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-04-09T23:35Z",
+      "source_file": "GJT_2022_09_2335.txt",
+      "similarity": 0.647060215473175,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "winter",
+          "counts": {
+            "winter": 47
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "winter",
+          "counts": {
+            "winter": 90
+          }
+        },
+        "4": {
+          "label": "winter",
+          "counts": {
+            "winter": 44
+          }
+        },
+        "5": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
+        },
+        "6": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
           }
         }
       }
@@ -98,53 +145,6 @@
       }
     },
     {
-      "datetime_utc": "2022-04-09T23:35Z",
-      "source_file": "GJT_2022_09_2335.txt",
-      "similarity": 0.647060215473175,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 47
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 90
-          }
-        },
-        "4": {
-          "label": "winter",
-          "counts": {
-            "winter": 44
-          }
-        },
-        "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2017-12-13T17:51Z",
       "source_file": "GJT_2017_13_1751.txt",
       "similarity": 0.6300045251846313,
@@ -188,7 +188,7 @@
     {
       "datetime_utc": "2020-04-01T09:00Z",
       "source_file": "GJT_2020_01_0900.txt",
-      "similarity": 0.6156882047653198,
+      "similarity": 0.6156882643699646,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -425,13 +425,13 @@
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.1,
-    "mean_similarity": 0.6318879127502441,
+    "mean_similarity": 0.6318879187107086,
     "n_severe": 1,
     "n_total": 10,
     "reason": "top-10 mean similarity 0.63 below confidence floor 0.7",
     "product_id": "202604140544-KGJT-FXUS65-AFDGJT",
     "afd_time": null,
-    "updated": "2026-04-14T08:10:09.924434+00:00",
+    "updated": "2026-04-14T09:54:27.976859+00:00",
     "office_lift": -0.06294983322503789,
     "base_rate": 0.4838098332250379
   }
