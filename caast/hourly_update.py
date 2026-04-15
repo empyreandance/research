@@ -642,6 +642,12 @@ def main():
             log(f"  No usable section in {latest_afd['product_id']}")
             continue
 
+        # Skip non-operational offices (insufficient model skill)
+        if office_metadata and office in office_metadata:
+            if not office_metadata[office].get("operational", True):
+                log(f"  Skipping {office}: operational=False ({office_metadata[office].get('block_reason', 'low skill')})")
+                continue
+
         # Embed
         query_emb = model.encode(long_term[:MAX_TEXT_LEN], convert_to_numpy=True)
 
@@ -672,12 +678,20 @@ def main():
             "afd_time": latest_afd["valid"],
             "section_type": section_type,
             "updated": now.isoformat(),
-            "query_preview": long_term[:300],
+            "query_preview": long_term[:5000],
             "analogs": analogs,
             "signal": signal,
         }
         with open(ANALOGS_DIR / f"{office}.json", "w") as f:
             json.dump(analog_record, f, indent=2)
+
+    # Remove signals for non-operational offices
+    if office_metadata:
+        blocked = [o for o in list(signals.keys()) if office_metadata.get(o, {}).get("operational", True) is False]
+        for o in blocked:
+            del signals[o]
+        if blocked:
+            log(f"Removed {len(blocked)} blocked offices from signals.json")
 
     # Write combined signals file
     SIGNALS_FILE.parent.mkdir(parents=True, exist_ok=True)
