@@ -2,7 +2,7 @@
   "ABR": {
     "level": "HIGH",
     "severe_fraction": 0.83,
-    "mean_similarity": 0.9372759467363357,
+    "mean_similarity": 0.9372760027647018,
     "base_rate": 0.4365676293372117,
     "signal_value": 0.32999999999999996,
     "percentile": null,
@@ -13,12 +13,12 @@
     "n_total_signal": 100,
     "product_id": "202604150604-KABR-FXUS63-AFDABR",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "APX": {
     "level": "HIGH",
     "severe_fraction": 0.83,
-    "mean_similarity": 0.974922178387642,
+    "mean_similarity": 0.9749222034215927,
     "base_rate": 0.40442272158311976,
     "signal_value": 0.32999999999999996,
     "percentile": null,
@@ -29,12 +29,12 @@
     "n_total_signal": 100,
     "product_id": "202604150525-KAPX-FXUS63-AFDAPX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ARX": {
     "level": "HIGH",
     "severe_fraction": 0.76,
-    "mean_similarity": 0.8607240605354309,
+    "mean_similarity": 0.8607240283489227,
     "base_rate": 0.5379961522883758,
     "signal_value": 0.26,
     "percentile": null,
@@ -43,30 +43,30 @@
     "n_total": 10,
     "n_severe_signal": 76,
     "n_total_signal": 100,
-    "product_id": "202604150613-KARX-FXUS63-AFDARX",
+    "product_id": "202604150644-KARX-FXUS63-AFDARX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BIS": {
-    "level": "LOW",
-    "severe_fraction": 0.15,
-    "mean_similarity": 0.944065163731575,
+    "level": "HIGH",
+    "severe_fraction": 0.82,
+    "mean_similarity": 0.9605057156085968,
     "base_rate": 0.4111681812195443,
-    "signal_value": -0.35,
+    "signal_value": 0.31999999999999995,
     "percentile": null,
     "office_lift": 0.33769181878045557,
-    "n_severe": 1,
+    "n_severe": 6,
     "n_total": 10,
-    "n_severe_signal": 15,
+    "n_severe_signal": 82,
     "n_total_signal": 100,
-    "product_id": "202604150546-KBIS-FXUS63-AFDBIS",
+    "product_id": "202604150806-KBIS-FXUS63-AFDBIS",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CHS": {
     "level": "HIGH",
     "severe_fraction": 0.69,
-    "mean_similarity": 0.9212403726577759,
+    "mean_similarity": 0.9212402868270874,
     "base_rate": 0.6555945188241934,
     "signal_value": 0.18999999999999995,
     "percentile": null,
@@ -77,12 +77,12 @@
     "n_total_signal": 100,
     "product_id": "202604150611-KCHS-FXUS62-AFDCHS",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CTP": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9635854059457779,
+    "mean_similarity": 0.9635853701829911,
     "base_rate": 0.5775495304987035,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -93,12 +93,12 @@
     "n_total_signal": 100,
     "product_id": "202604150535-KCTP-FXUS61-AFDCTP",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CYS": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9555494314432145,
+    "mean_similarity": 0.9555496060848236,
     "base_rate": 0.5033967863850309,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -109,55 +109,57 @@
     "n_total_signal": 100,
     "product_id": "202604150458-KCYS-FXUS65-AFDCYS",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "DVN": {
-    "level": "LOW",
-    "severe_fraction": 0.7,
-    "mean_similarity": 0.8355161607265472,
-    "base_rate": 0.5868920074442936,
-    "signal_value": 0.1108193752829334,
-    "percentile": 50,
-    "office_lift": 0.1965279925557064,
-    "n_severe": 7,
-    "n_total": 10,
-    "product_id": "202604141842-KDVN-FXUS63-AFDDVN",
+    "level": "INSUFFICIENT_MATCH",
+    "severe_fraction": 0.65,
+    "mean_similarity": 0.6204871827363968,
+    "n_severe": 65,
+    "n_total": 100,
+    "reason": "top-100 mean similarity 0.62 below confidence floor 0.7",
+    "product_id": "202604150627-KDVN-FXUS63-AFDDVN",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00",
+    "office_lift": 0.1965279925557064,
+    "base_rate": 0.5868920074442936
   },
   "FFC": {
     "level": "HIGH",
-    "severe_fraction": 0.89,
-    "mean_similarity": 0.9760991597175598,
+    "severe_fraction": 0.95,
+    "mean_similarity": 0.97283387362957,
     "base_rate": 0.7005541628183137,
-    "signal_value": 0.39,
+    "signal_value": 0.44999999999999996,
     "percentile": null,
     "office_lift": 0.058685837181686296,
-    "n_severe": 9,
+    "n_severe": 7,
     "n_total": 10,
-    "n_severe_signal": 89,
+    "n_severe_signal": 95,
     "n_total_signal": 100,
-    "product_id": "202604150527-KFFC-FXUS62-AFDFFC",
+    "product_id": "202604150717-KFFC-FXUS62-AFDFFC",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GYX": {
-    "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.1,
-    "mean_similarity": 0.6726865291595459,
-    "n_severe": 1,
-    "n_total": 10,
-    "reason": "top-10 mean similarity 0.67 below confidence floor 0.7",
-    "product_id": "202604141857-KGYX-FXUS61-AFDGYX",
-    "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00",
+    "level": "HIGH",
+    "severe_fraction": 0.97,
+    "mean_similarity": 0.9734966427087783,
+    "base_rate": 0.3830890791913128,
+    "signal_value": 0.47,
+    "percentile": null,
     "office_lift": 0.22345092080868717,
-    "base_rate": 0.3830890791913128
+    "n_severe": 9,
+    "n_total": 10,
+    "n_severe_signal": 97,
+    "n_total_signal": 100,
+    "product_id": "202604150629-KGYX-FXUS61-AFDGYX",
+    "afd_time": null,
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "HUN": {
     "level": "HIGH",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.9788199478387832,
+    "mean_similarity": 0.9788200080394744,
     "base_rate": 0.61129504342402,
     "signal_value": 0.4,
     "percentile": null,
@@ -168,26 +170,28 @@
     "n_total_signal": 100,
     "product_id": "202604150527-KHUN-FXUS64-AFDHUN",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ILM": {
-    "level": "LOW",
-    "severe_fraction": 0.4,
-    "mean_similarity": 0.9873336851596832,
+    "level": "HIGH",
+    "severe_fraction": 0.55,
+    "mean_similarity": 0.975050647854805,
     "base_rate": 0.5976320547839803,
-    "signal_value": -0.2020755588042934,
-    "percentile": 30,
+    "signal_value": 0.050000000000000044,
+    "percentile": null,
     "office_lift": 0.06528794521601977,
-    "n_severe": 4,
+    "n_severe": 6,
     "n_total": 10,
-    "product_id": "202604142130-KILM-FXUS62-AFDILM",
+    "n_severe_signal": 55,
+    "n_total_signal": 100,
+    "product_id": "202604150645-KILM-FXUS62-AFDILM",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "IND": {
     "level": "HIGH",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9759765619039535,
+    "mean_similarity": 0.9723877292871476,
     "base_rate": 0.5972225989313515,
     "signal_value": 0.48,
     "percentile": null,
@@ -196,14 +200,14 @@
     "n_total": 10,
     "n_severe_signal": 98,
     "n_total_signal": 100,
-    "product_id": "202604150550-KIND-FXUS63-AFDIND",
+    "product_id": "202604150719-KIND-FXUS63-AFDIND",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "JAN": {
     "level": "HIGH",
     "severe_fraction": 0.89,
-    "mean_similarity": 0.9603030318021775,
+    "mean_similarity": 0.9603031349182128,
     "base_rate": 0.6949098167819205,
     "signal_value": 0.39,
     "percentile": null,
@@ -212,9 +216,9 @@
     "n_total": 10,
     "n_severe_signal": 89,
     "n_total_signal": 100,
-    "product_id": "202604150018-KJAN-FXUS64-AFDJAN",
+    "product_id": "202604150630-KJAN-FXUS64-AFDJAN",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LIX": {
     "level": "LOW",
@@ -232,40 +236,40 @@
   },
   "LMK": {
     "level": "HIGH",
-    "severe_fraction": 0.85,
-    "mean_similarity": 0.8817305701971054,
+    "severe_fraction": 0.73,
+    "mean_similarity": 0.7692528474330902,
     "base_rate": 0.6153417439327152,
-    "signal_value": 0.35,
+    "signal_value": 0.22999999999999998,
     "percentile": null,
     "office_lift": 0.15383825606728474,
     "n_severe": 8,
     "n_total": 10,
-    "n_severe_signal": 85,
+    "n_severe_signal": 73,
     "n_total_signal": 100,
-    "product_id": "202604150528-KLMK-FXUS63-AFDLMK",
+    "product_id": "202604150749-KLMK-FXUS63-AFDLMK",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LWX": {
     "level": "HIGH",
-    "severe_fraction": 0.93,
-    "mean_similarity": 0.9677384334802628,
+    "severe_fraction": 0.75,
+    "mean_similarity": 0.9447595083713531,
     "base_rate": 0.592774516072778,
-    "signal_value": 0.43000000000000005,
+    "signal_value": 0.25,
     "percentile": null,
     "office_lift": 0.12912548392722212,
-    "n_severe": 10,
+    "n_severe": 8,
     "n_total": 10,
-    "n_severe_signal": 93,
+    "n_severe_signal": 75,
     "n_total_signal": 100,
-    "product_id": "202604150101-KLWX-FXUS61-AFDLWX",
+    "product_id": "202604150755-KLWX-FXUS61-AFDLWX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MHX": {
     "level": "HIGH",
     "severe_fraction": 0.46,
-    "mean_similarity": 0.8828321152925491,
+    "mean_similarity": 0.8828320389986039,
     "base_rate": 0.5152605574718001,
     "signal_value": -0.03999999999999998,
     "percentile": null,
@@ -276,12 +280,12 @@
     "n_total_signal": 100,
     "product_id": "202604150611-KMHX-FXUS62-AFDMHX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MKX": {
     "level": "HIGH",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9567915749549866,
+    "mean_similarity": 0.9567919433116913,
     "base_rate": 0.524006908462867,
     "signal_value": 0.45999999999999996,
     "percentile": null,
@@ -292,12 +296,12 @@
     "n_total_signal": 100,
     "product_id": "202604150301-KMKX-FXUS63-AFDMKX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MPX": {
     "level": "HIGH",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9770064896345139,
+    "mean_similarity": 0.9770064914226532,
     "base_rate": 0.5022588428564094,
     "signal_value": 0.45999999999999996,
     "percentile": null,
@@ -308,12 +312,12 @@
     "n_total_signal": 100,
     "product_id": "202604150611-KMPX-FXUS63-AFDMPX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "OHX": {
     "level": "HIGH",
     "severe_fraction": 0.83,
-    "mean_similarity": 0.9812532866001129,
+    "mean_similarity": 0.981253347992897,
     "base_rate": 0.6266581507320429,
     "signal_value": 0.32999999999999996,
     "percentile": null,
@@ -324,60 +328,60 @@
     "n_total_signal": 100,
     "product_id": "202604150458-KOHX-FXUS64-AFDOHX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PHI": {
     "level": "HIGH",
-    "severe_fraction": 0.94,
-    "mean_similarity": 0.9553453713655472,
+    "severe_fraction": 0.87,
+    "mean_similarity": 0.9767792493104934,
     "base_rate": 0.5410282477670467,
-    "signal_value": 0.43999999999999995,
+    "signal_value": 0.37,
     "percentile": null,
     "office_lift": 0.1564717522329533,
     "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 94,
+    "n_severe_signal": 87,
     "n_total_signal": 100,
-    "product_id": "202604150508-KPHI-FXUS61-AFDPHI",
+    "product_id": "202604150640-KPHI-FXUS61-AFDPHI",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "RAH": {
     "level": "HIGH",
-    "severe_fraction": 0.95,
-    "mean_similarity": 0.9825481897592545,
+    "severe_fraction": 0.66,
+    "mean_similarity": 0.9750735419988632,
     "base_rate": 0.6103318872594682,
-    "signal_value": 0.44999999999999996,
+    "signal_value": 0.16000000000000003,
     "percentile": null,
     "office_lift": 0.09306811274053184,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 95,
+    "n_severe_signal": 66,
     "n_total_signal": 100,
-    "product_id": "202604150526-KRAH-FXUS62-AFDRAH",
+    "product_id": "202604150636-KRAH-FXUS62-AFDRAH",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "RIW": {
     "level": "HIGH",
-    "severe_fraction": 0.93,
-    "mean_similarity": 0.9618357557058335,
+    "severe_fraction": 0.92,
+    "mean_similarity": 0.9723538893461228,
     "base_rate": 0.4983681969353184,
-    "signal_value": 0.43000000000000005,
+    "signal_value": 0.42000000000000004,
     "percentile": null,
     "office_lift": 0.22541180306468156,
-    "n_severe": 8,
+    "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 93,
+    "n_severe_signal": 92,
     "n_total_signal": 100,
-    "product_id": "202604150347-KRIW-FXUS65-AFDRIW",
+    "product_id": "202604150804-KRIW-FXUS65-AFDRIW",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "SGX": {
     "level": "MODERATE",
     "severe_fraction": 0.17,
-    "mean_similarity": 0.9856416070461274,
+    "mean_similarity": 0.9856415504217148,
     "base_rate": 0.24074249455440855,
     "signal_value": -0.32999999999999996,
     "percentile": null,
@@ -388,12 +392,12 @@
     "n_total_signal": 100,
     "product_id": "202604150417-KSGX-FXUS66-AFDSGX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "TFX": {
     "level": "LOW",
     "severe_fraction": 0.14,
-    "mean_similarity": 0.9945543646812439,
+    "mean_similarity": 0.994554426074028,
     "base_rate": 0.46885027081140745,
     "signal_value": -0.36,
     "percentile": null,
@@ -404,12 +408,12 @@
     "n_total_signal": 100,
     "product_id": "202604150601-KTFX-FXUS65-AFDTFX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "UNR": {
     "level": "LOW",
     "severe_fraction": 0.13,
-    "mean_similarity": 0.9759518659114838,
+    "mean_similarity": 0.9759518218040466,
     "base_rate": 0.46000706797031454,
     "signal_value": -0.37,
     "percentile": null,
@@ -420,12 +424,12 @@
     "n_total_signal": 100,
     "product_id": "202604150404-KUNR-FXUS63-AFDUNR",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "DTX": {
     "level": "HIGH",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.9757682055234909,
+    "mean_similarity": 0.9757681995630264,
     "base_rate": 0.47690083996945565,
     "signal_value": 0.42000000000000004,
     "percentile": null,
@@ -436,28 +440,28 @@
     "n_total_signal": 100,
     "product_id": "202604150559-KDTX-FXUS63-AFDDTX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GRB": {
     "level": "HIGH",
-    "severe_fraction": 0.89,
-    "mean_similarity": 0.9496044385433197,
+    "severe_fraction": 0.68,
+    "mean_similarity": 0.8951079308986664,
     "base_rate": 0.46778572547381614,
-    "signal_value": 0.39,
+    "signal_value": 0.18000000000000005,
     "percentile": null,
     "office_lift": 0.2430742745261839,
-    "n_severe": 6,
+    "n_severe": 7,
     "n_total": 10,
-    "n_severe_signal": 89,
+    "n_severe_signal": 68,
     "n_total_signal": 100,
-    "product_id": "202604150508-KGRB-FXUS63-AFDGRB",
+    "product_id": "202604150741-KGRB-FXUS63-AFDGRB",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "JKL": {
     "level": "HIGH",
     "severe_fraction": 0.94,
-    "mean_similarity": 0.9769177949428558,
+    "mean_similarity": 0.9769178575277329,
     "base_rate": 0.5677083333333334,
     "signal_value": 0.43999999999999995,
     "percentile": null,
@@ -468,28 +472,25 @@
     "n_total_signal": 100,
     "product_id": "202604150534-KJKL-FXUS63-AFDJKL",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LSX": {
-    "level": "HIGH",
-    "severe_fraction": 0.65,
-    "mean_similarity": 0.7872444754838943,
-    "base_rate": 0.64423634129946,
-    "signal_value": 0.15000000000000002,
-    "percentile": null,
-    "office_lift": 0.11320365870054006,
-    "n_severe": 8,
-    "n_total": 10,
-    "n_severe_signal": 65,
-    "n_total_signal": 100,
-    "product_id": "202604150350-KLSX-FXUS63-AFDLSX",
+    "level": "INSUFFICIENT_MATCH",
+    "severe_fraction": 0.63,
+    "mean_similarity": 0.6484171944856644,
+    "n_severe": 63,
+    "n_total": 100,
+    "reason": "top-100 mean similarity 0.65 below confidence floor 0.7",
+    "product_id": "202604150807-KLSX-FXUS63-AFDLSX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00",
+    "office_lift": 0.11320365870054006,
+    "base_rate": 0.64423634129946
   },
   "MEG": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9849958145618438,
+    "mean_similarity": 0.9849958449602128,
     "base_rate": 0.6625872058649639,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -500,28 +501,28 @@
     "n_total_signal": 100,
     "product_id": "202604150404-KMEG-FXUS64-AFDMEG",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "OUN": {
     "level": "HIGH",
-    "severe_fraction": 0.94,
-    "mean_similarity": 0.9831598967313766,
+    "severe_fraction": 0.98,
+    "mean_similarity": 0.9804518586397171,
     "base_rate": 0.6717192236772197,
-    "signal_value": 0.43999999999999995,
+    "signal_value": 0.48,
     "percentile": null,
     "office_lift": 0.09240077632278032,
     "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 94,
+    "n_severe_signal": 98,
     "n_total_signal": 100,
-    "product_id": "202604150325-KOUN-FXUS64-AFDOUN",
+    "product_id": "202604150703-KOUN-FXUS64-AFDOUN",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "DMX": {
     "level": "HIGH",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.9365290933847428,
+    "mean_similarity": 0.9365293061733246,
     "base_rate": 0.5710076913049146,
     "signal_value": 0.49,
     "percentile": null,
@@ -532,12 +533,12 @@
     "n_total_signal": 100,
     "product_id": "202604150548-KDMX-FXUS63-AFDDMX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "EPZ": {
     "level": "HIGH",
     "severe_fraction": 0.54,
-    "mean_similarity": 0.9717874670028687,
+    "mean_similarity": 0.9717875242233276,
     "base_rate": 0.35901680046346107,
     "signal_value": 0.040000000000000036,
     "percentile": null,
@@ -548,12 +549,12 @@
     "n_total_signal": 100,
     "product_id": "202604150409-KEPZ-FXUS64-AFDEPZ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "FSD": {
     "level": "HIGH",
     "severe_fraction": 0.94,
-    "mean_similarity": 0.9816905796527863,
+    "mean_similarity": 0.9816905683279038,
     "base_rate": 0.47481981880210566,
     "signal_value": 0.43999999999999995,
     "percentile": null,
@@ -564,12 +565,12 @@
     "n_total_signal": 100,
     "product_id": "202604150532-KFSD-FXUS63-AFDFSD",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GJT": {
     "level": "HIGH",
     "severe_fraction": 0.84,
-    "mean_similarity": 0.9588469886779785,
+    "mean_similarity": 0.9588470768928528,
     "base_rate": 0.4838098332250379,
     "signal_value": 0.33999999999999997,
     "percentile": null,
@@ -580,44 +581,44 @@
     "n_total_signal": 100,
     "product_id": "202604150528-KGJT-FXUS65-AFDGJT",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ICT": {
     "level": "HIGH",
-    "severe_fraction": 0.94,
-    "mean_similarity": 0.9660164749622345,
+    "severe_fraction": 0.91,
+    "mean_similarity": 0.9620091110467911,
     "base_rate": 0.6102984201287303,
-    "signal_value": 0.43999999999999995,
+    "signal_value": 0.41000000000000003,
     "percentile": null,
     "office_lift": 0.16022157987126973,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 94,
+    "n_severe_signal": 91,
     "n_total_signal": 100,
-    "product_id": "202604150601-KICT-FXUS63-AFDICT",
+    "product_id": "202604150737-KICT-FXUS63-AFDICT",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MAF": {
     "level": "HIGH",
-    "severe_fraction": 0.89,
-    "mean_similarity": 0.9863260996341705,
+    "severe_fraction": 0.87,
+    "mean_similarity": 0.9835831236839294,
     "base_rate": 0.5431329330394467,
-    "signal_value": 0.39,
+    "signal_value": 0.37,
     "percentile": null,
     "office_lift": 0.11004706696055344,
     "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 89,
+    "n_severe_signal": 87,
     "n_total_signal": 100,
-    "product_id": "202604150442-KMAF-FXUS64-AFDMAF",
+    "product_id": "202604150652-KMAF-FXUS64-AFDMAF",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PIH": {
     "level": "HIGH",
     "severe_fraction": 0.86,
-    "mean_similarity": 0.9630539405345917,
+    "mean_similarity": 0.9630540025234222,
     "base_rate": 0.419861180420088,
     "signal_value": 0.36,
     "percentile": null,
@@ -628,12 +629,12 @@
     "n_total_signal": 100,
     "product_id": "202604150401-KPIH-FXUS65-AFDPIH",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "SLC": {
     "level": "MODERATE",
     "severe_fraction": 0.23,
-    "mean_similarity": 0.965216104388237,
+    "mean_similarity": 0.9652162164449691,
     "base_rate": 0.4448202815361487,
     "signal_value": -0.27,
     "percentile": null,
@@ -644,28 +645,28 @@
     "n_total_signal": 100,
     "product_id": "202604150438-KSLC-FXUS65-AFDSLC",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ABQ": {
     "level": "HIGH",
-    "severe_fraction": 0.95,
-    "mean_similarity": 0.9767533516883851,
+    "severe_fraction": 0.87,
+    "mean_similarity": 0.9825904077291489,
     "base_rate": 0.5379238933471395,
-    "signal_value": 0.44999999999999996,
+    "signal_value": 0.37,
     "percentile": null,
     "office_lift": 0.20745610665286063,
-    "n_severe": 9,
+    "n_severe": 8,
     "n_total": 10,
-    "n_severe_signal": 95,
+    "n_severe_signal": 87,
     "n_total_signal": 100,
-    "product_id": "202604150523-KABQ-FXUS65-AFDABQ-AAB",
+    "product_id": "202604150642-KABQ-FXUS65-AFDABQ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "AMA": {
     "level": "HIGH",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9904648542404175,
+    "mean_similarity": 0.990464769601822,
     "base_rate": 0.5504161712247324,
     "signal_value": 0.43000000000000005,
     "percentile": null,
@@ -676,12 +677,12 @@
     "n_total_signal": 100,
     "product_id": "202604150518-KAMA-FXUS64-AFDAMA",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BOU": {
     "level": "HIGH",
     "severe_fraction": 0.91,
-    "mean_similarity": 0.7560587048530578,
+    "mean_similarity": 0.7560588234663009,
     "base_rate": 0.5462390560768193,
     "signal_value": 0.41000000000000003,
     "percentile": null,
@@ -692,12 +693,12 @@
     "n_total_signal": 100,
     "product_id": "202604150553-KBOU-FXUS65-AFDBOU",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BOI": {
     "level": "MODERATE",
     "severe_fraction": 0.39,
-    "mean_similarity": 0.837404557466507,
+    "mean_similarity": 0.8374046802520752,
     "base_rate": 0.36275012827090813,
     "signal_value": -0.10999999999999999,
     "percentile": null,
@@ -708,12 +709,12 @@
     "n_total_signal": 100,
     "product_id": "202604150529-KBOI-FXUS65-AFDBOI",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BMX": {
     "level": "HIGH",
     "severe_fraction": 0.65,
-    "mean_similarity": 0.8811709719896317,
+    "mean_similarity": 0.8811709725856781,
     "base_rate": 0.7028418124006359,
     "signal_value": 0.15000000000000002,
     "percentile": null,
@@ -724,44 +725,44 @@
     "n_total_signal": 100,
     "product_id": "202604150520-KBMX-FXUS64-AFDBMX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BYZ": {
-    "level": "MODERATE",
-    "severe_fraction": 0.25,
-    "mean_similarity": 0.9915325343608856,
+    "level": "LOW",
+    "severe_fraction": 0.12,
+    "mean_similarity": 0.9808226656913758,
     "base_rate": 0.42993805164190557,
-    "signal_value": -0.25,
+    "signal_value": -0.38,
     "percentile": null,
     "office_lift": 0.18912194835809448,
     "n_severe": 1,
     "n_total": 10,
-    "n_severe_signal": 25,
+    "n_severe_signal": 12,
     "n_total_signal": 100,
-    "product_id": "202604150211-KBYZ-FXUS65-AFDBYZ",
+    "product_id": "202604150724-KBYZ-FXUS65-AFDBYZ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "AKQ": {
     "level": "HIGH",
-    "severe_fraction": 0.61,
-    "mean_similarity": 0.972595117688179,
+    "severe_fraction": 0.47,
+    "mean_similarity": 0.9768163102865219,
     "base_rate": 0.5894923677671281,
-    "signal_value": 0.10999999999999999,
+    "signal_value": -0.030000000000000027,
     "percentile": null,
     "office_lift": 0.07210763223287198,
-    "n_severe": 7,
+    "n_severe": 3,
     "n_total": 10,
-    "n_severe_signal": 61,
+    "n_severe_signal": 47,
     "n_total_signal": 100,
-    "product_id": "202604150540-KAKQ-FXUS61-AFDAKQ",
+    "product_id": "202604150640-KAKQ-FXUS61-AFDAKQ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BGM": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9805333375930786,
+    "mean_similarity": 0.98053342461586,
     "base_rate": 0.5056064682664336,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -772,12 +773,12 @@
     "n_total_signal": 100,
     "product_id": "202604150530-KBGM-FXUS61-AFDBGM",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ALY": {
     "level": "HIGH",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9572445714473724,
+    "mean_similarity": 0.9572447174787522,
     "base_rate": 0.48228547210044637,
     "signal_value": 0.43000000000000005,
     "percentile": null,
@@ -788,41 +789,44 @@
     "n_total_signal": 100,
     "product_id": "202604150614-KALY-FXUS61-AFDALY",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BOX": {
     "level": "HIGH",
-    "severe_fraction": 0.81,
-    "mean_similarity": 0.9873517262935638,
+    "severe_fraction": 0.59,
+    "mean_similarity": 0.9855737751722335,
     "base_rate": 0.3974409211478177,
-    "signal_value": 0.31000000000000005,
+    "signal_value": 0.08999999999999997,
     "percentile": null,
     "office_lift": 0.15779907885218225,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 81,
+    "n_severe_signal": 59,
     "n_total_signal": 100,
-    "product_id": "202604150540-KBOX-FXUS61-AFDBOX",
+    "product_id": "202604150728-KBOX-FXUS61-AFDBOX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BUF": {
-    "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.5,
-    "mean_similarity": 0.6337893664836883,
-    "n_severe": 5,
-    "n_total": 10,
-    "reason": "top-10 mean similarity 0.63 below confidence floor 0.7",
-    "product_id": "202604141849-KBUF-FXUS61-AFDBUF",
-    "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00",
+    "level": "HIGH",
+    "severe_fraction": 0.76,
+    "mean_similarity": 0.9411552298069,
+    "base_rate": 0.4425690068015219,
+    "signal_value": 0.26,
+    "percentile": null,
     "office_lift": 0.17313099319847813,
-    "base_rate": 0.4425690068015219
+    "n_severe": 6,
+    "n_total": 10,
+    "n_severe_signal": 76,
+    "n_total_signal": 100,
+    "product_id": "202604150638-KBUF-FXUS61-AFDBUF",
+    "afd_time": null,
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CRP": {
     "level": "HIGH",
     "severe_fraction": 0.59,
-    "mean_similarity": 0.9508104938268661,
+    "mean_similarity": 0.9508105444908143,
     "base_rate": 0.3948890615557282,
     "signal_value": 0.08999999999999997,
     "percentile": null,
@@ -833,44 +837,44 @@
     "n_total_signal": 100,
     "product_id": "202604150615-KCRP-FXUS64-AFDCRP",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CAR": {
     "level": "LOW",
-    "severe_fraction": 0.13,
-    "mean_similarity": 0.9793264424800873,
+    "severe_fraction": 0.03,
+    "mean_similarity": 0.9800279158353805,
     "base_rate": 0.22816074307208106,
-    "signal_value": -0.37,
+    "signal_value": -0.47,
     "percentile": null,
     "office_lift": 0.15415925692791893,
     "n_severe": 0,
     "n_total": 10,
-    "n_severe_signal": 13,
+    "n_severe_signal": 3,
     "n_total_signal": 100,
-    "product_id": "202604150218-KCAR-FXUS61-AFDCAR",
+    "product_id": "202604150636-KCAR-FXUS61-AFDCAR",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "BTV": {
     "level": "HIGH",
-    "severe_fraction": 0.88,
-    "mean_similarity": 0.9734814375638962,
+    "severe_fraction": 0.86,
+    "mean_similarity": 0.9793069142103196,
     "base_rate": 0.3647966375355596,
-    "signal_value": 0.38,
+    "signal_value": 0.36,
     "percentile": null,
     "office_lift": 0.22948336246444034,
     "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 88,
+    "n_severe_signal": 86,
     "n_total_signal": 100,
-    "product_id": "202604150035-KBTV-FXUS61-AFDBTV",
+    "product_id": "202604150747-KBTV-FXUS61-AFDBTV",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "DDC": {
     "level": "HIGH",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9872867602109909,
+    "mean_similarity": 0.9872868436574936,
     "base_rate": 0.5799332302659587,
     "signal_value": 0.48,
     "percentile": null,
@@ -881,28 +885,28 @@
     "n_total_signal": 100,
     "product_id": "202604150535-KDDC-FXUS63-AFDDDC",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "CLE": {
     "level": "HIGH",
-    "severe_fraction": 0.86,
-    "mean_similarity": 0.9491342312097549,
+    "severe_fraction": 0.55,
+    "mean_similarity": 0.7784042501449585,
     "base_rate": 0.5339450083477387,
-    "signal_value": 0.36,
+    "signal_value": 0.050000000000000044,
     "percentile": null,
     "office_lift": 0.13829499165226133,
-    "n_severe": 10,
+    "n_severe": 5,
     "n_total": 10,
-    "n_severe_signal": 86,
+    "n_severe_signal": 55,
     "n_total_signal": 100,
-    "product_id": "202604150600-KCLE-FXUS61-AFDCLE",
+    "product_id": "202604150632-KCLE-FXUS61-AFDCLE",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "DLH": {
     "level": "HIGH",
     "severe_fraction": 0.75,
-    "mean_similarity": 0.963041968345642,
+    "mean_similarity": 0.9630419921875,
     "base_rate": 0.42961108251041324,
     "signal_value": 0.25,
     "percentile": null,
@@ -913,12 +917,12 @@
     "n_total_signal": 100,
     "product_id": "202604150541-KDLH-FXUS63-AFDDLH",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "EAX": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9758347249031067,
+    "mean_similarity": 0.9758346098661422,
     "base_rate": 0.5984615033440617,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -929,12 +933,12 @@
     "n_total_signal": 100,
     "product_id": "202604150529-KEAX-FXUS63-AFDEAX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "EWX": {
     "level": "HIGH",
     "severe_fraction": 0.66,
-    "mean_similarity": 0.9663970476388931,
+    "mean_similarity": 0.9663971340656281,
     "base_rate": 0.5290306223061104,
     "signal_value": 0.16000000000000003,
     "percentile": null,
@@ -945,12 +949,12 @@
     "n_total_signal": 100,
     "product_id": "202604150552-KEWX-FXUS64-AFDEWX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "FGZ": {
     "level": "MODERATE",
     "severe_fraction": 0.4,
-    "mean_similarity": 0.9516253113746643,
+    "mean_similarity": 0.9516254591941834,
     "base_rate": 0.4001475816730395,
     "signal_value": -0.09999999999999998,
     "percentile": null,
@@ -961,12 +965,12 @@
     "n_total_signal": 100,
     "product_id": "202604150515-KFGZ-FXUS65-AFDFGZ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GGW": {
     "level": "HIGH",
     "severe_fraction": 0.45,
-    "mean_similarity": 0.97186647772789,
+    "mean_similarity": 0.971866466999054,
     "base_rate": 0.3561591826873296,
     "signal_value": -0.04999999999999999,
     "percentile": null,
@@ -977,12 +981,12 @@
     "n_total_signal": 100,
     "product_id": "202604150520-KGGW-FXUS65-AFDGGW",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "FGF": {
     "level": "MODERATE",
     "severe_fraction": 0.27,
-    "mean_similarity": 0.9552608805894852,
+    "mean_similarity": 0.9552609515190125,
     "base_rate": 0.38744994994994997,
     "signal_value": -0.22999999999999998,
     "percentile": null,
@@ -993,12 +997,12 @@
     "n_total_signal": 100,
     "product_id": "202604150435-KFGF-FXUS63-AFDFGF",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GID": {
     "level": "HIGH",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.969539824128151,
+    "mean_similarity": 0.9695397627353668,
     "base_rate": 0.5456683027051706,
     "signal_value": 0.49,
     "percentile": null,
@@ -1009,41 +1013,44 @@
     "n_total_signal": 100,
     "product_id": "202604150530-KGID-FXUS63-AFDGID",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GRR": {
-    "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.3,
-    "mean_similarity": 0.6848720490932465,
-    "n_severe": 3,
-    "n_total": 10,
-    "reason": "top-10 mean similarity 0.68 below confidence floor 0.7",
-    "product_id": "202604141850-KGRR-FXUS63-AFDGRR",
-    "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00",
+    "level": "HIGH",
+    "severe_fraction": 0.98,
+    "mean_similarity": 0.9857442218065262,
+    "base_rate": 0.515856276957571,
+    "signal_value": 0.48,
+    "percentile": null,
     "office_lift": 0.19412372304242909,
-    "base_rate": 0.515856276957571
+    "n_severe": 10,
+    "n_total": 10,
+    "n_severe_signal": 98,
+    "n_total_signal": 100,
+    "product_id": "202604150734-KGRR-FXUS63-AFDGRR",
+    "afd_time": null,
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GLD": {
     "level": "HIGH",
-    "severe_fraction": 0.94,
-    "mean_similarity": 0.9144542026519775,
+    "severe_fraction": 0.95,
+    "mean_similarity": 0.9156759613752365,
     "base_rate": 0.5554927387724815,
-    "signal_value": 0.43999999999999995,
+    "signal_value": 0.44999999999999996,
     "percentile": null,
     "office_lift": 0.21788726122751845,
     "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 94,
+    "n_severe_signal": 95,
     "n_total_signal": 100,
-    "product_id": "202604150202-KGLD-FXUS63-AFDGLD",
+    "product_id": "202604150644-KGLD-FXUS63-AFDGLD",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LBF": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.8786922055482864,
+    "mean_similarity": 0.878692135810852,
     "base_rate": 0.5358489496215235,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -1054,12 +1061,12 @@
     "n_total_signal": 100,
     "product_id": "202604150504-KLBF-FXUS63-AFDLBF",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "IWX": {
     "level": "HIGH",
     "severe_fraction": 0.83,
-    "mean_similarity": 0.899859299659729,
+    "mean_similarity": 0.8998593783378601,
     "base_rate": 0.5780591548186366,
     "signal_value": 0.32999999999999996,
     "percentile": null,
@@ -1070,12 +1077,12 @@
     "n_total_signal": 100,
     "product_id": "202604150457-KIWX-FXUS63-AFDIWX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ILX": {
     "level": "HIGH",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9825017029047012,
+    "mean_similarity": 0.9825018054246902,
     "base_rate": 0.6120785297380734,
     "signal_value": 0.44999999999999996,
     "percentile": null,
@@ -1086,40 +1093,44 @@
     "n_total_signal": 100,
     "product_id": "202604150501-KILX-FXUS63-AFDILX-CCA",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "ILN": {
-    "level": "LOW",
-    "severe_fraction": 0.6,
-    "mean_similarity": 0.80765700340271,
+    "level": "HIGH",
+    "severe_fraction": 0.87,
+    "mean_similarity": 0.9833060419559478,
     "base_rate": 0.5930777695705263,
-    "signal_value": 0.005927310550673082,
-    "percentile": 50,
+    "signal_value": 0.37,
+    "percentile": null,
     "office_lift": 0.12628223042947384,
-    "n_severe": 6,
+    "n_severe": 7,
     "n_total": 10,
-    "product_id": "202604141802-KILN-FXUS61-AFDILN",
+    "n_severe_signal": 87,
+    "n_total_signal": 100,
+    "product_id": "202604150706-KILN-FXUS61-AFDILN",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LKN": {
-    "level": "QUIET",
-    "severe_fraction": 0.0,
-    "mean_similarity": 0.8815896511077881,
+    "level": "LOW",
+    "severe_fraction": 0.14,
+    "mean_similarity": 0.9718659216165543,
     "base_rate": 0.3487163656942944,
-    "signal_value": -0.351751813551474,
-    "percentile": 0,
+    "signal_value": -0.36,
+    "percentile": null,
     "office_lift": 0.13134363430570561,
-    "n_severe": 0,
+    "n_severe": 3,
     "n_total": 10,
-    "product_id": "202604142103-KLKN-FXUS65-AFDLKN",
+    "n_severe_signal": 14,
+    "n_total_signal": 100,
+    "product_id": "202604150740-KLKN-FXUS65-AFDLKN",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LUB": {
     "level": "HIGH",
     "severe_fraction": 0.65,
-    "mean_similarity": 0.8807671505212784,
+    "mean_similarity": 0.8807671785354614,
     "base_rate": 0.5527251024117631,
     "signal_value": 0.15000000000000002,
     "percentile": null,
@@ -1130,12 +1141,12 @@
     "n_total_signal": 100,
     "product_id": "202604150508-KLUB-FXUS64-AFDLUB",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MFL": {
     "level": "HIGH",
     "severe_fraction": 0.7,
-    "mean_similarity": 0.9673873114585877,
+    "mean_similarity": 0.9673874270915985,
     "base_rate": 0.5635268995788599,
     "signal_value": 0.19999999999999996,
     "percentile": null,
@@ -1146,12 +1157,12 @@
     "n_total_signal": 100,
     "product_id": "202604150500-KMFL-FXUS62-AFDMFL",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MLB": {
     "level": "HIGH",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.9742977553606034,
+    "mean_similarity": 0.9742978495359421,
     "base_rate": 0.6138267907441081,
     "signal_value": 0.4,
     "percentile": null,
@@ -1162,12 +1173,12 @@
     "n_total_signal": 100,
     "product_id": "202604150558-KMLB-FXUS62-AFDMLB",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "LOT": {
     "level": "HIGH",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9903225207328796,
+    "mean_similarity": 0.9903224617242813,
     "base_rate": 0.5787422753453954,
     "signal_value": 0.48,
     "percentile": null,
@@ -1178,42 +1189,44 @@
     "n_total_signal": 100,
     "product_id": "202604150510-KLOT-FXUS63-AFDLOT",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MSO": {
     "level": "LOW",
-    "severe_fraction": 0.3,
-    "mean_similarity": 0.826541519165039,
+    "severe_fraction": 0.14,
+    "mean_similarity": 0.9771815371513367,
     "base_rate": 0.40728105658170477,
-    "signal_value": -0.11010770505385253,
-    "percentile": 30,
+    "signal_value": -0.36,
+    "percentile": null,
     "office_lift": 0.21619894341829526,
-    "n_severe": 3,
+    "n_severe": 0,
     "n_total": 10,
-    "product_id": "202604141852-KMSO-FXUS65-AFDMSO",
+    "n_severe_signal": 14,
+    "n_total_signal": 100,
+    "product_id": "202604150655-KMSO-FXUS65-AFDMSO",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MRX": {
     "level": "HIGH",
-    "severe_fraction": 0.91,
-    "mean_similarity": 0.9313781994581223,
+    "severe_fraction": 0.81,
+    "mean_similarity": 0.8523797351121902,
     "base_rate": 0.621659522675557,
-    "signal_value": 0.41000000000000003,
+    "signal_value": 0.31000000000000005,
     "percentile": null,
     "office_lift": 0.10456047732444296,
-    "n_severe": 8,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 91,
+    "n_severe_signal": 81,
     "n_total_signal": 100,
-    "product_id": "202604150539-KMRX-FXUS64-AFDMRX",
+    "product_id": "202604150647-KMRX-FXUS64-AFDMRX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "OAX": {
     "level": "HIGH",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.9577520191669464,
+    "mean_similarity": 0.9577521419525147,
     "base_rate": 0.5290490280120566,
     "signal_value": 0.42000000000000004,
     "percentile": null,
@@ -1224,28 +1237,28 @@
     "n_total_signal": 100,
     "product_id": "202604150532-KOAX-FXUS63-AFDOAX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "MQT": {
     "level": "HIGH",
-    "severe_fraction": 0.89,
-    "mean_similarity": 0.9841882401704788,
+    "severe_fraction": 0.9,
+    "mean_similarity": 0.985623739361763,
     "base_rate": 0.3858349129760469,
-    "signal_value": 0.39,
+    "signal_value": 0.4,
     "percentile": null,
     "office_lift": 0.2299250870239531,
-    "n_severe": 9,
+    "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 89,
+    "n_severe_signal": 90,
     "n_total_signal": 100,
-    "product_id": "202604150522-KMQT-FXUS63-AFDMQT",
+    "product_id": "202604150656-KMQT-FXUS63-AFDMQT",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PAH": {
     "level": "HIGH",
     "severe_fraction": 0.86,
-    "mean_similarity": 0.9428118669986725,
+    "mean_similarity": 0.9428119426965713,
     "base_rate": 0.6371019688016355,
     "signal_value": 0.36,
     "percentile": null,
@@ -1256,12 +1269,12 @@
     "n_total_signal": 100,
     "product_id": "202604150549-KPAH-FXUS63-AFDPAH",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "OTX": {
     "level": "MODERATE",
     "severe_fraction": 0.19,
-    "mean_similarity": 0.9781799721717834,
+    "mean_similarity": 0.9781800079345703,
     "base_rate": 0.3239750993160503,
     "signal_value": -0.31,
     "percentile": null,
@@ -1272,28 +1285,28 @@
     "n_total_signal": 100,
     "product_id": "202604150542-KOTX-FXUS66-AFDOTX",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PBZ": {
-    "level": "MODERATE",
-    "severe_fraction": 0.22,
-    "mean_similarity": 0.8995710748434067,
+    "level": "HIGH",
+    "severe_fraction": 0.77,
+    "mean_similarity": 0.9292654705047607,
     "base_rate": 0.544319694101329,
-    "signal_value": -0.28,
+    "signal_value": 0.27,
     "percentile": null,
     "office_lift": 0.11556030589867117,
-    "n_severe": 1,
+    "n_severe": 7,
     "n_total": 10,
-    "n_severe_signal": 22,
+    "n_severe_signal": 77,
     "n_total_signal": 100,
-    "product_id": "202604150529-KPBZ-FXUS61-AFDPBZ",
+    "product_id": "202604150627-KPBZ-FXUS61-AFDPBZ",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PUB": {
     "level": "HIGH",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9736734908819199,
+    "mean_similarity": 0.9640714019536972,
     "base_rate": 0.5385662843828487,
     "signal_value": 0.48,
     "percentile": null,
@@ -1302,14 +1315,14 @@
     "n_total": 10,
     "n_severe_signal": 98,
     "n_total_signal": 100,
-    "product_id": "202604150506-KPUB-FXUS65-AFDPUB",
+    "product_id": "202604150741-KPUB-FXUS65-AFDPUB",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "PSR": {
     "level": "MODERATE",
     "severe_fraction": 0.27,
-    "mean_similarity": 0.9138994526863098,
+    "mean_similarity": 0.9138995975255966,
     "base_rate": 0.40400820421578076,
     "signal_value": -0.22999999999999998,
     "percentile": null,
@@ -1320,7 +1333,7 @@
     "n_total_signal": 100,
     "product_id": "202604150515-KPSR-FXUS65-AFDPSR",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "OKX": {
     "level": null,
@@ -1330,7 +1343,7 @@
   "SGF": {
     "level": "HIGH",
     "severe_fraction": 0.58,
-    "mean_similarity": 0.7676848244667053,
+    "mean_similarity": 0.767684583067894,
     "base_rate": 0.6294339304886007,
     "signal_value": 0.07999999999999996,
     "percentile": null,
@@ -1341,12 +1354,12 @@
     "n_total_signal": 100,
     "product_id": "202604150615-KSGF-FXUS63-AFDSGF",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "SJT": {
     "level": "HIGH",
     "severe_fraction": 0.91,
-    "mean_similarity": 0.9833318507671356,
+    "mean_similarity": 0.9833317565917968,
     "base_rate": 0.5617998314456618,
     "signal_value": 0.41000000000000003,
     "percentile": null,
@@ -1357,20 +1370,23 @@
     "n_total_signal": 100,
     "product_id": "202604150605-KSJT-FXUS64-AFDSJT",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "RLX": {
-    "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.66,
-    "mean_similarity": 0.667357429265976,
-    "n_severe": 66,
-    "n_total": 100,
-    "reason": "top-100 mean similarity 0.67 below confidence floor 0.7",
-    "product_id": "202604150533-KRLX-FXUS61-AFDRLX",
-    "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00",
+    "level": "HIGH",
+    "severe_fraction": 0.82,
+    "mean_similarity": 0.9309907978773118,
+    "base_rate": 0.5853095545601934,
+    "signal_value": 0.31999999999999995,
+    "percentile": null,
     "office_lift": 0.10853044543980661,
-    "base_rate": 0.5853095545601934
+    "n_severe": 9,
+    "n_total": 10,
+    "n_severe_signal": 82,
+    "n_total_signal": 100,
+    "product_id": "202604150754-KRLX-FXUS61-AFDRLX",
+    "afd_time": null,
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "TWC": {
     "level": "LOW",
@@ -1388,24 +1404,24 @@
   },
   "TOP": {
     "level": "HIGH",
-    "severe_fraction": 0.92,
-    "mean_similarity": 0.9546313977241516,
+    "severe_fraction": 0.94,
+    "mean_similarity": 0.9715250396728515,
     "base_rate": 0.581439641002896,
-    "signal_value": 0.42000000000000004,
+    "signal_value": 0.43999999999999995,
     "percentile": null,
     "office_lift": 0.20658035899710392,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 92,
+    "n_severe_signal": 94,
     "n_total_signal": 100,
-    "product_id": "202604150601-KTOP-FXUS63-AFDTOP",
+    "product_id": "202604150807-KTOP-FXUS63-AFDTOP",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "TSA": {
     "level": "HIGH",
     "severe_fraction": 0.87,
-    "mean_similarity": 0.9756364178657532,
+    "mean_similarity": 0.9756365036964416,
     "base_rate": 0.6678787549862961,
     "signal_value": 0.37,
     "percentile": null,
@@ -1416,26 +1432,28 @@
     "n_total_signal": 100,
     "product_id": "202604150530-KTSA-FXUS64-AFDTSA",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "RNK": {
-    "level": "LOW",
-    "severe_fraction": 0.6,
-    "mean_similarity": 0.743393063545227,
+    "level": "HIGH",
+    "severe_fraction": 0.86,
+    "mean_similarity": 0.932265100479126,
     "base_rate": 0.6031592832094714,
-    "signal_value": -0.004574847987645958,
-    "percentile": 50,
+    "signal_value": 0.36,
+    "percentile": null,
     "office_lift": 0.07356071679052856,
-    "n_severe": 6,
+    "n_severe": 9,
     "n_total": 10,
-    "product_id": "202604142303-KRNK-FXUS61-AFDRNK",
+    "n_severe_signal": 86,
+    "n_total_signal": 100,
+    "product_id": "202604150623-KRNK-FXUS61-AFDRNK",
     "afd_time": null,
-    "updated": "2026-04-14T23:09:27.871436+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "AJK": {
     "level": "LOW",
     "severe_fraction": 0.05,
-    "mean_similarity": 0.977080237865448,
+    "mean_similarity": 0.9770802289247513,
     "base_rate": null,
     "signal_value": -0.45,
     "percentile": null,
@@ -1446,7 +1464,7 @@
     "n_total_signal": 100,
     "product_id": "202604150531-PAJK-FXAK67-AFDAJK",
     "afd_time": null,
-    "updated": "2026-04-15T06:16:08.361198+00:00"
+    "updated": "2026-04-15T08:09:07.305251+00:00"
   },
   "GUM": {
     "level": "QUIET",
