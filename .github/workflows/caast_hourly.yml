@@ -63,7 +63,7 @@ jobs:
           n_op = sum(1 for o in meta.values() if o.get("operational"))
           fired = [o for o, v in sig.items()
                    if meta.get(o, {}).get("operational")
-                   and v.get("signal_level") not in (None, "INSUFFICIENT_MATCH")]
+                   and v.get("level") not in (None, "QUIET", "INSUFFICIENT_MATCH")]
           covered = sum(1 for o, v in sig.items()
                         if meta.get(o, {}).get("operational") and v)
           print(f"Operational offices in metadata: {n_op}")
