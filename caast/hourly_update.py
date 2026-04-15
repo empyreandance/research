@@ -471,8 +471,9 @@ def compute_signal(analogs, thresholds, office, office_metadata=None, display_an
         n_severe_display = sum(1 for a in analogs if a["is_severe"])
         n_total_display = len(analogs)
 
-    office_thresh = thresholds.get("per_office", {}).get(office)
-    if office_thresh is None:
+    # V3.1 schema: offices at root level. V3 schema: under "per_office".
+    office_thresh = thresholds.get(office) or thresholds.get("per_office", {}).get(office)
+    if office_thresh is None or "thresholds" not in office_thresh:
         office_thresh = thresholds["global"]
         base_rate = None
         signal_distribution = None
