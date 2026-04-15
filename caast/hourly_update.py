@@ -53,6 +53,7 @@ IEM_TEXT_URL = "https://mesonet.agron.iastate.edu/api/1/nwstext/{pil}"
 
 SEVERE_LABELS = {"tornado", "severe_wind", "severe_hail"}
 TOP_K = 10
+SIGNAL_K = 100  # K used for signal computation; TOP_K is for display
 MAX_TEXT_LEN = 1500
 
 # How far back to look for new AFDs (hours) on first run
@@ -350,7 +351,7 @@ def load_office_corpus(office_dir, labels_dir, office):
     }
 
 
-def find_analogs(query_emb, corpus, top_k=TOP_K):
+def find_analogs(query_emb, corpus, top_k=TOP_K, max_k=None):
     """Find top-K analogs by cosine similarity, deduplicating by date.
 
     AFDs are reissued multiple times per day with nearly identical text.
@@ -400,7 +401,7 @@ def find_analogs(query_emb, corpus, top_k=TOP_K):
             "daily_breakdown": daily_breakdowns[i],
         })
 
-        if len(analogs) >= top_k:
+        if len(analogs) >= (max_k or top_k):
             break
 
     return analogs
@@ -444,7 +445,7 @@ def compute_percentile(value, distribution):
     return None
 
 
-def compute_signal(analogs, thresholds, office, office_metadata=None):
+def compute_signal(analogs, thresholds, office, office_metadata=None, display_analogs=None):
     """Determine signal level from analog severe fraction vs office baseline."""
     if not analogs:
         return None
@@ -462,6 +463,13 @@ def compute_signal(analogs, thresholds, office, office_metadata=None):
         }
 
     severe_fraction = sum(1 for a in analogs if a["is_severe"]) / len(analogs)
+    # If display_analogs provided, compute display-only severe fraction for UI
+    if display_analogs:
+        n_severe_display = sum(1 for a in display_analogs if a["is_severe"])
+        n_total_display = len(display_analogs)
+    else:
+        n_severe_display = sum(1 for a in analogs if a["is_severe"])
+        n_total_display = len(analogs)
 
     office_thresh = thresholds.get("per_office", {}).get(office)
     if office_thresh is None:
@@ -512,8 +520,10 @@ def compute_signal(analogs, thresholds, office, office_metadata=None):
         "signal_value": float(signal_value),
         "percentile": percentile,
         "office_lift": float(office_lift) if office_lift is not None else None,
-        "n_severe": sum(1 for a in analogs if a["is_severe"]),
-        "n_total": len(analogs),
+        "n_severe": n_severe_display,
+        "n_total": n_total_display,
+        "n_severe_signal": sum(1 for a in analogs if a["is_severe"]),
+        "n_total_signal": len(analogs),
     }
 
 
@@ -636,10 +646,12 @@ def main():
         query_emb = model.encode(long_term[:MAX_TEXT_LEN], convert_to_numpy=True)
 
         # Find analogs
-        analogs = find_analogs(query_emb, corpus, top_k=TOP_K)
+        # Get K=100 for signal computation, slice to TOP_K for display
+        analogs_full = find_analogs(query_emb, corpus, top_k=TOP_K, max_k=SIGNAL_K)
+        analogs = analogs_full[:TOP_K]
 
         # Compute signal
-        signal = compute_signal(analogs, thresholds, office, office_metadata)
+        signal = compute_signal(analogs_full, thresholds, office, office_metadata, display_analogs=analogs)
         if signal is None:
             continue
 
