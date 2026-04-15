@@ -1,15 +1,15 @@
 {
   "office": "OHX",
-  "product_id": "202604151547-KOHX-FXUS64-AFDOHX",
+  "product_id": "202604151735-KOHX-FXUS64-AFDOHX-AAA",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-15T17:22:08.663344+00:00",
+  "updated": "2026-04-15T18:44:59.150527+00:00",
   "query_preview": "..\n(Thursday Night through next Wednesday)\nIssued at 1027 AM CDT Wed Apr 15 2026\n\nA shortwave looks to push into Land-between-the-Lakes shortly\nafter 00Z Thursday evening, and a convective cluster may accompany\nthe shortwave. The HRRR has at times shown some storms affecting\nnorthwest portions of Middle Tennessee during the evening, hence\nthe marginal risk from the SPC. While we cannot completely rule\nout a wind and hail threat, the risk of severe storms is very low\nduring the early evening. And even that threat will diminish \nconsiderably as we lose our daytime heating. QPF values for \ntomorrow and tomorrow night remain underwhelming; most locations \ncan expect no more than 1/4\", although a few spots could see up to\n1/2\". Either way, it's not nearly enough to make up the growing \nrainfall deficit. Meanwhile, a much stronger cold front will sweep\nacross Middle Tennessee on Saturday. The atmospheric models \ncontinue to depict the bulk of the convective activity Saturday \nand Saturday evening as post-frontal, so that's going to limit the\nsevere potential. Current QPF values resulting from Saturday's \ncold front are close to 1/2\" area-wide, which will certainly be \nwelcome, but won't do much to alleviate our drought conditions. \nThe primary impact from Saturday's cold front will be the \nsignificant drop in temperatures on the other side. Indeed, high \ntemperatures on Sunday will only be in the 60s most areas, and \nMonday morning's low temperatures will range from the upper 30s to\nlow 40s most areas. After that, look for a gradual warming trend \nthroughout next week, with no appreciable rain chances until \nThursday night or Friday.",
   "analogs": [
     {
       "datetime_utc": "2021-06-23T17:21Z",
       "source_file": "OHX_2021_23_1721_1.txt",
-      "similarity": 0.977641761302948,
+      "similarity": 0.9776417016983032,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -50,7 +50,7 @@
     {
       "datetime_utc": "2025-04-24T04:30Z",
       "source_file": "OHX_2025_24_0430.txt",
-      "similarity": 0.9773293733596802,
+      "similarity": 0.9773292541503906,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -182,7 +182,7 @@
     {
       "datetime_utc": "2025-02-01T04:54Z",
       "source_file": "OHX_2025_01_0454.txt",
-      "similarity": 0.9765408039093018,
+      "similarity": 0.976540744304657,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -227,7 +227,7 @@
     {
       "datetime_utc": "2025-03-01T11:10Z",
       "source_file": "OHX_2025_01_1110.txt",
-      "similarity": 0.9765408039093018,
+      "similarity": 0.976540744304657,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -266,7 +266,7 @@
     {
       "datetime_utc": "2015-06-27T20:28Z",
       "source_file": "OHX_2015_27_2028.txt",
-      "similarity": 0.9765154719352722,
+      "similarity": 0.9765152931213379,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -321,9 +321,9 @@
       }
     },
     {
-      "datetime_utc": "2025-03-11T17:36Z",
-      "source_file": "OHX_2025_11_1736_1.txt",
-      "similarity": 0.9752404689788818,
+      "datetime_utc": "2025-03-11T23:27Z",
+      "source_file": "OHX_2025_11_2327.txt",
+      "similarity": 0.9752405881881714,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -370,7 +370,7 @@
     {
       "datetime_utc": "2025-03-12T02:10Z",
       "source_file": "OHX_2025_12_0210.txt",
-      "similarity": 0.9752404689788818,
+      "similarity": 0.9752405881881714,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -415,17 +415,15 @@
       }
     },
     {
-      "datetime_utc": "2024-04-12T17:16Z",
-      "source_file": "OHX_2024_12_1716_1.txt",
-      "similarity": 0.9751516580581665,
+      "datetime_utc": "2024-04-13T01:35Z",
+      "source_file": "OHX_2024_13_0135.txt",
+      "similarity": 0.9751515984535217,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -444,14 +442,17 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 6,
             "severe_wind": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 1
           }
         }
       }
@@ -460,7 +461,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.9710492545366287,
+    "mean_similarity": 0.9710491651296616,
     "base_rate": 0.6266581507320429,
     "signal_value": 0.4,
     "percentile": null,
@@ -469,8 +470,8 @@
     "n_total": 10,
     "n_severe_signal": 90,
     "n_total_signal": 100,
-    "product_id": "202604151547-KOHX-FXUS64-AFDOHX",
+    "product_id": "202604151735-KOHX-FXUS64-AFDOHX-AAA",
     "afd_time": null,
-    "updated": "2026-04-15T17:22:08.663344+00:00"
+    "updated": "2026-04-15T18:44:59.150527+00:00"
   }
 }
