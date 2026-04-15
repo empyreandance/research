@@ -542,6 +542,11 @@ def main():
     thresholds = ensure_thresholds(s3)
     office_metadata = ensure_office_metadata(s3)
 
+    # Copy office_metadata to output dir for frontend access
+    import shutil
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    shutil.copy(CACHE_DIR / "office_metadata.json", OUTPUT_DIR / "office_metadata.json")
+
     # Determine window
     last_run = load_last_run()
     now = datetime.now(timezone.utc)

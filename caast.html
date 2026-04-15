@@ -565,6 +565,7 @@
 
 <script>
 const SIGNALS_URL = 'caast/data/signals.json';
+const METADATA_URL = 'caast/data/office_metadata.json';
 const ANALOGS_URL = 'caast/data/analogs/';
 const CWA_TOPOJSON_URL = 'caast/cwa.topo.json';
 const STATES_URL = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
@@ -580,6 +581,12 @@ const SIGNAL_ORDER = { HIGH: 0, MODERATE: 1, LOW: 2, QUIET: 3, INSUFFICIENT_MATC
 const NO_DATA_COLOR = '#1a1d24';
 
 let signals = {};
+let officeMetadata = {};
+
+function isBlocked(code) {
+  const meta = officeMetadata[code];
+  return meta && meta.operational === false;
+}
 let cwaFeatures = null;
 let currentView = 'signal';  // 'signal' or 'utility'
 
@@ -606,6 +613,15 @@ async function loadAll() {
   } catch (e) {
     console.error('Failed to load signals', e);
     signals = {};
+  }
+
+  // Load office metadata for operational/blocked status
+  try {
+    const resp = await fetch(METADATA_URL);
+    officeMetadata = await resp.json();
+  } catch (e) {
+    console.error('Failed to load office metadata', e);
+    officeMetadata = {};
   }
 
   // Load CWA polygons from local TopoJSON
@@ -644,6 +660,18 @@ function renderMap() {
   });
 
   // CWA polygons colored by signal or utility
+  // Pattern for blocked offices
+  const defs = svg.append('defs');
+  const pattern = defs.append('pattern')
+    .attr('id', 'blocked-hatch')
+    .attr('width', 6)
+    .attr('height', 6)
+    .attr('patternUnits', 'userSpaceOnUse')
+    .attr('patternTransform', 'rotate(45)');
+  pattern.append('rect').attr('width', 6).attr('height', 6).attr('fill', '#1a1a1a');
+  pattern.append('line').attr('x1', 0).attr('y1', 0).attr('x2', 0).attr('y2', 6)
+    .attr('stroke', '#444').attr('stroke-width', 2);
+
   const cwaGroup = svg.append('g');
   cwaGroup.selectAll('path')
     .data(cwaFeatures.features || [])
@@ -652,6 +680,7 @@ function renderMap() {
     .attr('d', path)
     .attr('fill', d => {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      if (isBlocked(code)) return 'url(#blocked-hatch)';
       const sig = signals[code];
       if (currentView === 'utility') {
         return sig && sig.office_lift != null
@@ -659,6 +688,10 @@ function renderMap() {
           : NO_DATA_COLOR;
       }
       return sig && sig.level ? SIGNAL_COLORS[sig.level] || NO_DATA_COLOR : NO_DATA_COLOR;
+    })
+    .style('cursor', d => {
+      const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      return isBlocked(code) ? 'not-allowed' : 'pointer';
     })
     .on('mouseenter', function(event, d) {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
@@ -671,6 +704,8 @@ function renderMap() {
         tooltip.innerHTML = sig && sig.office_lift != null
           ? `${code}<br>utility: +${(sig.office_lift * 100).toFixed(1)} pp`
           : `${code}: no calibration data`;
+      } else if (isBlocked(code)) {
+        tooltip.innerHTML = `${code}: insufficient model skill<br>(blocked from operational use)`;
       } else {
         tooltip.innerHTML = sig
           ? `${code}: ${sig.level}<br>${sig.n_severe}/${sig.n_total} severe analogs`
@@ -682,6 +717,7 @@ function renderMap() {
     })
     .on('click', (event, d) => {
       const code = (d.properties.cwa || d.properties.CWA || '').toUpperCase();
+      if (isBlocked(code)) return;
       openDetail(code);
     });
 
