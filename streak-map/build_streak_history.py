@@ -173,13 +173,14 @@ def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
     Quality-control station observations by flagging likely sensor errors.
 
     A station is discarded if BOTH of these conditions are true:
-      1. Its temperature is more than 40°F below the climatological normal
-         for its location and date
-      2. Its temperature is more than 30°F below the median of all stations
-         within a ±1° lat/lon box
+      1. Its temperature is more than 40°F off the climatological normal
+         for its location and date (in EITHER direction)
+      2. It also deviates from the median of all stations within a ±1°
+         lat/lon box by more than 30°F (in the same direction as #1)
 
-    This catches broken sensors (e.g., 1°F in March when neighbors read 60°F)
-    without flagging legitimate cold events (where neighbors are also cold).
+    This catches broken sensors (e.g., 1°F in March when neighbors read
+    60°F, OR 110°F in March when neighbors read 60°F) without flagging
+    legitimate extreme events (where neighbors are similarly anomalous).
 
     Parameters
     ----------
@@ -201,12 +202,11 @@ def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
         return observations
 
     normal_grid = clim_normals[doy - 1, :, :]
-    flagged = 0
+    flagged_cold = 0
+    flagged_hot = 0
     clean = []
 
     for obs in observations:
-        # Condition 1: check departure from climatological normal
-        # Find the nearest grid cell for this station
         lat_idx = np.argmin(np.abs(clim_lats - obs["lat"]))
         lon_idx = np.argmin(np.abs(clim_lons - obs["lon"]))
         normal_temp = normal_grid[lat_idx, lon_idx]
@@ -217,9 +217,8 @@ def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
 
         departure = obs["maxt"] - normal_temp
 
-        # Only check further if observation is way below normal
-        if departure < -40:
-            # Condition 2: check against neighbors within ±1°
+        # Only check further if observation is way off normal in either direction
+        if abs(departure) > 40:
             neighbors = [
                 o["maxt"] for o in observations
                 if o is not obs
@@ -229,14 +228,19 @@ def qc_observations(observations, clim_normals, clim_lons, clim_lats, doy):
 
             if len(neighbors) >= 2:
                 neighbor_median = np.median(neighbors)
-                if obs["maxt"] < neighbor_median - 30:
-                    flagged += 1
-                    continue  # Discard this observation
+                # Reject if station deviates from neighbors by >30°F
+                # in the SAME direction as its anomaly
+                if departure < 0 and obs["maxt"] < neighbor_median - 30:
+                    flagged_cold += 1
+                    continue
+                if departure > 0 and obs["maxt"] > neighbor_median + 30:
+                    flagged_hot += 1
+                    continue
 
         clean.append(obs)
 
-    if flagged > 0:
-        print(f"    QC: removed {flagged} suspect observation(s)")
+    if flagged_cold > 0 or flagged_hot > 0:
+        print(f"    QC: removed {flagged_cold} cold-biased, {flagged_hot} hot-biased observation(s)")
 
     return clean
 
