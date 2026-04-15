@@ -188,9 +188,17 @@ def ensure_labels(s3):
 
 
 def ensure_thresholds(s3):
-    """Download thresholds.json from R2."""
+    """Download thresholds.json from R2 (always fresh).
+
+    Force re-download since thresholds change frequently with calibration updates.
+    """
     local_path = CACHE_DIR / "thresholds.json"
-    download_from_r2(s3, "thresholds.json", local_path)
+    if local_path.exists():
+        local_path.unlink()
+    local_path.parent.mkdir(parents=True, exist_ok=True)
+    log("Downloading thresholds.json from R2...")
+    import boto3
+    s3.download_file(R2_BUCKET, "thresholds.json", str(local_path))
     with open(local_path) as f:
         return json.load(f)
 
