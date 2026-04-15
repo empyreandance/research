@@ -1008,7 +1008,7 @@ document.getElementById('about-panel').innerHTML = `
   </div>
 
   <h3>The Model</h3>
-  <p>A 335M-parameter sentence embedder (BAAI/bge-large-en-v1.5) fine-tuned on 1.4 million AFD pairs using contrastive learning. It maps each AFD section to a 1,024-dimensional vector where semantically similar forecasts cluster together.</p>
+  <p>A 335M-parameter sentence embedder (BAAI/bge-large-en-v1.5) fine-tuned on 1.44 million AFD section pairs using contrastive learning with curriculum training and hard-negative mining. It maps each AFD section to a 1,024-dimensional vector where semantically similar forecasts cluster together.</p>
 
   <h3>Analogs</h3>
   <p>When a new AFD arrives, CAAST embeds its Long Term section and finds the 10 historical AFDs from that office whose embeddings are closest by cosine similarity. Duplicates from the same calendar day are collapsed to the highest-similarity match so the top 10 represents 10 distinct historical situations.</p>
@@ -1029,7 +1029,7 @@ document.getElementById('about-panel').innerHTML = `
   <p>When the top-10 mean similarity falls below 0.70, CAAST refuses to fire any signal — the model has nothing comparable in its archive, so any "prediction" would be unreliable. Common for fire weather, frost, and other non-convective discussions that fall outside CAAST's training scope.</p>
 
   <h3>Validation</h3>
-  <p>National average severe precision of 67.1% across 90,750 verification queries (CWA + 100 km buffer, 7-day window), with 74 of 121 offices exceeding 70% precision. Mean lift over baseline: +17.5 percentage points. Lead time decay: 80% Day 1 → 49% Day 7.</p>
+  <p>National average severe precision of 67.6% across the 91 operational offices (CWA + 100 km buffer, 7-day verification window), with 47 of 91 offices exceeding 70% precision. Mean lift over baseline: +15.9 percentage points. Lead time decay: 72% Day 1 → 51% Day 6.</p>
 
   <div class="footnote">
     Personal research project, not an official NWS/NOAA product. CAAST is a retrospective pattern-matching tool, not an operational forecast system. Always rely on official NWS forecasts, watches, and warnings for weather decisions.
