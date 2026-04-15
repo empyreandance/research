@@ -1028,6 +1028,9 @@ document.getElementById('about-panel').innerHTML = `
   <h3>Insufficient Match</h3>
   <p>When the top-10 mean similarity falls below 0.70, CAAST refuses to fire any signal — the model has nothing comparable in its archive, so any "prediction" would be unreliable. Common for fire weather, frost, and other non-convective discussions that fall outside CAAST's training scope.</p>
 
+  <h3>Operational Scope</h3>
+  <p>CAAST is configured to fire signals for 91 of the 119 forecast offices in the verification set. Offices outside this scope — non-convective WFOs (fire-weather, marine-only), Alaska, Hawaii, Puerto Rico — are silently no-fired because their AFD language and severe-weather climatology fall outside the convective-CONUS training distribution. All validation statistics below reflect these 91 operational offices.</p>
+
   <h3>Validation</h3>
   <p>National average severe precision of 67.6% across the 91 operational offices (CWA + 100 km buffer, 7-day verification window), with 47 of 91 offices exceeding 70% precision. Mean lift over baseline: +15.9 percentage points. Lead time decay: 72% Day 1 → 51% Day 6.</p>
 
