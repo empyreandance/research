@@ -27,12 +27,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Cache CAAST corpus and model
-        uses: actions/cache@v4
-        with:
-          path: caast/.caast_cache
-          key: caast-cache-v4
-
       - name: Cache pip packages
         uses: actions/cache@v4
         with:
@@ -54,6 +48,33 @@ jobs:
         run: |
           cd caast
           python hourly_update.py
+
+      - name: Verify run completeness
+        run: |
+          python3 << 'PY'
+          import json, sys
+          from pathlib import Path
+          sig_path = Path("caast/data/signals.json")
+          meta_path = Path("caast/.caast_cache/office_metadata.json")
+          if not sig_path.exists():
+              print("FAIL: signals.json missing"); sys.exit(1)
+          sig = json.load(sig_path.open())
+          meta = json.load(meta_path.open()) if meta_path.exists() else {}
+          n_op = sum(1 for o in meta.values() if o.get("operational"))
+          fired = [o for o, v in sig.items()
+                   if meta.get(o, {}).get("operational")
+                   and v.get("signal_level") not in (None, "INSUFFICIENT_MATCH")]
+          covered = sum(1 for o, v in sig.items()
+                        if meta.get(o, {}).get("operational") and v)
+          print(f"Operational offices in metadata: {n_op}")
+          print(f"Operational offices present in signals.json: {covered}")
+          print(f"  ...of which fired a signal: {len(fired)}")
+          THRESHOLD = 85
+          if covered < THRESHOLD:
+              print(f"FAIL: only {covered}/{n_op} operational offices covered (threshold {THRESHOLD})")
+              sys.exit(1)
+          print("OK")
+          PY
 
       - name: Commit updated signals
         run: |
