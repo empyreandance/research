@@ -3,12 +3,12 @@
   "product_id": "202604151010-KCHS-FXUS62-AFDCHS",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-15T15:41:01.219632+00:00",
+  "updated": "2026-04-15T16:15:04.341852+00:00",
   "query_preview": "..\nKEY MESSAGE 1: Dry weather and above-normal temperatures will \ncontinue through the weekend.\n\nProminent ridging aloft and subtropical high pressure at the surface \nwill continue to support dry weather and above-normal temperatures \nthrough the weekend. Temperatures will range into the upper 80s to \nlow 90s this afternoon and through the weekend. These values would \nbe on the order of 10 degrees (or more) above normal. High \ntemperatures could approach the daily records today, with the \nbest chances of reaching records on Friday and Saturday (see \nClimate section below). The beaches will feel considerably \ncooler (possibly 10 to 15 degrees cooler) with onshore flow and \nwater temperatures remaining in the mid-60s. The combination of \nwell above normal temperatures and no rainfall will only serve \nto further worsen ongoing Extreme (D3) drought conditions \nhighlighted by the U.S. Drought Monitor.",
   "analogs": [
     {
-      "datetime_utc": "2021-11-14T17:16Z",
-      "source_file": "CHS_2021_14_1716.txt",
+      "datetime_utc": "2021-11-14T09:25Z",
+      "source_file": "CHS_2021_14_0925.txt",
       "similarity": 0.9482812881469727,
       "label": "quiet",
       "is_severe": false,
@@ -36,6 +36,53 @@
         "5": {
           "label": "quiet",
           "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2017-09-06T23:37Z",
+      "source_file": "CHS_2017_06_2337.txt",
+      "similarity": 0.9398739337921143,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 1,
+            "tornado": 3,
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "flood": 8,
+            "tornado": 5,
+            "severe_wind": 1
+          }
         },
         "6": {
           "label": "quiet",
@@ -81,53 +128,6 @@
         "5": {
           "label": "quiet",
           "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2017-09-06T20:02Z",
-      "source_file": "CHS_2017_06_2002.txt",
-      "similarity": 0.9398739337921143,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 1,
-            "tornado": 3,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "flood": 8,
-            "tornado": 5,
-            "severe_wind": 1
-          }
         },
         "6": {
           "label": "quiet",
@@ -232,7 +232,7 @@
     {
       "datetime_utc": "2007-01-18T20:13Z",
       "source_file": "CHS_2007_18_2013.txt",
-      "similarity": 0.9353464841842651,
+      "similarity": 0.9353465437889099,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -269,9 +269,9 @@
       }
     },
     {
-      "datetime_utc": "2010-04-07T17:41Z",
-      "source_file": "CHS_2010_07_1741.txt",
-      "similarity": 0.9339649081230164,
+      "datetime_utc": "2010-04-07T11:34Z",
+      "source_file": "CHS_2010_07_1134_1.txt",
+      "similarity": 0.9339650869369507,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -312,7 +312,7 @@
     {
       "datetime_utc": "2006-07-31T06:24Z",
       "source_file": "CHS_2006_31_0624.txt",
-      "similarity": 0.9335075616836548,
+      "similarity": 0.93350750207901,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -398,9 +398,9 @@
       }
     },
     {
-      "datetime_utc": "2016-10-06T00:25Z",
-      "source_file": "CHS_2016_06_0025.txt",
-      "similarity": 0.932857096195221,
+      "datetime_utc": "2016-10-05T17:16Z",
+      "source_file": "CHS_2016_05_1716.txt",
+      "similarity": 0.9328572750091553,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -409,36 +409,34 @@
           "counts": {}
         },
         "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
           "label": "severe_wind",
           "counts": {
             "flood": 19,
             "severe_wind": 5
           }
         },
-        "2": {
+        "3": {
           "label": "flood",
           "counts": {
             "flood": 41
           }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "flood",
           "counts": {
-            "flood": 2
+            "flood": 1
           }
         }
       }
@@ -447,7 +445,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.69,
-    "mean_similarity": 0.9212402868270874,
+    "mean_similarity": 0.921240314245224,
     "base_rate": 0.6555945188241934,
     "signal_value": 0.18999999999999995,
     "percentile": null,
@@ -458,6 +456,6 @@
     "n_total_signal": 100,
     "product_id": "202604151010-KCHS-FXUS62-AFDCHS",
     "afd_time": null,
-    "updated": "2026-04-15T15:41:01.219632+00:00"
+    "updated": "2026-04-15T16:15:04.341852+00:00"
   }
 }
