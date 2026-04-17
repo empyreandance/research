@@ -3,13 +3,13 @@
   "product_id": "202604171137-KLBF-FXUS63-AFDLBF",
   "afd_time": null,
   "section_type": "long_term",
-  "updated": "2026-04-17T14:00:33.235705+00:00",
+  "updated": "2026-04-17T17:09:45.336883+00:00",
   "query_preview": "/SUNDAY THROUGH THURSDAY/...\nIssued at 358 AM CDT Fri Apr 17 2026\n\nUpper level ridging will be translating eastward across the Rockies \nSunday. Across our area, northwest flow aloft will be present \ndownstream of the ridge. At the surface, the center of surface high \npressure will be moving out of southern Canada and into northern \nMinnesota. This will drive a weak backdoor cold front into portions \nof north central Nebraska. This should limit highs to the mid 60s \nacross that area. Meanwhile, highs reaching the mid 70s are likely \nelsewhere. The lack of wind Sunday should limited fire weather \nconcerns despite very low afternoon humidity values. \n\nMonday, a ridge breakdown occurs, a classic set-up for near or \ncritical fire weather concerns. This indeed appears to be the case, \nas gusty south to southwest winds combine with humidity well below \n20% and highs climbing into the 80s. \n\nTuesday, the ridge aloft appears it will build northward once again, \nwith the axis centered over the western High Plains. Again, it will \nbe a very warm day with low humidity, but the lack of much of a \nsurface pressure gradient should keep winds on the lighter side, and \nlimit the overall fire weather concerns.\n\nAn upper level trough approaches the area from the west Wednesday. \nSurface low pressure will deepen in response across eastern \nColorado/Wyoming. A very warm day (highs mid to upper 80s) along \nwith gusty south winds can be expected due to the deepening surface \nlow to the west. Appears to be another good set-up for fire weather \nconcerns. The difference Wednesday is that low-level \nmoisture/humidity will be on the increase, with dew points possibly \nclimbing into the lower and middle 50s by afternoon. This higher \nhumidity could limit a critical weather threat. \n\nAttention turns to thunderstorm potential later Wednesday afternoon \nthrough Thursday afternoon. It appears the upper level trough will \nonly slowly move to the northeast and potentially close off across \neastern Montana Thursday. This would allow for a continued increase \nin dew points/humidity along and ahead of a slow moving cold front. \nWill continue to monitor.",
   "analogs": [
     {
       "datetime_utc": "2010-07-25T20:03Z",
       "source_file": "LBF_2010_25_2003.txt",
-      "similarity": 0.9225907325744629,
+      "similarity": 0.9225902557373047,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -50,9 +50,61 @@
       }
     },
     {
+      "datetime_utc": "2019-05-12T05:48Z",
+      "source_file": "LBF_2019_12_0548_1.txt",
+      "similarity": 0.9184098839759827,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "2": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 5
+          }
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 80,
+            "tornado": 29,
+            "severe_wind": 4
+          }
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2019-05-11T20:36Z",
       "source_file": "LBF_2019_11_2036.txt",
-      "similarity": 0.9184103012084961,
+      "similarity": 0.9184098839759827,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -103,61 +155,9 @@
       }
     },
     {
-      "datetime_utc": "2019-05-12T05:48Z",
-      "source_file": "LBF_2019_12_0548_1.txt",
-      "similarity": 0.9184103012084961,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 5
-          }
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 80,
-            "tornado": 29,
-            "severe_wind": 4
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2010-04-16T20:09Z",
       "source_file": "LBF_2010_16_2009.txt",
-      "similarity": 0.9159665107727051,
+      "similarity": 0.915966272354126,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -200,9 +200,9 @@
       }
     },
     {
-      "datetime_utc": "2013-05-24T17:41Z",
-      "source_file": "LBF_2013_24_1741.txt",
-      "similarity": 0.915585458278656,
+      "datetime_utc": "2013-05-24T11:33Z",
+      "source_file": "LBF_2013_24_1133.txt",
+      "similarity": 0.915584921836853,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -264,7 +264,7 @@
     {
       "datetime_utc": "2004-06-19T08:55Z",
       "source_file": "LBF_2004_19_0855.txt",
-      "similarity": 0.9155244827270508,
+      "similarity": 0.9155243039131165,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -303,7 +303,7 @@
     {
       "datetime_utc": "2019-06-13T08:40Z",
       "source_file": "LBF_2019_13_0840.txt",
-      "similarity": 0.9146311283111572,
+      "similarity": 0.9146307706832886,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -355,53 +355,9 @@
       }
     },
     {
-      "datetime_utc": "2016-05-16T20:16Z",
-      "source_file": "LBF_2016_16_2016.txt",
-      "similarity": 0.9137848615646362,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 37,
-            "severe_wind": 8,
-            "flood": 4,
-            "tornado": 4
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2016-05-17T05:29Z",
       "source_file": "LBF_2016_17_0529.txt",
-      "similarity": 0.9137848615646362,
+      "similarity": 0.913784384727478,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -447,29 +403,23 @@
       }
     },
     {
-      "datetime_utc": "2014-05-25T06:08Z",
-      "source_file": "LBF_2014_25_0608.txt",
-      "similarity": 0.9133414030075073,
-      "label": "severe_wind",
+      "datetime_utc": "2016-05-16T23:45Z",
+      "source_file": "LBF_2016_16_2345.txt",
+      "similarity": 0.913784384727478,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 6
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 5
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -482,14 +432,63 @@
         "5": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 2
+            "severe_hail": 1
           }
         },
         "6": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 4,
-            "severe_wind": 3
+            "severe_hail": 37,
+            "severe_wind": 8,
+            "flood": 4,
+            "tornado": 4
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2014-05-24T20:56Z",
+      "source_file": "LBF_2014_24_2056.txt",
+      "similarity": 0.91334068775177,
+      "label": "severe_hail",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "2": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 6
+          }
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 5
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
           }
         }
       }
@@ -498,7 +497,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9052954125404358,
+    "mean_similarity": 0.905294941663742,
     "base_rate": 0.5358489496215235,
     "signal_value": 0.42415105037847645,
     "percentile": 69,
@@ -509,6 +508,6 @@
     "n_total_signal": 100,
     "product_id": "202604171137-KLBF-FXUS63-AFDLBF",
     "afd_time": null,
-    "updated": "2026-04-17T14:00:33.235705+00:00"
+    "updated": "2026-04-17T17:09:45.336883+00:00"
   }
 }
