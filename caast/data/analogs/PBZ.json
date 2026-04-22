@@ -3,12 +3,12 @@
   "product_id": "202604212300-KPBZ-FXUS61-AFDPBZ",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-21T23:01:14.308271+00:00",
+  "updated": "2026-04-21T23:54:09.788026+00:00",
   "query_preview": "..\nKEY MESSAGE 1... \n\nA shortwave trough and weakening surface cold front is expected\nto approach and cross the region tonight into tomorrow morning \nwith showers likely. Minimal instability (MU CAPE less than 500 \nJ/kg) could result in a couple of embedded thunderstorms \ntonight, with this potential shifting south of Pittsburgh during\nthe day tomorrow.\n\nKEY MESSAGE 2...\n\nDry and warmer weather is expected Thursday into early Friday as a \nridge builds in. The ridge should flatten and exit the area later \nFriday as a marginally zonal type flow setting up across much the \nCONUS into the weekend. Periodic shortwaves embedded in the flow \nshould return shower chances to the region Friday afternoon into the \nweekend. At this time, it appears the most likely time for showers \nis with a shortwave and surface warm front approach and passage \nFriday night, followed by a surface cold front on Saturday. Model \nensemble data indicate relatively low instability and shear \nparameters, with low chances for thunder and severe storms. \nLingering shower chances continue, especially early Sunday, with \nanother weak shortwave passage.\n\nA warming trend is expected from Wednesday through Friday, with \nhighs eventually reaching around 15 degrees above average. A return \nto more seasonable temperatures is expected after the passage of the \nSaturday cold front.",
   "analogs": [
     {
-      "datetime_utc": "2015-06-29T23:43Z",
-      "source_file": "PBZ_2015_29_2343.txt",
+      "datetime_utc": "2015-06-29T21:58Z",
+      "source_file": "PBZ_2015_29_2158.txt",
       "similarity": 0.9688514471054077,
       "label": "severe_wind",
       "is_severe": true,
@@ -99,9 +99,58 @@
       }
     },
     {
+      "datetime_utc": "2025-03-31T01:09Z",
+      "source_file": "PBZ_2025_31_0109.txt",
+      "similarity": 0.9678570032119751,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 107,
+            "severe_hail": 109,
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 43,
+            "severe_wind": 7
+          }
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 17
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 5,
+            "severe_wind": 2
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-03-30T22:12Z",
       "source_file": "PBZ_2025_30_2212.txt",
-      "similarity": 0.9678570628166199,
+      "similarity": 0.9678570032119751,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -152,9 +201,9 @@
       }
     },
     {
-      "datetime_utc": "2025-03-31T01:09Z",
-      "source_file": "PBZ_2025_31_0109.txt",
-      "similarity": 0.9678570628166199,
+      "datetime_utc": "2022-07-02T01:01Z",
+      "source_file": "PBZ_2022_02_0101.txt",
+      "similarity": 0.9673420190811157,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -169,30 +218,26 @@
         "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 107,
-            "severe_hail": 109,
-            "flood": 1
+            "severe_wind": 1
           }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "flood": 43,
-            "severe_wind": 7
+            "severe_wind": 1,
+            "flood": 5
           }
         },
         "4": {
-          "label": "flood",
+          "label": "severe_wind",
           "counts": {
-            "flood": 17
+            "severe_hail": 1,
+            "severe_wind": 6
           }
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 5,
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -250,51 +295,6 @@
       }
     },
     {
-      "datetime_utc": "2022-07-02T05:37Z",
-      "source_file": "PBZ_2022_02_0537.txt",
-      "similarity": 0.9673420190811157,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "flood": 5
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 6
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2012-12-02T16:17Z",
       "source_file": "PBZ_2012_02_1617.txt",
       "similarity": 0.9668949842453003,
@@ -330,54 +330,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2020-07-12T05:07Z",
-      "source_file": "PBZ_2020_12_0507.txt",
-      "similarity": 0.9665050506591797,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 1,
-            "flood": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 30,
-            "tornado": 1,
-            "flood": 7
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
         }
       }
     },
@@ -430,9 +382,57 @@
       }
     },
     {
+      "datetime_utc": "2020-07-12T03:06Z",
+      "source_file": "PBZ_2020_12_0306.txt",
+      "similarity": 0.9665050506591797,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 1,
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 30,
+            "tornado": 1,
+            "flood": 7
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2020-09-26T17:37Z",
       "source_file": "PBZ_2020_26_1737_1.txt",
-      "similarity": 0.966462254524231,
+      "similarity": 0.9664621949195862,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -470,7 +470,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.9,
-    "mean_similarity": 0.961349778175354,
+    "mean_similarity": 0.9613497459888458,
     "base_rate": 0.544319694101329,
     "signal_value": 0.35568030589867106,
     "percentile": 85,
@@ -481,6 +481,6 @@
     "n_total_signal": 100,
     "product_id": "202604212300-KPBZ-FXUS61-AFDPBZ",
     "afd_time": null,
-    "updated": "2026-04-21T23:01:14.308271+00:00"
+    "updated": "2026-04-21T23:54:09.788026+00:00"
   }
 }
