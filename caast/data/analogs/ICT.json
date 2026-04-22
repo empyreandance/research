@@ -1,15 +1,15 @@
 {
   "office": "ICT",
-  "product_id": "202604212245-KICT-FXUS63-AFDICT",
+  "product_id": "202604220339-KICT-FXUS63-AFDICT",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-21T23:54:09.788026+00:00",
+  "updated": "2026-04-22T03:44:45.198785+00:00",
   "query_preview": "..\nIssued at 138 PM CDT Tue Apr 21 2026\n\nCurrently, broad ridging extends across much of the central CONUS \nwith deep troughs situated along either coast. A weak, subtle \nshortwave trough sits over the Upper Midwest with an associated \nsurface low near the Great Lakes. A weak boundary extends south from \nthis feature through the Plains. Under the ridge, temperatures today \nwill reach into the middle 80s across Central Kansas with middle to \nupper 70s for South-central and Southeastern Kansas. As the \nshortwave pushes east and the boundary extends further south, \ntemperatures for Wednesday will tick down a few degrees with highs \ngenerally in the lower to middle 70s and a few locations in Central \nKansas approaching 80 degrees. Breezy southerly winds are expected \neach day with sustained winds between 15-25 mph and gusts between 30-\n35 mph possible. \n\nFor Thursday, the deep trough that is currently just off the Pacific \ncoast will traverse eastward and will be centered over the Rockies \nby Thursday morning. An elongated surface low will be stretched over \nthe High Plains with a frontal boundary pushing into our area. \nTemperatures ahead of this next frontal boundary will reach into the \n80s for most on Thursday afternoon. This boundary will be the focus \nof our next chance at severe weather on Thursday afternoon and \nevening. With ample MUCAPE (2000-3000 J/kg) and shear between 30-40 \nkts, initial supercellular development is anticipated with an \nisolated tornado threat. But storm motion will lead to a broken line \nof storms where strong winds and large hail will be the primary \nconcerns. \n\nCooler, near normal, temperatures will prevail for Friday behind the \nfront with a few lingering showers in Southeast Kansas. The front \nwill stall to our south on Friday, then by Saturday it will begin to \nlift back over our area as a warm front. Instability will increase \nthrough the evening hours on Saturday leading to what looks like an \nevening/overnight thunderstorm risk. Another potent shortwave trough \nwill then swing through the area on Sunday. Sufficient instability \nand shear will lead to additional severe chances developing late \nSunday afternoon and lasting through the evening hours, primarily \nacross Southern and Southeastern Kansas. Details for both Sat/Sun \nevents will continue to be refined in the coming days. Behind \nSunday's system, clearing skies and near normal temperatures are \nanticipated to begin next week.",
   "analogs": [
     {
       "datetime_utc": "2024-06-14T11:25Z",
       "source_file": "ICT_2024_14_1125.txt",
-      "similarity": 0.9799739122390747,
+      "similarity": 0.9799739718437195,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -58,7 +58,7 @@
     {
       "datetime_utc": "2005-05-11T09:01Z",
       "source_file": "ICT_2005_11_0901_1.txt",
-      "similarity": 0.9796802997589111,
+      "similarity": 0.9796804189682007,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -95,8 +95,8 @@
       }
     },
     {
-      "datetime_utc": "2024-06-15T17:34Z",
-      "source_file": "ICT_2024_15_1734.txt",
+      "datetime_utc": "2024-06-15T07:53Z",
+      "source_file": "ICT_2024_15_0753.txt",
       "similarity": 0.9793456792831421,
       "label": "severe_wind",
       "is_severe": true,
@@ -142,9 +142,60 @@
       }
     },
     {
+      "datetime_utc": "2018-07-26T04:30Z",
+      "source_file": "ICT_2018_26_0430.txt",
+      "similarity": 0.9791826009750366,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 5,
+            "flood": 2
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 23
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "flood": 1,
+            "severe_wind": 31,
+            "tornado": 1,
+            "severe_hail": 4
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2018-07-25T23:37Z",
       "source_file": "ICT_2018_25_2337.txt",
-      "similarity": 0.9791825413703918,
+      "similarity": 0.9791826009750366,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -197,60 +248,9 @@
       }
     },
     {
-      "datetime_utc": "2018-07-26T04:30Z",
-      "source_file": "ICT_2018_26_0430.txt",
-      "similarity": 0.9791825413703918,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 6,
-            "severe_wind": 5,
-            "flood": 2
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 23
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "flood": 1,
-            "severe_wind": 31,
-            "tornado": 1,
-            "severe_hail": 4
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2019-08-24T00:08Z",
-      "source_file": "ICT_2019_24_0008.txt",
-      "similarity": 0.9780547022819519,
+      "datetime_utc": "2019-08-24T04:35Z",
+      "source_file": "ICT_2019_24_0435.txt",
+      "similarity": 0.9780548214912415,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -302,7 +302,7 @@
     {
       "datetime_utc": "2019-08-23T20:03Z",
       "source_file": "ICT_2019_23_2003.txt",
-      "similarity": 0.9780547022819519,
+      "similarity": 0.9780548214912415,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -354,7 +354,7 @@
     {
       "datetime_utc": "2010-08-02T08:21Z",
       "source_file": "ICT_2010_02_0821.txt",
-      "similarity": 0.977853536605835,
+      "similarity": 0.9778537154197693,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -401,7 +401,7 @@
     {
       "datetime_utc": "2004-06-09T08:46Z",
       "source_file": "ICT_2004_09_0846.txt",
-      "similarity": 0.9775775671005249,
+      "similarity": 0.9775776863098145,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -456,7 +456,7 @@
     {
       "datetime_utc": "2024-06-16T11:25Z",
       "source_file": "ICT_2024_16_1125.txt",
-      "similarity": 0.9770538806915283,
+      "similarity": 0.9770539999008179,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -500,7 +500,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9743730002641677,
+    "mean_similarity": 0.9743730992078781,
     "base_rate": 0.6102984201287303,
     "signal_value": 0.3497015798712697,
     "percentile": 85,
@@ -509,8 +509,8 @@
     "n_total": 10,
     "n_severe_signal": 96,
     "n_total_signal": 100,
-    "product_id": "202604212245-KICT-FXUS63-AFDICT",
+    "product_id": "202604220339-KICT-FXUS63-AFDICT",
     "afd_time": null,
-    "updated": "2026-04-21T23:54:09.788026+00:00"
+    "updated": "2026-04-22T03:44:45.198785+00:00"
   }
 }
