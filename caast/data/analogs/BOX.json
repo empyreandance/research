@@ -1,15 +1,15 @@
 {
   "office": "BOX",
-  "product_id": "202604212334-KBOX-FXUS61-AFDBOX",
+  "product_id": "202604220602-KBOX-FXUS61-AFDBOX",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-21T23:54:09.788026+00:00",
+  "updated": "2026-04-22T06:13:02.833749+00:00",
   "query_preview": "..\nKEY MESSAGE 1...Scattered showers Wed and Thu. Some wet snow \npossible Wed morning in the higher elevations, then a \nthunderstorm with small hail possible Thu. \n\nYou know it's April in southern New England when you have to \nrefer to your winter weather and convective forecast procedures \non the same day.\n\nBroad NW flow aloft dominates as upper low over Maritimes drops\nsouthward toward Gulf of Maine Wed and Thu. This will help \nsuppress a weak short wave and surface low approaching from the \nlower Great Lakes which eventually passes off NJ coast and south\nof New England Wed. There is enough low level moisture \nconvergence to bring scattered showers to southern New England \nlate tonight into Wed morning, especially for western MA and \nmuch of CT which are closer to the better lift and moisture \nconvergence. We also can't rule out some wet snow across the \nhigher elevations at onset due to marginal temperature profiles \nbut at most there should only be a coating on the grass.\n\nKind of an interesting setup for Thu and guidance may be \nunderplaying convective potential a bit, something typical in \nthese situations with cold air aloft and closed low lurking \nnearby. There's enough cyclonic flow coupled with daytime \nheating and ample moisture to at least generate diurnally driven\nclouds and perhaps a few showers. Certainly seeing some signals\nin the high-res models for a few low-topped showers or \nthunderstorms, especially in eastern MA where there should be \nadditional support from potent mid level short wave rotating \nthrough along with minimal lower level instability. Small hail \nor graupel is possible should cores grow tall enough given \npresence of cold air aloft.\n\n\nKEY MESSAGE 2...Mainly dry and seasonable Fri through the \nweekend, then pattern looks to turn more unsettled next week.\n\nBroad cyclonic flow dominates later this week and through the \nweekend as upper low meanders around Atlantic Canada. This \nessentially blocks any systems approaching our area from the \nPlains and Great Lakes and maintains dry weather, although it's \ncertainly possible that we see diurnal clouds and perhaps a \nbrief shower from combination of daytime heating and cold air \naloft. Temperatures should end up near or just below average \nhighs for late April which are in the upper 50s to lower 60s.\n\nThere are some signals in longer range guidance that blocky \npattern breaks down early next week which allows a series of \nclosed upper lows to track through region, each bringing rounds \nof steadier rainfall, so it's possible we see a return to a \nwetter pattern toward the middle of next week.",
   "analogs": [
     {
-      "datetime_utc": "2022-05-09T07:42Z",
-      "source_file": "BOX_2022_09_0742.txt",
-      "similarity": 0.9779465198516846,
+      "datetime_utc": "2022-05-09T17:47Z",
+      "source_file": "BOX_2022_09_1747.txt",
+      "similarity": 0.977946400642395,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -49,9 +49,48 @@
       }
     },
     {
+      "datetime_utc": "2023-06-17T06:00Z",
+      "source_file": "BOX_2023_17_0600.txt",
+      "similarity": 0.9771153926849365,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 13
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2023-06-16T19:45Z",
       "source_file": "BOX_2023_16_1945.txt",
-      "similarity": 0.9771155118942261,
+      "similarity": 0.9771153926849365,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -88,17 +127,15 @@
       }
     },
     {
-      "datetime_utc": "2023-06-17T01:58Z",
-      "source_file": "BOX_2023_17_0158.txt",
-      "similarity": 0.9771155118942261,
-      "label": "flood",
-      "is_severe": false,
+      "datetime_utc": "2023-05-28T01:48Z",
+      "source_file": "BOX_2023_28_0148.txt",
+      "similarity": 0.9760526418685913,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 13
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -117,8 +154,12 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 15,
+            "severe_wind": 13,
+            "flood": 1
+          }
         },
         "6": {
           "label": "quiet",
@@ -129,7 +170,7 @@
     {
       "datetime_utc": "2023-05-27T22:44Z",
       "source_file": "BOX_2023_27_2244.txt",
-      "similarity": 0.9760525822639465,
+      "similarity": 0.9760526418685913,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -168,49 +209,8 @@
       }
     },
     {
-      "datetime_utc": "2023-05-28T05:33Z",
-      "source_file": "BOX_2023_28_0533.txt",
-      "similarity": 0.9760525822639465,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 15,
-            "severe_wind": 13,
-            "flood": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-05-08T14:03Z",
-      "source_file": "BOX_2022_08_1403.txt",
+      "datetime_utc": "2022-05-08T08:15Z",
+      "source_file": "BOX_2022_08_0815.txt",
       "similarity": 0.9755920171737671,
       "label": "severe_hail",
       "is_severe": true,
@@ -248,9 +248,9 @@
       }
     },
     {
-      "datetime_utc": "2022-10-04T17:50Z",
-      "source_file": "BOX_2022_04_1750.txt",
-      "similarity": 0.9753366112709045,
+      "datetime_utc": "2022-10-04T07:17Z",
+      "source_file": "BOX_2022_04_0717.txt",
+      "similarity": 0.9753365516662598,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -285,46 +285,9 @@
       }
     },
     {
-      "datetime_utc": "2025-05-19T11:02Z",
-      "source_file": "BOX_2025_19_1102.txt",
+      "datetime_utc": "2025-05-19T17:27Z",
+      "source_file": "BOX_2025_19_1727.txt",
       "similarity": 0.9751120805740356,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-05-07T05:32Z",
-      "source_file": "BOX_2022_07_0532.txt",
-      "similarity": 0.9748554229736328,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -361,7 +324,44 @@
     {
       "datetime_utc": "2022-05-06T19:38Z",
       "source_file": "BOX_2022_06_1938.txt",
-      "similarity": 0.9748554229736328,
+      "similarity": 0.974855363368988,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-05-07T02:09Z",
+      "source_file": "BOX_2022_07_0209.txt",
+      "similarity": 0.974855363368988,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -399,7 +399,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.3,
-    "mean_similarity": 0.9722951644659042,
+    "mean_similarity": 0.9722951185703278,
     "base_rate": 0.3974409211478177,
     "signal_value": -0.09744092114781772,
     "percentile": 36,
@@ -408,8 +408,8 @@
     "n_total": 10,
     "n_severe_signal": 30,
     "n_total_signal": 100,
-    "product_id": "202604212334-KBOX-FXUS61-AFDBOX",
+    "product_id": "202604220602-KBOX-FXUS61-AFDBOX",
     "afd_time": null,
-    "updated": "2026-04-21T23:54:09.788026+00:00"
+    "updated": "2026-04-22T06:13:02.833749+00:00"
   }
 }
