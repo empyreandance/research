@@ -1,9 +1,9 @@
 {
   "office": "JAN",
-  "product_id": "202604230833-KJAN-FXUS64-AFDJAN",
+  "product_id": "202604231158-KJAN-FXUS64-AFDJAN-AAA",
   "afd_time": null,
   "section_type": "discussion",
-  "updated": "2026-04-23T10:50:08.053455+00:00",
+  "updated": "2026-04-23T12:10:56.209639+00:00",
   "query_preview": "..\nIssued at 322 AM CDT Thu Apr 23 2026\n\nThrough tonight: The ridging aloft that is over our region early \nthis morning will shift east through the period while the surface \nridge across our CWA from the east will persist. This will continue \nto lead to moisture return through tonight. Daytime heating of the \nincrease in moisture will lead to a chance of showers and \nthunderstorms over our southwest this afternoon. This convection \nwill see a distinct diurnal trend and dissipate early this evening. \nThe increase in moisture will also support patchy fog development in \nthe south early this morning and again toward sunrise Friday \nmorning. Warmer than normal temperatures are also expected through \nthe period. /22/\n\nThrough late next week:\n\nAn active jet pattern will promote increased rain and storm chances \nbeginning this weekend and persisting into next week. The break down \nof the surface subtropical high that has kept drier air locked over \nthe region will allow for moisture recovery and maintenance of moist \nairmass with no substantial airmass change expected through the \nperiod. The primary focus for now is a convective system poised to \ngrow upscale and push across the area later Friday. Analysis of \navailable CAM guidance shows that the most favorable zone for severe \nthreat exists roughly along the HWY 82 corridor, as here is where \nshear is most favorably aligned relative to storm motion and \norientation. Further south and west, shear is more line parallel, \nthus the cold pool is more likely to overwhelm convection in these \nareas. It is possible that the thermal and shear environment will be \nsufficient to support cold pool maintenance, so even these areas \nwill have be monitored. The slight risk has been expanded across the \nI-20 corridor for Friday. CAM soundings generally supported \nconvection becoming elevated south of I-20 amid waning surface based \ninstability Friday evening. Given this, I-20 seems like a fair \ncutoff for severe threat. \n\nFollowing storms Friday, there is good consensus among CAM guidance \nthe environment wont recover in time to support much convection \nSaturday, which conceptually makes sense. However, global models \nseem to be struggling to resolve this. Have opted to cap PoP on \nSaturday. \n\nThe environment recovers by Sunday and is supportive of mainly \ndiurnal convection through early week as the jet remains displaced \nnorth. Severe threat looks to increase again Monday night as \nstronger flow with a shortwave could support more organized \nconvection. There is a slight risk highlighted by SPC for this, but \nlocally will focus on Friday threat first. \n\nA more substantial shortwave could support more organized convection \nlater next week and possibly a greater severe threat. This will have \nto be monitored closely. /SAS/",
   "analogs": [
     {
@@ -42,6 +42,60 @@
         "5": {
           "label": "quiet",
           "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-05-13T07:21Z",
+      "source_file": "JAN_2024_13_0721.txt",
+      "similarity": 0.9920411109924316,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 39,
+            "severe_hail": 2,
+            "tornado": 5,
+            "flood": 5
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 4,
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 53,
+            "flood": 6
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 4,
+            "flood": 19
+          }
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
         },
         "6": {
           "label": "quiet",
@@ -109,60 +163,6 @@
       }
     },
     {
-      "datetime_utc": "2024-05-13T07:21Z",
-      "source_file": "JAN_2024_13_0721.txt",
-      "similarity": 0.9920411109924316,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 39,
-            "severe_hail": 2,
-            "tornado": 5,
-            "flood": 5
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 4,
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 53,
-            "flood": 6
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "flood": 19
-          }
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2021-08-01T09:08Z",
       "source_file": "JAN_2021_01_0908.txt",
       "similarity": 0.991873025894165,
@@ -207,7 +207,7 @@
     {
       "datetime_utc": "2023-06-11T22:12Z",
       "source_file": "JAN_2023_11_2212.txt",
-      "similarity": 0.9915915727615356,
+      "similarity": 0.9915916919708252,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -269,60 +269,9 @@
       }
     },
     {
-      "datetime_utc": "2023-03-29T23:25Z",
-      "source_file": "JAN_2023_29_2325.txt",
-      "similarity": 0.9915573000907898,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 12,
-            "severe_wind": 21,
-            "severe_hail": 3
-          }
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 12,
-            "tornado": 2,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-03-30T01:55Z",
-      "source_file": "JAN_2023_30_0155.txt",
-      "similarity": 0.9915573000907898,
+      "datetime_utc": "2023-03-30T05:25Z",
+      "source_file": "JAN_2023_30_0525.txt",
+      "similarity": 0.9915573596954346,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -375,9 +324,60 @@
       }
     },
     {
+      "datetime_utc": "2023-03-29T20:11Z",
+      "source_file": "JAN_2023_29_2011.txt",
+      "similarity": 0.9915573596954346,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 12,
+            "severe_wind": 21,
+            "severe_hail": 3
+          }
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 12,
+            "tornado": 2,
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 1
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2023-07-05T09:00Z",
       "source_file": "JAN_2023_05_0900.txt",
-      "similarity": 0.991206705570221,
+      "similarity": 0.9912066459655762,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -429,7 +429,7 @@
     {
       "datetime_utc": "2021-06-22T23:46Z",
       "source_file": "JAN_2021_22_2346.txt",
-      "similarity": 0.990848183631897,
+      "similarity": 0.9908483028411865,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -474,7 +474,7 @@
     {
       "datetime_utc": "2024-03-31T08:23Z",
       "source_file": "JAN_2024_31_0823.txt",
-      "similarity": 0.9906522035598755,
+      "similarity": 0.990652322769165,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -515,7 +515,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9891341000795364,
+    "mean_similarity": 0.9891341400146484,
     "base_rate": 0.6949098167819205,
     "signal_value": 0.2350901832180795,
     "percentile": 90,
@@ -524,8 +524,8 @@
     "n_total": 10,
     "n_severe_signal": 93,
     "n_total_signal": 100,
-    "product_id": "202604230833-KJAN-FXUS64-AFDJAN",
+    "product_id": "202604231158-KJAN-FXUS64-AFDJAN-AAA",
     "afd_time": null,
-    "updated": "2026-04-23T10:50:08.053455+00:00"
+    "updated": "2026-04-23T12:10:56.209639+00:00"
   }
 }
