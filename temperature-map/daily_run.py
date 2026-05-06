@@ -425,6 +425,8 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
 
     nlat, nlon = forecast_grid.shape
     anomaly = np.full((nlat, nlon), np.nan)
+    capped_max = np.zeros((nlat, nlon), dtype=bool)  # Warmer than any normal day
+    capped_min = np.zeros((nlat, nlon), dtype=bool)  # Colder than any normal day
 
     # Today's index (0-based)
     d0 = today_doy - 1  # Convert 1-based DOY to 0-based index
@@ -461,6 +463,7 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
                 elif offset < -182:
                     offset += 365
                 anomaly[i, j] = offset
+                capped_max[i, j] = True
                 continue
 
             # If forecast is below the annual min normal, cap it
@@ -471,6 +474,7 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
                 elif offset < -182:
                     offset += 365
                 anomaly[i, j] = offset
+                capped_min[i, j] = True
                 continue
 
             # Determine which branch of the annual cycle we're on.
@@ -559,12 +563,16 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
             anomaly[i, j] = offset
 
     valid_pct = 100 * np.sum(~np.isnan(anomaly)) / anomaly.size
+    n_max = np.sum(capped_max)
+    n_min = np.sum(capped_min)
     print(f"  Valid cells: {valid_pct:.0f}%")
     print(f"  Anomaly range: {np.nanmin(anomaly):.0f} to "
           f"{np.nanmax(anomaly):+.0f} days")
     print(f"  Mean anomaly: {np.nanmean(anomaly):+.1f} days")
+    print(f"  Capped at MAX (warmer than any normal day): {n_max} cells")
+    print(f"  Capped at MIN (colder than any normal day): {n_min} cells")
 
-    return anomaly
+    return anomaly, capped_max, capped_min
 
 
 # =============================================================================
@@ -572,7 +580,8 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
 # =============================================================================
 
 def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
-               region_name=None, region_extent=None):
+               region_name=None, region_extent=None,
+               capped_max=None, capped_min=None):
     """
     Create a nice-looking map of the day-offset anomalies.
 
@@ -606,14 +615,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         print("Rendering map...")
 
     # --- Set up the figure and map projection ---
-    if is_regional and region_extent:
-        w, e, s, n = region_extent
-        aspect = (e - w) / (n - s)
-        fig_w = 10
-        fig_h = fig_w / aspect + 1.5  # Extra space for colorbar and labels
-        fig = plt.figure(figsize=(fig_w, fig_h))
-    else:
-        fig = plt.figure(figsize=(MAP_WIDTH_INCHES, MAP_HEIGHT_INCHES))
+    fig = plt.figure(figsize=(MAP_WIDTH_INCHES, MAP_HEIGHT_INCHES))
 
     # Lambert Conformal Conic — the standard projection for US weather maps
     projection = ccrs.LambertConformal(
@@ -622,15 +624,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         standard_parallels=(33, 45)
     )
 
-    if is_regional:
-        # Position axes using absolute inches so layout is consistent
-        fig_h_setup = fig.get_figheight()
-        ax_bottom = 1.5 / fig_h_setup    # 1.5" from bottom for colorbar + labels
-        ax_top = 1.0 - 0.85 / fig_h_setup  # 0.85" from top for title + subtitle
-        ax = fig.add_axes([0.02, ax_bottom, 0.96, ax_top - ax_bottom],
-                          projection=projection)
-    else:
-        ax = fig.add_axes([0.02, 0.13, 0.96, 0.74], projection=projection)
+    ax = fig.add_axes([0.02, 0.08, 0.96, 0.78], projection=projection)
 
     # Set the map extent
     if region_extent:
@@ -680,17 +674,34 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         "temp_calendar", all_colors, N=n_bins
     )
 
-    # --- Fixed display range ---
-    abs_max = 150
+    # --- Determine the display range dynamically from the data ---
+    # Use the actual data extremes, rounded up to the nearest 5 for clean ticks.
+    # Make the scale symmetric around zero so white always means "on schedule."
+    abs_max = np.nanmax(np.abs(anomaly))
+    # Round up to nearest 5
+    abs_max = int(np.ceil(abs_max / 5.0) * 5)
+    # Enforce a minimum range so mild days still look good
+    abs_max = max(abs_max, 20)
+
     vmin = -abs_max
     vmax = abs_max
-    tick_spacing = 30
+
+    # Pick tick spacing based on the range: every 10 for small ranges,
+    # every 15 for medium, every 20 or 30 for very large ranges
+    if abs_max <= 30:
+        tick_spacing = 10
+    elif abs_max <= 60:
+        tick_spacing = 15
+    elif abs_max <= 120:
+        tick_spacing = 20
+    else:
+        tick_spacing = 30
 
     print(f"  Color scale: ±{abs_max} days (ticks every {tick_spacing})")
 
     # --- Plot the data ---
     lon2d, lat2d = np.meshgrid(clim_lons, clim_lats)
-                   
+
     # Smooth the anomaly field slightly for cleaner contours.
     # Without this, contourf can produce very jagged edges from grid noise.
     from scipy.ndimage import gaussian_filter
@@ -745,102 +756,77 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         colors="#333333"
     )
 
-    # Clip contours to CONUS boundary so oceans and Canada/Mexico are clean.
-    # For regional maps, also intersect with the viewport rectangle so data
-    # from distant states doesn't bleed outside the axes frame.
-    import cartopy.io.shapereader as shpreader
-    from matplotlib.path import Path as MplPath
-    from matplotlib.patches import PathPatch
-    from shapely.geometry import Polygon as ShapelyPolygon
-    from shapely.ops import unary_union
+    # --- Hatching and MAX/MIN labels for capped areas ---
+    if capped_max is not None and np.any(capped_max):
+        from scipy.ndimage import label as ndlabel
+        # Draw hatching over areas warmer than any normal day
+        ax.contourf(
+            lon2d, lat2d, capped_max.astype(float),
+            levels=[0.5, 1.5],
+            hatches=['///'],
+            colors='none',
+            transform=ccrs.PlateCarree(),
+            zorder=2.8
+        )
+        # Place "MAX" text at centroids of connected capped regions
+        labeled_array, num_features = ndlabel(capped_max)
+        for region_id in range(1, num_features + 1):
+            region_cells = labeled_array == region_id
+            if np.sum(region_cells) < 4:
+                continue  # Skip tiny isolated cells
+            rlats = lat2d[region_cells]
+            rlons = lon2d[region_cells]
+            clat = np.mean(rlats)
+            clon = np.mean(rlons)
+            ax.text(
+                clon, clat, "MAX",
+                transform=ccrs.PlateCarree(),
+                fontsize=8 if is_regional else 6,
+                fontweight="bold",
+                color="#67000d",
+                ha="center", va="center",
+                zorder=4,
+                path_effects=[
+                    pe.withStroke(linewidth=2, foreground="white")
+                ]
+            )
 
-    shapefile = shpreader.natural_earth(
-        resolution='110m', category='cultural', name='admin_0_countries'
-    )
-    reader = shpreader.Reader(shapefile)
-    us_geom = None
-    for record in reader.records():
-        if record.attributes.get('NAME') == 'United States of America' or \
-           record.attributes.get('ISO_A2') == 'US':
-            us_geom = record.geometry
-            break
-
-    if us_geom is not None:
-        projected_geom = projection.project_geometry(us_geom, ccrs.PlateCarree())
-
-        # Build shapely polygons from the projected CONUS boundary
-        conus_polys = []
-        for geom in projected_geom.geoms:
-            try:
-                p = ShapelyPolygon(geom.exterior.coords)
-                if p.is_valid:
-                    conus_polys.append(p)
-            except Exception:
-                pass
-
-        if conus_polys:
-            conus_union = unary_union(conus_polys)
-
-            if is_regional:
-                # Intersect CONUS with viewport rectangle in projected coords
-                x0, x1 = ax.get_xlim()
-                y0, y1 = ax.get_ylim()
-                viewport = ShapelyPolygon([
-                    (x0, y0), (x1, y0), (x1, y1), (x0, y1)
-                ])
-                clip_geom = viewport.intersection(conus_union)
-            else:
-                clip_geom = conus_union
-
-            # Convert the clip geometry to a matplotlib Path
-            vertices = []
-            codes = []
-
-            def _add_polygon(poly):
-                coords = list(poly.exterior.coords)
-                vertices.extend(coords)
-                codes.append(MplPath.MOVETO)
-                codes.extend([MplPath.LINETO] * (len(coords) - 2))
-                codes.append(MplPath.CLOSEPOLY)
-
-            if clip_geom.geom_type == 'Polygon':
-                _add_polygon(clip_geom)
-            elif clip_geom.geom_type in ('MultiPolygon', 'GeometryCollection'):
-                for g in clip_geom.geoms:
-                    if g.geom_type == 'Polygon':
-                        _add_polygon(g)
-
-            if vertices:
-                clip_path = MplPath(vertices, codes)
-                clip_patch = PathPatch(
-                    clip_path, transform=ax.transData, facecolor='none'
-                )
-                ax.add_patch(clip_patch)
-
-                for artist in [filled, lines]:
-                    if hasattr(artist, 'collections'):
-                        for col in artist.collections:
-                            col.set_clip_path(clip_patch)
-                    else:
-                        artist.set_clip_path(clip_patch)
-
-                if clabels:
-                    for txt in clabels:
-                        x, y = txt.get_position()
-                        if not clip_path.contains_point((x, y)):
-                            txt.remove()
+    if capped_min is not None and np.any(capped_min):
+        from scipy.ndimage import label as ndlabel
+        # Draw hatching over areas colder than any normal day
+        ax.contourf(
+            lon2d, lat2d, capped_min.astype(float),
+            levels=[0.5, 1.5],
+            hatches=['\\\\\\'],
+            colors='none',
+            transform=ccrs.PlateCarree(),
+            zorder=2.8
+        )
+        # Place "MIN" text at centroids of connected capped regions
+        labeled_array, num_features = ndlabel(capped_min)
+        for region_id in range(1, num_features + 1):
+            region_cells = labeled_array == region_id
+            if np.sum(region_cells) < 4:
+                continue
+            rlats = lat2d[region_cells]
+            rlons = lon2d[region_cells]
+            clat = np.mean(rlats)
+            clon = np.mean(rlons)
+            ax.text(
+                clon, clat, "MIN",
+                transform=ccrs.PlateCarree(),
+                fontsize=8 if is_regional else 6,
+                fontweight="bold",
+                color="#08306b",
+                ha="center", va="center",
+                zorder=4,
+                path_effects=[
+                    pe.withStroke(linewidth=2, foreground="white")
+                ]
+            )
 
     # --- Colorbar ---
-    # Use absolute inch positions from bottom so spacing is consistent
-    # regardless of figure height
-    fig_h = fig.get_figheight()
-    if is_regional:
-        cbar_y = 0.75 / fig_h   # Colorbar ~0.75 inches from bottom
-        credit_y = 0.10 / fig_h  # Credit ~0.10 inches from bottom
-    else:
-        cbar_y = 0.08
-        credit_y = 0.01
-    cbar_ax = fig.add_axes([0.15, cbar_y, 0.70, 0.025])
+    cbar_ax = fig.add_axes([0.15, 0.06, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_label("Days Ahead (+) or Behind (−) Normal Temperature Schedule",
                    fontsize=11, fontweight="bold", labelpad=8)
@@ -858,20 +844,16 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
                     "compared to the normal temperature schedule?")
 
     ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
-    if is_regional:
-        subtitle_y = 1.0 - (0.55 / fig_h)  # ~0.55 inches from top
-    else:
-        subtitle_y = 0.88
-    fig.text(0.5, subtitle_y, subtitle, ha="center", fontsize=10, color="#555555",
+    fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
     # --- Credit line ---
-    fig.text(0.5, credit_y, "Data: NWS NDFD / ACIS 1991-2020 Normals",
-             ha="center", fontsize=7, color="#999999")
+    fig.text(0.99, 0.01, "Data: NWS NDFD / ACIS 1991-2020 Normals",
+             ha="right", fontsize=7, color="#999999")
 
     # --- Save ---
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
-    fig.savefig(output_path, dpi=MAP_DPI,
+    fig.savefig(output_path, dpi=MAP_DPI, bbox_inches="tight",
                 facecolor="white", edgecolor="none")
     plt.close(fig)
 
@@ -1014,11 +996,12 @@ def main():
     )
 
     # 6. Compute anomalies
-    anomaly = compute_day_anomaly(forecast_regridded, clim_normals, today_doy)
+    anomaly, capped_max, capped_min = compute_day_anomaly(forecast_regridded, clim_normals, today_doy)
 
     # 7. Render the national map at full 300 DPI
     latest_path = os.path.join(OUTPUT_DIR, "temp_anomaly_latest.png")
-    render_map(anomaly, clim_lons, clim_lats, run_date, latest_path)
+    render_map(anomaly, clim_lons, clim_lats, run_date, latest_path,
+               capped_max=capped_max, capped_min=capped_min)
 
     # 8. Create a lightweight archive copy (150 DPI JPEG, ~100-200 KB)
     # This is what the archive gallery page shows. Full-res PNGs are only
@@ -1057,7 +1040,9 @@ def main():
         render_map(
             anomaly, clim_lons, clim_lats, run_date, latest_region_path,
             region_name=region_info["name"],
-            region_extent=region_info["extent"]
+            region_extent=region_info["extent"],
+            capped_max=capped_max,
+            capped_min=capped_min
         )
 
     # 10. Done!
