@@ -39,7 +39,7 @@ def render_html(maps):
         f'          <a href="assets/archive/{m["filename"]}" class="map-card-link">\n'
         f'            <div class="map-date">{m["date_str"]}</div>\n'
         f'            <div class="map-thumb-container">\n'
-        f'              <img src="assets/archive/{m["filename"]}" alt="Apparent Temperature Anomaly: {m["date_str"]}" loading="lazy">\n'
+        f'              <img src="assets/archive/{m["filename"]}" alt="Apparent Temperature Calendar Anomaly: {m["date_str"]}" loading="lazy">\n'
         f'            </div>\n'
         f'          </a>\n'
         f'        </li>'
@@ -106,7 +106,7 @@ def render_html(maps):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apparent Temperature Map Archive &ndash; Alex Cooke</title>
+  <title>Apparent Temperature Calendar Anomaly Archive &ndash; Alex Cooke</title>
   <style>{css}</style>
 </head>
 <body>
@@ -127,13 +127,13 @@ def render_html(maps):
     <div class="subnav">
       <a href="maps-and-tools.html">Maps &amp; Tools</a>
       <span class="separator">&rsaquo;</span>
-      <a href="apparent-temperature.html">Apparent Temperature Anomaly</a>
+      <a href="apparent-temperature.html">Apparent Temperature Calendar Anomaly</a>
       <span class="separator">&rsaquo;</span>
       <span class="current">Archive</span>
     </div>
 
     <div class="content-section">
-      <h2 class="section-title">Apparent Temperature Archive</h2>
+      <h2 class="section-title">Apparent Temperature Calendar Anomaly Archive</h2>
       <p class="archive-meta">{meta}</p>
       <ul class="map-gallery">
 {cards}
