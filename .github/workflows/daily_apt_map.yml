@@ -1,0 +1,70 @@
+name: Daily Apparent Temperature Map
+
+on:
+  schedule:
+    - cron: "30 10 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate-map:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeccodes-dev
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-apt-${{ hashFiles('apparent-temperature/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-apt-
+
+      - name: Cache cartopy shapefiles
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/cartopy
+          key: cartopy-shapefiles-110m
+
+      - name: Install Python packages
+        run: pip install -r apparent-temperature/requirements.txt
+
+      - name: Generate apparent temperature map
+        run: |
+          cd apparent-temperature
+          python -m src.daily_run
+
+      - name: Copy maps to site assets
+        run: |
+          mkdir -p assets/regions
+          mkdir -p assets/archive
+          cp apparent-temperature/output/apt_anomaly_latest.png assets/apt_anomaly_latest.png
+          cp apparent-temperature/output/regions/apt_anomaly_*_latest.png assets/regions/ 2>/dev/null || true
+          cp apparent-temperature/output/archive/apt_anomaly_*.jpg assets/archive/ 2>/dev/null || true
+
+      - name: Build apt archive page
+        run: |
+          cd apparent-temperature
+          python -m src.build_archive --assets-dir ../assets/archive --output ../apt-archive.html
+
+      - name: Commit and push
+        run: |
+          git config user.name "Apparent Temperature Map Bot"
+          git config user.email "bot@apt-map.local"
+          git add assets/apt_anomaly_latest.png
+          git add assets/regions/ 2>/dev/null || true
+          git add assets/archive/ 2>/dev/null || true
+          git add apt-archive.html
+          git diff --staged --quiet || git commit -m "Update apparent temperature map for $(date +%Y-%m-%d)"
+          git pull --rebase || true
+          git push

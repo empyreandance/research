@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apparent Temperature Anomaly &ndash; Alex Cooke</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+           background-color: #0a0a0a; color: #e0e0e0; line-height: 1.6; min-height: 100vh;
+           display: flex; flex-direction: column; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; flex: 1; }
+    header { text-align: center; padding: 60px 0 40px; border-bottom: 1px solid #222; margin-bottom: 40px; }
+    header h1 { font-size: 2.5em; font-weight: 300; letter-spacing: -1px; color: #fff; margin-bottom: 10px; }
+    header h1 a { color: inherit; text-decoration: none; transition: opacity 0.3s; }
+    header .subtitle { color: #888; font-size: 1.1em; }
+    nav { text-align: center; margin-bottom: 40px; }
+    nav a { color: #ccc; text-decoration: none; margin: 0 15px; font-size: 1.1em;
+            padding: 5px 0; border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom-color 0.3s; }
+    nav a:hover, nav a.active { color: #fff; border-bottom-color: #fff; }
+    .subnav { text-align: center; margin-top: -25px; margin-bottom: 40px; font-size: 0.95em; color: #666; }
+    .subnav a { color: #888; text-decoration: none; border-bottom: 1px solid #333;
+                transition: color 0.3s, border-bottom-color 0.3s; }
+    .subnav a:hover { color: #fff; border-bottom-color: #fff; }
+    .subnav .separator { margin: 0 8px; color: #444; }
+    .subnav .current { color: #ccc; }
+    .content-section { animation: fadeIn 0.8s ease forwards; opacity: 0; transform: translateY(20px); }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    .section-title { font-size: 1.8em; font-weight: 300; color: #fff; margin-bottom: 10px;
+                     border-bottom: 1px solid #333; padding-bottom: 15px; }
+    .page-desc { color: #ccc; font-size: 1em; margin-bottom: 25px; }
+    .main-map-container { margin-bottom: 8px; border-radius: 8px; overflow: hidden; border: 1px solid #222; }
+    .main-map-container img { width: 100%; height: auto; display: block; cursor: pointer; }
+    .map-hint { font-size: 0.85em; color: #666; margin-bottom: 6px; font-style: italic; }
+    .disclaimer { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; }
+    .archive-link { display: inline-block; font-size: 1.05em; font-weight: bold; color: #ccc;
+                    text-decoration: none; border-bottom: 1px solid #444; padding: 4px 0;
+                    margin-bottom: 40px; transition: color 0.3s, border-bottom-color 0.3s; }
+    .archive-link:hover { color: #fff; border-bottom-color: #fff; }
+    .subsection-title { font-size: 1.3em; font-weight: 400; color: #fff; margin-bottom: 15px; margin-top: 10px; }
+    .region-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+                   list-style: none; margin-bottom: 40px; }
+    .region-grid li { background: #111; border-radius: 6px; border: 1px solid #222;
+                      overflow: hidden; transition: background 0.3s, border-color 0.3s, transform 0.2s; }
+    .region-grid li:hover { background: #151515; border-color: #444; transform: translateY(-1px); }
+    .region-link { display: block; text-decoration: none; color: inherit; }
+    .region-thumb { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #0d0d0d; }
+    .region-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .region-label { padding: 8px 10px; font-size: 0.8em; font-weight: 500; color: #ccc; text-align: center; }
+    footer { text-align: center; padding: 40px 0; color: #666; font-size: 0.9em;
+             border-top: 1px solid #222; margin-top: 80px; }
+    footer a { color: #999; text-decoration: none; border-bottom: 1px solid #444;
+               transition: color 0.3s, border-bottom-color 0.3s; }
+    footer a:hover { color: #fff; border-bottom-color: #fff; }
+    @media (max-width: 768px) {
+      .container { padding: 15px; }
+      header h1 { font-size: 2em; }
+      .section-title { font-size: 1.5em; }
+      .region-grid { grid-template-columns: repeat(2, 1fr); }
+      nav a { margin: 0 8px; font-size: 0.95em; }
+    }
+    @media (max-width: 480px) {
+      nav a { margin: 0 5px; font-size: 0.85em; }
+      .region-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="https://www.alexcooke.co">Alex Cooke</a></h1>
+      <p class="subtitle">Research</p>
+    </header>
+
+    <nav>
+      <a href="index.html">About</a>
+      <a href="meteorology.html">Meteorology</a>
+      <a href="music.html">Music</a>
+      <a href="presentations.html">Presentations</a>
+      <a href="maps-and-tools.html" class="active">Maps &amp; Tools</a>
+    </nav>
+
+    <div class="subnav">
+      <a href="maps-and-tools.html">Maps &amp; Tools</a>
+      <span class="separator">&rsaquo;</span>
+      <span class="current">Apparent Temperature Anomaly</span>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Apparent Temperature Anomaly</h2>
+      <p class="page-desc">A daily-updating map showing how the forecast apparent temperature compares to the 1995&ndash;2024 normal for this date. Apparent temperature uses heat index when it's hot and humid, wind chill when it's cold and windy, and air temperature otherwise &mdash; so the anomaly captures how the air feels rather than just the thermometer reading. The map uses whichever of the day's forecast maximum or minimum apparent temperature departs further from normal.</p>
+
+      <p class="map-hint">Click the map for full resolution.</p>
+      <div class="main-map-container">
+        <a href="assets/apt_anomaly_latest.png">
+          <img src="assets/apt_anomaly_latest.png" alt="Apparent Temperature Anomaly Map">
+        </a>
+      </div>
+
+      <p class="disclaimer">This is an independent project and is not an official product of the National Weather Service or NOAA. Data: NWS NDFD apparent temperature forecast / 1995&ndash;2024 ASOS-derived climatology.</p>
+
+      <a href="apt-archive.html" class="archive-link">Browse Archive</a>
+
+      <h3 class="subsection-title">Regional Views</h3>
+      <p class="map-hint">Click any region for a full-resolution crop.</p>
+
+      <ul class="region-grid">
+        <li><a href="assets/regions/apt_anomaly_northwest_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_northwest_latest.png" alt="Pacific Northwest" loading="lazy"></div>
+          <div class="region-label">Pacific Northwest</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_northern_plains_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_northern_plains_latest.png" alt="Northern Plains" loading="lazy"></div>
+          <div class="region-label">Northern Plains</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_upper_midwest_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_upper_midwest_latest.png" alt="Upper Midwest" loading="lazy"></div>
+          <div class="region-label">Upper Midwest</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_northeast_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_northeast_latest.png" alt="Northeast" loading="lazy"></div>
+          <div class="region-label">Northeast</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_west_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_west_latest.png" alt="West" loading="lazy"></div>
+          <div class="region-label">West</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_southern_plains_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_southern_plains_latest.png" alt="Southern Plains" loading="lazy"></div>
+          <div class="region-label">Southern Plains</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_midwest_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_midwest_latest.png" alt="Midwest" loading="lazy"></div>
+          <div class="region-label">Midwest</div></a></li>
+        <li><a href="assets/regions/apt_anomaly_southeast_latest.png" class="region-link">
+          <div class="region-thumb"><img src="assets/regions/apt_anomaly_southeast_latest.png" alt="Southeast" loading="lazy"></div>
+          <div class="region-label">Southeast</div></a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>
+        <a href="contact.html">Contact Me</a>
+        <span style="margin: 0 20px; color: #444;">&bull;</span>
+        &copy; 2026 Alex Cooke. All rights reserved.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
