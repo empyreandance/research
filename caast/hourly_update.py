@@ -249,30 +249,39 @@ def fetch_new_afds(since_dt):
     new_afds = []
     since_str = since_dt.strftime("%Y-%m-%dT%H:%MZ")
 
+    # IEM API now only accepts a single UTC date, not a start datetime.
+    # Query today's date (and yesterday's if since_dt spans midnight UTC).
+    query_dates = {since_dt.strftime("%Y-%m-%d"),
+                   datetime.now(timezone.utc).strftime("%Y-%m-%d")}
+
     for wfo in ALL_WFOS:
         pil = f"AFD{wfo}"
-        try:
-            r = requests.get(
-                IEM_BASE_URL,
-                params={"pil": pil, "sdate": since_str},
-                timeout=30,
-            )
-            if r.status_code != 200:
+        for qdate in sorted(query_dates):
+            try:
+                r = requests.get(
+                    IEM_BASE_URL,
+                    params={"pil": pil, "date": qdate},
+                    timeout=30,
+                )
+                if r.status_code != 200:
+                    log(f"  WARNING: IEM returned {r.status_code} for {wfo} on {qdate}")
+                    continue
+                products = r.json().get("data", [])
+                for p in products:
+                    entered = p.get("entered", "")
+                    # Filter to only products after since_dt
+                    if entered and entered >= since_str:
+                        new_afds.append({
+                            "wfo": wfo,
+                            "product_id": p.get("product_id"),
+                            "valid": entered,
+                        })
+            except Exception as e:
+                log(f"  WARNING: IEM fetch failed for {wfo}: {e}")
                 continue
-            products = r.json().get("data", [])
-            for p in products:
-                new_afds.append({
-                    "wfo": wfo,
-                    "product_id": p.get("product_id"),
-                    "valid": p.get("valid"),
-                })
-        except Exception as e:
-            log(f"  WARNING: IEM fetch failed for {wfo}: {e}")
-            continue
 
     log(f"Found {len(new_afds)} new AFDs since {since_str}")
     return new_afds
-
 
 def fetch_afd_text(product_id):
     """Fetch the full text of an AFD by product ID."""
