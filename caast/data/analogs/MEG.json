@@ -1,15 +1,62 @@
 {
   "office": "MEG",
-  "product_id": "202605081722-KMEG-FXUS64-AFDMEG",
-  "afd_time": "2026-05-08T17:22:00Z",
+  "product_id": "202605090047-KMEG-FXUS64-AFDMEG-AAA",
+  "afd_time": "2026-05-09T00:47:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-08T18:47:07.083950+00:00",
+  "updated": "2026-05-09T03:59:26.351548+00:00",
   "query_preview": "..\n(This evening through next Thursday)\nIssued at 1221 PM CDT Fri May 8 2026\n\nToday will feature mostly cool and dry conditions, though rain\nchances are on the rise for both our southernmost and\nnorthernmost zones late tonight into Saturday morning. A bimodal\nswath of precip will move through along a split-flow regime\novernight. While there could be a few rumbles of thunder,\nespecially for north Mississippi, moisture return ahead of the\nboundary is quite lackluster and thus will only result in a\nquarter inch of QPF, at most.\n\nThe next appreciable round of rainfall will move through with a\ncold front Sunday evening. We're just outside the CAMs' windows\nfor resolving timing, but the RRFS does go out that far and shows\nan estimated time of arrival for pre-frontal showers and\nthunderstorms in the early afternoon Sunday. Convective mode\nlooks messy and multicellular at best due to a weak shear profile\nthat will provide little to no organized structure. Given the\ntiming coinciding with peak diurnal heating, forecast MUCAPE is\nprobably going to be a good representation of our instability\nfield. Per the LREF, 600-800 J/kg of MUCAPE Sunday evening will\nsupport a few healthy updrafts with subsequently strong\ndowndrafts. Overall, the current Marginal Risk (level 1/5) for\nthe MS Delta represents this low-end severe weather threat well.\n\nAfter the FROPA Sunday night, forecast surface analyses depict a\nmessy and non-descript pattern to emerge next week. Northwest\nflow aloft will help keep temperatures on the cool side Monday\nand Tuesday, hovering about 5 degrees below normal in the mid\n70s. Broad upper level ridging moves in midweek and sends\ntemperatures on a warming trend while PoPs continue to decrease\nthrough Friday.",
   "analogs": [
     {
-      "datetime_utc": "2023-06-04T04:45Z",
-      "source_file": "MEG_2023_04_0445.txt",
-      "similarity": 0.9760137796401978,
+      "datetime_utc": "2023-06-03T23:22Z",
+      "source_file": "MEG_2023_03_2322.txt",
+      "similarity": 0.9760139584541321,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "severe_hail": 6
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 9,
+            "severe_wind": 8
+          }
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-06-04T02:30Z",
+      "source_file": "MEG_2023_04_0230.txt",
+      "similarity": 0.9760139584541321,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -54,36 +101,36 @@
       }
     },
     {
-      "datetime_utc": "2023-06-03T23:22Z",
-      "source_file": "MEG_2023_03_2322.txt",
-      "similarity": 0.9760137796401978,
-      "label": "severe_wind",
+      "datetime_utc": "2023-03-22T04:34Z",
+      "source_file": "MEG_2023_22_0434.txt",
+      "similarity": 0.9754409790039062,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_wind": 3,
-            "severe_hail": 6
+            "flood": 1,
+            "severe_hail": 1
           }
         },
         "2": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 9,
-            "severe_wind": 8
+            "severe_wind": 66,
+            "tornado": 26,
+            "flood": 30,
+            "severe_hail": 2
           }
         },
         "3": {
-          "label": "severe_hail",
+          "label": "flood",
           "counts": {
-            "severe_hail": 1
+            "flood": 1
           }
         },
         "4": {
@@ -148,56 +195,9 @@
       }
     },
     {
-      "datetime_utc": "2023-03-22T04:34Z",
-      "source_file": "MEG_2023_22_0434.txt",
-      "similarity": 0.9754409790039062,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "flood": 1,
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 66,
-            "tornado": 26,
-            "flood": 30,
-            "severe_hail": 2
-          }
-        },
-        "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-08-05T08:25Z",
-      "source_file": "MEG_2024_05_0825.txt",
-      "similarity": 0.9749423265457153,
+      "datetime_utc": "2024-08-05T17:21Z",
+      "source_file": "MEG_2024_05_1721.txt",
+      "similarity": 0.9749425053596497,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -232,9 +232,9 @@
       }
     },
     {
-      "datetime_utc": "2023-02-27T05:23Z",
-      "source_file": "MEG_2023_27_0523.txt",
-      "similarity": 0.9746129512786865,
+      "datetime_utc": "2023-02-26T23:37Z",
+      "source_file": "MEG_2023_26_2337.txt",
+      "similarity": 0.9746130704879761,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -247,6 +247,10 @@
           "counts": {}
         },
         "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
           "label": "tornado",
           "counts": {
             "severe_wind": 7,
@@ -255,7 +259,7 @@
             "severe_hail": 12
           }
         },
-        "3": {
+        "4": {
           "label": "tornado",
           "counts": {
             "severe_wind": 1,
@@ -263,17 +267,13 @@
             "flood": 3
           }
         },
-        "4": {
+        "5": {
           "label": "tornado",
           "counts": {
             "severe_wind": 73,
             "flood": 22,
             "tornado": 5
           }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -282,9 +282,9 @@
       }
     },
     {
-      "datetime_utc": "2023-02-26T23:37Z",
-      "source_file": "MEG_2023_26_2337.txt",
-      "similarity": 0.9746129512786865,
+      "datetime_utc": "2023-02-27T05:23Z",
+      "source_file": "MEG_2023_27_0523.txt",
+      "similarity": 0.9746130704879761,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -297,10 +297,6 @@
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
           "label": "tornado",
           "counts": {
             "severe_wind": 7,
@@ -309,7 +305,7 @@
             "severe_hail": 12
           }
         },
-        "4": {
+        "3": {
           "label": "tornado",
           "counts": {
             "severe_wind": 1,
@@ -317,13 +313,17 @@
             "flood": 3
           }
         },
-        "5": {
+        "4": {
           "label": "tornado",
           "counts": {
             "severe_wind": 73,
             "flood": 22,
             "tornado": 5
           }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -436,7 +436,7 @@
     {
       "datetime_utc": "2024-12-26T17:37Z",
       "source_file": "MEG_2024_26_1737.txt",
-      "similarity": 0.9742245674133301,
+      "similarity": 0.9742245078086853,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -479,7 +479,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.9697053283452988,
+    "mean_similarity": 0.9697053360939026,
     "base_rate": 0.6625872058649639,
     "signal_value": 0.25741279413503615,
     "percentile": 85,
@@ -488,8 +488,8 @@
     "n_total": 10,
     "n_severe_signal": 92,
     "n_total_signal": 100,
-    "product_id": "202605081722-KMEG-FXUS64-AFDMEG",
-    "afd_time": "2026-05-08T17:22:00Z",
-    "updated": "2026-05-08T18:47:07.083950+00:00"
+    "product_id": "202605090047-KMEG-FXUS64-AFDMEG-AAA",
+    "afd_time": "2026-05-09T00:47:00Z",
+    "updated": "2026-05-09T03:59:26.351548+00:00"
   }
 }
