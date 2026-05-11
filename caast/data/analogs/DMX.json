@@ -1,15 +1,15 @@
 {
   "office": "DMX",
-  "product_id": "202605101952-KDMX-FXUS63-AFDDMX",
-  "afd_time": "2026-05-10T19:52:00Z",
+  "product_id": "202605102327-KDMX-FXUS63-AFDDMX",
+  "afd_time": "2026-05-10T23:27:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-10T21:08:22.820928+00:00",
-  "query_preview": "/WEDNESDAY THROUGH SATURDAY/...\nIssued at 248 PM CDT Sun May 10 2026\n\nTemperatures cool slightly on Wednesday, albeit still in the 70s. \nThe broad upper level ridging then fills in behind the departing \nshortwave, warming temperatures into the 80s through the second half \nof the work week. As mentioned in yesterday's long term discussion, \ndespite the brief ridge moving in, the pattern quickly becomes \nagitated through the end of the week and into next weekend with \nmultiple shortwaves and increasing shower and thunderstorm \npotential, the first of which looks to be on Thursday night into \nFriday as a healthy gulf moisture stream returns to the state. \nAdditional chances continue into the weekend. This will likely put a \ndamper on the highs in the 90s that NBM guidance had been \nforecasting for next weekend and today's extended forecast now \nreflects this a bit better. That said, with the southwesterly to \nwesterly flow pattern, temperatures should stay seasonably warm\nin the 80s through the weekend.",
+  "updated": "2026-05-11T00:11:16.133572+00:00",
+  "query_preview": "/WEDNESDAY THROUGH SUNDAY/...\nIssued at 248 PM CDT Sun May 10 2026\n\nTemperatures cool slightly on Wednesday, albeit still in the 70s. \nThe broad upper level ridging then fills in behind the departing \nshortwave, warming temperatures into the 80s through the second half \nof the work week. As mentioned in yesterday's long term discussion, \ndespite the brief ridge moving in, the pattern quickly becomes \nagitated through the end of the week and into next weekend with \nmultiple shortwaves and increasing shower and thunderstorm \npotential, the first of which looks to be on Thursday night into \nFriday as a healthy gulf moisture stream returns to the state. \nAdditional chances continue into the weekend. This will likely put a \ndamper on the highs in the 90s that NBM guidance had been \nforecasting for next weekend and today's extended forecast now \nreflects this a bit better. That said, with the southwesterly to \nwesterly flow pattern, temperatures should stay seasonably warm\nin the 80s through the weekend.",
   "analogs": [
     {
       "datetime_utc": "2010-09-02T08:27Z",
       "source_file": "DMX_2010_02_0827.txt",
-      "similarity": 0.9018263220787048,
+      "similarity": 0.9078842997550964,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -55,7 +55,7 @@
     {
       "datetime_utc": "2010-09-01T19:58Z",
       "source_file": "DMX_2010_01_1958.txt",
-      "similarity": 0.9018263220787048,
+      "similarity": 0.9078842997550964,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,15 +102,18 @@
       }
     },
     {
-      "datetime_utc": "2012-04-10T11:19Z",
-      "source_file": "DMX_2012_10_1119.txt",
-      "similarity": 0.875884473323822,
-      "label": "tornado",
+      "datetime_utc": "2012-06-20T23:40Z",
+      "source_file": "DMX_2012_20_2340.txt",
+      "similarity": 0.885220468044281,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "flood": 3,
+            "severe_wind": 9
+          }
         },
         "1": {
           "label": "quiet",
@@ -123,16 +126,15 @@
         "3": {
           "label": "severe_wind",
           "counts": {
+            "severe_hail": 3,
             "severe_wind": 1
           }
         },
         "4": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 56,
-            "tornado": 14,
-            "flood": 7,
-            "severe_wind": 55
+            "severe_hail": 7,
+            "severe_wind": 2
           }
         },
         "5": {
@@ -148,7 +150,7 @@
     {
       "datetime_utc": "2005-11-04T20:44Z",
       "source_file": "DMX_2005_04_2044.txt",
-      "similarity": 0.8749659061431885,
+      "similarity": 0.8784692883491516,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -188,7 +190,7 @@
     {
       "datetime_utc": "2008-05-22T08:26Z",
       "source_file": "DMX_2008_22_0826.txt",
-      "similarity": 0.874883770942688,
+      "similarity": 0.8779608607292175,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -235,18 +237,15 @@
       }
     },
     {
-      "datetime_utc": "2012-06-20T23:40Z",
-      "source_file": "DMX_2012_20_2340.txt",
-      "similarity": 0.87373948097229,
-      "label": "severe_wind",
+      "datetime_utc": "2012-04-10T11:19Z",
+      "source_file": "DMX_2012_10_1119.txt",
+      "similarity": 0.8767074346542358,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 3,
-            "severe_wind": 9
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -259,15 +258,16 @@
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 3,
             "severe_wind": 1
           }
         },
         "4": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 7,
-            "severe_wind": 2
+            "severe_hail": 56,
+            "tornado": 14,
+            "flood": 7,
+            "severe_wind": 55
           }
         },
         "5": {
@@ -283,7 +283,7 @@
     {
       "datetime_utc": "2008-09-08T08:20Z",
       "source_file": "DMX_2008_08_0820.txt",
-      "similarity": 0.8691717386245728,
+      "similarity": 0.8732730150222778,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -326,7 +326,7 @@
     {
       "datetime_utc": "2008-09-07T08:19Z",
       "source_file": "DMX_2008_07_0819.txt",
-      "similarity": 0.8671622276306152,
+      "similarity": 0.8732374906539917,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -367,9 +367,9 @@
       }
     },
     {
-      "datetime_utc": "2022-07-22T20:26Z",
-      "source_file": "DMX_2022_22_2026.txt",
-      "similarity": 0.8583389520645142,
+      "datetime_utc": "2022-07-22T23:20Z",
+      "source_file": "DMX_2022_22_2320.txt",
+      "similarity": 0.8686180114746094,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -416,7 +416,7 @@
     {
       "datetime_utc": "2022-07-23T04:31Z",
       "source_file": "DMX_2022_23_0431.txt",
-      "similarity": 0.8583389520645142,
+      "similarity": 0.8686180114746094,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -460,18 +460,18 @@
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.65,
-    "mean_similarity": 0.7973662185668945,
+    "severe_fraction": 0.64,
+    "mean_similarity": 0.8014155983924866,
     "base_rate": 0.5710076913049146,
-    "signal_value": 0.07899230869508544,
+    "signal_value": 0.06899230869508544,
     "percentile": 43,
     "office_lift": 0.21759230869508528,
     "n_severe": 10,
     "n_total": 10,
-    "n_severe_signal": 65,
+    "n_severe_signal": 64,
     "n_total_signal": 100,
-    "product_id": "202605101952-KDMX-FXUS63-AFDDMX",
-    "afd_time": "2026-05-10T19:52:00Z",
-    "updated": "2026-05-10T21:08:22.820928+00:00"
+    "product_id": "202605102327-KDMX-FXUS63-AFDDMX",
+    "afd_time": "2026-05-10T23:27:00Z",
+    "updated": "2026-05-11T00:11:16.133572+00:00"
   }
 }
