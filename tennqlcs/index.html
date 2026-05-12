@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OHX QLCS Tornado Detection</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0c10;color:#e0e4ec;font-family:'Outfit',sans-serif;overflow:hidden;height:100vh}
+#map{position:absolute;top:0;left:0;right:0;bottom:0;z-index:1}
+.leaflet-container{background:#0a0c10}
+
+.header{position:absolute;top:0;left:0;right:0;z-index:1000;background:linear-gradient(180deg,rgba(10,12,16,0.95),rgba(10,12,16,0.7));padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(8px)}
+.header-left{display:flex;align-items:center;gap:14px}
+.title{font-weight:700;font-size:15px;letter-spacing:0.5px;color:#fff}
+.title span{color:#ef4444;font-weight:400}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:0.5px}
+.badge-live{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);animation:pulse 2s ease-in-out infinite}
+.badge-hist{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
+.badge-stale{background:rgba(150,150,150,0.15);color:#999;border:1px solid rgba(150,150,150,0.3)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.header-right{display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8892a4}
+.scan-time{color:#c8d0e0;font-weight:600}
+
+.mode-bar{position:absolute;top:48px;left:0;right:0;z-index:1000;background:rgba(10,12,16,0.88);border-bottom:1px solid rgba(255,255,255,0.05);padding:6px 20px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(8px);font-family:'JetBrains Mono',monospace;font-size:11px}
+.mbtn{background:none;border:1px solid rgba(255,255,255,0.12);color:#8892a4;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;transition:all 0.15s}
+.mbtn:hover{border-color:rgba(255,255,255,0.25);color:#c8d0e0}
+.mbtn.on{border-color:rgba(239,68,68,0.4);color:#ef4444;background:rgba(239,68,68,0.08)}
+.dinp{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#c8d0e0;padding:4px 10px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;width:130px}
+.dinp:focus{outline:none;border-color:rgba(59,130,246,0.5)}
+.lbtn{background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#3b82f6;padding:4px 14px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;transition:all 0.15s}
+.lbtn:hover{background:rgba(59,130,246,0.25)}
+.lbtn:disabled{opacity:0.4;cursor:default}
+.hctl{display:none;align-items:center;gap:8px;margin-left:auto}
+.hctl.vis{display:flex}
+.pb{background:none;border:1px solid rgba(255,255,255,0.15);color:#c8d0e0;width:28px;height:28px;border-radius:4px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.pb:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+.pb.on{border-color:rgba(239,68,68,0.4);color:#ef4444}
+.tl{flex:1;max-width:400px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;cursor:pointer}
+.tl-p{height:100%;background:#ef4444;border-radius:2px;transition:width 0.1s}
+.tl-l{color:#8892a4;font-size:10px;min-width:70px;text-align:right}
+.spd{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#c8d0e0;padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10px}
+
+.ctrl{position:absolute;top:96px;right:16px;z-index:1000;display:flex;flex-direction:column;gap:4px}
+.cbtn{background:rgba(10,12,16,0.85);border:1px solid rgba(255,255,255,0.1);color:#8892a4;font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 12px;border-radius:4px;cursor:pointer;transition:all 0.15s;backdrop-filter:blur(8px)}
+.cbtn:hover{border-color:rgba(255,255,255,0.25);color:#c8d0e0}
+.cbtn.on{border-color:rgba(239,68,68,0.4);color:#ef4444;background:rgba(239,68,68,0.08)}
+.slider-box{margin-top:4px;padding:4px 10px;background:rgba(10,12,16,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:4px;backdrop-filter:blur(8px)}
+.slider-box label{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b7280;display:block;margin-bottom:2px}
+.slider-box input{width:80px;accent-color:#ef4444}
+
+.legend{position:absolute;bottom:20px;right:16px;z-index:1000;background:rgba(10,12,16,0.92);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px;backdrop-filter:blur(8px)}
+.legend h3{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#6b7280;margin-bottom:6px;font-weight:600}
+.legend-bar{width:180px;height:12px;border-radius:2px;margin-bottom:4px}
+.legend-labels{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b7280}
+
+.nodata{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;text-align:center;color:#6b7280}
+.nodata h2{font-size:18px;font-weight:300;margin-bottom:8px;color:#8892a4}
+.nodata p{font-size:13px;font-family:'JetBrains Mono',monospace}
+
+.track-tooltip{background:rgba(10,12,16,0.95)!important;border:1px solid rgba(239,68,68,0.3)!important;color:#e0e4ec!important;font-family:'JetBrains Mono',monospace!important;font-size:11px!important;padding:4px 8px!important;border-radius:4px!important}
+.track-tooltip::before,.leaflet-tooltip-top::before{display:none!important}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="title">OHX QLCS <span>Tornado Detection</span></div>
+    <div class="badge badge-stale" id="badge">LOADING</div>
+  </div>
+  <div class="header-right">
+    <span id="stime" class="scan-time">--:--:-- UTC</span>
+    <span id="mcount">0 markers</span>
+  </div>
+</div>
+<div class="mode-bar">
+  <button class="mbtn on" id="m-live" onclick="setMode('live')">LIVE</button>
+  <button class="mbtn" id="m-cases" onclick="setMode('cases')">CASES</button>
+  <select class="dinp" id="case-select" disabled style="width:160px"><option value="">Loading...</option></select>
+  <div class="hctl" id="hctl">
+    <button class="pb" onclick="step(-1)">&#9664;</button>
+    <button class="pb" id="playbtn" onclick="togglePlay()">&#9654;</button>
+    <button class="pb" onclick="step(1)">&#9654;</button>
+    <div class="tl" onclick="seek(event)"><div class="tl-p" id="tlp"></div></div>
+    <div class="tl-l" id="flbl">0/0</div>
+    <select class="spd" id="spd" onchange="playSpd=+this.value;if(playTm){stopPlay();startPlay()}">
+      <option value="1000">1x</option><option value="500" selected>2x</option><option value="250">4x</option><option value="100">10x</option>
+    </select>
+  </div>
+</div>
+<div class="ctrl">
+  <button class="cbtn on" id="c-refl" onclick="tog('refl')">REFL</button>
+  <button class="cbtn on" id="c-az" onclick="tog('az')">AZSHEAR</button>
+  <button class="cbtn on" id="c-mk" onclick="tog('mk')">MARKERS</button>
+  <div class="slider-box">
+    <label>MARKER OPACITY</label>
+    <input type="range" min="10" max="100" value="100" oninput="mkOp=this.value/100;applyVis()">
+  </div>
+  <div class="slider-box" id="env-box" style="display:none">
+    <label>ENVIRONMENT SCORE</label>
+    <div id="env-score-val" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fff;margin:4px 0 6px"></div>
+    <div id="env-timeline" style="display:flex;align-items:flex-end;gap:2px;height:42px;margin-bottom:2px"></div>
+    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;color:#6b7280;margin-bottom:6px"><span>-2h</span><span>-1h</span><span>now</span><span>+1h</span><span>+2h</span><span>+3h</span></div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:5px;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.6">
+      <div><span style="color:#4caf50">&#9632;</span> <span style="color:#8892a4">0–3 Low</span></div>
+      <div><span style="color:#ffc107">&#9632;</span> <span style="color:#8892a4">3–6 Moderate</span></div>
+      <div><span style="color:#ef4444">&#9632;</span> <span style="color:#8892a4">6+ High</span></div>
+    </div>
+  </div>
+</div>
+<div class="legend">
+  <h3>Reflectivity (dBZ)</h3>
+  <div class="legend-bar" style="background:linear-gradient(90deg,#04e9e7,#019ff4,#0300f4,#02fd02,#01c501,#008e00,#fdf802,#e5bc00,#fd9500,#fd0000,#d40000,#bc0000,#f800fd,#9854c6)"></div>
+  <div class="legend-labels"><span>5</span><span>20</span><span>35</span><span>50</span><span>65</span></div>
+</div>
+<div class="nodata" id="nodata"><h2>Waiting for data</h2><p>Select LIVE or load a historical date</p></div>
+<div id="map"></div>
+
+<script>
+const CWA={south:34.99,north:36.68,west:-88.07,east:-84.66};
+const map=L.map('map',{center:[(CWA.south+CWA.north)/2,(CWA.west+CWA.east)/2],zoom:8,zoomControl:false,attributionControl:false,keyboard:false});
+L.control.zoom({position:'bottomright'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:14,opacity:0.6}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:14,pane:'overlayPane'}).addTo(map);
+
+// Data source configuration
+const LIVE_BASE = 'https://ohx-data.alexcooke.co';  // VPS serving live data
+
+// CWA boundary — fetch from NWS MapServer
+let cwaLayer=null;
+const CWA_URL='https://mapservices.weather.noaa.gov/static/rest/services/nws_reference_maps/nws_reference_map/MapServer/1/query?where=cwa%3D%27OHX%27&outFields=cwa&f=geojson&outSR=4326';
+fetch(CWA_URL).then(r=>r.ok?r.json():null).then(d=>{
+  if(!d||!d.features||!d.features.length)throw new Error('empty');
+  cwaLayer=L.geoJSON(d,{style:{color:'#ffffff',weight:1.5,fillOpacity:0,opacity:0.35,dashArray:'8,6'}}).addTo(map);
+}).catch(()=>{
+  // Fallback to rectangle if API unavailable
+  L.rectangle([[CWA.south,CWA.west],[CWA.north,CWA.east]],{color:'#fff',weight:1.5,fillOpacity:0,opacity:0.3,dashArray:'8,6'}).addTo(map);
+});
+
+// State
+let mode='live',reflLayer=null,markers=[],contourLines=[],torMarkers=[];
+let lastScan=null,pollTm=null;
+let histData=null,hFrame=0,playTm=null,playSpd=500;
+let mkOp=1.0;
+const vis={refl:true,az:true,mk:true};
+
+function azColor(v){
+  if(v>=12)return'#ff1744';
+  if(v>=8)return'#ff6d00';
+  if(v>=6)return'#ffc400';
+  return'#aaaaaa';
+}
+
+function setMode(m){mode=m;
+  document.getElementById('m-live').classList.toggle('on',m==='live');
+  document.getElementById('m-cases').classList.toggle('on',m==='cases');
+  document.getElementById('case-select').disabled=m!=='cases';
+  if(m==='live'){
+    stopPlay();histData=null;liveFollowing=true;
+    document.getElementById('hctl').classList.toggle('vis',liveData!==null&&liveData.n_frames>1);
+    startPoll();document.getElementById('badge').textContent='LIVE';document.getElementById('badge').className='badge badge-live';
+  }else{
+    stopPoll();
+    document.getElementById('hctl').classList.toggle('vis',m==='cases'&&histData!==null);
+  }
+}
+
+// Load case index and populate dropdown
+fetch('data/index.json?t='+Date.now()).then(r=>r.ok?r.json():[]).then(dates=>{
+  const sel=document.getElementById('case-select');
+  sel.innerHTML='<option value="">Select event...</option>';
+  dates.forEach(d=>{
+    const opt=document.createElement('option');opt.value=d.date;
+    opt.textContent=d.date+(d.n_tornadoes?' ('+d.n_tornadoes+' tor)':'');
+    sel.appendChild(opt);
+  });
+  sel.onchange=()=>{if(sel.value)loadHistDate(sel.value);};
+}).catch(()=>{});
+
+function tog(k){vis[k]=!vis[k];document.getElementById('c-'+k).classList.toggle('on',vis[k]);applyVis();}
+function applyVis(){
+  if(reflLayer)reflLayer.setOpacity(vis.refl?0.85:0);
+  contourLines.forEach(l=>{if(vis.az)l.addTo(map);else map.removeLayer(l);});
+  markers.forEach(m=>{
+    if(vis.mk){m.addTo(map);if(m.setOpacity)m.setOpacity(mkOp);if(m.setStyle)m.setStyle({opacity:mkOp});}
+    else map.removeLayer(m);
+  });
+}
+
+function clearAll(){
+  if(reflLayer){map.removeLayer(reflLayer);reflLayer=null;}
+  markers.forEach(m=>map.removeLayer(m));markers=[];
+  contourLines.forEach(l=>map.removeLayer(l));contourLines=[];
+  torMarkers.forEach(m=>map.removeLayer(m));torMarkers=[];
+}
+
+function renderFrame(data){
+  clearAll();
+  const b=[[data.bounds.south,data.bounds.west],[data.bounds.north,data.bounds.east]];
+  const imgUrl=(data._liveBase||'')+data.refl_img+'?t='+Date.now();
+  reflLayer=L.imageOverlay(imgUrl,b,{opacity:vis.refl?0.85:0,zIndex:100}).addTo(map);
+
+  // Contour lines
+  if(data.contours){
+    const cStyles={
+      3:{color:'#999999',weight:1.5},
+      5:{color:'#cccccc',weight:2.5},
+      8:{color:'#ffffff',weight:3.5},
+      12:{color:'#ff4444',weight:4.0}
+    };
+    data.contours.forEach(c=>{
+      const st=cStyles[c.level]||{color:'#aaa',weight:1.5};
+      const line=L.polyline(c.coords,{...st,opacity:0.9});
+      if(vis.az)line.addTo(map);
+      contourLines.push(line);
+      // Value label at midpoint
+      if(c.label){
+        const lbl=L.marker(c.label,{icon:L.divIcon({className:'',
+          html:'<div style="font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700;color:'+st.color+';text-shadow:0 0 4px #000,0 0 8px #000;pointer-events:none">'+c.level+'</div>',
+          iconSize:[0,0]})});
+        if(vis.az)lbl.addTo(map);
+        contourLines.push(lbl);
+      }
+    });
+  }
+
+  // Markers
+  data.tracks.forEach(t=>{
+    const col=azColor(t.max_val);
+    const mk=L.circleMarker([t.current_lat,t.current_lon],{
+      radius:8,color:col,weight:2.5,fillOpacity:0,opacity:mkOp});
+    mk.bindTooltip('az '+t.max_val.toFixed(0),{className:'track-tooltip',direction:'top',offset:[0,-10]});
+    if(vis.mk)mk.addTo(map);
+    markers.push(mk);
+    const lb=L.marker([t.current_lat,t.current_lon],{icon:L.divIcon({className:'',
+      html:'<div style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:'+col+';text-shadow:0 0 4px #000,0 0 2px #000;transform:translate(10px,-14px);white-space:nowrap">'+t.max_val.toFixed(0)+'</div>',
+      iconSize:[0,0]})});
+    if(vis.mk)lb.addTo(map);
+    markers.push(lb);
+  });
+  document.getElementById('mcount').textContent=data.tracks.length+' markers';
+
+  // Tornado markers (historical only)
+  if(data.tornadoes&&data.scanTime){
+    const scanT=new Date(data.scanTime).getTime();
+    data.tornadoes.forEach(tor=>{
+      const torT=new Date(tor.time).getTime();
+      const dtMin=Math.abs(scanT-torT)/60000;
+      const active=dtMin<=5;
+      const sz=active?14:8;
+      const op=active?1.0:0.25;
+      const icon=L.divIcon({className:'',
+        html:'<div style="width:0;height:0;border-left:'+(sz/2)+'px solid transparent;border-right:'+(sz/2)+'px solid transparent;border-top:'+sz+'px solid #d60d0d;opacity:'+op+';filter:drop-shadow(0 0 3px rgba(0,0,0,0.8));transform:translate(-'+(sz/2)+'px,-'+(sz/2)+'px);pointer-events:auto;cursor:default" title="'+tor.ef+' '+tor.time.slice(11,19)+' UTC"></div>',
+        iconSize:[0,0]});
+      const m=L.marker([tor.lat,tor.lon],{icon:icon,zIndexOffset:active?1000:500});
+      m.addTo(map);
+      torMarkers.push(m);
+    });
+  }
+}
+
+// Live
+let liveData=null,liveFrame=-1,liveEnvTimeline=null,liveFollowing=true;
+function startPoll(){if(pollTm)return;pollTm=setInterval(loadLive,5000);loadLive();}
+function stopPoll(){if(pollTm){clearInterval(pollTm);pollTm=null;}}
+async function loadLive(){if(mode!=='live')return;try{
+  const r=await fetch(LIVE_BASE+'/data/latest.json?t='+Date.now());if(!r.ok)return;const d=await r.json();
+  if(!d.scan_time||d.scan_time===lastScan)return;lastScan=d.scan_time;
+  document.getElementById('nodata').style.display='none';
+  liveData=d;
+  if(d.env_timeline&&d.env_timeline.length)liveEnvTimeline=d.env_timeline;
+
+  // Show playback controls
+  if(d.n_frames>1)document.getElementById('hctl').classList.add('vis');
+
+  // If following (watching latest), jump to newest frame
+  if(liveFollowing)liveFrame=d.n_frames-1;
+  showLiveFrame(liveFrame);
+}catch(e){}}
+
+function showLiveFrame(i){
+  if(!liveData||!liveData.frames||!liveData.frames.length)return;
+  i=Math.max(0,Math.min(i,liveData.n_frames-1));
+  liveFrame=i;
+  liveFollowing=(i===liveData.n_frames-1);
+  var f=liveData.frames[i];
+  var dt=new Date(f.time);
+  document.getElementById('stime').textContent=dt.toISOString().slice(11,19)+' UTC';
+  var age=(Date.now()-dt.getTime())/1000;var b=document.getElementById('badge');
+  if(liveFollowing&&age<300){b.textContent='LIVE';b.className='badge badge-live';}
+  else if(liveFollowing){b.textContent=Math.floor(age/60)+'m AGO';b.className='badge badge-stale';}
+  else{b.textContent='REVIEW';b.className='badge badge-hist';}
+  renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,_liveBase:LIVE_BASE+'/'});
+  document.getElementById('flbl').textContent=(i+1)+'/'+liveData.n_frames;
+  document.getElementById('tlp').style.width=(100*(i+1)/liveData.n_frames)+'%';
+  if(liveEnvTimeline)updateEnvPanel(new Date().toISOString(),liveEnvTimeline);
+}
+
+// Historical loading
+async function loadHistDate(ds){
+  document.getElementById('nodata').style.display='none';
+  document.getElementById('env-box').style.display='none';
+  try{const r=await fetch('data/history/'+ds+'.json?t='+Date.now());
+    if(!r.ok){alert('No data available for '+ds);return;}
+    histData=await r.json();hFrame=0;
+    document.getElementById('hctl').classList.add('vis');
+    document.getElementById('badge').textContent=ds;document.getElementById('badge').className='badge badge-hist';
+    showFrame(0);
+  }catch(e){alert('Failed to load '+ds);}
+}
+
+function envCol(v){if(v<3)return'#4caf50';if(v<6)return'#ffc107';return'#ef4444';}
+
+function updateEnvPanel(frameTime,tl_override){
+  var ebox=document.getElementById('env-box');
+  var tl_data=tl_override||(histData&&histData.env_timeline)||null;
+  if(!tl_data||!tl_data.length){ebox.style.display='none';return;}
+  var frameT=new Date(frameTime).getTime();
+
+  var slots=[null,null,null,null,null,null];
+  for(var j=0;j<tl_data.length;j++){
+    var e=tl_data[j];
+    var validT=new Date(e.time).getTime();
+    var offsetH=Math.round((validT-frameT)/3600000);
+    var si=offsetH+2;
+    if(si>=0&&si<6)slots[si]=e.score;
+  }
+
+  // Big number: now slot, or closest, or dash if all empty
+  var nowScore=slots[2];
+  if(nowScore===null){
+    var best=null,bestDist=99;
+    slots.forEach(function(v,i){if(v!==null){var d=Math.abs(i-2);if(d<bestDist){bestDist=d;best=v;}}});
+    nowScore=best;
+  }
+  if(nowScore!==null){
+    document.getElementById('env-score-val').innerHTML='<span style="color:'+envCol(nowScore)+'">'+nowScore.toFixed(1)+'</span>';
+  }else{
+    document.getElementById('env-score-val').innerHTML='<span style="color:#6b7280">—</span>';
+  }
+
+  var tl=document.getElementById('env-timeline');
+  tl.innerHTML='';
+  slots.forEach(function(v,i){
+    var bar=document.createElement('div');
+    bar.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:42px';
+    if(v!==null){
+      var num=document.createElement('div');
+      num.style.cssText='font-family:monospace;font-size:8px;font-weight:600;margin-bottom:1px;color:'+envCol(v);
+      num.textContent=v.toFixed(1);
+      var fill=document.createElement('div');
+      fill.style.cssText='width:100%;border-radius:2px 2px 0 0;height:'+Math.max(4,v/10*34)+'px;background:'+envCol(v);
+      if(i!==2){fill.style.opacity='0.4';num.style.opacity='0.4';}
+      else{fill.style.outline='1.5px solid #fff';fill.style.outlineOffset='1px';}
+      bar.appendChild(num);bar.appendChild(fill);
+    }
+    tl.appendChild(bar);
+  });
+  ebox.style.display='block';
+}
+
+function showFrame(i){if(!histData||i<0||i>=histData.n_frames)return;hFrame=i;
+  const f=histData.frames[i];
+  renderFrame({bounds:histData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,tornadoes:histData.tornadoes,scanTime:f.time});
+  updateEnvPanel(f.time,histData.env_timeline);
+  document.getElementById('stime').textContent=f.time_str;
+  document.getElementById('flbl').textContent=(i+1)+'/'+histData.n_frames;
+  document.getElementById('tlp').style.width=(100*(i+1)/histData.n_frames)+'%';
+}
+function togglePlay(){if(playTm)stopPlay();else startPlay();}
+function startPlay(){
+  var data=mode==='live'?liveData:histData;
+  if(!data)return;
+  document.getElementById('playbtn').classList.add('on');document.getElementById('playbtn').innerHTML='&#9646;&#9646;';
+  playTm=setInterval(()=>{
+    if(mode==='live'&&liveData){
+      liveFrame=liveFrame>=liveData.n_frames-1?0:liveFrame+1;
+      showLiveFrame(liveFrame);
+    }else if(histData){
+      hFrame=hFrame>=histData.n_frames-1?0:hFrame+1;showFrame(hFrame);
+    }
+  },playSpd);
+}
+function stopPlay(){if(playTm){clearInterval(playTm);playTm=null;}document.getElementById('playbtn').classList.remove('on');document.getElementById('playbtn').innerHTML='&#9654;';}
+function step(d){
+  stopPlay();
+  if(mode==='live'&&liveData){showLiveFrame(liveFrame+d);}
+  else if(histData){showFrame(Math.max(0,Math.min(hFrame+d,histData.n_frames-1)));}
+}
+function seek(e){
+  stopPlay();
+  var data=mode==='live'?liveData:histData;
+  if(!data)return;
+  var r=e.target.closest('.tl').getBoundingClientRect();
+  var i=Math.max(0,Math.min(Math.floor((e.clientX-r.left)/r.width*data.n_frames),data.n_frames-1));
+  if(mode==='live')showLiveFrame(i);else showFrame(i);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}
+  if(e.key==='ArrowRight'){e.preventDefault();step(1);}
+  if(e.key===' '){e.preventDefault();togglePlay();}
+});
+
+setMode('live');
+</script>
+</body>
+</html>
