@@ -63,12 +63,28 @@ body{background:#0a0c10;color:#e0e4ec;font-family:'Outfit',sans-serif;overflow:h
 
 .track-tooltip{background:rgba(10,12,16,0.95)!important;border:1px solid rgba(239,68,68,0.3)!important;color:#e0e4ec!important;font-family:'JetBrains Mono',monospace!important;font-size:11px!important;padding:4px 8px!important;border-radius:4px!important}
 .track-tooltip::before,.leaflet-tooltip-top::before{display:none!important}
+.info-btn{background:none;border:none;color:#6b7280;font-size:16px;cursor:pointer;padding:0 6px;transition:color 0.2s}
+.info-btn:hover{color:#fff}
+.about-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.about-box{background:#111;border:1px solid #333;border-radius:10px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;padding:28px 32px;color:#c8d0e0;font-size:13px;line-height:1.7;position:relative}
+.about-box h2{color:#fff;font-size:17px;font-weight:600;margin:0 0 14px;letter-spacing:-0.3px}
+.about-box h3{color:#e0e4ec;font-size:13px;font-weight:600;margin:18px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
+.about-box p{margin:0 0 10px;color:#9ca3af}
+.about-box .close-btn{position:absolute;top:14px;right:18px;background:none;border:none;color:#6b7280;font-size:20px;cursor:pointer;line-height:1}
+.about-box .close-btn:hover{color:#fff}
+.about-box .var-table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:12px;font-family:'JetBrains Mono',monospace}
+.about-box .var-table th{text-align:left;color:#6b7280;font-weight:400;padding:4px 8px;border-bottom:1px solid #222}
+.about-box .var-table td{padding:4px 8px;color:#9ca3af;border-bottom:1px solid #1a1a1a}
+.about-box .cat-row{display:flex;align-items:center;gap:8px;margin:3px 0;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9ca3af}
+.about-box .cat-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.about-box .disclaimer{margin-top:18px;padding-top:14px;border-top:1px solid #222;color:#666;font-size:11px;font-style:italic}
 </style>
 </head>
 <body>
 <div class="header">
   <div class="header-left">
     <div class="title">OHX QLCS <span>Tornado Detection</span></div>
+    <button class="info-btn" onclick="document.getElementById('about-modal').style.display='flex'" title="About this tool">&#9432;</button>
     <div class="badge badge-stale" id="badge">LOADING</div>
   </div>
   <div class="header-right">
@@ -407,5 +423,41 @@ document.addEventListener('keydown',e=>{
 
 setMode('live');
 </script>
+<div class="about-overlay" id="about-modal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="about-box">
+    <button class="close-btn" onclick="document.getElementById('about-modal').style.display='none'">&times;</button>
+    <h2>OHX QLCS Tornado Detection Viewer</h2>
+    <p>This tool provides real-time environmental scoring for quasi-linear convective system (QLCS) tornado potential in the NWS Nashville (OHX) County Warning Area. It overlays MRMS radar data with an HRRR-derived environment score to help forecasters assess whether an ongoing QLCS is likely to produce tornadoes.</p>
+
+    <h3>Environment Score (0&ndash;10)</h3>
+    <p>The score measures how favorable the current environment is for QLCS tornadogenesis based on five variables extracted from the HRRR model. Each variable is scored on how far it has exceeded its climatological tornado threshold, weighted by its discrimination strength from a bootstrap elastic-net classification of 29 QLCS tornado events versus 37 QLCS non-tornado events (2014&ndash;2025).</p>
+
+    <table class="var-table">
+      <tr><th>Variable</th><th>Favorable</th><th>Physical Role</th></tr>
+      <tr><td>Surface RH</td><td>Higher (&gt; 75%)</td><td>Boundary layer moisture / low LCL</td></tr>
+      <tr><td>0&ndash;6 km Mean U</td><td>Stronger (&gt; 22 kt)</td><td>Deep-layer flow strength</td></tr>
+      <tr><td>Surface Wind</td><td>Stronger (&gt; 10 kt)</td><td>Low-level forcing</td></tr>
+      <tr><td>Surface Temp</td><td>Cooler (&lt; 22&deg;C)</td><td>Cool-season regime</td></tr>
+      <tr><td>SB CIN</td><td>Less negative (&gt; &minus;105)</td><td>Cap strength</td></tr>
+    </table>
+
+    <h3>Score Categories</h3>
+    <div class="cat-row"><div class="cat-swatch" style="background:#4caf50"></div> 0&ndash;3: Low &mdash; background tornado frequency</div>
+    <div class="cat-row"><div class="cat-swatch" style="background:#ffc107"></div> 3&ndash;6: Moderate &mdash; elevated frequency, environment becoming favorable</div>
+    <div class="cat-row"><div class="cat-swatch" style="background:#ef4444"></div> 6+: High &mdash; strong discrimination; conditional tornado frequency 9&ndash;24%</div>
+
+    <h3>Timeline Panel</h3>
+    <p>The rolling &minus;2h to +3h timeline shows how the environment score evolves relative to the current frame. In live mode, scores update hourly as new HRRR runs complete. In historical mode, scores slide through as you scrub the playback.</p>
+
+    <h3>Radar Overlays</h3>
+    <p>MRMS merged base reflectivity and 0&ndash;2 km azimuthal shear are displayed at native resolution. Azimuthal shear peaks exceeding 6 &times; 10&supmin;&sup3; s&supmin;&sup1; are marked as detection candidates. Contour lines highlight shear regions at 3, 5, 8, and 12 &times; 10&supmin;&sup3; s&supmin;&sup1;.</p>
+
+    <h3>Important Limitation</h3>
+    <p>The environment score identifies WHETHER an active QLCS is favorable for tornadoes but does not localize WHERE within the CWA tornadoes will occur. Spatial discrimination within events is near zero (Cohen&rsquo;s d &asymp; &minus;0.12). The radar overlays provide spatial context that the score alone cannot.</p>
+
+    <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS, NOAA, or NCEP product. Cross-validated event-level AUC: 0.833 at T&minus;3h (29 tornado events, 37 null events, 2014&ndash;2025). For research and situational awareness only.</p>
+  </div>
+</div>
+
 </body>
 </html>
