@@ -433,12 +433,12 @@ setMode('live');
     <p>The score measures how favorable the current environment is for QLCS tornadogenesis based on five variables extracted from the HRRR model. Each variable is scored on how far it has exceeded its climatological tornado threshold, weighted by its discrimination strength from a bootstrap elastic-net classification of 29 QLCS tornado events versus 37 QLCS non-tornado events (2014&ndash;2025).</p>
 
     <table class="var-table">
-      <tr><th>Variable</th><th>Favorable</th><th>Physical Role</th></tr>
-      <tr><td>Surface RH</td><td>Higher (&gt; 75%)</td><td>Boundary layer moisture / low LCL</td></tr>
-      <tr><td>0&ndash;6 km Mean U</td><td>Stronger (&gt; 22 kt)</td><td>Deep-layer flow strength</td></tr>
-      <tr><td>Surface Wind</td><td>Stronger (&gt; 10 kt)</td><td>Low-level forcing</td></tr>
-      <tr><td>Surface Temp</td><td>Cooler (&lt; 22&deg;C)</td><td>Cool-season regime</td></tr>
-      <tr><td>SB CIN</td><td>Less negative (&gt; &minus;105)</td><td>Cap strength</td></tr>
+      <tr><th>Variable</th><th>Favorable Direction</th></tr>
+      <tr><td>Surface RH</td><td>Higher (&gt; 75%)</td></tr>
+      <tr><td>0&ndash;6 km Mean U</td><td>Stronger (&gt; 22 kt)</td></tr>
+      <tr><td>Surface Wind</td><td>Stronger (&gt; 10 kt)</td></tr>
+      <tr><td>Surface Temp</td><td>Cooler (&lt; 22&deg;C)</td></tr>
+      <tr><td>SB CIN</td><td>Less negative (&gt; &minus;105 J/kg)</td></tr>
     </table>
 
     <h3>Score Categories</h3>
@@ -450,12 +450,12 @@ setMode('live');
     <p>The rolling &minus;2h to +3h timeline shows how the environment score evolves relative to the current frame. In live mode, scores update hourly as new HRRR runs complete. In historical mode, scores slide through as you scrub the playback.</p>
 
     <h3>Radar Overlays</h3>
-    <p>MRMS merged base reflectivity and 0&ndash;2 km azimuthal shear are displayed at native resolution. Azimuthal shear peaks exceeding 6 &times; 10&supmin;&sup3; s&supmin;&sup1; are marked as detection candidates. Contour lines highlight shear regions at 3, 5, 8, and 12 &times; 10&supmin;&sup3; s&supmin;&sup1;.</p>
+    <p>MRMS merged base reflectivity and 0&ndash;2 km azimuthal shear are displayed at native resolution. Azimuthal shear peaks exceeding 6 &times; 10&#8315;&sup3; s&#8315;&sup1; are marked as detection candidates. Contour lines highlight shear regions at 3, 5, 8, and 12 &times; 10&#8315;&sup3; s&#8315;&sup1;.</p>
 
     <h3>Important Limitation</h3>
     <p>The environment score identifies WHETHER an active QLCS is favorable for tornadoes but does not localize WHERE within the CWA tornadoes will occur. Spatial discrimination within events is near zero (Cohen&rsquo;s d &asymp; &minus;0.12). The radar overlays provide spatial context that the score alone cannot.</p>
 
-    <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS, NOAA, or NCEP product. Cross-validated event-level AUC: 0.833 at T&minus;3h (29 tornado events, 37 null events, 2014&ndash;2025). For research and situational awareness only.</p>
+    <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS, NOAA, or NCEP product. Cross-validated event-level AUC: 0.833 at T&minus;3h (29 tornado events, 37 null events, 2014&ndash;2025). For research only.</p>
   </div>
 </div>
 
