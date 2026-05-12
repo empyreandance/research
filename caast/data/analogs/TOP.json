@@ -1,9 +1,9 @@
 {
   "office": "TOP",
-  "product_id": "202605111908-KTOP-FXUS63-AFDTOP",
-  "afd_time": "2026-05-11T19:08:00Z",
+  "product_id": "202605112359-KTOP-FXUS63-AFDTOP",
+  "afd_time": "2026-05-11T23:59:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-11T20:05:57.253393+00:00",
+  "updated": "2026-05-12T00:13:39.301821+00:00",
   "query_preview": "..\nIssued at 208 PM CDT Mon May 11 2026\n\nUpper pattern becomes more progressive for this forecast period. A \nshortwave along the U.S./Canada border drags a cold front southeast \nacross Kansas late tonight into Tuesday night. Northerly low-level \nflow from roughly the Red River south to the Gulf will keep moisture \nquality with this front low with a moderate cap in place above it. \nFrontal convergence is not very strong, but could be enough for \nisolated thunderstorm development in portions of east-central Kansas \nlate Tuesday afternoon to early Tuesday evening. MLCAPE around 1000 \nJ/kg and deep-layer shear around 40 knots could support severe \nstorms with a wind and hail threat. Highs in the middle and upper \n80s Tuesday only back off a category or two for Wednesday as \nmodified surface high pressure moves through. \n\nWarm-air advection regime sets up Wednesday night into Thursday as a \nstronger upper wave moves across the northern Plains. At this point \navailable moisture still looks rather low for any notable \nprecipitation chance until another modified cold front comes \nThursday night, but this too could be moisture-starved. Thursday's \nhighs could be tricky depending on cloud persistence with NBM ranges \nrather high at this range. Greater precipitation chances should come \nthis weekend into early next week as southwest upper flow dominates \nwith better Gulf moisture availability. Ahead of this moisture, the \nWAA brings 850 mb temperatures into the 90th percentile range of \nclimatology to bring highs close to record values, including record \nwarm low potential Friday night. Somewhat cooler temperatures are \nanticipated Monday though model spreads in the larger scale increase \nnotably at this point.",
   "analogs": [
     {
@@ -59,7 +59,7 @@
     {
       "datetime_utc": "2025-04-12T19:45Z",
       "source_file": "TOP_2025_12_1945.txt",
-      "similarity": 0.9824910163879395,
+      "similarity": 0.9824909567832947,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -103,7 +103,7 @@
     {
       "datetime_utc": "2025-04-13T05:17Z",
       "source_file": "TOP_2025_13_0517.txt",
-      "similarity": 0.9824910163879395,
+      "similarity": 0.9824909567832947,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -246,7 +246,7 @@
     {
       "datetime_utc": "2024-04-27T17:51Z",
       "source_file": "TOP_2024_27_1751.txt",
-      "similarity": 0.9818350076675415,
+      "similarity": 0.981834888458252,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -307,8 +307,8 @@
       }
     },
     {
-      "datetime_utc": "2015-04-06T23:47Z",
-      "source_file": "TOP_2015_06_2347.txt",
+      "datetime_utc": "2015-04-06T21:04Z",
+      "source_file": "TOP_2015_06_2104.txt",
       "similarity": 0.9807970523834229,
       "label": "tornado",
       "is_severe": true,
@@ -358,9 +358,9 @@
       }
     },
     {
-      "datetime_utc": "2018-06-07T11:11Z",
-      "source_file": "TOP_2018_07_1111.txt",
-      "similarity": 0.9806568026542664,
+      "datetime_utc": "2018-06-07T17:47Z",
+      "source_file": "TOP_2018_07_1747_1.txt",
+      "similarity": 0.9806568622589111,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -406,9 +406,9 @@
       }
     },
     {
-      "datetime_utc": "2024-04-26T09:09Z",
-      "source_file": "TOP_2024_26_0909.txt",
-      "similarity": 0.9804145097732544,
+      "datetime_utc": "2024-04-26T17:01Z",
+      "source_file": "TOP_2024_26_1701.txt",
+      "similarity": 0.9804145693778992,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -469,25 +469,32 @@
       }
     },
     {
-      "datetime_utc": "2014-06-12T05:12Z",
-      "source_file": "TOP_2014_12_0512.txt",
-      "similarity": 0.9803844690322876,
+      "datetime_utc": "2014-06-11T20:32Z",
+      "source_file": "TOP_2014_11_2032.txt",
+      "similarity": 0.9803845286369324,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 13,
+            "severe_wind": 16
+          }
+        },
+        "1": {
           "label": "flood",
           "counts": {
             "flood": 1
           }
         },
-        "1": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3
           }
         },
-        "2": {
+        "3": {
           "label": "tornado",
           "counts": {
             "flood": 1,
@@ -496,26 +503,19 @@
             "tornado": 3
           }
         },
-        "3": {
+        "4": {
           "label": "quiet",
           "counts": {}
         },
-        "4": {
+        "5": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 4
           }
         },
-        "5": {
+        "6": {
           "label": "quiet",
           "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
-          }
         }
       }
     }
@@ -523,7 +523,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9771653515100479,
+    "mean_similarity": 0.977165303826332,
     "base_rate": 0.581439641002896,
     "signal_value": 0.37856035899710394,
     "percentile": 85,
@@ -532,8 +532,8 @@
     "n_total": 10,
     "n_severe_signal": 96,
     "n_total_signal": 100,
-    "product_id": "202605111908-KTOP-FXUS63-AFDTOP",
-    "afd_time": "2026-05-11T19:08:00Z",
-    "updated": "2026-05-11T20:05:57.253393+00:00"
+    "product_id": "202605112359-KTOP-FXUS63-AFDTOP",
+    "afd_time": "2026-05-11T23:59:00Z",
+    "updated": "2026-05-12T00:13:39.301821+00:00"
   }
 }
