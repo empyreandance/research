@@ -177,7 +177,7 @@
     </div>
     <div class="disclaimer">
       <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
-      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product. <span class="d-br"></span>Personal research project by Alex Cooke. <span class="d-br"></span>Wind: NWS API + ECCC HRDPS via GeoMet. <span class="d-br"></span>SST: GLERL monthly climatology. <span class="d-br"></span>850 mb: ECCC HRDPS · Basemap: CARTO. <span class="d-br"></span>Shoreline: Natural Earth 10m.</span>
+      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product. <span class="d-br"></span>Personal research project by Alex Cooke. <span class="d-br"></span>Wind: NWS API + ECCC HRDPS via GeoMet. <span class="d-br"></span>SST: JPL MUR satellite analysis (daily, 1 km). <span class="d-br"></span>850 mb: ECCC HRDPS · Basemap: CARTO. <span class="d-br"></span>Shoreline: Natural Earth 10m.</span>
     </div>
     <div class="cursor-readout" id="cursorReadout">
       <div class="cursor-readout-title">Cursor Readout</div>
@@ -261,7 +261,7 @@
       {lat:47.15,lon:-90.2,lake:"Superior",src:"nws"},{lat:47.15,lon:-89.4,lake:"Superior",src:"nws"},
       {lat:47.15,lon:-88.6,lake:"Superior",src:"nws"},{lat:47.15,lon:-87.8,lake:"Superior",src:"nws"},
       {lat:47.15,lon:-87.0,lake:"Superior",src:"nws"},{lat:47.15,lon:-86.2,lake:"Superior",src:"nws"},
-      {lat:47.15,lon:-85.4,lake:"Superior",src:"nws"},{lat:47.15,lon:-84.8,lake:"Superior",src:"nws"},
+      {lat:47.15,lon:-85.4,lake:"Superior",src:"eccc"},{lat:47.15,lon:-84.8,lake:"Superior",src:"eccc"},
       // Superior — CA north shore
       {lat:47.7,lon:-89.5,lake:"Superior",src:"eccc"},{lat:47.7,lon:-88.5,lake:"Superior",src:"eccc"},
       {lat:47.7,lon:-87.5,lake:"Superior",src:"eccc"},{lat:47.7,lon:-86.5,lake:"Superior",src:"eccc"},
@@ -282,14 +282,14 @@
       {lat:45.3,lon:-86.7,lake:"Michigan",src:"nws"},{lat:45.3,lon:-86.1,lake:"Michigan",src:"nws"},
       // Huron — US west side
       {lat:43.3,lon:-83.2,lake:"Huron",src:"nws"},{lat:43.3,lon:-82.7,lake:"Huron",src:"nws"},
-      {lat:43.3,lon:-82.2,lake:"Huron",src:"nws"},{lat:43.8,lon:-83.2,lake:"Huron",src:"nws"},
-      {lat:43.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:43.8,lon:-82.2,lake:"Huron",src:"nws"},
+      {lat:43.3,lon:-82.2,lake:"Huron",src:"eccc"},{lat:43.8,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:43.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:43.8,lon:-82.2,lake:"Huron",src:"eccc"},
       {lat:44.3,lon:-83.2,lake:"Huron",src:"nws"},{lat:44.3,lon:-82.7,lake:"Huron",src:"nws"},
-      {lat:44.3,lon:-82.2,lake:"Huron",src:"nws"},{lat:44.8,lon:-83.2,lake:"Huron",src:"nws"},
-      {lat:44.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:44.8,lon:-82.2,lake:"Huron",src:"nws"},
+      {lat:44.3,lon:-82.2,lake:"Huron",src:"eccc"},{lat:44.8,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:44.8,lon:-82.7,lake:"Huron",src:"nws"},{lat:44.8,lon:-82.2,lake:"Huron",src:"eccc"},
       {lat:45.2,lon:-83.2,lake:"Huron",src:"nws"},{lat:45.2,lon:-82.7,lake:"Huron",src:"nws"},
-      {lat:45.2,lon:-82.2,lake:"Huron",src:"nws"},{lat:45.6,lon:-83.2,lake:"Huron",src:"nws"},
-      {lat:45.6,lon:-82.7,lake:"Huron",src:"nws"},{lat:45.6,lon:-82.2,lake:"Huron",src:"nws"},
+      {lat:45.2,lon:-82.2,lake:"Huron",src:"eccc"},{lat:45.6,lon:-83.2,lake:"Huron",src:"nws"},
+      {lat:45.6,lon:-82.7,lake:"Huron",src:"eccc"},{lat:45.6,lon:-82.2,lake:"Huron",src:"eccc"},
       // Huron — CA east side / Georgian Bay
       {lat:43.5,lon:-81.5,lake:"Huron",src:"eccc"},{lat:44.0,lon:-81.2,lake:"Huron",src:"eccc"},
       {lat:44.5,lon:-81.0,lake:"Huron",src:"eccc"},{lat:45.0,lon:-81.3,lake:"Huron",src:"eccc"},
@@ -298,8 +298,8 @@
       {lat:41.6,lon:-83.0,lake:"Erie",src:"nws"},{lat:41.6,lon:-82.3,lake:"Erie",src:"nws"},
       {lat:41.6,lon:-81.6,lake:"Erie",src:"nws"},{lat:41.6,lon:-80.9,lake:"Erie",src:"nws"},
       {lat:41.6,lon:-80.2,lake:"Erie",src:"nws"},{lat:41.6,lon:-79.5,lake:"Erie",src:"nws"},
-      {lat:42.1,lon:-83.0,lake:"Erie",src:"nws"},{lat:42.1,lon:-82.3,lake:"Erie",src:"nws"},
-      {lat:42.1,lon:-81.6,lake:"Erie",src:"nws"},{lat:42.1,lon:-80.9,lake:"Erie",src:"nws"},
+      {lat:42.1,lon:-83.0,lake:"Erie",src:"eccc"},{lat:42.1,lon:-82.3,lake:"Erie",src:"eccc"},
+      {lat:42.1,lon:-81.6,lake:"Erie",src:"eccc"},{lat:42.1,lon:-80.9,lake:"Erie",src:"nws"},
       {lat:42.1,lon:-80.2,lake:"Erie",src:"nws"},{lat:42.1,lon:-79.5,lake:"Erie",src:"nws"},
       {lat:42.5,lon:-79.2,lake:"Erie",src:"nws"},
       // Erie — CA north shore
@@ -307,9 +307,9 @@
       {lat:42.5,lon:-80.2,lake:"Erie",src:"eccc"},{lat:42.6,lon:-79.5,lake:"Erie",src:"eccc"},
       {lat:42.8,lon:-79.0,lake:"Erie",src:"eccc"},
       // Ontario — US south shore
-      {lat:43.3,lon:-79.2,lake:"Ontario",src:"nws"},{lat:43.3,lon:-78.4,lake:"Ontario",src:"nws"},
+      {lat:43.3,lon:-79.2,lake:"Ontario",src:"eccc"},{lat:43.3,lon:-78.4,lake:"Ontario",src:"nws"},
       {lat:43.3,lon:-77.6,lake:"Ontario",src:"nws"},{lat:43.3,lon:-76.8,lake:"Ontario",src:"nws"},
-      {lat:43.3,lon:-76.2,lake:"Ontario",src:"nws"},{lat:43.6,lon:-79.2,lake:"Ontario",src:"nws"},
+      {lat:43.3,lon:-76.2,lake:"Ontario",src:"nws"},{lat:43.6,lon:-79.2,lake:"Ontario",src:"eccc"},
       {lat:43.6,lon:-78.4,lake:"Ontario",src:"nws"},{lat:43.6,lon:-77.6,lake:"Ontario",src:"nws"},
       {lat:43.6,lon:-76.8,lake:"Ontario",src:"nws"},{lat:43.6,lon:-76.2,lake:"Ontario",src:"nws"},
       // Ontario — CA north shore
@@ -321,18 +321,18 @@
       {lat:46.9,lon:-91.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-90.5,lake:"Superior",src:"nws"},
       {lat:46.9,lon:-89.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-88.5,lake:"Superior",src:"nws"},
       {lat:46.9,lon:-87.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-86.5,lake:"Superior",src:"nws"},
-      {lat:46.9,lon:-85.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-84.8,lake:"Superior",src:"nws"},
+      {lat:46.9,lon:-85.5,lake:"Superior",src:"nws"},{lat:46.9,lon:-84.8,lake:"Superior",src:"eccc"},
       // Michigan mid-lake
       {lat:42.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:42.5,lon:-86.4,lake:"Michigan",src:"nws"},
       {lat:43.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:43.5,lon:-86.4,lake:"Michigan",src:"nws"},
       {lat:44.0,lon:-86.4,lake:"Michigan",src:"nws"},{lat:44.5,lon:-86.4,lake:"Michigan",src:"nws"},
       {lat:45.0,lon:-86.4,lake:"Michigan",src:"nws"},
       // Huron mid-lake
-      {lat:43.5,lon:-82.0,lake:"Huron",src:"nws"},{lat:44.0,lon:-82.0,lake:"Huron",src:"nws"},
-      {lat:44.5,lon:-82.0,lake:"Huron",src:"nws"},{lat:45.0,lon:-82.0,lake:"Huron",src:"nws"},
-      {lat:45.5,lon:-82.0,lake:"Huron",src:"nws"},
+      {lat:43.5,lon:-82.0,lake:"Huron",src:"eccc"},{lat:44.0,lon:-82.0,lake:"Huron",src:"eccc"},
+      {lat:44.5,lon:-82.0,lake:"Huron",src:"eccc"},{lat:45.0,lon:-82.0,lake:"Huron",src:"eccc"},
+      {lat:45.5,lon:-82.0,lake:"Huron",src:"eccc"},
       // Erie mid-lake
-      {lat:41.9,lon:-82.5,lake:"Erie",src:"nws"},{lat:41.9,lon:-81.8,lake:"Erie",src:"nws"},
+      {lat:41.9,lon:-82.5,lake:"Erie",src:"eccc"},{lat:41.9,lon:-81.8,lake:"Erie",src:"nws"},
       {lat:41.9,lon:-81.0,lake:"Erie",src:"nws"},{lat:41.9,lon:-80.3,lake:"Erie",src:"nws"},
       {lat:41.9,lon:-79.8,lake:"Erie",src:"nws"},{lat:41.9,lon:-79.2,lake:"Erie",src:"nws"},
       // Ontario mid-lake
@@ -690,7 +690,7 @@
       }
 
       const result = computeFetchDiscretized(lat, lon, hitLake);
-      const sst = lakeSST(hitLake, targetTime);
+      const sst = cellWind.sstF !== null ? cellWind.sstF : lakeSST(hitLake, targetTime);
 
       document.getElementById('crWindDir').textContent = `${cellWind.dir.toFixed(0)}°`;
       document.getElementById('crWindSpd').textContent = `${cellWind.spdKt.toFixed(0)} kt`;
@@ -748,6 +748,7 @@
             windSpd: jsonSeriesToInternal(d.windSpd),
             temp: jsonSeriesToInternal(d.temp),
             temp850: d.temp850 ? jsonSeriesToInternal(d.temp850) : null,
+            sst: typeof d.sst === 'number' ? d.sst : null,
           };
           if (d.temp850 && d.temp850.length) has850++;
         }
@@ -904,13 +905,15 @@
           const rad = (dir * Math.PI) / 180;
           const temp = valAt(d.temp, targetTime);
           const temp850 = d.temp850 ? valAt(d.temp850, targetTime) : null;
+          const sstC = typeof d.sst === 'number' ? d.sst : null;
           pts.push({
             lat: WIND_POINTS[i].lat, lon: WIND_POINTS[i].lon,
             u: -Math.sin(rad) * spd, v: -Math.cos(rad) * spd,
             spd: spd,
             cosLat: Math.cos(WIND_POINTS[i].lat * Math.PI / 180),
             tempC: temp,
-            temp850C: temp850
+            temp850C: temp850,
+            sstC: sstC
           });
         }
         windField[lakeName] = pts;
@@ -944,7 +947,7 @@
     function idwFull(lat, lon, lakeName) {
       const pts = windField[lakeName];
       if (!pts || !pts.length) return null;
-      let uSum = 0, vSum = 0, spdSum = 0, wSum = 0, tempSum = 0, tempW = 0, t850Sum = 0, t850W = 0;
+      let uSum = 0, vSum = 0, spdSum = 0, wSum = 0, tempSum = 0, tempW = 0, t850Sum = 0, t850W = 0, sstSum = 0, sstW = 0;
       const cosLat = Math.cos(lat * Math.PI / 180);
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i];
@@ -954,6 +957,7 @@
         uSum += w * p.u; vSum += w * p.v; spdSum += w * p.spd; wSum += w;
         if (p.tempC !== null) { tempSum += w * p.tempC; tempW += w; }
         if (p.temp850C !== null) { t850Sum += w * p.temp850C; t850W += w; }
+        if (p.sstC !== null) { sstSum += w * p.sstC; sstW += w; }
       }
       if (wSum === 0) return null;
       return {
@@ -961,7 +965,8 @@
         spdKmh: spdSum / wSum,
         spdKt: (spdSum / wSum) * 0.539957,
         airTempF: tempW > 0 ? (tempSum / tempW) * 9 / 5 + 32 : null,
-        temp850F: t850W > 0 ? (t850Sum / t850W) * 9 / 5 + 32 : null
+        temp850F: t850W > 0 ? (t850Sum / t850W) * 9 / 5 + 32 : null,
+        sstF: sstW > 0 ? (sstSum / sstW) * 9 / 5 + 32 : null
       };
     }
 
@@ -1055,7 +1060,12 @@
 
       for(const lakeName of lakes){
         const lakeWind=avgWindForLake(lakeName); if(!lakeWind)continue;
-        const sst=lakeSST(lakeName,targetTime);
+        // Use real SST if available (average of wind field points), fall back to climatology
+        const lakePts = windField[lakeName] || [];
+        const sstVals = lakePts.filter(p => p.sstC !== null).map(p => p.sstC);
+        const sst = sstVals.length > 0
+          ? (sstVals.reduce((a,b) => a+b, 0) / sstVals.length) * 9/5 + 32
+          : lakeSST(lakeName, targetTime);
         const grid=LAKE_GRIDS[lakeName]; if(!grid)continue;
         let lakeMaxFetch=0, lakeMaxResidence=0;
 
@@ -1130,7 +1140,7 @@
         if (hitLake) {
           const w = idwFull(rLat, rLon, hitLake);
           if (w) {
-            const sst = lakeSST(hitLake, targetTime);
+            const sst = w.sstF !== null ? w.sstF : lakeSST(hitLake, targetTime);
             document.getElementById('crWindDir').textContent = `${w.dir.toFixed(0)}°`;
             document.getElementById('crWindSpd').textContent = `${w.spdKt.toFixed(0)} kt`;
             document.getElementById('crSST').textContent = `${sst.toFixed(0)}°F`;

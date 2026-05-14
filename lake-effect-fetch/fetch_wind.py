@@ -29,7 +29,7 @@ WIND_POINTS = [
     (47.15,-90.2,"Superior","nws"),(47.15,-89.4,"Superior","nws"),
     (47.15,-88.6,"Superior","nws"),(47.15,-87.8,"Superior","nws"),
     (47.15,-87.0,"Superior","nws"),(47.15,-86.2,"Superior","nws"),
-    (47.15,-85.4,"Superior","nws"),(47.15,-84.8,"Superior","nws"),
+    (47.15,-85.4,"Superior","eccc"),(47.15,-84.8,"Superior","eccc"),
     (47.7,-89.5,"Superior","eccc"),(47.7,-88.5,"Superior","eccc"),
     (47.7,-87.5,"Superior","eccc"),(47.7,-86.5,"Superior","eccc"),
     (47.7,-85.5,"Superior","eccc"),(48.1,-88.0,"Superior","eccc"),
@@ -49,14 +49,14 @@ WIND_POINTS = [
     (45.3,-86.7,"Michigan","nws"),(45.3,-86.1,"Michigan","nws"),
     # Huron — US (18) + CA (6)
     (43.3,-83.2,"Huron","nws"),(43.3,-82.7,"Huron","nws"),
-    (43.3,-82.2,"Huron","nws"),(43.8,-83.2,"Huron","nws"),
-    (43.8,-82.7,"Huron","nws"),(43.8,-82.2,"Huron","nws"),
+    (43.3,-82.2,"Huron","eccc"),(43.8,-83.2,"Huron","nws"),
+    (43.8,-82.7,"Huron","nws"),(43.8,-82.2,"Huron","eccc"),
     (44.3,-83.2,"Huron","nws"),(44.3,-82.7,"Huron","nws"),
-    (44.3,-82.2,"Huron","nws"),(44.8,-83.2,"Huron","nws"),
-    (44.8,-82.7,"Huron","nws"),(44.8,-82.2,"Huron","nws"),
+    (44.3,-82.2,"Huron","eccc"),(44.8,-83.2,"Huron","nws"),
+    (44.8,-82.7,"Huron","nws"),(44.8,-82.2,"Huron","eccc"),
     (45.2,-83.2,"Huron","nws"),(45.2,-82.7,"Huron","nws"),
-    (45.2,-82.2,"Huron","nws"),(45.6,-83.2,"Huron","nws"),
-    (45.6,-82.7,"Huron","nws"),(45.6,-82.2,"Huron","nws"),
+    (45.2,-82.2,"Huron","eccc"),(45.6,-83.2,"Huron","nws"),
+    (45.6,-82.7,"Huron","eccc"),(45.6,-82.2,"Huron","eccc"),
     (43.5,-81.5,"Huron","eccc"),(44.0,-81.2,"Huron","eccc"),
     (44.5,-81.0,"Huron","eccc"),(45.0,-81.3,"Huron","eccc"),
     (45.5,-81.8,"Huron","eccc"),(45.8,-82.3,"Huron","eccc"),
@@ -64,17 +64,17 @@ WIND_POINTS = [
     (41.6,-83.0,"Erie","nws"),(41.6,-82.3,"Erie","nws"),
     (41.6,-81.6,"Erie","nws"),(41.6,-80.9,"Erie","nws"),
     (41.6,-80.2,"Erie","nws"),(41.6,-79.5,"Erie","nws"),
-    (42.1,-83.0,"Erie","nws"),(42.1,-82.3,"Erie","nws"),
-    (42.1,-81.6,"Erie","nws"),(42.1,-80.9,"Erie","nws"),
+    (42.1,-83.0,"Erie","eccc"),(42.1,-82.3,"Erie","eccc"),
+    (42.1,-81.6,"Erie","eccc"),(42.1,-80.9,"Erie","nws"),
     (42.1,-80.2,"Erie","nws"),(42.1,-79.5,"Erie","nws"),
     (42.5,-79.2,"Erie","nws"),
     (42.4,-81.8,"Erie","eccc"),(42.4,-81.0,"Erie","eccc"),
     (42.5,-80.2,"Erie","eccc"),(42.6,-79.5,"Erie","eccc"),
     (42.8,-79.0,"Erie","eccc"),
     # Ontario — US (10) + CA (6)
-    (43.3,-79.2,"Ontario","nws"),(43.3,-78.4,"Ontario","nws"),
+    (43.3,-79.2,"Ontario","eccc"),(43.3,-78.4,"Ontario","nws"),
     (43.3,-77.6,"Ontario","nws"),(43.3,-76.8,"Ontario","nws"),
-    (43.3,-76.2,"Ontario","nws"),(43.6,-79.2,"Ontario","nws"),
+    (43.3,-76.2,"Ontario","nws"),(43.6,-79.2,"Ontario","eccc"),
     (43.6,-78.4,"Ontario","nws"),(43.6,-77.6,"Ontario","nws"),
     (43.6,-76.8,"Ontario","nws"),(43.6,-76.2,"Ontario","nws"),
     (43.8,-79.0,"Ontario","eccc"),(43.9,-78.2,"Ontario","eccc"),
@@ -84,15 +84,15 @@ WIND_POINTS = [
     (46.9,-91.5,"Superior","nws"),(46.9,-90.5,"Superior","nws"),
     (46.9,-89.5,"Superior","nws"),(46.9,-88.5,"Superior","nws"),
     (46.9,-87.5,"Superior","nws"),(46.9,-86.5,"Superior","nws"),
-    (46.9,-85.5,"Superior","nws"),(46.9,-84.8,"Superior","nws"),
+    (46.9,-85.5,"Superior","nws"),(46.9,-84.8,"Superior","eccc"),
     (42.0,-86.4,"Michigan","nws"),(42.5,-86.4,"Michigan","nws"),
     (43.0,-86.4,"Michigan","nws"),(43.5,-86.4,"Michigan","nws"),
     (44.0,-86.4,"Michigan","nws"),(44.5,-86.4,"Michigan","nws"),
     (45.0,-86.4,"Michigan","nws"),
-    (43.5,-82.0,"Huron","nws"),(44.0,-82.0,"Huron","nws"),
-    (44.5,-82.0,"Huron","nws"),(45.0,-82.0,"Huron","nws"),
-    (45.5,-82.0,"Huron","nws"),
-    (41.9,-82.5,"Erie","nws"),(41.9,-81.8,"Erie","nws"),
+    (43.5,-82.0,"Huron","eccc"),(44.0,-82.0,"Huron","eccc"),
+    (44.5,-82.0,"Huron","eccc"),(45.0,-82.0,"Huron","eccc"),
+    (45.5,-82.0,"Huron","eccc"),
+    (41.9,-82.5,"Erie","eccc"),(41.9,-81.8,"Erie","nws"),
     (41.9,-81.0,"Erie","nws"),(41.9,-80.3,"Erie","nws"),
     (41.9,-79.8,"Erie","nws"),(41.9,-79.2,"Erie","nws"),
     (43.5,-79.0,"Ontario","nws"),(43.5,-78.2,"Ontario","nws"),
@@ -233,6 +233,57 @@ async def fetch_850mb_for_point(session, idx, lat, lon, run_time, sem):
     return idx, series if series else None
 
 
+# ===== SST (via NOAA ERDDAP — JPL MUR SST, daily 1km satellite analysis) =====
+
+MUR_SST_URL = "https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplMURSST41.json"
+
+# Lake centers for nudging failed shore points toward open water
+LAKE_CENTERS = {
+    "Superior": (47.5, -87.5),
+    "Michigan": (43.5, -86.5),
+    "Huron": (44.8, -82.0),
+    "Erie": (42.0, -81.2),
+    "Ontario": (43.6, -77.8),
+}
+
+async def _query_sst(session, lat, lon, sem):
+    """Single SST query. Returns value in °C or None."""
+    async with sem:
+        url = f"{MUR_SST_URL}?analysed_sst%5Blast%5D%5B({lat})%5D%5B({lon})%5D"
+        try:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=15)) as resp:
+                if resp.status != 200:
+                    return None
+                text = await resp.text()
+                data = json.loads(text)
+                rows = data.get("table", {}).get("rows", [])
+                if rows:
+                    sst_c = rows[0][-1]
+                    if sst_c is not None and isinstance(sst_c, (int, float)):
+                        return round(sst_c, 2)
+                return None
+        except:
+            return None
+
+
+async def fetch_sst_for_point(session, idx, lat, lon, lake, sem):
+    """Fetch SST, retrying with nudges toward lake center if shore pixel is masked."""
+    val = await _query_sst(session, lat, lon, sem)
+    if val is not None:
+        return idx, val
+
+    # Nudge 20%, 40%, 60% toward lake center and retry
+    clat, clon = LAKE_CENTERS.get(lake, (lat, lon))
+    for frac in [0.2, 0.4, 0.6]:
+        nlat = lat + (clat - lat) * frac
+        nlon = lon + (clon - lon) * frac
+        val = await _query_sst(session, nlat, nlon, sem)
+        if val is not None:
+            return idx, val
+
+    return idx, None
+
+
 # ===== MAIN =====
 
 async def fetch_all():
@@ -264,6 +315,17 @@ async def fetch_all():
 
     print(f"  NWS:  {nws_ok} ok, {nws_fail} failed")
     print(f"  ECCC: {eccc_ok} ok, {eccc_fail} failed")
+    wind_by_lake = {}
+    for i, (lat, lon, lake, source) in enumerate(WIND_POINTS):
+        if lake not in wind_by_lake:
+            wind_by_lake[lake] = [0, 0]
+        wind_by_lake[lake][1] += 1
+        if str(i) in points:
+            wind_by_lake[lake][0] += 1
+    for lake in ["Superior", "Michigan", "Huron", "Erie", "Ontario"]:
+        if lake in wind_by_lake:
+            ok, total = wind_by_lake[lake]
+            print(f"    {lake}: {ok}/{total}")
 
     # Phase 2: 850mb temperature for ALL successful points via ECCC HRDPS
     run_time = latest_hrdps_run()
@@ -285,6 +347,36 @@ async def fetch_all():
             t850_ok += 1
 
     print(f"  850mb: {t850_ok}/{len(points)} points")
+
+    # Phase 3: Real-time SST for ALL successful points via JPL MUR SST
+    sst_sem = asyncio.Semaphore(8)
+    print(f"  Fetching SST via JPL MUR SST (NOAA ERDDAP)...")
+
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as session:
+        sst_tasks = []
+        for idx_str in points:
+            idx = int(idx_str)
+            lat, lon, lake = WIND_POINTS[idx][0], WIND_POINTS[idx][1], WIND_POINTS[idx][2]
+            sst_tasks.append(fetch_sst_for_point(session, idx, lat, lon, lake, sst_sem))
+        sst_results = await asyncio.gather(*sst_tasks)
+
+    sst_ok = 0
+    sst_by_lake = {}
+    for idx, sst_val in sst_results:
+        lake = WIND_POINTS[idx][2]
+        if lake not in sst_by_lake:
+            sst_by_lake[lake] = [0, 0]  # [ok, total]
+        sst_by_lake[lake][1] += 1
+        if sst_val is not None:
+            points[str(idx)]["sst"] = sst_val
+            sst_ok += 1
+            sst_by_lake[lake][0] += 1
+
+    print(f"  SST:  {sst_ok}/{len(points)} points")
+    for lake in ["Superior", "Michigan", "Huron", "Erie", "Ontario"]:
+        if lake in sst_by_lake:
+            ok, total = sst_by_lake[lake]
+            print(f"    {lake}: {ok}/{total}")
     return points, nws_ok + eccc_ok
 
 
