@@ -1126,7 +1126,7 @@
       if(showResidence){document.getElementById('legendTitle').textContent='Residence Time';document.getElementById('legendBar').style.background='linear-gradient(to right, #0d1926, #1480c8, #40d0f0, #ccffff)';document.getElementById('legendLabels').innerHTML='<span>0 h</span><span>2</span><span>5</span><span>10+</span>';}
       else{document.getElementById('legendTitle').textContent='Fetch Distance';document.getElementById('legendBar').style.background='linear-gradient(to right, #0d1926, #994400, #ff5500, #ff0044)';document.getElementById('legendLabels').innerHTML='<span>0 km</span><span>80</span><span>160</span><span>250+</span>';}
 
-      const ts=targetTime.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+      const ts=targetTime.toLocaleString('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
       const h=currentTimeIndex-HOURS_PAST;
       document.getElementById('timeDisplay').textContent=`${ts}  ·  ${h===0?'Now':h>0?`+${h}h Forecast`:`${h}h Observed`}`;
 
@@ -1225,8 +1225,8 @@
     function getTimeLabel(slotIndex) {
       const t = timeSlots[slotIndex];
       if (!t) return '';
-      const dateStr = t.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
-      const timeStr = t.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+      const dateStr = t.toLocaleDateString('en-US', {timeZone:'America/New_York', weekday:'short', month:'short', day:'numeric', year:'numeric'});
+      const timeStr = t.toLocaleTimeString('en-US', {timeZone:'America/New_York', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
       return `Lake-Effect Fetch Map  ·  Valid: ${dateStr} ${timeStr}`;
     }
 
