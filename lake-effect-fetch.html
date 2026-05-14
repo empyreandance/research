@@ -801,12 +801,12 @@
 
       // Update "Forecast created" display
       if (windGenerated) {
-        const ct = windGenerated.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        const ct = windGenerated.toLocaleString('en-US', {timeZone:'America/New_York', weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
         document.getElementById('windCreatedTime').textContent = ct;
       } else {
         const now = new Date();
         windGenerated = now;
-        const ct = now.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        const ct = now.toLocaleString('en-US', {timeZone:'America/New_York', weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
         document.getElementById('windCreatedTime').textContent = ct + ' (live)';
       }
 
@@ -1394,7 +1394,7 @@
 
       // Forecast created box (bottom-right)
       if (windGenerated) {
-        const createdStr = 'Forecast created: ' + windGenerated.toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
+        const createdStr = 'Forecast created: ' + windGenerated.toLocaleString('en-US', {timeZone:'America/New_York', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
         ctx.font = '500 10px "DM Sans", Arial, sans-serif';
         const cw = ctx.measureText(createdStr).width + 20;
         const bx = size.x - cw - 10, by = size.y - 38;
