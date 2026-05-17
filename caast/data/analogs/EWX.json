@@ -1,21 +1,25 @@
 {
   "office": "EWX",
-  "product_id": "202605161834-KEWX-FXUS64-AFDEWX",
-  "afd_time": "2026-05-16T18:34:00Z",
+  "product_id": "202605162318-KEWX-FXUS64-AFDEWX-AAA",
+  "afd_time": "2026-05-16T23:18:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-16T19:35:49.612094+00:00",
+  "updated": "2026-05-17T00:11:01.498945+00:00",
   "query_preview": "..\n(Monday through next Saturday)\nIssued at 110 PM CDT Sat May 16 2026\n\nMonday's weather forecast calls for even warmer temperatures than \nthis weekend with highs in the mid to upper 90s most places and \ngetting into the 100 mark over portions of the Rio Grande Plains. \nWith increased moisture in place and dewpoints in the lower 70s for \nmany locations, feel-like temperatures between the upper 90s to 106 \nare anticipated along and east of I-35 corridor and 100 to 107 over \nthe Rio Grande Plains. As far as shower/storm activity, things are \nquiet as a strong cap holds, but if for some reason weakens, the a \nfew strong storms could be possible with strong winds reaching the \nground.\n\nFrom Tuesday into Wednesday time frame is where the weather pattern \nget interesting as a dryline sits over west Texas and a cold front \nover north central Texas advances to the south. We may see some \nstorms developing along the dryline and then moving east into the \nRio Grande Plains Tuesday afternoon and evening. The other area that \ncould see some storms is along and east of I-35 corridor where pwats \nare around 1.7 to 2.0 inches based on GFS values. During the \nafternoon on Wednesday, the cold front is forecast to be nearby the \nHill Country and then pushing over that area in the evening based on \nGFS guidance. The 00Z ECMWF model package has a similar approach of \nthe cold front. The upper level support solutions are a bit \ndifferent with the passing short waves/disturbances through the \nperiod with the long wave axis moving over the northwest Pacific and \nextending into southern California. The long wave deepens as it \nmoves across the Rockies and four corners region and into the \nSouthern Plains on Thursday with the lingering frontal boundary \nacross South Central Texas. There are signals that Thursday could \nbe the day with the more intense rains. The wet pattern continues \ninto Friday as upper level disturbances move over central Texas. \n\nIn summary, a wet weather pattern awaits for the work week \nespecially Wednesday through Thursday with rounds of showers and \nstorms on Friday into next weekend. Some areas could get several \ninches of rainfall through this period leading to localized\nflooding. More details will be shared in future weather packages\nas the event unfolds.",
   "analogs": [
     {
-      "datetime_utc": "2022-05-25T05:14Z",
-      "source_file": "EWX_2022_25_0514.txt",
-      "similarity": 0.9862872362136841,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2022-05-24T23:47Z",
+      "source_file": "EWX_2022_24_2347.txt",
+      "similarity": 0.9862871170043945,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 26,
+            "severe_wind": 42,
+            "flood": 1
+          }
         },
         "1": {
           "label": "quiet",
@@ -44,19 +48,15 @@
       }
     },
     {
-      "datetime_utc": "2022-05-24T23:47Z",
-      "source_file": "EWX_2022_24_2347.txt",
-      "similarity": 0.9862872362136841,
-      "label": "severe_wind",
-      "is_severe": true,
+      "datetime_utc": "2022-05-25T05:14Z",
+      "source_file": "EWX_2022_25_0514.txt",
+      "similarity": 0.9862871170043945,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 26,
-            "severe_wind": 42,
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -131,51 +131,9 @@
       }
     },
     {
-      "datetime_utc": "2024-06-04T05:26Z",
-      "source_file": "EWX_2024_04_0526.txt",
-      "similarity": 0.9859184622764587,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2024-06-03T19:25Z",
       "source_file": "EWX_2024_03_1925.txt",
-      "similarity": 0.9859184622764587,
+      "similarity": 0.985918402671814,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -215,8 +173,50 @@
       }
     },
     {
-      "datetime_utc": "2023-05-04T23:20Z",
-      "source_file": "EWX_2023_04_2320.txt",
+      "datetime_utc": "2024-06-04T05:26Z",
+      "source_file": "EWX_2024_04_0526.txt",
+      "similarity": 0.985918402671814,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-05-04T19:56Z",
+      "source_file": "EWX_2023_04_1956.txt",
       "similarity": 0.9857490062713623,
       "label": "severe_wind",
       "is_severe": true,
@@ -276,8 +276,8 @@
       }
     },
     {
-      "datetime_utc": "2023-05-05T03:53Z",
-      "source_file": "EWX_2023_05_0353.txt",
+      "datetime_utc": "2023-05-05T05:15Z",
+      "source_file": "EWX_2023_05_0515.txt",
       "similarity": 0.9857490062713623,
       "label": "severe_wind",
       "is_severe": true,
@@ -336,7 +336,7 @@
     {
       "datetime_utc": "2023-06-11T23:08Z",
       "source_file": "EWX_2023_11_2308.txt",
-      "similarity": 0.985471248626709,
+      "similarity": 0.9854713082313538,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -384,7 +384,7 @@
     {
       "datetime_utc": "2023-06-12T05:18Z",
       "source_file": "EWX_2023_12_0518.txt",
-      "similarity": 0.985471248626709,
+      "similarity": 0.9854713082313538,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -432,9 +432,9 @@
       }
     },
     {
-      "datetime_utc": "2016-03-17T17:41Z",
-      "source_file": "EWX_2016_17_1741.txt",
-      "similarity": 0.9850597381591797,
+      "datetime_utc": "2016-03-17T16:57Z",
+      "source_file": "EWX_2016_17_1657.txt",
+      "similarity": 0.9850597977638245,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -478,7 +478,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.81,
-    "mean_similarity": 0.9820734298229218,
+    "mean_similarity": 0.9820734322071075,
     "base_rate": 0.5290306223061104,
     "signal_value": 0.28096937769388963,
     "percentile": 89,
@@ -487,8 +487,8 @@
     "n_total": 10,
     "n_severe_signal": 81,
     "n_total_signal": 100,
-    "product_id": "202605161834-KEWX-FXUS64-AFDEWX",
-    "afd_time": "2026-05-16T18:34:00Z",
-    "updated": "2026-05-16T19:35:49.612094+00:00"
+    "product_id": "202605162318-KEWX-FXUS64-AFDEWX-AAA",
+    "afd_time": "2026-05-16T23:18:00Z",
+    "updated": "2026-05-17T00:11:01.498945+00:00"
   }
 }
