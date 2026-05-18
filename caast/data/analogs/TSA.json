@@ -1,15 +1,15 @@
 {
   "office": "TSA",
-  "product_id": "202605171728-KTSA-FXUS64-AFDTSA",
-  "afd_time": "2026-05-17T17:28:00Z",
+  "product_id": "202605172356-KTSA-FXUS64-AFDTSA",
+  "afd_time": "2026-05-17T23:56:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-17T19:39:17.379000+00:00",
+  "updated": "2026-05-18T00:13:22.441254+00:00",
   "query_preview": "..\n(Tomorrow through Sunday)\nIssued at 1131 AM CDT Sun May 17 2026\n\nThe same general pattern will remain in place Monday, just\nwindier. A Wind Advisory is posted for portions of northeast\nOklahoma. There will be some improvement in forcing, however, as \nthe dry line moves into western Oklahoma. Sporadic convective \ninitiation may occur along the line, with any storms that develop \nmoving east into the forecast area during the evening hours. Most \nCAMs that show this focus across southeast OK, but any location \nalong the dry line will be in play. A few CAMs hint at some \nisolated storms popping up within the warm sector, though this \nremains uncertain. Like today, any storms that develop will \npossess an abundance of moisture, wind shear, and instability, so \nthey may become severe. Large hail and damaging winds would be the\nmore likely hazards. \n\nA cold front will then move into the forecast area Tuesday morning. \nStorms will have grown upscale into a line by the time the front \nreaches the forecast area. This will promote the threat of heavy \nrain and strong winds as it moves through. In general, the shear \nvector will likely be mostly parallel to the front, which will limit \nthe overall tornado threat. However, if any individual segments bow \nout, the wind shear will promote the potential for QLCS tornadoes as \nwell. Models remain uncertain on the exact progression of the front, \nbut some reinvigoration is expected to the south of it due to \ndaytime heating Tuesday afternoon. This will continue the severe \nweather threat until the cold front clears the area.\n\nTemperatures will be much cooler behind the front, with highs \nWednesday through Friday mainly in the 70s and lows in the 50s to \nlower 60s. Rain chances along with some thunder potential will \npersist as moisture rides above the elevated frontal surface and a\npassing upper level trough induces some lift. Rainfall will be \nfairly widespread during this period, but generally not overly \nheavy either. Upper level ridging will gradually return into the \nweekend, though remaining fairly weak. This will promote gradual \nwarming and drying into the weekend.",
   "analogs": [
     {
-      "datetime_utc": "2025-06-05T15:24Z",
-      "source_file": "TSA_2025_05_1524.txt",
-      "similarity": 0.9863620400428772,
+      "datetime_utc": "2025-06-05T11:16Z",
+      "source_file": "TSA_2025_05_1116.txt",
+      "similarity": 0.9863619804382324,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -65,9 +65,64 @@
       }
     },
     {
-      "datetime_utc": "2022-05-18T19:08Z",
-      "source_file": "TSA_2022_18_1908.txt",
-      "similarity": 0.9841609001159668,
+      "datetime_utc": "2022-05-19T05:25Z",
+      "source_file": "TSA_2022_19_0525.txt",
+      "similarity": 0.9841609597206116,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 1,
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 4
+          }
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_hail": 3,
+            "severe_wind": 4,
+            "flood": 2
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "flood": 1,
+            "severe_wind": 1,
+            "tornado": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-05-18T23:32Z",
+      "source_file": "TSA_2022_18_2332.txt",
+      "similarity": 0.9841609597206116,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -121,64 +176,9 @@
       }
     },
     {
-      "datetime_utc": "2022-05-19T05:25Z",
-      "source_file": "TSA_2022_19_0525.txt",
-      "similarity": 0.9841609001159668,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 1,
-            "flood": 1
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 4
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1,
-            "severe_hail": 3,
-            "severe_wind": 4,
-            "flood": 2
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "flood": 1,
-            "severe_wind": 1,
-            "tornado": 1
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2021-08-07T14:50Z",
       "source_file": "TSA_2021_07_1450_1.txt",
-      "similarity": 0.9824683666229248,
+      "similarity": 0.9824685454368591,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -223,7 +223,7 @@
     {
       "datetime_utc": "2020-09-26T18:59Z",
       "source_file": "TSA_2020_26_1859.txt",
-      "similarity": 0.9820960760116577,
+      "similarity": 0.9820961952209473,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -263,7 +263,7 @@
     {
       "datetime_utc": "2017-03-20T08:00Z",
       "source_file": "TSA_2017_20_0800.txt",
-      "similarity": 0.9804818630218506,
+      "similarity": 0.9804819226264954,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -316,7 +316,7 @@
     {
       "datetime_utc": "2017-08-03T19:59Z",
       "source_file": "TSA_2017_03_1959.txt",
-      "similarity": 0.9795941710472107,
+      "similarity": 0.9795942902565002,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -365,7 +365,7 @@
     {
       "datetime_utc": "2023-07-14T02:59Z",
       "source_file": "TSA_2023_14_0259.txt",
-      "similarity": 0.9793668389320374,
+      "similarity": 0.9793670177459717,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -412,9 +412,9 @@
       }
     },
     {
-      "datetime_utc": "2023-07-13T20:38Z",
-      "source_file": "TSA_2023_13_2038.txt",
-      "similarity": 0.9793668389320374,
+      "datetime_utc": "2023-07-13T22:57Z",
+      "source_file": "TSA_2023_13_2257.txt",
+      "similarity": 0.9793670177459717,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -462,9 +462,9 @@
       }
     },
     {
-      "datetime_utc": "2025-07-04T21:47Z",
-      "source_file": "TSA_2025_04_2147.txt",
-      "similarity": 0.9792708158493042,
+      "datetime_utc": "2025-07-04T17:59Z",
+      "source_file": "TSA_2025_04_1759.txt",
+      "similarity": 0.979270875453949,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -512,7 +512,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.91,
-    "mean_similarity": 0.9764334458112717,
+    "mean_similarity": 0.976433590054512,
     "base_rate": 0.6678787549862961,
     "signal_value": 0.2421212450137039,
     "percentile": 77,
@@ -521,8 +521,8 @@
     "n_total": 10,
     "n_severe_signal": 91,
     "n_total_signal": 100,
-    "product_id": "202605171728-KTSA-FXUS64-AFDTSA",
-    "afd_time": "2026-05-17T17:28:00Z",
-    "updated": "2026-05-17T19:39:17.379000+00:00"
+    "product_id": "202605172356-KTSA-FXUS64-AFDTSA",
+    "afd_time": "2026-05-17T23:56:00Z",
+    "updated": "2026-05-18T00:13:22.441254+00:00"
   }
 }
