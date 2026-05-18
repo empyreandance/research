@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dewpoint EFI / SOT — GEFS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+  :root{--bg:#0c0e13;--bg-card:#13161d;--bg-card-alt:#181c25;--border:#252a36;--border-light:#2f3545;--text:#c8cdd8;--text-dim:#6b7280;--text-bright:#e8ecf4;--accent:#60a5fa;--accent-dim:#2563eb}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+  .header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .header-left h1{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;color:var(--text-bright)}
+  .header-left .subtitle{font-size:0.72rem;color:var(--text-dim);margin-top:2px}
+  .info-btn{font-family:'JetBrains Mono',monospace;font-size:0.73rem;background:var(--bg-card);color:var(--accent);border:1px solid var(--border-light);border-radius:6px;padding:5px 11px;cursor:pointer}
+  .info-btn:hover{background:var(--bg-card-alt)}
+  .meta-bar{padding:7px 24px;font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--text-dim);border-bottom:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap}
+  .main{display:grid;grid-template-columns:260px 1fr;gap:0;height:calc(100vh - 85px)}
+  @media(max-width:900px){.main{grid-template-columns:1fr;height:auto}}
+  .left-panel{border-right:1px solid var(--border);overflow-y:auto;padding:14px}
+  .day-row{display:grid;grid-template-columns:55px 1fr 1fr;gap:3px;padding:7px 5px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.75rem}
+  .day-row:hover{background:rgba(96,165,250,.06)}
+  .day-row.active{background:rgba(96,165,250,.12);border:1px solid var(--accent-dim)}
+  .day-label{font-weight:600;color:var(--text-bright);display:flex;flex-direction:column}
+  .day-label .sub{font-size:0.58rem;color:var(--text-dim);font-weight:400}
+  .cell-stack{display:flex;flex-direction:column;align-items:center;gap:1px}
+  .cell-header{font-size:0.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.3px}
+  .efi-val{font-weight:600;font-size:0.78rem;padding:2px 5px;border-radius:3px;min-width:44px;text-align:center;display:inline-block}
+  .sot-val{font-size:0.58rem;color:var(--text-dim)}
+  .right-panel{overflow:hidden;background:#fff;position:relative;display:flex;flex-direction:column}
+  #esat-title{flex:0 0 auto;text-align:center;padding:7px 16px;font-size:0.78rem;color:#1a1a1a;line-height:1.5;background:#fff;border-bottom:1px solid var(--border)}
+  #esat-title b{color:#000;font-weight:600}
+  #esat-title .sep{color:#9aa0ac;margin:0 7px}
+  #efi-map{flex:1 1 auto;min-height:0;width:100%}
+  #efi-map svg{width:100%;height:100%;display:block}
+  #map-footer{flex:0 0 auto;background:#fff;border-top:1px solid var(--border);padding:9px 16px 11px}
+  #esat-colorbar{max-width:600px;margin:0 auto}
+  #sot-legend{text-align:center;font-size:0.66rem;color:#555;margin-top:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+  @media(max-width:900px){#efi-map{min-height:520px}}
+  .legend{display:flex;gap:5px;align-items:center;margin-bottom:10px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--border)}
+  .legend-title{font-size:0.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-right:5px}
+  .legend-item{display:flex;align-items:center;gap:3px;font-size:0.63rem;color:var(--text-dim)}
+  .legend-swatch{width:11px;height:11px;border-radius:2px;border:1px solid rgba(255,255,255,.08)}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--border)}
+  .nav-hint{font-size:0.6rem;color:var(--text-dim);text-align:center;margin-top:10px;font-family:'JetBrains Mono',monospace}
+  .nav-hint kbd{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:3px;padding:1px 4px;font-size:.6rem}
+  .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center}
+  .modal-overlay.active{display:flex}
+  .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;max-width:800px;max-height:85vh;overflow-y:auto;padding:24px;width:90%}
+  .modal h2{font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--text-bright);margin-bottom:14px}
+  .modal p{font-size:0.83rem;color:var(--text);margin-bottom:10px;line-height:1.6}
+  .modal .stat{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600}
+  .modal img{max-width:100%;border-radius:8px;margin:10px 0;border:1px solid var(--border)}
+  .modal-close{float:right;background:none;border:none;color:var(--text-dim);font-size:1.5rem;cursor:pointer;padding:4px 8px}
+  .modal-close:hover{color:var(--text-bright)}
+  .modal .caption{font-size:0.7rem;color:var(--text-dim);font-style:italic;margin-bottom:14px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>Dewpoint EFI / SOT</h1>
+    <div class="subtitle">GEFS-based Extreme Forecast Index for 2m Dewpoint (Lalaurette 2003)</div>
+  </div>
+  <div class="header-right">
+    <button class="info-btn" onclick="toggleModal()">&#9432; Why Dewpoint EFI?</button>
+  </div>
+</div>
+<div class="meta-bar" id="meta-bar"><span>Loading...</span></div>
+<div class="main" id="content">
+  <div class="left-panel">
+    <div class="legend">
+      <span class="legend-title">EFI</span>
+      <div class="legend-item"><div class="legend-swatch" style="background:#78b07c"></div>&lt;0.5</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#eed535"></div>0.5</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#f0a020"></div>0.6</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#ff4040"></div>0.8</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#d060ff"></div>0.9</div>
+    </div>
+    <div style="margin-bottom:10px">
+      <label style="font-size:0.68rem;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-family:JetBrains Mono,monospace">CWA</label>
+      <select id="cwa-picker" style="display:block;width:100%;margin-top:3px;font-family:JetBrains Mono,monospace;font-size:0.88rem;font-weight:600;background:var(--bg-card-alt);color:var(--accent);border:1px solid var(--border-light);border-radius:6px;padding:5px 9px;cursor:pointer">
+        <option value="CONUS">CONUS</option>
+      </select>
+    </div>
+    <div class="section-label">Forecast Days</div>
+    <div id="day-list"></div>
+    <div style="margin-top:10px;font-size:0.63rem;color:var(--text-dim);font-family:JetBrains Mono,monospace">
+      <label><input type="checkbox" id="toggle-cities" checked> Cities</label>
+      <label style="margin-left:8px"><input type="checkbox" id="toggle-counties"> Counties</label>
+    </div>
+    <div class="nav-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> cycle days</div>
+  </div>
+  <div class="right-panel">
+    <div id="esat-title">Loading&hellip;</div>
+    <div id="efi-map"></div>
+    <div id="map-footer">
+      <div id="esat-colorbar"></div>
+      <div id="sot-legend">SOT contours (moist tail) at 1, 2, 5, 8</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="info-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="toggleModal()">&times;</button>
+    <h2>Why Dewpoint EFI?</h2>
+    <p>The ECMWF EFI suite has no moisture variable. Dewpoint drives convective potential, fire weather risk, and comfort independently of existing parameters.</p>
+    <p><span class="stat">High tail: 27.6% independence</span> &mdash; 1 in 4 moisture events invisible to current EFI.</p>
+    <p><span class="stat">Low tail: 53.9% independence</span>, <span class="stat">66.3% in summer</span>. Over half of fire-season dryness events produce zero EFI signal.</p>
+    <img src="results/dewpoint_independence_map.png" alt="High-tail independence">
+    <div class="caption">High-dewpoint anomalies not captured by existing EFI.</div>
+    <img src="results/dewpoint_independence_low_map.png" alt="Low-tail independence">
+    <div class="caption">Low-dewpoint anomalies not captured. 40-60% independence CONUS-wide.</div>
+    <p style="font-weight:600;color:var(--text-bright);margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">How this differs from operational ECMWF EFI</p>
+    <p>This product is built entirely on <span class="stat">GEFS</span>, not the ECMWF IFS. Both the operational ensemble (31 members) and the M-climate reforecasts (5 members per day, 2000&ndash;2019) come from GEFS.</p>
+    <p>The M-climate day-of-year window is <span class="stat">&plusmn;7 days</span>, narrower than ECMWF's &plusmn;17.5-day (5-week) window. GEFS reforecasts initialize daily, so a &plusmn;7-day window still yields roughly <span class="stat">1,500 samples per day-of-year</span> &mdash; comparable sampling to ECMWF's wider window over twice-weekly initializations. The narrower window preserves sharper seasonal structure, such as monsoon onset.</p>
+    <p>The EFI and SOT formulas are <span class="stat">identical</span> to ECMWF's published methodology (Lalaurette 2003; Zs&oacute;t&eacute;r 2006). The only departures are the model source and the climate window above.</p>
+    <p>Computation is done in <span class="stat">specific humidity (q) space</span>, which is monotonically equivalent to dewpoint temperature. Working in q avoids numerical issues with the Clausius-Clapeyron conversion at extreme values, and the resulting percentiles map back to dewpoint without distortion.</p>
+  </div>
+</div>
+
+<script>
+// === DEPLOY SETTING =================================================
+// Production data (dewpoint_efi_latest.json + grids/*.json) is served
+// from the Cloudflare R2 bucket "dewpoint-efi". R2_BASE is its public
+// URL, no trailing slash. When the page is opened from localhost or as
+// a file://, R2_BASE is ignored and the page reads ./output instead,
+// so local testing keeps working unchanged.
+var R2_BASE = "https://pub-7a92c2bc41f4494f91faac8eca4c378a.r2.dev";
+// ====================================================================
+var IS_LOCAL = location.protocol === "file:" ||
+               /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname);
+var DATA_BASE = IS_LOCAL ? "output" : R2_BASE;
+var DATA_URL = DATA_BASE + "/dewpoint_efi_latest.json";
+var DATA = null;
+var selectedDay = null;
+
+function efiColor(v){var a=Math.abs(v);if(a>=.9)return"#d060ff";if(a>=.8)return"#ff4040";if(a>=.6)return"#f0a020";if(a>=.5)return"#eed535";return"#78b07c";}
+function sotColor(v){var a=Math.abs(v);if(a>=5)return"#c050ff";if(a>=1)return"#ff4040";if(a>0)return"#f0a020";return"#6b7280";}
+
+// EFI diverging fill scale — single source of truth for the map fill and the
+// colorbar legend. 5 bands per side; index 0 = innermost band (|EFI| 0.5-0.6),
+// index 4 = outermost band (|EFI| 0.9-1.0).
+var EFI_THRESHOLDS = [0.499, 0.599, 0.699, 0.799, 0.899];
+var EFI_POS_COLORS = ["#f6f3a8","#fdda3c","#f59e0b","#ea580c","#b91c1c"]; // moist: pale yellow -> deep red
+var EFI_NEG_COLORS = ["#cdd8f5","#8fb0f0","#4d7be0","#3b3fc4","#6b1f9c"]; // dry: pale blue -> purple
+
+// Format an ISO timestamp that carries no timezone (UTC is implied by the
+// pipeline) as e.g. "06Z Tue May 19", optionally with the year.
+function fmtValidZ(iso, withYear){
+  if(!iso) return "";
+  var dt = new Date(/Z$/.test(iso) ? iso : iso + "Z");
+  if(isNaN(dt.getTime())) return "";
+  var dn = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var mn = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var s = String(dt.getUTCHours()).padStart(2,"0") + "Z " + dn[dt.getUTCDay()] +
+          " " + mn[dt.getUTCMonth()] + " " + dt.getUTCDate();
+  return withYear ? s + " " + dt.getUTCFullYear() : s;
+}
+
+// Map title — driven by the selected day (the valid window is identical
+// across CWAs, so this does not depend on the CWA selection).
+function updateMapTitle(day){
+  var el = document.getElementById("esat-title");
+  if(!el) return;
+  if(!DATA || !DATA.days || !DATA.days[String(day)]){ el.textContent = ""; return; }
+  var d = DATA.days[String(day)];
+  var fhr = String(d.fh_range || "").replace(/\s*forecast\s*$/i, "");
+  var win = fmtValidZ(d.valid_start) + " to " + fmtValidZ(d.valid_end, true);
+  var gefs = "GEFS " + (DATA.init_date || "") + " " + (DATA.cycle || "") + " (31 members)";
+  el.innerHTML =
+    "Dewpoint EFI (shaded) and SOT (contours) &mdash; <b>Day " + day + "</b>" +
+    '<span class="sep">|</span>' + fhr + " forecast valid " + win +
+    '<span class="sep">|</span>' + gefs;
+}
+
+function getSelectedCwa(){var e=document.getElementById("cwa-picker");return e?e.value:"CONUS";}
+
+function getDayData(day){
+  var cwa=getSelectedCwa();
+  if(cwa!=="CONUS"&&DATA.by_cwa&&DATA.by_cwa[cwa]&&DATA.by_cwa[cwa].days&&DATA.by_cwa[cwa].days[String(day)]){
+    var cd=DATA.by_cwa[cwa].days[String(day)],base=DATA.days[String(day)]||{};
+    return{valid:base.valid,efi_max:cd.efi_max,efi_min:cd.efi_min,sot_upper_max:cd.sot_upper_max,sot_lower_max:cd.sot_lower_max};
+  }
+  return DATA.days[String(day)];
+}
+
+function getDays(){if(!DATA)return[];return Object.keys(DATA.days).map(Number).sort(function(a,b){return a-b;});}
+
+function selectDay(day){
+  selectedDay=day;
+  document.querySelectorAll(".day-row").forEach(function(r){r.classList.toggle("active",r.dataset.day===String(day));});
+  updateMapTitle(day);
+  updateMap(getSelectedCwa(),"td",String(day));
+}
+
+function render(){
+  var container=document.getElementById("day-list");
+  container.innerHTML="";
+  var days=getDays();
+  for(var i=0;i<days.length;i++){
+    var day=days[i],d=getDayData(day);if(!d)continue;
+    var row=document.createElement("div");row.className="day-row";row.dataset.day=day;
+    (function(dy){row.onclick=function(){selectDay(dy);};})(day);
+    var eM=d.efi_max,em=d.efi_min,eS=Math.abs(eM)>=Math.abs(em)?eM:em;
+    // sot_upper_max / sot_lower_max are the signed Zsoter tail SOTs: upper is
+    // positive when the moist tail is extreme, lower is positive when the dry
+    // tail is extreme. Each runs large-negative when its tail is the quiet one,
+    // so clamp at 0. A tail with no extreme signal (clamped value 0) renders as
+    // an em dash, not 0.00, so it is not misread as a measured value. sP is the
+    // dominant tail; the headline is an em dash when neither tail has a signal.
+    var sMoist=Math.max(0,d.sot_upper_max),sDry=-Math.max(0,d.sot_lower_max);
+    var sP=(sMoist>=-sDry)?sMoist:sDry;
+    var sotMoistTxt=sMoist>0?('+'+sMoist.toFixed(2)):'\u2014';
+    var sotDryTxt=sDry<0?sDry.toFixed(2):'\u2014';
+    var sotHeadTxt=(sMoist===0&&sDry===0)?'\u2014':((sP>=0?'+':'')+sP.toFixed(2));
+    row.innerHTML='<div class="day-label"><span>Day '+day+'</span><span class="sub">'+(d.valid||'')+'</span></div>'+
+      '<div class="cell-stack"><span class="cell-header">EFI</span><span class="efi-val" style="background:'+efiColor(eS)+'20;color:'+efiColor(eS)+'">'+(eS>=0?'+':'')+eS.toFixed(2)+'</span><span class="sot-val">'+em.toFixed(2)+' / '+eM.toFixed(2)+'</span></div>'+
+      '<div class="cell-stack"><span class="cell-header">SOT</span><span class="efi-val" style="background:'+sotColor(sP)+'20;color:'+sotColor(sP)+'">'+sotHeadTxt+'</span><span class="sot-val">'+sotDryTxt+' / '+sotMoistTxt+'</span></div>';
+    container.appendChild(row);
+  }
+  if(days.length>0)selectDay(selectedDay||days[0]);
+}
+
+function populateCwaDropdown(){
+  var p=document.getElementById("cwa-picker");
+  p.innerHTML='<option value="CONUS">CONUS</option>';
+  if(DATA.cwa_list){for(var i=0;i<DATA.cwa_list.length;i++){var o=document.createElement("option");o.value=DATA.cwa_list[i];o.textContent=DATA.cwa_list[i];p.appendChild(o);}}
+  p.onchange=function(){render();};
+}
+
+function toggleModal(){document.getElementById("info-modal").classList.toggle("active");}
+document.getElementById("info-modal").addEventListener("click",function(e){if(e.target===this)toggleModal();});
+document.addEventListener("keydown",function(e){
+  if(!DATA)return;var days=getDays(),idx=days.indexOf(selectedDay);
+  if(e.key==="ArrowRight"&&idx<days.length-1)selectDay(days[idx+1]);
+  if(e.key==="ArrowLeft"&&idx>0)selectDay(days[idx-1]);
+  if(e.key==="Escape"){var m=document.getElementById("info-modal");if(m.classList.contains("active"))toggleModal();}
+});
+
+var GRID_CACHE = {};
+var ESAT_NAMES = {"td": "Dewpoint"};
+// ==== Map engine (from EFI CWA viewer) ====
+let mapSvg = null;
+let mapProjection = null;
+let mapPath = null;
+let statesGeoData = null;
+let countiesGeoData = null;
+let citiesData = null;
+const MAP_W = 900, MAP_H = 700;
+
+async function loadCwaGrid(cwaId) {
+  if (!cwaId) return null;
+  if (GRID_CACHE[cwaId]) return GRID_CACHE[cwaId];
+  try {
+    const resp = await fetch(`${DATA_BASE}/grids/${cwaId}.json`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    GRID_CACHE[cwaId] = data;
+    return data;
+  } catch(e) {
+    console.warn(`Grid data not available for ${cwaId}:`, e);
+    return null;
+  }
+}
+
+async function loadStates() {
+  if (statesGeoData) return statesGeoData;
+  try {
+    const resp = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json");
+    const us = await resp.json();
+    statesGeoData = topojson.feature(us, us.objects.states);
+    return statesGeoData;
+  } catch(e) {
+    console.warn("Could not load states:", e);
+    return null;
+  }
+}
+
+async function loadCounties() {
+  if (countiesGeoData) return countiesGeoData;
+  try {
+    const resp = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json");
+    const us = await resp.json();
+    countiesGeoData = topojson.feature(us, us.objects.counties);
+    return countiesGeoData;
+  } catch(e) {
+    console.warn("Could not load counties:", e);
+    return null;
+  }
+}
+
+async function loadCities() {
+  if (citiesData) return citiesData;
+  try {
+    const resp = await fetch("us_cities.json");
+    citiesData = await resp.json();
+    return citiesData;
+  } catch(e) {
+    console.warn("Could not load cities:", e);
+    return null;
+  }
+}
+
+function initMap() {
+  const container = document.getElementById("efi-map");
+  container.innerHTML = "";
+  mapSvg = d3.select("#efi-map").append("svg")
+    .attr("viewBox", `0 0 ${MAP_W} ${MAP_H}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("background", "#ffffff");
+
+  // Wrapper group for zoom/pan.
+  const g = mapSvg.append("g").attr("id", "g-map-root");
+  g.append("g").attr("id", "g-contours");
+  g.append("g").attr("id", "g-counties");
+  g.append("g").attr("id", "g-states");
+  g.append("g").attr("id", "g-sot");
+  g.append("g").attr("id", "g-sot-labels");
+  g.append("g").attr("id", "g-cwa");
+  g.append("g").attr("id", "g-region-box");
+  g.append("g").attr("id", "g-cities");
+
+  // Enable zoom/pan.
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 10])
+    .on("zoom", (event) => {
+      g.attr("transform", event.transform);
+      const k = event.transform.k;
+
+      // Progressive city disclosure: lower pop threshold as you zoom in.
+      const popThreshold = 300000 / (k * k * k);
+      g.selectAll(".city-group").each(function() {
+        this.style.display = +this.dataset.pop >= popThreshold ? "" : "none";
+      });
+
+      // Gentle counter-scale: sqrt(k) so fonts grow with zoom but not 1:1.
+      const cs = Math.sqrt(k);
+      g.selectAll("#g-cities text").each(function() {
+        const base = +this.dataset.baseSize || 6;
+        d3.select(this).attr("font-size", (base / cs) + "px");
+      });
+      g.selectAll("#g-cities rect").each(function() {
+        const base = +this.dataset.baseSize || 2;
+        d3.select(this)
+          .attr("width", base / cs).attr("height", base / cs)
+          .attr("x", +this.dataset.cx - base / cs / 2)
+          .attr("y", +this.dataset.cy - base / cs / 2);
+      });
+      g.selectAll("#g-sot-labels text").each(function() {
+        d3.select(this).attr("font-size", (11 / cs) + "px")
+          .attr("stroke-width", (2.5 / cs));
+      });
+    });
+  mapSvg.call(zoom);
+}
+
+function setupProjection(cwaData) {
+  const lats = cwaData.efi.lats;
+  const lons = cwaData.efi.lons;
+  const south = Math.min(lats[0], lats[lats.length - 1]);
+  const north = Math.max(lats[0], lats[lats.length - 1]);
+  const west = Math.min(lons[0], lons[lons.length - 1]);
+  const east = Math.max(lons[0], lons[lons.length - 1]);
+  const centerLon = (west + east) / 2;
+
+  // Build projection with unit scale first.
+  mapProjection = d3.geoConicConformal()
+    .parallels([25, 50])
+    .rotate([-centerLon, 0])
+    .scale(1)
+    .translate([0, 0]);
+
+  // Project the four corners to find bounds.
+  const corners = [
+    mapProjection([west, south]),
+    mapProjection([east, south]),
+    mapProjection([east, north]),
+    mapProjection([west, north]),
+  ];
+  const xs = corners.map(c => c[0]);
+  const ys = corners.map(c => c[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+
+  // Scale to fit SVG with padding.
+  const pad = 30;
+  const scaleX = (MAP_W - 2 * pad) / (maxX - minX);
+  const scaleY = (MAP_H - 2 * pad) / (maxY - minY);
+  const s = Math.min(scaleX, scaleY);
+
+  mapProjection
+    .scale(s)
+    .translate([
+      MAP_W / 2 - s * (minX + maxX) / 2,
+      MAP_H / 2 - s * (minY + maxY) / 2
+    ]);
+
+  mapPath = d3.geoPath(mapProjection);
+}
+
+function transformContourToGeoJSON(contour, lats, lons) {
+  const coords = contour.coordinates.map(polygon =>
+    polygon.map(ring =>
+      ring.map(([x, y]) => {
+        const xi = Math.min(Math.floor(x), lons.length - 2);
+        const xf = x - xi;
+        const lon = lons[xi] * (1 - xf) + lons[Math.min(xi + 1, lons.length - 1)] * xf;
+        const yi = Math.min(Math.floor(y), lats.length - 2);
+        const yf = y - yi;
+        const lat = lats[yi] * (1 - yf) + lats[Math.min(yi + 1, lats.length - 1)] * yf;
+        return [lon, lat];
+      })
+    )
+  );
+  return {
+    type: "Feature",
+    geometry: { type: "MultiPolygon", coordinates: coords },
+    properties: { value: contour.value }
+  };
+}
+
+// Project a GeoJSON feature to an SVG path string manually,
+// bypassing D3's spherical winding rules.
+function projectToSvgPath(geoFeature) {
+  let d = "";
+  const geom = geoFeature.geometry;
+  let polygons;
+  if (geom.type === "MultiPolygon") {
+    polygons = geom.coordinates;
+  } else if (geom.type === "Polygon") {
+    polygons = [geom.coordinates];
+  } else {
+    return "";
+  }
+  for (const polygon of polygons) {
+    for (const ring of polygon) {
+      for (let i = 0; i < ring.length; i++) {
+        const pt = mapProjection(ring[i]);
+        if (!pt) continue;
+        d += (i === 0 ? "M" : "L") + pt[0].toFixed(1) + "," + pt[1].toFixed(1);
+      }
+      d += "Z";
+    }
+  }
+  return d;
+}
+
+// EFI colorbar — diverging blue/purple (dry) -> white (|EFI|<0.5) -> orange/red
+// (moist). 5 colored segments per side; uses the same color arrays as the map
+// fill so the legend always matches what is rendered.
+function buildColorbar() {
+  const bar = document.getElementById("esat-colorbar");
+  if (!bar) return;
+  // Segments left -> right: -1.0..-0.5 (dark->light), white, 0.5..1.0.
+  const cells = EFI_NEG_COLORS.slice().reverse().concat(["#ffffff"], EFI_POS_COLORS);
+  const ticks = ["-1.0","-0.9","-0.8","-0.7","-0.6","-0.5","0.5","0.6","0.7","0.8","0.9","1.0"];
+  let html = '<div style="position:relative;height:30px;">';
+  // Colored bar — 11 equal cells, 12 boundaries.
+  html += '<div style="display:flex;height:13px;border:1px solid #c2c6cf;border-radius:2px;overflow:hidden;">';
+  cells.forEach(c => {
+    html += `<div style="flex:1;background:${c};"></div>`;
+  });
+  html += '</div>';
+  // Tick marks + labels at each of the 12 boundaries (boundary i = tick i).
+  for (let i = 0; i < ticks.length; i++) {
+    const pct = (i / 11) * 100;
+    let edge = "transform:translateX(-50%);";
+    if (i === 0) edge = "transform:translateX(0);";
+    else if (i === ticks.length - 1) edge = "transform:translateX(-100%);";
+    html += `<div style="position:absolute;top:13px;left:${pct}%;${edge}width:1px;height:4px;background:#888;"></div>`;
+    html += `<div style="position:absolute;top:18px;left:${pct}%;${edge}font-size:9px;color:#555;white-space:nowrap;font-family:'JetBrains Mono',monospace;">${ticks[i]}</div>`;
+  }
+  html += '</div>';
+  html += '<div style="text-align:center;font-size:9px;color:#777;margin-top:1px;font-family:\'JetBrains Mono\',monospace;letter-spacing:.3px;">'
+       +  'EFI &mdash; dewpoint anomaly vs GEFS M-climate (dry &larr; | &rarr; moist)</div>';
+  bar.innerHTML = html;
+}
+
+async function updateMap(cwaId, param, stepHours) {
+  /* CONUS handled normally */
+  if (!mapSvg) { initMap(); }
+  if (!cwaId) return;
+
+  const cwaData = await loadCwaGrid(cwaId);
+  if (!cwaData) return;
+  const states = await loadStates();
+
+  setupProjection(cwaData);
+
+  mapSvg.select("#g-contours").selectAll("*").remove();
+  mapSvg.select("#g-counties").selectAll("*").remove();
+  mapSvg.select("#g-states").selectAll("*").remove();
+  mapSvg.select("#g-sot").selectAll("*").remove();
+  mapSvg.select("#g-sot-labels").selectAll("*").remove();
+  mapSvg.select("#g-cwa").selectAll("*").remove();
+  mapSvg.select("#g-region-box").selectAll("*").remove();
+  mapSvg.select("#g-cities").selectAll("*").remove();
+
+  const efiGrid = cwaData.efi;
+  if (efiGrid && efiGrid.fields && efiGrid.fields[param]) {
+    const field = efiGrid.fields[param][stepHours];
+    if (field) {
+      const lats = efiGrid.lats;
+      const lons = efiGrid.lons;
+      const width = lons.length;
+      const height = lats.length;
+
+      const flat = [];
+      for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+          flat.push(field[i][j] != null ? field[i][j] : 0);
+        }
+      }
+
+      // --- Positive (moist) EFI fill — value >= threshold ---
+      const posContours = d3.contours().size([width, height]).thresholds(EFI_THRESHOLDS)(flat);
+      posContours.forEach((c, idx) => {
+        if (c.coordinates.length === 0) return;
+        const svgD = projectToSvgPath(transformContourToGeoJSON(c, lats, lons));
+        if (!svgD) return;
+        mapSvg.select("#g-contours").append("path")
+          .attr("d", svgD)
+          .attr("fill", EFI_POS_COLORS[idx]).attr("fill-opacity", 0.85).attr("stroke", "none");
+      });
+
+      // --- Negative (dry) EFI fill — value <= -threshold, via negated field ---
+      const negFlat = flat.map(v => -v);
+      const negContours = d3.contours().size([width, height]).thresholds(EFI_THRESHOLDS)(negFlat);
+      negContours.forEach((c, idx) => {
+        if (c.coordinates.length === 0) return;
+        const svgD = projectToSvgPath(transformContourToGeoJSON(c, lats, lons));
+        if (!svgD) return;
+        mapSvg.select("#g-contours").append("path")
+          .attr("d", svgD)
+          .attr("fill", EFI_NEG_COLORS[idx]).attr("fill-opacity", 0.85).attr("stroke", "none");
+      });
+
+      // --- SOT contour lines + labels ---
+      // sot.fields.td is the UPPER (moist) tail SOT: [Qf(90)-Qc(99)]/[Qc(99)-
+      // Qc(90)]. The dry tail uses different quantiles ([Qc(1)-Qf(10)]/[Qc(10)-
+      // Qc(1)]) and is a SEPARATE array — it CANNOT be obtained by negating the
+      // moist field. If the pipeline exports it as sot.fields.td_lower (same
+      // grid, stored positive-when-dry-extreme like sot_lower_max), it is drawn
+      // automatically below with negative labels. Until then only the moist
+      // tail is shown and the legend says so.
+      const sotFields = (cwaData.sot && cwaData.sot.fields) ? cwaData.sot.fields : {};
+      // Accept a few field-name conventions so the pipeline naming choice
+      // cannot silently block rendering. Moist tail: "td" (current) or
+      // "td_upper". Dry tail: "td_lower" or "td_dry".
+      const pickField = (names) => {
+        for (const n of names) {
+          if (sotFields[n] && sotFields[n][stepHours]) return sotFields[n][stepHours];
+        }
+        return null;
+      };
+      const sotUpperField = pickField([param, param + "_upper"]);
+      const sotLowerField = pickField([param + "_lower", param + "_dry"]);
+
+      if (sotUpperField || sotLowerField) {
+        const sotLevels = [1, 2, 5, 8];
+        // Label-size gate: a contour polygon is labeled only when its grid-space
+        // bounding box covers at least this many cells. CONUS grids are large,
+        // so a high threshold avoids clutter; CWA grids are far smaller, so the
+        // threshold must drop sharply or almost nothing gets a label.
+        const MIN_LABEL_AREA = (cwaId === "CONUS") ? 40 : 6;
+
+        const toFlat = (f) => {
+          const out = [];
+          for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+              out.push(f[i][j] != null ? f[i][j] : 0);
+            }
+          }
+          return out;
+        };
+
+        // values: a positive-valued SOT field. labelSign: +1 labels moist-tail
+        // contours "1/2/5/8", -1 labels dry-tail contours "-1/-2/-5/-8".
+        const drawSotSet = (values, labelSign) => {
+          const contours = d3.contours().size([width, height]).thresholds(sotLevels)(values);
+          contours.forEach(c => {
+            if (c.coordinates.length === 0) return;
+            // The contour line is always drawn, regardless of polygon size.
+            mapSvg.select("#g-sot").append("path")
+              .attr("d", projectToSvgPath(transformContourToGeoJSON(c, lats, lons)))
+              .attr("fill", "none").attr("stroke", "#000")
+              .attr("stroke-width", 1.2).attr("opacity", 0.7);
+
+            // One label per polygon — only when the polygon is large enough.
+            for (const poly of c.coordinates) {
+              if (!poly[0] || poly[0].length < 3) continue;
+              const ring = poly[0];
+              let xmin = Infinity, xmax = -Infinity, ymin = Infinity, ymax = -Infinity;
+              for (const [x, y] of ring) {
+                if (x < xmin) xmin = x;
+                if (x > xmax) xmax = x;
+                if (y < ymin) ymin = y;
+                if (y > ymax) ymax = y;
+              }
+              // Bounding-box area in grid cells — skip labeling tiny blobs.
+              if ((xmax - xmin) * (ymax - ymin) < MIN_LABEL_AREA) continue;
+
+              // Place the label at the topmost point of the ring.
+              let bestPx = null, bestPy = Infinity;
+              for (const [x, y] of ring) {
+                const xi = Math.min(Math.floor(x), lons.length - 2);
+                const xf = x - xi;
+                const lon = lons[xi] * (1 - xf) + lons[Math.min(xi + 1, lons.length - 1)] * xf;
+                const yi = Math.min(Math.floor(y), lats.length - 2);
+                const yf = y - yi;
+                const lat = lats[yi] * (1 - yf) + lats[Math.min(yi + 1, lats.length - 1)] * yf;
+                const [px, py] = mapProjection([lon, lat]);
+                if (py < bestPy) { bestPx = px; bestPy = py; }
+              }
+              if (bestPx && bestPx > 20 && bestPx < MAP_W - 20 && bestPy > 20 && bestPy < MAP_H - 20) {
+                mapSvg.select("#g-sot-labels").append("text")
+                  .attr("x", bestPx).attr("y", bestPy - 2)
+                  .attr("text-anchor", "middle").attr("dominant-baseline", "auto")
+                  .attr("font-size", "11px").attr("font-weight", "bold")
+                  .attr("fill", "#000").attr("stroke", "#fff")
+                  .attr("stroke-width", 2.5).attr("paint-order", "stroke")
+                  .text((labelSign < 0 ? "-" : "") + c.value);
+              }
+            }
+          });
+        };
+
+        if (sotUpperField) drawSotSet(toFlat(sotUpperField), 1);   // moist tail
+        if (sotLowerField) drawSotSet(toFlat(sotLowerField), -1);  // dry tail
+
+        // Legend reflects which tails the data actually contains.
+        const legendEl = document.getElementById("sot-legend");
+        if (legendEl) {
+          legendEl.textContent = sotLowerField
+            ? "SOT contours \u2014 moist tail 1, 2, 5, 8  /  dry tail -1, -2, -5, -8"
+            : "SOT contours \u2014 moist tail 1, 2, 5, 8  (dry-tail grid not yet in data)";
+        }
+      }
+    }
+  }
+
+  // --- State borders ---
+  if (states) {
+    mapSvg.select("#g-states").selectAll("path")
+      .data(states.features).join("path")
+      .attr("d", mapPath).attr("fill", "none")
+      .attr("stroke", "#888").attr("stroke-width", 0.6);
+  }
+
+  // --- CWA boundary ---
+  const polygon = cwaData.polygon;
+  if (polygon) {
+    const cwaFeat = { type: "Feature", geometry: polygon };
+    mapSvg.select("#g-cwa").append("path")
+      .attr("d", projectToSvgPath(cwaFeat))
+      .attr("fill", "none").attr("stroke", "#00cccc")
+      .attr("stroke-width", 2.5).attr("stroke-dasharray", "10,6");
+  }
+
+  // --- ESAT region bounding box (rectangle in projection plane) ---
+  if (cwaData.efi && cwaData.efi.lats && cwaData.efi.lons) {
+    const gl = cwaData.efi.lats, gn = cwaData.efi.lons;
+    const s = Math.min(gl[0], gl[gl.length-1]), n = Math.max(gl[0], gl[gl.length-1]);
+    const w = Math.min(gn[0], gn[gn.length-1]), e = Math.max(gn[0], gn[gn.length-1]);
+    // Project corners and draw a straight rectangle in SVG space.
+    const corners = [
+      mapProjection([w, s]), mapProjection([e, s]),
+      mapProjection([e, n]), mapProjection([w, n]),
+    ];
+    const xs = corners.map(c => c[0]);
+    const ys = corners.map(c => c[1]);
+    const rx = Math.min(...xs), ry = Math.min(...ys);
+    const rw = Math.max(...xs) - rx, rh = Math.max(...ys) - ry;
+    mapSvg.select("#g-region-box").append("rect")
+      .attr("x", rx).attr("y", ry).attr("width", rw).attr("height", rh)
+      .attr("fill", "none")
+      .attr("stroke", "#888").attr("stroke-width", 1.2).attr("stroke-dasharray", "5,4");
+  }
+
+  // --- Counties (toggle) ---
+  if (document.getElementById("toggle-counties").checked) {
+    const counties = await loadCounties();
+    if (counties) {
+      mapSvg.select("#g-counties").selectAll("path")
+        .data(counties.features).join("path")
+        .attr("d", mapPath).attr("fill", "none")
+        .attr("stroke", "#bbb").attr("stroke-width", 0.3);
+    }
+  }
+
+  // --- Cities (toggle) ---
+  if (document.getElementById("toggle-cities").checked) {
+    const cities = await loadCities();
+    if (cities && cwaData.efi) {
+      const gl = cwaData.efi.lats, gn = cwaData.efi.lons;
+      const south = Math.min(gl[0], gl[gl.length-1]);
+      const north = Math.max(gl[0], gl[gl.length-1]);
+      const west = Math.min(gn[0], gn[gn.length-1]);
+      const east = Math.max(gn[0], gn[gn.length-1]);
+
+      // Filter cities within the grid extent, cap at 200 for SVG performance.
+      const visible = cities.filter(c => 
+        c[1] >= south && c[1] <= north && c[2] >= west && c[2] <= east
+      );
+      visible.sort((a, b) => b[3] - a[3]);
+      const show = visible.slice(0, 1000);
+
+      const cg = mapSvg.select("#g-cities");
+      const defaultThreshold = 300000;
+      const placed = []; // bounding boxes of placed labels
+
+      for (const city of show) {
+        const pt = mapProjection([city[2], city[1]]);
+        if (!pt) continue;
+        const pop = city[3];
+        const sz = pop > 500000 ? 2.5 : pop > 100000 ? 1.8 : pop > 30000 ? 1.2 : pop > 5000 ? 0.9 : 0.7;
+        const fs = pop > 500000 ? 7 : pop > 100000 ? 5.5 : pop > 30000 ? 4.5 : pop > 5000 ? 3.5 : 3;
+
+        // Zoom level where this city first appears: k = cbrt(300000 / pop)
+        const appearK = Math.max(1, Math.cbrt(300000 / Math.max(pop, 1)));
+        // Scale collision box down for cities that only show when zoomed in.
+        const collisionScale = 1 / appearK;
+
+        const labelW = city[0].length * fs * 0.55 * collisionScale;
+        const labelH = fs * 1.3 * collisionScale;
+        const pad = fs * 0.4 * collisionScale; // breathing room
+        const lx = pt[0] + (sz + 1) * collisionScale - pad;
+        const ly = pt[1] - labelH / 2 - pad;
+        const box = { x: lx, y: ly, w: labelW + 2 * pad, h: labelH + 2 * pad };
+
+        const overlaps = placed.some(p =>
+          box.x < p.x + p.w && box.x + box.w > p.x &&
+          box.y < p.y + p.h && box.y + box.h > p.y
+        );
+        if (overlaps) continue;
+        placed.push(box);
+
+        const group = cg.append("g")
+          .attr("class", "city-group")
+          .attr("data-pop", pop)
+          .style("display", pop >= defaultThreshold ? "" : "none");
+
+        group.append("rect")
+          .attr("x", pt[0] - sz/2).attr("y", pt[1] - sz/2)
+          .attr("width", sz).attr("height", sz)
+          .attr("fill", "#333")
+          .attr("data-base-size", sz)
+          .attr("data-cx", pt[0]).attr("data-cy", pt[1]);
+        group.append("text")
+          .attr("x", pt[0] + sz + 1).attr("y", pt[1] + 0.5)
+          .attr("font-size", fs + "px").attr("fill", "#444")
+          .attr("font-family", "sans-serif")
+          .attr("dominant-baseline", "middle")
+          .attr("data-base-size", fs)
+          .text(city[0]);
+      }
+    }
+  }
+
+}
+
+
+async function init(){
+  try{var r=await fetch(DATA_URL);if(!r.ok)throw new Error("HTTP "+r.status);DATA=await r.json();}
+  catch(e){document.getElementById("content").innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-dim)">Could not load data.</div>';return;}
+  document.getElementById("meta-bar").innerHTML=
+    '<span>Init: '+DATA.init_date+' '+DATA.cycle+'</span><span>Generated: '+new Date(DATA.generated_utc).toLocaleString(undefined,{timeZoneName:"short"})+'</span><span>GEFS 31-member</span><span>M-climate: 2000\u20132019</span>';
+  populateCwaDropdown();
+  initMap();
+  buildColorbar();
+  render();
+  // Toggle layers re-render the map
+  var mapRefresh = function(){ updateMap(getSelectedCwa(), "td", String(selectedDay)); };
+  document.getElementById("toggle-counties").addEventListener("change", mapRefresh);
+  document.getElementById("toggle-cities").addEventListener("change", mapRefresh);
+}
+init();
+</script>
+</body>
+</html>
