@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dewpoint EFI / SOT — GEFS</title>
+<title>Max Dewpoint EFI / SOT — GEFS</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <style>
@@ -61,8 +61,8 @@
 <body>
 <div class="header">
   <div class="header-left">
-    <h1>Dewpoint EFI / SOT</h1>
-    <div class="subtitle">GEFS-based Extreme Forecast Index for 2m Dewpoint (Lalaurette 2003)</div>
+    <h1>Max Dewpoint EFI / SOT</h1>
+    <div class="subtitle">GEFS-based Extreme Forecast Index for daily maximum 2m dewpoint (Lalaurette 2003)</div>
   </div>
   <div class="header-right">
     <button class="info-btn" onclick="toggleModal()">&#9432; Why Dewpoint EFI?</button>
@@ -108,6 +108,7 @@
     <button class="modal-close" onclick="toggleModal()">&times;</button>
     <h2>Why Dewpoint EFI?</h2>
     <p>The ECMWF EFI suite has no moisture variable. Dewpoint drives convective potential, fire weather risk, and comfort independently of existing parameters.</p>
+    <p>The variable is the <span class="stat">daily maximum</span> dewpoint &mdash; the highest value across each forecast day, taken the same way for both the live ensemble and the M-climate reforecasts. EFI and SOT here describe how anomalous that daily peak is, not the dewpoint at any single hour.</p>
     <p><span class="stat">High tail: 27.6% independence</span> &mdash; 1 in 4 moisture events invisible to current EFI.</p>
     <p><span class="stat">Low tail: 53.9% independence</span>, <span class="stat">66.3% in summer</span>. Over half of fire-season dryness events produce zero EFI signal.</p>
     <img src="results/dewpoint_independence_map.png" alt="High-tail independence">
@@ -172,7 +173,7 @@ function updateMapTitle(day){
   var win = fmtValidZ(d.valid_start) + " to " + fmtValidZ(d.valid_end, true);
   var gefs = "GEFS " + (DATA.init_date || "") + " " + (DATA.cycle || "") + " (31 members)";
   el.innerHTML =
-    "Dewpoint EFI (shaded) and SOT (contours) &mdash; <b>Day " + day + "</b>" +
+    "Max Dewpoint EFI (shaded) and SOT (contours) &mdash; <b>Day " + day + "</b>" +
     '<span class="sep">|</span>' + fhr + " forecast valid " + win +
     '<span class="sep">|</span>' + gefs;
 }
@@ -476,7 +477,7 @@ function buildColorbar() {
   }
   html += '</div>';
   html += '<div style="text-align:center;font-size:9px;color:#777;margin-top:1px;font-family:\'JetBrains Mono\',monospace;letter-spacing:.3px;">'
-       +  'EFI &mdash; dewpoint anomaly vs GEFS M-climate (dry &larr; | &rarr; moist)</div>';
+       +  'EFI &mdash; daily-max dewpoint anomaly vs GEFS M-climate (dry &larr; | &rarr; moist)</div>';
   bar.innerHTML = html;
 }
 
