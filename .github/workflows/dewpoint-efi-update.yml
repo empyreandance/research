@@ -1,0 +1,116 @@
+name: Dewpoint EFI update
+
+# This file MUST live at .github/workflows/ in the research repo ROOT —
+# GitHub only discovers workflows there. Everything else for the project
+# (pipeline code and the viewer) stays under the dewpoint-efi/ subfolder;
+# the working-directory below points the run steps back into it.
+
+on:
+  schedule:
+    # GEFS pgrb2s posts roughly 5 h after cycle time. These four runs
+    # catch the 00 / 06 / 12 / 18Z cycles (all on the same UTC day).
+    # Delete cron entries for fewer updates; push the minutes later if
+    # NOMADS is still catching up.
+    - cron: '30 5,11,17,23 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'GEFS date YYYYMMDD (blank = today UTC)'
+        required: false
+      cycle:
+        description: 'Cycle hour 00/06/12/18 (blank = auto from run time)'
+        required: false
+
+concurrency:
+  group: dewpoint-efi-update
+  cancel-in-progress: false
+
+env:
+  R2_ENDPOINT: https://817fc9f791704e3418596f7427194bc2.r2.cloudflarestorage.com
+  R2_MCLIMATE_BUCKET: dewpoint-efi-mclimate
+  R2_PUBLIC_BUCKET: dewpoint-efi
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    # The pipeline lives in dewpoint-efi/pipeline/ — every run step works there.
+    defaults:
+      run:
+        working-directory: dewpoint-efi/pipeline
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up conda environment
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          # Action input — path is from the repo root, not working-directory.
+          environment-file: dewpoint-efi/pipeline/environment.yml
+          cache-environment: true
+
+      - name: Resolve GEFS date and cycle
+        id: cyc
+        shell: bash
+        run: |
+          IN_DATE="${{ github.event.inputs.date }}"
+          IN_CYCLE="${{ github.event.inputs.cycle }}"
+          if [ -n "$IN_DATE" ]; then
+            DATE="$IN_DATE"
+          else
+            DATE="$(date -u +%Y%m%d)"
+          fi
+          if [ -n "$IN_CYCLE" ]; then
+            CYCLE=$(printf '%02d' "$((10#$IN_CYCLE))")
+          else
+            # Run hour -> most recent cycle: 05Z->00, 11Z->06, 17Z->12, 23Z->18
+            H=$(date -u +%H)
+            C=$(( (10#$H - 5) / 6 * 6 ))
+            if [ "$C" -lt 0 ]; then C=0; fi
+            CYCLE=$(printf '%02d' "$C")
+          fi
+          echo "date=$DATE"   >> "$GITHUB_OUTPUT"
+          echo "cycle=$CYCLE" >> "$GITHUB_OUTPUT"
+          echo "Target: GEFS $DATE ${CYCLE}Z"
+
+      - name: Fetch M-climate from R2
+        shell: bash -el {0}
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ env.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          mkdir -p data/mclimate
+          rclone copy "r2:${R2_MCLIMATE_BUCKET}" data/mclimate --transfers 8 --checkers 16
+          echo "M-climate files present:"
+          ls -lh data/mclimate
+
+      - name: Run pipeline
+        shell: bash -el {0}
+        run: |
+          python run_efi.py --date "${{ steps.cyc.outputs.date }}" --cycle "${{ steps.cyc.outputs.cycle }}"
+          python aggregate_cwa.py
+
+      - name: Publish data to R2
+        shell: bash -el {0}
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ env.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          # Guard: never publish an empty/failed run — it would blank the site.
+          if [ ! -f output/dewpoint_efi_latest.json ] || [ -z "$(ls -A output/grids 2>/dev/null)" ]; then
+            echo "::error::Pipeline produced no output — not publishing."
+            exit 1
+          fi
+          mkdir -p publish/grids
+          cp output/dewpoint_efi_latest.json publish/
+          cp output/grids/*.json publish/grids/
+          # copy (not sync): overwrites in place, never deletes — a bad run
+          # cannot wipe the live data.
+          rclone copy publish "r2:${R2_PUBLIC_BUCKET}" --transfers 16 --checkers 16
+          echo "Published $(ls publish/grids | wc -l) grid files."
