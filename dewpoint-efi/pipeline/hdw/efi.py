@@ -55,9 +55,24 @@ def compute_efi(
     Returns
     -------
     efi : ndarray, shape (...)
-        EFI values at each grid point.  Range: approximately [-1, +1].
-        Positive values indicate the ensemble is shifted toward higher
-        HDW (more extreme fire weather) than M-climate.
+        EFI values at each grid point, in [-1, +1].  A fully displaced
+        ensemble (every member outside the entire M-climate range)
+        reaches +/-1.  Positive values indicate the ensemble is shifted
+        toward higher HDW (more extreme fire weather) than M-climate.
+
+    Notes
+    -----
+    The EFI weight 1/sqrt(p(1-p)) is singular at p=0 and p=1.  Dropping
+    those endpoints discards a non-negligible share of the integral --
+    because the weight diverges there, the slivers near the endpoints
+    carry roughly 9% of the total -- which caps |EFI| near 0.91 instead
+    of 1.0.  Instead, the singular weight is integrated analytically:
+    its antiderivative is W(p) = 2*arcsin(sqrt(p)), which is finite at
+    p=0 and p=1.  Each quantile sample is given a quadrature weight
+    equal to the exact integral of 1/sqrt(p(1-p)) across its cell, and
+    the smooth, bounded factor (p - F_f) is evaluated on the supplied
+    quantile grid.  No endpoints are dropped and a fully displaced
+    ensemble integrates to +/-1.
     """
     ensemble_hdw = np.asarray(ensemble_hdw, dtype=np.float64)
     mclimate_quantiles = np.asarray(mclimate_quantiles, dtype=np.float64)
@@ -70,37 +85,30 @@ def compute_efi(
 
     n_members = ensemble_hdw.shape[0]
     spatial_shape = ensemble_hdw.shape[1:]
+    extra = (1,) * len(spatial_shape)
+    p = mclimate_probs  # all quantile levels, including p=0 and p=1
 
-    # For numerical stability, skip the endpoints p=0 and p=1
-    # where the weighting function 1/sqrt(p(1-p)) diverges.
-    interior = (mclimate_probs > 0.0) & (mclimate_probs < 1.0)
-    p = mclimate_probs[interior]
-    q_c = mclimate_quantiles[interior]
-
-    # Broadcast q_c to (n_interior, ...) and ensemble to (n_members, ...)
-    # For each M-climate quantile value, compute the fraction of
-    # ensemble members at or below that value.
-    # F_f(p) = fraction of members with HDW <= Q_c(p)
-
-    # Shape: (n_interior, n_members, ...)
-    below = ensemble_hdw[np.newaxis, :, ...] <= q_c[:, np.newaxis, ...]
-
-    # F_f at each probability level: shape (n_interior, ...)
+    # F_f(p): fraction of ensemble members at or below each M-climate
+    # quantile value.  Shape: (n_q, n_members, ...) -> (n_q, ...)
+    below = ensemble_hdw[np.newaxis, :, ...] <= mclimate_quantiles[:, np.newaxis, ...]
     F_f = below.sum(axis=1) / n_members
 
-    # Integrand: [p - F_f(p)] / sqrt(p * (1-p))
-    # Broadcast p to (n_interior, 1, 1, ...) for spatial dims
-    p_bc = p.reshape((-1,) + (1,) * len(spatial_shape))
-    weight = 1.0 / np.sqrt(p_bc * (1.0 - p_bc))
-    integrand = (p_bc - F_f) * weight
+    # Smooth, bounded factor g(p) = p - F_f(p), values in [-1, 1].
+    g = p.reshape((-1,) + extra) - F_f
 
-    # Trapezoidal integration over the probability dimension
-    dp = np.diff(p)
-    # Average adjacent integrand values, multiply by dp
-    integral = np.sum(
-        0.5 * (integrand[:-1] + integrand[1:]) * dp.reshape((-1,) + (1,) * len(spatial_shape)),
-        axis=0,
-    )
+    # Analytic quadrature weights for the singular EFI weight
+    # 1/sqrt(p(1-p)).  Antiderivative: W(p) = 2*arcsin(sqrt(p)).
+    # Each sample's weight is the exact integral of the singular weight
+    # across its cell; cell edges are the midpoints between adjacent
+    # samples, with the two end cells running to p=0 and p=1.
+    edges = np.empty(n_q + 1, dtype=np.float64)
+    edges[0] = 0.0
+    edges[-1] = 1.0
+    edges[1:-1] = 0.5 * (p[:-1] + p[1:])
+    cell_w = np.diff(2.0 * np.arcsin(np.sqrt(edges)))  # shape (n_q,)
+
+    # EFI = (2/pi) * integral of g(p) / sqrt(p(1-p)) dp
+    integral = np.sum(g * cell_w.reshape((-1,) + extra), axis=0)
 
     efi = (2.0 / np.pi) * integral
     return np.clip(efi, -1.0, 1.0)
