@@ -114,3 +114,15 @@ jobs:
           # cannot wipe the live data.
           rclone copy publish "r2:${R2_PUBLIC_BUCKET}" --transfers 16 --checkers 16
           echo "Published $(ls publish/grids | wc -l) grid files."
+
+      - name: Publish data to VPS
+        shell: bash
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H 157.173.196.40 >> ~/.ssh/known_hosts 2>/dev/null
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" \
+            publish/ root@157.173.196.40:/var/www/dewpoint-data/
