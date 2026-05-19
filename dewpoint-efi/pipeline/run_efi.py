@@ -35,7 +35,7 @@ LON_BOUNDS = (234.0, 294.0)  # 0-360
 
 FHOURS_PER_DAY = {}
 for _d in range(1, 8):
-    FHOURS_PER_DAY[_d] = list(range((_d - 1) * 24 + 6, _d * 24 + 1, 6))
+    FHOURS_PER_DAY[_d] = list(range(max((_d - 1) * 24, 3), _d * 24 + 1, 3))
 
 
 def sat_vp(T_c):
