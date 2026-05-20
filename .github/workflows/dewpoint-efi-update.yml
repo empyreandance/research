@@ -55,19 +55,25 @@ jobs:
         run: |
           IN_DATE="${{ github.event.inputs.date }}"
           IN_CYCLE="${{ github.event.inputs.cycle }}"
+          # Default: most recent cycle posted to NOMADS, assuming ~5h latency
+          # 05Z->today 00, 11Z->today 06, 17Z->today 12, 23Z->today 18, 00-04Z->yesterday 18
+          H=$(date -u +%H)
+          if [ "$H" -lt 5 ]; then
+            DEF_DATE="$(date -u -d 'yesterday' +%Y%m%d)"
+            DEF_CYCLE="18"
+          else
+            DEF_DATE="$(date -u +%Y%m%d)"
+            DEF_CYCLE=$(printf '%02d' "$(( (10#$H - 5) / 6 * 6 ))")
+          fi
           if [ -n "$IN_DATE" ]; then
             DATE="$IN_DATE"
           else
-            DATE="$(date -u +%Y%m%d)"
+            DATE="$DEF_DATE"
           fi
           if [ -n "$IN_CYCLE" ]; then
             CYCLE=$(printf '%02d' "$((10#$IN_CYCLE))")
           else
-            # Run hour -> most recent cycle: 05Z->00, 11Z->06, 17Z->12, 23Z->18
-            H=$(date -u +%H)
-            C=$(( (10#$H - 5) / 6 * 6 ))
-            if [ "$C" -lt 0 ]; then C=0; fi
-            CYCLE=$(printf '%02d' "$C")
+            CYCLE="$DEF_CYCLE"
           fi
           echo "date=$DATE"   >> "$GITHUB_OUTPUT"
           echo "cycle=$CYCLE" >> "$GITHUB_OUTPUT"
