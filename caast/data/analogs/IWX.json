@@ -1,9 +1,9 @@
 {
   "office": "IWX",
-  "product_id": "202605191829-KIWX-FXUS63-AFDIWX",
-  "afd_time": "2026-05-19T18:29:00Z",
+  "product_id": "202605192351-KIWX-FXUS63-AFDIWX",
+  "afd_time": "2026-05-19T23:51:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-19T19:19:57.609530+00:00",
+  "updated": "2026-05-20T04:39:06.536563+00:00",
   "query_preview": "..\nIssued at 225 PM EDT Tue May 19 2026\n\nA cold front currently positioned over Wisconsin and Illinois \nwill swing eastward and through the local forecast area this \nevening. Ahead of this front, strong to severe storms will become \npossible this afternoon and evening. The region is well into the \nwarm sector with temperatures in the upper 70s to mid 80s and \ndewpoints in the upper 60s to low 70s. The moisture combined \nwith daytime heating supports SBCAPE of 2000-2500 J/kg, \nespecially east of the I-69 corridor where cloud cover has been \nminimal today. Destabilization is beginning to occur with \ncumulus development evident on satellite. The best chances for \nstrong to severe storms will be 3-9 PM EDT today. The greatest \nrisk area will be along and south of US-24, where a Slight Risk \n(level 2 of 5) for severe weather is in place. Shear is still \nexpected to be weak given a fairly unidirectional vertical wind \nprofile, but it will be better than the past few days at 20 to \n30 kts. With weaker shear, the favored storm mode will be \nmulticell clusters or line segments. Given DCAPE over 1000 J/kg \nthis afternoon and evening and steep low level lapse rates of \n7-8 C/km, damaging winds will be the main threat today. \nConfidence in isolated tornado chances is decreasing due to \ncurrent low level SRH less than 150 m2/s2, and forecast to \ndecrease today. If one were to develop, the potential is still \ngreatest in NW Ohio, which will have the longest time to heat up\nand destabilize today as the cold front takes its time moving \nin from west to east. With PWATs now around 1.5-1.6\", even if \nstorm clusters are not severe, they will likely be efficient \nwith rainfall rates in excess of 1\"/hr.\n\nAfter the passage of the cold front, the second half of the workweek \nwill be much cooler with highs only in the 60s through Friday. Rain \nshowers will likely be continuing southeast of US-24 on Wednesday \nmorning before drier air moves in. The next chance for rain will \nthen be on Friday afternoon in association with a shortwave coming \nup from the southwest. We could get a bit of a break on Saturday \nbefore a stronger upper trough moves across the region on Sunday. \nUnsettled weather will also be possible on Memorial Day, especially \nsouth of US-30, but model agreement is poor so there is low \nconfidence in forecast specifics.",
   "analogs": [
     {
@@ -88,9 +88,9 @@
       }
     },
     {
-      "datetime_utc": "2012-07-16T10:31Z",
-      "source_file": "IWX_2012_16_1031.txt",
-      "similarity": 0.966564416885376,
+      "datetime_utc": "2012-07-16T17:16Z",
+      "source_file": "IWX_2012_16_1716.txt",
+      "similarity": 0.9665642976760864,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -138,7 +138,7 @@
     {
       "datetime_utc": "2019-07-14T16:55Z",
       "source_file": "IWX_2019_14_1655.txt",
-      "similarity": 0.9653081297874451,
+      "similarity": 0.9653080701828003,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -190,9 +190,54 @@
       }
     },
     {
+      "datetime_utc": "2024-05-03T23:53Z",
+      "source_file": "IWX_2024_03_2353.txt",
+      "similarity": 0.9652814865112305,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 2,
+            "tornado": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 95,
+            "flood": 8,
+            "severe_wind": 52,
+            "tornado": 47
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2024-05-04T04:32Z",
       "source_file": "IWX_2024_04_0432.txt",
-      "similarity": 0.96528160572052,
+      "similarity": 0.9652814865112305,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -237,10 +282,10 @@
       }
     },
     {
-      "datetime_utc": "2024-05-03T23:53Z",
-      "source_file": "IWX_2024_03_2353.txt",
-      "similarity": 0.96528160572052,
-      "label": "tornado",
+      "datetime_utc": "2004-08-01T19:40Z",
+      "source_file": "IWX_2004_01_1940.txt",
+      "similarity": 0.9649051427841187,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
@@ -248,28 +293,26 @@
           "counts": {}
         },
         "1": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 2,
-            "tornado": 1
+            "severe_hail": 4,
+            "severe_wind": 1
           }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 34,
+            "flood": 3
+          }
         },
         "3": {
           "label": "quiet",
           "counts": {}
         },
         "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 95,
-            "flood": 8,
-            "severe_wind": 52,
-            "tornado": 47
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -284,7 +327,7 @@
     {
       "datetime_utc": "2004-08-02T05:38Z",
       "source_file": "IWX_2004_02_0538.txt",
-      "similarity": 0.9649052619934082,
+      "similarity": 0.9649051427841187,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -325,51 +368,8 @@
       }
     },
     {
-      "datetime_utc": "2004-08-01T19:40Z",
-      "source_file": "IWX_2004_01_1940.txt",
-      "similarity": 0.9649052619934082,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 4,
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 34,
-            "flood": 3
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2019-07-02T10:46Z",
-      "source_file": "IWX_2019_02_1046.txt",
+      "datetime_utc": "2019-07-02T17:20Z",
+      "source_file": "IWX_2019_02_1720.txt",
       "similarity": 0.9638670682907104,
       "label": "severe_wind",
       "is_severe": true,
@@ -423,8 +423,8 @@
       }
     },
     {
-      "datetime_utc": "2020-08-24T23:11Z",
-      "source_file": "IWX_2020_24_2311.txt",
+      "datetime_utc": "2020-08-25T05:31Z",
+      "source_file": "IWX_2020_25_0531.txt",
       "similarity": 0.9637772440910339,
       "label": "severe_wind",
       "is_severe": true,
@@ -432,33 +432,31 @@
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 4
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
             "severe_hail": 2,
             "severe_wind": 3
           }
         },
-        "2": {
+        "1": {
           "label": "quiet",
           "counts": {}
         },
-        "3": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 6,
             "flood": 4
           }
         },
-        "4": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 26,
             "flood": 5
           }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -474,7 +472,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.958244372010231,
+    "mean_similarity": 0.9582443004846573,
     "base_rate": 0.5780591548186366,
     "signal_value": 0.3519408451813635,
     "percentile": 80,
@@ -483,8 +481,8 @@
     "n_total": 10,
     "n_severe_signal": 93,
     "n_total_signal": 100,
-    "product_id": "202605191829-KIWX-FXUS63-AFDIWX",
-    "afd_time": "2026-05-19T18:29:00Z",
-    "updated": "2026-05-19T19:19:57.609530+00:00"
+    "product_id": "202605192351-KIWX-FXUS63-AFDIWX",
+    "afd_time": "2026-05-19T23:51:00Z",
+    "updated": "2026-05-20T04:39:06.536563+00:00"
   }
 }
