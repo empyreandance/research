@@ -1,0 +1,153 @@
+# =============================================================================
+# Daily Time Since Temperature Maps
+# =============================================================================
+# Sibling workflow to daily_temp_map.yml. Generates the "time since" streak
+# pair (forecast high + forecast low) and commits the rendered PNGs/JPGs.
+#
+# Heavy state lives in GHA cache, not the repo:
+#   - observations_maxt.nc  (~800 MB)
+#   - observations_mint.nc  (~800 MB)
+# Threshold-indexed last-date files (last_dates_*.nc, ~84 MB each) are
+# regenerated each run from those cubes and never committed.
+#
+# Schedule: 11:30 UTC daily. Staggered ~90 min after daily_temp_map.yml's
+# 10:00 UTC run so the two workflows don't race for the same NDFD endpoint
+# or push concurrently.
+# =============================================================================
+
+name: Daily Time Since Temperature Map
+
+on:
+  schedule:
+    - cron: "30 11 * * *"
+  workflow_dispatch:
+
+# A push from one run while another run is reading would cause a rebase loop.
+# Hold concurrent runs to one at a time per workflow.
+concurrency:
+  group: time-since-temp
+  cancel-in-progress: false
+
+jobs:
+  generate-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90  # generous: ~3 min cached, ~30 min on cube rebuild
+
+    steps:
+      # --- 1. Check out the repository ---
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      # --- 2. Set up Python ---
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # --- 3. Install system dependencies ---
+      # eccodes is the C library cfgrib uses to read NDFD GRIB2 forecasts.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeccodes-dev
+
+      # --- 4. Cache pip packages ---
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-tst-${{ hashFiles('time-since-temp/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-tst-
+
+      # --- 5. Cache cartopy shapefiles ---
+      # Natural Earth shapes (used for the CONUS land mask) download once
+      # and never change.
+      - name: Cache cartopy shapefiles
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/cartopy
+          key: cartopy-shapefiles-110m
+
+      # --- 6. Restore the observation cubes from cache ---
+      # Fixed key — overwritten in place after each successful run. The cache
+      # holds the only persistent copy of the 1979→yesterday observation
+      # history. If the cache is ever lost, the bootstrap step below rebuilds
+      # from ACIS (~27 min).
+      - name: Restore observation cubes
+        id: cube-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            time-since-temp/observations_maxt.nc
+            time-since-temp/observations_mint.nc
+          key: time-since-temp-cubes-v1
+
+      # --- 7. Install Python dependencies ---
+      - name: Install Python packages
+        run: |
+          pip install -r time-since-temp/requirements.txt
+
+      # --- 8. Bootstrap observation cubes if the cache missed ---
+      # First-ever run, or after a 7+ day idle period (GHA cache eviction
+      # window), the cubes need to be rebuilt from ACIS. The build pulls each
+      # state-year with 10 parallel workers and writes both elements at once.
+      - name: Bootstrap observation cubes (cache miss only)
+        if: steps.cube-cache.outputs.cache-hit != 'true'
+        run: |
+          cd time-since-temp
+          echo "Cube cache missed — bootstrapping from ACIS (~27 min)..."
+          python build_observations.py
+
+      # --- 9. Run the daily map generator ---
+      # Performs the ACIS sliding-window refresh (last 30 days), the cube
+      # update, the threshold rebuild, the NDFD download, and the renders.
+      - name: Generate time-since-temp maps
+        run: |
+          cd time-since-temp
+          python daily_run.py
+
+      # --- 10. Save the updated cubes back to cache ---
+      # Only save on success — a partial/failed run shouldn't poison the
+      # cache. actions/cache/save@v4 noop's when the key already exists with
+      # identical content but otherwise overwrites.
+      - name: Save observation cubes
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            time-since-temp/observations_maxt.nc
+            time-since-temp/observations_mint.nc
+          key: time-since-temp-cubes-v1
+
+      # --- 11. Copy outputs to the site's assets folder ---
+      # Latest PNGs go to assets/ (national) and assets/regions/ (regionals).
+      # Archive JPGs go to assets/archive/.
+      - name: Copy maps to site assets
+        run: |
+          mkdir -p assets/regions
+          mkdir -p assets/archive
+          cp time-since-temp/output/temp_streak_high_latest.png assets/temp_streak_high_latest.png
+          cp time-since-temp/output/temp_streak_low_latest.png  assets/temp_streak_low_latest.png
+          cp time-since-temp/output/regions/temp_streak_*_latest.png assets/regions/ 2>/dev/null || true
+          cp time-since-temp/output/archive/*.jpg assets/archive/ 2>/dev/null || true
+
+      # --- 12. Rebuild the archive page ---
+      - name: Build archive page
+        run: |
+          cd time-since-temp
+          python build_archive.py --assets-dir ../assets/archive --output ../time-since-temp-archive.html
+
+      # --- 13. Commit and push ---
+      - name: Commit and push
+        run: |
+          git config user.name "Time Since Temp Bot"
+          git config user.email "bot@time-since-temp.local"
+          git add assets/temp_streak_high_latest.png
+          git add assets/temp_streak_low_latest.png
+          git add assets/regions/ 2>/dev/null || true
+          git add assets/archive/ 2>/dev/null || true
+          git add time-since-temp-archive.html
+          git diff --staged --quiet || git commit -m "Update time-since-temp map for $(date +%Y-%m-%d)"
+          git pull --rebase || true
+          git push

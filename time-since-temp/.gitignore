@@ -1,0 +1,16 @@
+# Observation cubes (~800 MB each) — held in GitHub Actions cache, never committed.
+observations_*.nc
+
+# Threshold-indexed last-date arrays — regenerated each run from the cubes.
+last_dates_*.nc
+
+# Render outputs — copied to ../assets/ by the workflow.
+output/
+
+# Initial-build year checkpoints — only used by build_observations.py during bootstrap.
+cache/
+
+# Python noise.
+__pycache__/
+*.pyc
+*.pyo
