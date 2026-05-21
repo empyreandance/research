@@ -31,7 +31,7 @@ concurrency:
 jobs:
   generate-map:
     runs-on: ubuntu-latest
-    timeout-minutes: 90  # generous: ~3 min cached, ~30 min on cube rebuild
+    timeout-minutes: 360  # generous: ~3 min cached, ~30 min on cube rebuild
 
     steps:
       # --- 1. Check out the repository ---
