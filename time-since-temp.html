@@ -129,9 +129,14 @@
       color: #fff;
     }
 
-    /* The two sides — JS swaps display between them. Low side hidden by
-       default since "Forecast High" is the active button at first paint. */
-    .side-low { display: none; }
+    /* High/low visibility is driven by a data-active-side attribute on the
+       .content-section ancestor. The attribute selector below (specificity 0,2,0)
+       beats the .region-grid display:grid rule (0,1,0), so the same rule hides
+       both the main map containers and the regional thumbnail grids. */
+    [data-active-side="high"] .side-low,
+    [data-active-side="low"] .side-high {
+      display: none;
+    }
 
     .main-map-container {
       margin-bottom: 8px;
@@ -287,7 +292,7 @@
       <span class="current">Time Since Temperature</span>
     </div>
 
-    <div class="content-section">
+    <div class="content-section" data-active-side="high">
       <h2 class="section-title">Time Since Temperature</h2>
       <p class="page-desc">When was the last time this location was actually as hot &mdash; or as cold &mdash; as today&apos;s forecast? Each grid cell looks back at every observed daily maximum (or minimum) from 1979 to yesterday and reports the most recent day that matched or exceeded today&apos;s NDFD forecast. A reading of 30 days means &ldquo;this hot last happened a month ago.&rdquo; A reading of 5,000 days means &ldquo;this hot is overdue by more than a decade.&rdquo; Toggle between the forecast high and the forecast low below.</p>
 
@@ -436,12 +441,7 @@
 
   <script>
     function showSide(side) {
-      document.querySelectorAll('.side-high').forEach(el => {
-        el.style.display = side === 'high' ? '' : 'none';
-      });
-      document.querySelectorAll('.side-low').forEach(el => {
-        el.style.display = side === 'low' ? '' : 'none';
-      });
+      document.querySelector('.content-section').dataset.activeSide = side;
       document.querySelectorAll('.side-toggle button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.side === side);
       });

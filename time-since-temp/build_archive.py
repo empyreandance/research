@@ -127,7 +127,8 @@ def render_html(entries):
     }
     .side-toggle button:hover { background: #1a1a1a; color: #fff; }
     .side-toggle button.active { background: #2a2a2a; color: #fff; }
-    .side-low { display: none; }
+    [data-active-side="high"] .side-low,
+    [data-active-side="low"] .side-high { display: none; }
 
     .map-gallery { list-style:none; }
     .map-gallery li { background:#111; margin-bottom:20px; border-radius:8px;
@@ -188,7 +189,7 @@ def render_html(entries):
       <span class="current">Archive</span>
     </div>
 
-    <div class="content-section">
+    <div class="content-section" data-active-side="high">
       <h2 class="section-title">Time Since Temperature Archive</h2>
       <p class="archive-meta">{meta}</p>
 
@@ -217,12 +218,7 @@ def render_html(entries):
 
   <script>
     function showSide(side) {{
-      document.querySelectorAll('.side-high').forEach(el => {{
-        el.style.display = side === 'high' ? '' : 'none';
-      }});
-      document.querySelectorAll('.side-low').forEach(el => {{
-        el.style.display = side === 'low' ? '' : 'none';
-      }});
+      document.querySelector('.content-section').dataset.activeSide = side;
       document.querySelectorAll('.side-toggle button').forEach(btn => {{
         btn.classList.toggle('active', btn.dataset.side === side);
       }});
