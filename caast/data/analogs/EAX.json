@@ -1,15 +1,15 @@
 {
   "office": "EAX",
-  "product_id": "202605221748-KEAX-FXUS63-AFDEAX",
-  "afd_time": "2026-05-22T17:48:00Z",
+  "product_id": "202605222045-KEAX-FXUS63-AFDEAX",
+  "afd_time": "2026-05-22T20:45:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-22T18:06:54.612384+00:00",
-  "query_preview": "/MONDAY THROUGH FRIDAY/...\nIssued at 404 AM CDT Fri May 22 2026\n\nAn interesting synoptic scale pattern is in store for the extended \nforecast period. Early next week, upper-level ridging is expected to \nintensify over the Plains while a trough deepens along the West \nCoast and another low-pressure system slows over New England. Medium \nrange guidance depicts the trough further west ejecting a series of \nshortwaves into the Southern Rockies, inducing lee cyclogenesis \nmidweek. This lee cyclone, detached from upper-level flow \nreminiscent of omega blocking, could hover over the Southern Plains \nfor several days mid/late week before degrading. It is expected that \nthis unusual setup will lead to a wet and unsettled weather pattern \nfor much of next week, though uncertainty is prolific this far\nout.",
+  "updated": "2026-05-22T21:38:39.476912+00:00",
+  "query_preview": "/SUNDAY THROUGH FRIDAY/...\nIssued at 340 PM CDT Fri May 22 2026\n\nBy Sunday, the forecast is expected to gradually clear out. Yet\nanother shortwave embedded in the upper-level pattern is\nexpected to invigorate more opportunities for precipitation\ngoing into the weekend, but these greater chances will remain\nfurther northwest along the primary shortwave. Amplified ridging\nwill keep the area relatively dry going into Monday, before\ndisturbances embedded in the upper-level flow increase\nprecipitation chances going into midweek next week. These\ndisturbances appear along a blocking pattern reminiscent of an omega\nblock at the upper levels, which has become increasingly more \nresolved by deterministic models as the forecast grows closer. \nBy the end of the forecast period, the persistence of this \nblocking pattern appears consistent between LREF ensemble\nmembers, but the degradation of energy within the blocked upper\nlevel trough over the western CONUS remains variable at this\ntime. As it stands presently, multiple rounds of continuing\nprecipitation appear likelier midweek through the end of the\nforecast period, with some uncertainty remaining in how the\nblocked flow will evolve late in the forecast period (and how\nthat impacts continued precipitation chances by late next week).\nTemperatures are expected to continue warming through the\nperiod, with forecast highs in the low/mid 80s by next week\nunder consistent southerly flow and subsequent WAA.",
   "analogs": [
     {
       "datetime_utc": "2005-08-23T17:34Z",
       "source_file": "EAX_2005_23_1734.txt",
-      "similarity": 0.9027889966964722,
+      "similarity": 0.9538553953170776,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -59,22 +59,62 @@
       }
     },
     {
-      "datetime_utc": "2011-10-24T20:22Z",
-      "source_file": "EAX_2011_24_2022.txt",
-      "similarity": 0.887395977973938,
+      "datetime_utc": "2012-07-17T20:58Z",
+      "source_file": "EAX_2012_17_2058.txt",
+      "similarity": 0.9365366101264954,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
+            "severe_wind": 3
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2012-07-18T04:56Z",
+      "source_file": "EAX_2012_18_0456.txt",
+      "similarity": 0.9365366101264954,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -101,7 +141,7 @@
     {
       "datetime_utc": "2009-05-09T09:42Z",
       "source_file": "EAX_2009_09_0942.txt",
-      "similarity": 0.8822169303894043,
+      "similarity": 0.9320424795150757,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -149,31 +189,35 @@
       }
     },
     {
-      "datetime_utc": "2012-07-17T08:24Z",
-      "source_file": "EAX_2012_17_0824.txt",
-      "similarity": 0.874557614326477,
+      "datetime_utc": "2006-05-07T08:23Z",
+      "source_file": "EAX_2006_07_0823.txt",
+      "similarity": 0.9303141832351685,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 3
+            "severe_hail": 4,
+            "severe_wind": 2
           }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1,
+            "flood": 1
+          }
         },
         "4": {
           "label": "quiet",
@@ -190,173 +234,38 @@
       }
     },
     {
-      "datetime_utc": "2005-06-28T15:15Z",
-      "source_file": "EAX_2005_28_1515.txt",
-      "similarity": 0.8730666637420654,
+      "datetime_utc": "2010-05-30T11:01Z",
+      "source_file": "EAX_2010_30_1101.txt",
+      "similarity": 0.9233152866363525,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 43,
-            "severe_wind": 18
+            "severe_hail": 5,
+            "severe_wind": 4
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "tornado",
           "counts": {
-            "severe_hail": 85,
-            "severe_wind": 30,
-            "flood": 9,
-            "tornado": 7
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 9,
-            "severe_wind": 34
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2013-09-04T11:26Z",
-      "source_file": "EAX_2013_04_1126.txt",
-      "similarity": 0.8719476461410522,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2012-06-30T04:45Z",
-      "source_file": "EAX_2012_30_0445.txt",
-      "similarity": 0.869035005569458,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 7,
-            "severe_wind": 6
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 4,
-            "severe_wind": 6
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2012-06-29T23:31Z",
-      "source_file": "EAX_2012_29_2331.txt",
-      "similarity": 0.869035005569458,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 7,
-            "severe_wind": 6
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "severe_hail": 1
+            "severe_hail": 70,
+            "tornado": 5,
+            "severe_wind": 77,
+            "flood": 2
           }
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 4,
-            "severe_wind": 6
+            "severe_hail": 19,
+            "severe_wind": 3,
+            "flood": 2
           }
         },
         "4": {
@@ -364,19 +273,28 @@
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 64,
+            "flood": 15,
+            "severe_wind": 6,
+            "tornado": 2
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "flood": 8,
+            "severe_wind": 6,
+            "tornado": 2
+          }
         }
       }
     },
     {
-      "datetime_utc": "2010-08-04T17:32Z",
-      "source_file": "EAX_2010_04_1732.txt",
-      "similarity": 0.8689517974853516,
+      "datetime_utc": "2010-08-04T15:25Z",
+      "source_file": "EAX_2010_04_1525.txt",
+      "similarity": 0.914151668548584,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -419,9 +337,86 @@
       }
     },
     {
+      "datetime_utc": "2004-10-24T07:52Z",
+      "source_file": "EAX_2004_24_0752.txt",
+      "similarity": 0.900208592414856,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2011-10-24T20:22Z",
+      "source_file": "EAX_2011_24_2022.txt",
+      "similarity": 0.8965938091278076,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2006-05-25T00:03Z",
       "source_file": "EAX_2006_25_0003.txt",
-      "similarity": 0.868385374546051,
+      "similarity": 0.8919039368629456,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -476,18 +471,18 @@
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.67,
-    "mean_similarity": 0.7577935522794723,
+    "severe_fraction": 0.68,
+    "mean_similarity": 0.7646419817209243,
     "base_rate": 0.5984615033440617,
-    "signal_value": 0.07153849665593837,
+    "signal_value": 0.08153849665593838,
     "percentile": 43,
     "office_lift": 0.16819849665593845,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 67,
+    "n_severe_signal": 68,
     "n_total_signal": 100,
-    "product_id": "202605221748-KEAX-FXUS63-AFDEAX",
-    "afd_time": "2026-05-22T17:48:00Z",
-    "updated": "2026-05-22T18:06:54.612384+00:00"
+    "product_id": "202605222045-KEAX-FXUS63-AFDEAX",
+    "afd_time": "2026-05-22T20:45:00Z",
+    "updated": "2026-05-22T21:38:39.476912+00:00"
   }
 }
