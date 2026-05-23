@@ -1,15 +1,15 @@
 {
   "office": "DVN",
-  "product_id": "202605230622-KDVN-FXUS63-AFDDVN",
-  "afd_time": "2026-05-23T06:22:00Z",
+  "product_id": "202605231137-KDVN-FXUS63-AFDDVN",
+  "afd_time": "2026-05-23T11:37:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-23T06:47:41.016962+00:00",
-  "query_preview": "/SUNDAY NIGHT THROUGH FRIDAY/...\nIssued at 121 AM CDT Sat May 23 2026\n\nZonal flow aloft early in the week to bring dry conditions and a \nwarming trend going into Memorial Day, with above normal \ntemperatures likely. Widespread highs in the mid to upper 80s are \nforecast for the holiday. Great weather for any outdoor activities!\n\nTuesday onward, a cutoff upper low over the southern Plains will \nslowly lift northward in response to a building upper ridge over the \nupper Midwest. This will bring us the next best chance of widespread \nprecipitation, however there remains quite the model spread on \namount of available moisture, timing, and the location of strongest \nforcing. In any case, the latest NBM 72-hr QPF probs for >0.25\" is \nnow in the 50-70% range along and south of I-80 which is 10-20% \nhigher than its previous 06z run. Hopefully this trend will continue \nas we could use more rain. Once this system eventually dissipates, \nan Omega block will form over the northern CONUS late in the work \nweek leading to another dry period and continued above normal \ntemperatures.",
+  "updated": "2026-05-23T12:10:10.252474+00:00",
+  "query_preview": "/SUNDAY NIGHT THROUGH FRIDAY/...\nIssued at 121 AM CDT Sat May 23 2026\n\nZonal flow aloft early in the week to bring dry conditions and a \nwarming trend going into Memorial Day, with above normal \ntemperatures likely. Widespread highs in the mid to upper 80s are \nforecast for the holiday. Great weather for any outdoor activities!\n\nTuesday onward, a cutoff upper low over the southern Plains will \nslowly lift northward in response to a building upper ridge over the \nupper Midwest. This will bring us the next best chance of widespread \nprecipitation, however there remains quite the model spread on \namount of available moisture, timing, and the location of strongest \nforcing. In any case, the latest NBM 72-hr QPF probs for >0.25\" is \nnow in the 50-70% range along and south of I-80 which is 10-20% \nhigher than its previous 06z run. Hopefully this trend will continue \nas we could use more rain. Once this system eventually dissipates, \nan Omega block pattern will form over the northern CONUS late \nin the work week, leading to another dry period and continued \nabove normal temperatures.",
   "analogs": [
     {
       "datetime_utc": "2007-05-04T08:30Z",
       "source_file": "DVN_2007_04_0830_1.txt",
-      "similarity": 0.8529559969902039,
+      "similarity": 0.846332311630249,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -51,9 +51,55 @@
       }
     },
     {
-      "datetime_utc": "2021-08-22T08:42Z",
-      "source_file": "DVN_2021_22_0842.txt",
-      "similarity": 0.8520233631134033,
+      "datetime_utc": "2007-04-29T08:07Z",
+      "source_file": "DVN_2007_29_0807.txt",
+      "similarity": 0.8454123139381409,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 3
+          }
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
+        },
+        "2": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2021-08-22T17:13Z",
+      "source_file": "DVN_2021_22_1713.txt",
+      "similarity": 0.8442360758781433,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -110,9 +156,51 @@
       }
     },
     {
+      "datetime_utc": "2006-04-17T08:07Z",
+      "source_file": "DVN_2006_17_0807.txt",
+      "similarity": 0.841886043548584,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 12,
+            "severe_hail": 30,
+            "tornado": 2,
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2016-02-02T03:26Z",
       "source_file": "DVN_2016_02_0326.txt",
-      "similarity": 0.8511431217193604,
+      "similarity": 0.8402857184410095,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -157,7 +245,7 @@
     {
       "datetime_utc": "2016-02-01T21:34Z",
       "source_file": "DVN_2016_01_2134.txt",
-      "similarity": 0.8511431217193604,
+      "similarity": 0.8402857184410095,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -198,176 +286,9 @@
       }
     },
     {
-      "datetime_utc": "2006-04-17T08:07Z",
-      "source_file": "DVN_2006_17_0807.txt",
-      "similarity": 0.8498988151550293,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 12,
-            "severe_hail": 30,
-            "tornado": 2,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2007-04-29T08:07Z",
-      "source_file": "DVN_2007_29_0807.txt",
-      "similarity": 0.8497538566589355,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 3
-          }
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 3
-          }
-        },
-        "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2009-06-27T08:31Z",
-      "source_file": "DVN_2009_27_0831.txt",
-      "similarity": 0.846487820148468,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 62,
-            "severe_hail": 3
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2009-08-27T08:27Z",
-      "source_file": "DVN_2009_27_0827.txt",
-      "similarity": 0.8454223871231079,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 27
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2008-06-06T08:21Z",
-      "source_file": "DVN_2008_06_0821.txt",
-      "similarity": 0.8451842069625854,
+      "datetime_utc": "2008-06-06T16:48Z",
+      "source_file": "DVN_2008_06_1648.txt",
+      "similarity": 0.8390957117080688,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -434,17 +355,17 @@
       }
     },
     {
-      "datetime_utc": "2012-07-02T20:14Z",
-      "source_file": "DVN_2012_02_2014.txt",
-      "similarity": 0.8431093692779541,
+      "datetime_utc": "2009-06-27T08:31Z",
+      "source_file": "DVN_2009_27_0831.txt",
+      "similarity": 0.8386204838752747,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 3,
-            "severe_wind": 5
+            "severe_wind": 62,
+            "severe_hail": 3
           }
         },
         "1": {
@@ -464,16 +385,92 @@
           "counts": {}
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 9,
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2009-08-27T08:27Z",
+      "source_file": "DVN_2009_27_0827.txt",
+      "similarity": 0.8353893160820007,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 27
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2006-05-03T07:53Z",
+      "source_file": "DVN_2006_03_0753.txt",
+      "similarity": 0.8345800638198853,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 1
+            "severe_hail": 2
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 4,
+            "severe_wind": 1
           }
         }
       }
@@ -482,7 +479,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.86,
-    "mean_similarity": 0.8274126130342484,
+    "mean_similarity": 0.8181665432453156,
     "base_rate": 0.5868920074442936,
     "signal_value": 0.2731079925557064,
     "percentile": 57,
@@ -491,8 +488,8 @@
     "n_total": 10,
     "n_severe_signal": 86,
     "n_total_signal": 100,
-    "product_id": "202605230622-KDVN-FXUS63-AFDDVN",
-    "afd_time": "2026-05-23T06:22:00Z",
-    "updated": "2026-05-23T06:47:41.016962+00:00"
+    "product_id": "202605231137-KDVN-FXUS63-AFDDVN",
+    "afd_time": "2026-05-23T11:37:00Z",
+    "updated": "2026-05-23T12:10:10.252474+00:00"
   }
 }
