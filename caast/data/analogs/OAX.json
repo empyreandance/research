@@ -1,15 +1,15 @@
 {
   "office": "OAX",
-  "product_id": "202605231854-KOAX-FXUS63-AFDOAX",
-  "afd_time": "2026-05-23T18:54:00Z",
+  "product_id": "202605232315-KOAX-FXUS63-AFDOAX",
+  "afd_time": "2026-05-23T23:15:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-23T19:39:49.670146+00:00",
+  "updated": "2026-05-24T00:16:07.741385+00:00",
   "query_preview": "..\nIssued at 153 PM CDT Sat May 23 2026\n\nThe forecast period begins with an upper low over Saskatchewan and \nManitoba and weak sfc high pressure over eastern Kansas and \nOklahoma. Satellite shows some clouds streaming in across the border \nfrom Kansas into southeastern Nebraska and southwestern Iowa. \nVisible satellite imagery also shows an area of cumulus clouds \nacross north central Nebraska where surface analysis is showing a \nmoisture plume coming in from the southwest and an area of \nconvergence. MLCAPE values of maybe 500 J/kg and SBCAPE of 500-1000 \nJ/kg are expected along with some decent lapse rates. A few showers \nand maybe isolated thunderstorms are expected across portions of \nnortheastern Nebraska this evening/tonight; however, a widespread \nsevere weather threat is not expected. Should a few stronger storms \ndevelop, wind and some small hail would be the main concerns.\n\nHeading into Sunday, the upper trough shifts east, centered over \nnorthern Missouri and into Iowa during the morning. A weak shortwave \nlifts northeastward into the region during the day. This may kick \noff a few showers and isolated thunderstorms. Models have been \npessimistic over the past few days over the storm potential. \nHowever, a few are starting to pick up on the possibility of \nsomething coming in along with a small plume of moisture advecting \nin. Went with a blend of the NAMNest, SREF and ECMWF to put in some \nlow PoPs for Sunday to account for this potential. Confidence is \nstill low as to severe weather potential; however, if a strong storm \nwere to develop, the most likely concern would be hail.\n\nMonday caps off a three-day warming trend with highs returning to \nthe mid to upper 80s for most locations. A few low 90s are not \nentirely out of the question, particularly for northeastern \nNebraska. \n\nMonday through the remainder of the forecast period, the pattern \nshifts, giving the CWA daily chances for a few showers and isolated \nthunderstorms. The overall pattern has a ridge over the forecast \narea Monday with an upper low over the Aleutians. The low is \nexpected to come ashore over the PACNW Monday night/Tuesday morning, \ndigging south into southern California by Thursday morning. \nMeanwhile, several disturbances will filter through our area, \nbringing chances for showers and storms.",
   "analogs": [
     {
       "datetime_utc": "2021-07-03T17:09Z",
       "source_file": "OAX_2021_03_1709.txt",
-      "similarity": 0.9800814390182495,
+      "similarity": 0.9800813794136047,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -58,7 +58,7 @@
     {
       "datetime_utc": "2018-05-25T08:13Z",
       "source_file": "OAX_2018_25_0813.txt",
-      "similarity": 0.9800181984901428,
+      "similarity": 0.980018138885498,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -107,8 +107,49 @@
       }
     },
     {
-      "datetime_utc": "2020-03-19T20:32Z",
-      "source_file": "OAX_2020_19_2032.txt",
+      "datetime_utc": "2020-03-20T04:50Z",
+      "source_file": "OAX_2020_20_0450.txt",
+      "similarity": 0.9794347286224365,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 57
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "winter",
+          "counts": {
+            "winter": 2
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2020-03-19T23:39Z",
+      "source_file": "OAX_2020_19_2339.txt",
       "similarity": 0.9794347286224365,
       "label": "severe_hail",
       "is_severe": true,
@@ -151,49 +192,8 @@
       }
     },
     {
-      "datetime_utc": "2020-03-20T04:50Z",
-      "source_file": "OAX_2020_20_0450.txt",
-      "similarity": 0.9794347286224365,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 57
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 2
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-06-30T07:40Z",
-      "source_file": "OAX_2022_30_0740.txt",
+      "datetime_utc": "2022-06-30T16:52Z",
+      "source_file": "OAX_2022_30_1652.txt",
       "similarity": 0.9786759614944458,
       "label": "tornado",
       "is_severe": true,
@@ -247,9 +247,64 @@
       }
     },
     {
-      "datetime_utc": "2024-06-12T20:38Z",
-      "source_file": "OAX_2024_12_2038.txt",
-      "similarity": 0.9785104393959045,
+      "datetime_utc": "2024-06-13T04:54Z",
+      "source_file": "OAX_2024_13_0454.txt",
+      "similarity": 0.9785103797912598,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 43,
+            "severe_wind": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 33,
+            "severe_hail": 3,
+            "flood": 8,
+            "tornado": 14
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "flood": 2
+          }
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 13,
+            "severe_wind": 6
+          }
+        },
+        "6": {
+          "label": "flood",
+          "counts": {
+            "flood": 4
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-06-12T22:56Z",
+      "source_file": "OAX_2024_12_2256_1.txt",
+      "similarity": 0.9785103797912598,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -305,63 +360,8 @@
       }
     },
     {
-      "datetime_utc": "2024-06-13T04:54Z",
-      "source_file": "OAX_2024_13_0454.txt",
-      "similarity": 0.9785104393959045,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 43,
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 33,
-            "severe_hail": 3,
-            "flood": 8,
-            "tornado": 14
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "flood": 2
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 13,
-            "severe_wind": 6
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 4
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-06-21T20:49Z",
-      "source_file": "OAX_2024_21_2049.txt",
+      "datetime_utc": "2024-06-21T23:36Z",
+      "source_file": "OAX_2024_21_2336.txt",
       "similarity": 0.9781855344772339,
       "label": "tornado",
       "is_severe": true,
@@ -511,7 +511,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.9761629426479339,
+    "mean_similarity": 0.9761629647016525,
     "base_rate": 0.5290490280120566,
     "signal_value": 0.3909509719879435,
     "percentile": 69,
@@ -520,8 +520,8 @@
     "n_total": 10,
     "n_severe_signal": 92,
     "n_total_signal": 100,
-    "product_id": "202605231854-KOAX-FXUS63-AFDOAX",
-    "afd_time": "2026-05-23T18:54:00Z",
-    "updated": "2026-05-23T19:39:49.670146+00:00"
+    "product_id": "202605232315-KOAX-FXUS63-AFDOAX",
+    "afd_time": "2026-05-23T23:15:00Z",
+    "updated": "2026-05-24T00:16:07.741385+00:00"
   }
 }
