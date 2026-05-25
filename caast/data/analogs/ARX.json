@@ -1,15 +1,15 @@
 {
   "office": "ARX",
-  "product_id": "202605251104-KARX-FXUS63-AFDARX",
-  "afd_time": "2026-05-25T11:04:00Z",
+  "product_id": "202605251735-KARX-FXUS63-AFDARX",
+  "afd_time": "2026-05-25T17:35:00Z",
   "section_type": "long_term",
-  "updated": "2026-05-25T12:47:06.578593+00:00",
+  "updated": "2026-05-25T18:00:30.938105+00:00",
   "query_preview": "global ensembles and accompanying clusters suggest a quasi \nRex block synoptic pattern setting up through the end of the week, \nperpetuating similar forecast concerns, i.e., low confidence in \nprecipitation and higher confidence in warmer than normal \ntemperatures.",
   "analogs": [
     {
       "datetime_utc": "2007-08-03T08:34Z",
       "source_file": "ARX_2007_03_0834.txt",
-      "similarity": 0.8576400279998779,
+      "similarity": 0.8576393127441406,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -53,7 +53,7 @@
     {
       "datetime_utc": "2006-09-12T19:27Z",
       "source_file": "ARX_2006_12_1927.txt",
-      "similarity": 0.8366371989250183,
+      "similarity": 0.8366374969482422,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -138,7 +138,7 @@
     {
       "datetime_utc": "2011-03-09T09:15Z",
       "source_file": "ARX_2011_09_0915.txt",
-      "similarity": 0.8248428702354431,
+      "similarity": 0.8248433470726013,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -179,7 +179,7 @@
     {
       "datetime_utc": "2004-06-11T09:48Z",
       "source_file": "ARX_2004_11_0948.txt",
-      "similarity": 0.8245514631271362,
+      "similarity": 0.8245517015457153,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -230,7 +230,7 @@
     {
       "datetime_utc": "2005-12-26T08:43Z",
       "source_file": "ARX_2005_26_0843.txt",
-      "similarity": 0.8137235641479492,
+      "similarity": 0.8137236833572388,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -269,7 +269,7 @@
     {
       "datetime_utc": "2010-04-03T07:52Z",
       "source_file": "ARX_2010_03_0752.txt",
-      "similarity": 0.8003134727478027,
+      "similarity": 0.8003138303756714,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -317,9 +317,9 @@
       }
     },
     {
-      "datetime_utc": "2023-06-02T08:16Z",
-      "source_file": "ARX_2023_02_0816.txt",
-      "similarity": 0.7985258102416992,
+      "datetime_utc": "2023-06-02T11:06Z",
+      "source_file": "ARX_2023_02_1106.txt",
+      "similarity": 0.7985263466835022,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -364,9 +364,46 @@
       }
     },
     {
+      "datetime_utc": "2016-09-25T04:47Z",
+      "source_file": "ARX_2016_25_0447.txt",
+      "similarity": 0.7933642268180847,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2016-09-24T19:30Z",
       "source_file": "ARX_2016_24_1930.txt",
-      "similarity": 0.7933638095855713,
+      "similarity": 0.7933642268180847,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -401,55 +438,18 @@
           "counts": {}
         }
       }
-    },
-    {
-      "datetime_utc": "2016-09-25T04:47Z",
-      "source_file": "ARX_2016_25_0447.txt",
-      "similarity": 0.7933638095855713,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
     }
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
     "severe_fraction": 0.65,
-    "mean_similarity": 0.6920966720581054,
+    "mean_similarity": 0.6920972263813019,
     "n_severe": 65,
     "n_total": 100,
     "reason": "top-100 mean similarity 0.69 below confidence floor 0.7",
-    "product_id": "202605251104-KARX-FXUS63-AFDARX",
-    "afd_time": "2026-05-25T11:04:00Z",
-    "updated": "2026-05-25T12:47:06.578593+00:00",
+    "product_id": "202605251735-KARX-FXUS63-AFDARX",
+    "afd_time": "2026-05-25T17:35:00Z",
+    "updated": "2026-05-25T18:00:30.938105+00:00",
     "office_lift": 0.2076038477116241,
     "base_rate": 0.5379961522883758
   }
