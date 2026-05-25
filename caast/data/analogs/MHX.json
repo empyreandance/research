@@ -1,9 +1,9 @@
 {
   "office": "MHX",
-  "product_id": "202605242002-KMHX-FXUS62-AFDMHX",
-  "afd_time": "2026-05-24T20:02:00Z",
+  "product_id": "202605242351-KMHX-FXUS62-AFDMHX",
+  "afd_time": "2026-05-24T23:51:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-24T21:13:54.094044+00:00",
+  "updated": "2026-05-25T04:54:15.540151+00:00",
   "query_preview": "..\nKEY MESSAGE 1...A warm front will slowly lift north through the\nENC coastal plain this afternoon, with a continued risk of \nshowers and thunderstorms focused along it. Somewhat slower \nstorm motions parallel to the front, plus PWATs near 2\" and a \nmoderately unstable airmass will continue to support a risk of \nintense rainfall rates of at least 1-2\"/hr. Where these higher \nrates occur, there will be a risk of minor flooding, especially \nin poor drainage and urban locations. Meanwhile, a broad area of\nincrease large-scale forcing will continue to reside over the \narea, allowing periods of convection even away from the warm \nfront. This will support an above- climo chance of precipitation\nthrough this evening.\n\nToday's front is forecast to then lift north to around the \nNC/VA border by Monday, and remain there through the middle of \nthe week. Guidance differs some on where the front will stall. \nWherever it stalls, it should be the primary focus for \nconvection through Wednesday. Away from the front, convection \nshould mostly be seabreeze-driven. Confidence in where the \nhighest coverage of convection will be each day is lower because\nof the uncertainty regarding the placement of the front each \nday. The mean storm motion parallel to the front, plus moderate \ninstability and 2\" PWATs will continue to support a risk of \nintense rainfall rates and possible flooding. If the front \nstalls along the VA/NC border, then the greatest risk of \nflooding would be focused there as well. Stay tuned for updates \non the potential placement of the front each day and where the \ngreatest risk of convection and possible flooding will be. \n\nOn Thursday, the front is forecast to get shoved back south as \na cold front as a shortwave moves off the Mid-Atlantic/New \nEngland Coast. This may offer at least one more day of unsettled\nweather, but perhaps with a focus across the southern half of \nENC as opposed to the entire area.\n\nA modest increase in mid-upper level westerly flow from Monday \nthrough Wednesday should lead to a bump up in deep layer shear \nto 20- 30kt. This suggests an increase in the potential for \nstorm organization each day during that time. This combined with\nmoderate instability of 1000-2000j/kg MLCAPE may support a \nmarginal severe thunderstorm risk each afternoon and evening. On\nThursday, shear is forecast to increase as the above-mentioned \ncold front moves through and this may lead to a slightly \nimproved risk of strong to severe thunderstorms. Analog, \ndeterministic, and machine learning guidance all hint at this \npotential as well.",
   "analogs": [
     {
@@ -47,8 +47,8 @@
       }
     },
     {
-      "datetime_utc": "2009-07-30T12:31Z",
-      "source_file": "MHX_2009_30_1231.txt",
+      "datetime_utc": "2009-07-30T07:31Z",
+      "source_file": "MHX_2009_30_0731.txt",
       "similarity": 0.9779013991355896,
       "label": "severe_wind",
       "is_severe": true,
@@ -147,8 +147,8 @@
       }
     },
     {
-      "datetime_utc": "2010-07-11T05:26Z",
-      "source_file": "MHX_2010_11_0526.txt",
+      "datetime_utc": "2010-07-11T02:52Z",
+      "source_file": "MHX_2010_11_0252.txt",
       "similarity": 0.9778237342834473,
       "label": "severe_wind",
       "is_severe": true,
@@ -196,7 +196,7 @@
     {
       "datetime_utc": "2009-07-24T08:08Z",
       "source_file": "MHX_2009_24_0808.txt",
-      "similarity": 0.9776077270507812,
+      "similarity": 0.977607786655426,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -251,17 +251,13 @@
       }
     },
     {
-      "datetime_utc": "2008-08-26T21:06Z",
-      "source_file": "MHX_2008_26_2106.txt",
-      "similarity": 0.9768463373184204,
+      "datetime_utc": "2008-08-27T01:02Z",
+      "source_file": "MHX_2008_27_0102.txt",
+      "similarity": 0.9768462777137756,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "tornado",
           "counts": {
             "severe_wind": 1,
@@ -269,15 +265,15 @@
             "flood": 3
           }
         },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2,
@@ -285,11 +281,15 @@
             "flood": 3
           }
         },
-        "5": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -298,13 +298,17 @@
       }
     },
     {
-      "datetime_utc": "2008-08-27T01:02Z",
-      "source_file": "MHX_2008_27_0102.txt",
-      "similarity": 0.9768463373184204,
+      "datetime_utc": "2008-08-26T21:06Z",
+      "source_file": "MHX_2008_26_2106.txt",
+      "similarity": 0.9768462777137756,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
           "label": "tornado",
           "counts": {
             "severe_wind": 1,
@@ -312,15 +316,15 @@
             "flood": 3
           }
         },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2,
@@ -328,15 +332,11 @@
             "flood": 3
           }
         },
-        "4": {
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -389,9 +389,9 @@
       }
     },
     {
-      "datetime_utc": "2008-06-27T08:29Z",
-      "source_file": "MHX_2008_27_0829.txt",
-      "similarity": 0.9761694073677063,
+      "datetime_utc": "2008-06-27T16:01Z",
+      "source_file": "MHX_2008_27_1601.txt",
+      "similarity": 0.9761694669723511,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -489,7 +489,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.74,
-    "mean_similarity": 0.9698624783754348,
+    "mean_similarity": 0.9698624908924103,
     "base_rate": 0.5152605574718001,
     "signal_value": 0.22473944252819988,
     "percentile": 57,
@@ -498,8 +498,8 @@
     "n_total": 10,
     "n_severe_signal": 74,
     "n_total_signal": 100,
-    "product_id": "202605242002-KMHX-FXUS62-AFDMHX",
-    "afd_time": "2026-05-24T20:02:00Z",
-    "updated": "2026-05-24T21:13:54.094044+00:00"
+    "product_id": "202605242351-KMHX-FXUS62-AFDMHX",
+    "afd_time": "2026-05-24T23:51:00Z",
+    "updated": "2026-05-25T04:54:15.540151+00:00"
   }
 }
