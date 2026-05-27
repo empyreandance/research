@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "classic_supercell",
+  "name": "Supercell potential",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "supercell",
+  "description": "Deep-layer shear + helicity + instability favorable for supercells. WFO Louisville tip sheet: 0-6 km shear > 40 kt (supercells), 0-3 km SRH > 150 m2/s2 (updraft rotation likely), with moderate CAPE. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mlcape_180mb", "operator": ">=", "value": 1000, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 40, "units": "kt", "level": null },
+    { "parameter_id": "srh_0_3km", "operator": ">=", "value": 150, "units": "m2/s2", "level": null }
+  ]
+}

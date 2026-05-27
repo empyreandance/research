@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "flash_flood",
+  "name": "Flash flooding (heavy rain)",
+  "origin": "builtin",
+  "category": "hydro",
+  "subcategory": "flash_flood",
+  "description": "Deep moisture + a deep warm-cloud layer (efficient warm-rain processes) + high low-level moisture. WFO Louisville tip sheet (Flash Flooding): high PW, ~10,000 ft (≈3000 m) depth between LCL and freezing level, high surface dewpoints. Starting point — tune across cycles; PW thresholds are seasonal/regional.",
+  "thresholds": [
+    { "parameter_id": "pwat", "operator": ">=", "value": 40, "units": "kg/m2", "level": null },
+    { "parameter_id": "warm_cloud_depth", "operator": ">=", "value": 3000, "units": "m", "level": null },
+    { "parameter_id": "d2m", "operator": ">=", "value": 18, "units": "degC", "level": null },
+    { "parameter_id": "k_index", "operator": ">=", "value": 30, "units": "degC", "level": null }
+  ]
+}

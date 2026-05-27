@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "wet_microburst",
+  "name": "Wet microburst",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "wind",
+  "description": "Buoyancy + steep mid-level lapse rates + a dry sub-cloud layer that maximizes evaporative downdraft cooling. WFO Louisville tip sheet (Wet Microbursts): moderate-large CAPE, 850-500 mb lapse rate >= 6.5 C/km, lowest 50-100 mb dewpoint depression >= 10 C. Starting point — tune across cycles. (Note: a surface-to-mid theta-e differential >= 20 K is also indicated; see the DCAPE / WMSI composites.)",
+  "thresholds": [
+    { "parameter_id": "mlcape_180mb", "operator": ">=", "value": 1500, "units": "J/kg", "level": null },
+    { "parameter_id": "lapse_850_500", "operator": ">=", "value": 6.5, "units": "degC/km", "level": null },
+    { "parameter_id": "dewpoint_depression_2m", "operator": ">=", "value": 10, "units": "degC", "level": null }
+  ]
+}

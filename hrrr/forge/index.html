@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Authoring mode enabled</title>
+  <script>
+    // Visiting /forge enables the authoring controls for this browser (spec 6.3),
+    // then sends you back to the tool. The flag is per-browser; regular users who
+    // don't know this URL never see authoring controls.
+    localStorage.setItem("authoringMode", "1");
+    location.replace("../");
+  </script>
+</head>
+<body>
+  <p>Authoring mode enabled — redirecting…
+     <a href="../">click here</a> if you are not redirected.</p>
+</body>
+</html>

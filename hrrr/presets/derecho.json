@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "derecho",
+  "name": "Derecho / bowing wind",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "wind",
+  "description": "High instability + strong deep-layer and low-level flow supporting long-lived bowing MCSs. WFO Louisville tip sheet (Derechoes / MCS Maintenance): high-to-extreme instability (MUCAPE in lowest 300 mb > 1700 J/kg), 0-3 km shear > 30 kt, 0-6 km shear > 40 kt. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": ">=", "value": 1700, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_3km_magnitude", "operator": ">=", "value": 30, "units": "kt", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 40, "units": "kt", "level": null }
+  ]
+}

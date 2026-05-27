@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "large_hail",
+  "name": "Large hail (supercell)",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "hail",
+  "description": "Steep mid-level lapse rates + ample MU instability + deep-layer shear and helicity (longer residence in the hail growth zone). WFO Louisville tip sheet (Supercells & Hail): 700-500 mb lapse > 7.0 C/km, moderate-large CAPE, 0-6 km shear > 40-50 kt, 0-3 km SRH > 150-200 m2/s2. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": ">=", "value": 1500, "units": "J/kg", "level": null },
+    { "parameter_id": "lapse_700_500", "operator": ">=", "value": 7.0, "units": "degC/km", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 45, "units": "kt", "level": null },
+    { "parameter_id": "srh_0_3km", "operator": ">=", "value": 150, "units": "m2/s2", "level": null }
+  ]
+}

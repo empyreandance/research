@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HRRR Threshold Tool</title>
+
+  <!-- MapLibre GL JS (open-source map renderer), pinned, from CDN — no build step -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <aside id="panel">
+      <h1>HRRR Threshold Tool</h1>
+      <p id="cycle-info" class="muted">Loading…</p>
+      <label class="inline"><input type="checkbox" id="hover-toggle" checked /> Cursor readout on hover</label>
+
+      <label for="fh">Forecast hour: <span id="fh-readout">f00</span></label>
+      <input id="fh" type="range" min="0" max="0" step="1" value="0" />
+
+      <h2>Presets</h2>
+      <select id="preset-select"><option value="">— choose a preset —</option></select>
+      <div class="preset-actions">
+        <button id="preset-load" class="secondary">Load</button>
+        <button id="preset-save" class="secondary">Save current…</button>
+        <button id="preset-share" class="secondary">Share link</button>
+        <button id="preset-export" class="secondary">Export file</button>
+        <button id="preset-import" class="secondary">Import file</button>
+        <button id="preset-delete" class="link" title="Delete selected preset">🗑</button>
+      </div>
+      <input id="preset-file" type="file" accept="application/json,.json" hidden />
+
+      <section id="authoring" hidden>
+        <h2>Authoring</h2>
+        <button id="export-builtin" class="secondary">Export as built-in JSON</button>
+        <p class="muted">Saves a JSON file. Paste it into
+          <code>frontend/presets/&lt;id&gt;.json</code> and add the id to
+          <code>frontend/presets/index.json</code>, then push.</p>
+      </section>
+
+      <h2>Ingredients <span class="muted" id="cond-count"></span></h2>
+      <div id="conditions"></div>
+      <button id="add-cond" class="secondary">+ Add ingredient</button>
+
+      <label for="floor">Show cells meeting at least</label>
+      <div class="row">
+        <input id="floor" type="range" min="1" max="1" step="1" value="1" />
+        <span id="floor-readout" class="readout">1</span>
+      </div>
+
+      <div class="row actions">
+        <button id="apply">Update map</button>
+        <button id="export-image" class="secondary">Export image</button>
+      </div>
+      <p id="status" class="muted"></p>
+
+      <section id="inspect" hidden>
+        <h2>Inspect <button id="inspect-close" class="link">✕</button></h2>
+        <p id="inspect-loc" class="muted"></p>
+        <table id="inspect-table"></table>
+      </section>
+
+      <footer class="muted">
+        <div><span class="badge badge-hrrr">HRRR</span> direct from the model</div>
+        <div><span class="badge badge-calc">calc</span> calculated by this tool</div>
+      </footer>
+    </aside>
+    <main id="map"></main>
+    <div id="hover" hidden></div>
+    <div id="map-legend" hidden></div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

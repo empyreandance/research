@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "id": "tornadic_supercell",
+  "name": "Tornadic supercell",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "tornado",
+  "description": "Low-level shear/helicity + low LCL + moist boundary layer over a buoyant, deeply-sheared environment. WFO Louisville tip sheet (Hodograph): 0-1 km SRH > 150 m2/s2, LCL <= 1000 m, boundary-layer RH > 65%, 0-6 km shear > 40 kt. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mlcape_180mb", "operator": ">=", "value": 1000, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 40, "units": "kt", "level": null },
+    { "parameter_id": "srh_0_1km", "operator": ">=", "value": 150, "units": "m2/s2", "level": null },
+    { "parameter_id": "lcl_height", "operator": "<=", "value": 1000, "units": "m", "level": null },
+    { "parameter_id": "rh2m", "operator": ">=", "value": 65, "units": "%", "level": null }
+  ]
+}
