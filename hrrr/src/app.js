@@ -45,6 +45,10 @@ const map = new maplibregl.Map({
   preserveDrawingBuffer: true, // required so the map canvas can be exported to PNG
 });
 
+// Wire the resize handle immediately (not inside the async init), so the
+// sidebar is draggable the moment the page loads, before data finishes loading.
+setupPanelResize();
+
 async function init() {
   try {
     const { cycle } = await loadManifests(DATA_BASE_URL);
@@ -89,7 +93,6 @@ async function init() {
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
-    setupPanelResize();
     updateMap();
   } catch (e) {
     els["cycle-info"].textContent = `Could not load data: ${e.message}`;
