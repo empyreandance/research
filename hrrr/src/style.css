@@ -32,9 +32,15 @@ label.inline input { width: auto; padding: 0; }
 .prov-tag { font-size: 9px; color: #999; text-transform: uppercase; }
 
 #panel {
-  width: 340px; flex: 0 0 340px; padding: 16px; overflow-y: auto;
+  width: var(--panel-w, 380px); flex: 0 0 var(--panel-w, 380px); padding: 16px; overflow-y: auto;
   background: #fafafa; border-right: 1px solid #ddd; font-size: 14px;
 }
+/* Drag handle to resize the panel (width persists in localStorage). */
+#panel-resize {
+  flex: 0 0 6px; cursor: col-resize; background: #e6e6e6;
+  transition: background 0.15s;
+}
+#panel-resize:hover, #panel-resize.dragging { background: #1565c0; }
 #map { flex: 1; }
 
 h1 { font-size: 18px; margin: 0 0 8px; }

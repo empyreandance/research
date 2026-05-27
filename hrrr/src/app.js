@@ -89,10 +89,54 @@ async function init() {
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
+    setupPanelResize();
     updateMap();
   } catch (e) {
     els["cycle-info"].textContent = `Could not load data: ${e.message}`;
   }
+}
+
+// Drag #panel-resize to set the sidebar width; persisted in localStorage so it
+// sticks between visits. The map canvas is resized to match (live during drag,
+// throttled to one resize per frame).
+function setupPanelResize() {
+  const handle = document.getElementById("panel-resize");
+  if (!handle) return;
+  const root = document.documentElement;
+  const KEY = "hrrr.panelWidth";
+  const clamp = (w) => Math.min(680, Math.max(280, w));
+  const saved = parseInt(localStorage.getItem(KEY) || "", 10);
+  if (saved) root.style.setProperty("--panel-w", clamp(saved) + "px");
+
+  let dragging = false, raf = 0;
+  const xOf = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
+  const onMove = (e) => {
+    if (!dragging) return;
+    root.style.setProperty("--panel-w", clamp(xOf(e)) + "px");
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; map.resize(); });
+    if (e.cancelable) e.preventDefault();
+  };
+  const stop = () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove("dragging");
+    document.body.style.userSelect = "";
+    const w = parseInt(getComputedStyle(document.getElementById("panel")).width, 10);
+    localStorage.setItem(KEY, String(w));
+    map.resize();
+  };
+  const start = (e) => {
+    dragging = true;
+    handle.classList.add("dragging");
+    document.body.style.userSelect = "none";
+    if (e.cancelable) e.preventDefault();
+  };
+  handle.addEventListener("mousedown", start);
+  handle.addEventListener("touchstart", start, { passive: false });
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("touchmove", onMove, { passive: false });
+  window.addEventListener("mouseup", stop);
+  window.addEventListener("touchend", stop);
 }
 
 function setupForecastHourSlider() {
