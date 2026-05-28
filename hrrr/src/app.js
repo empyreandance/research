@@ -46,6 +46,9 @@ const map = new maplibregl.Map({
   container: "map", style: basemapStyle(), center: [-97, 38], zoom: 3.2,
   preserveDrawingBuffer: true, // required so the map canvas can be exported to PNG
 });
+// Arrow keys are reserved for FH scrubbing (setupArrowScrub). MapLibre's
+// built-in keyboard pan would otherwise also fire after a map click.
+map.keyboard.disable();
 
 // Wire the resize handle and outlook toggles immediately (not inside the async
 // init), so the sidebar is draggable AND the outlook checkboxes are responsive

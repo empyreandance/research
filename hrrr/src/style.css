@@ -16,6 +16,18 @@ label.inline input { width: auto; padding: 0; }
 #hover .pass { color: #1b5e20; }
 #hover .fail { color: #b71c1c; }
 
+/* On-map status pill: top-left, tracks panel width like #map-legend.
+   Red so "Reading data…" / errors are immediately visible against any
+   basemap; hides itself when empty. */
+#status {
+  position: fixed; top: 12px; left: calc(var(--panel-w, 380px) + 22px); z-index: 5;
+  margin: 0; padding: 4px 10px; max-width: 50%;
+  background: rgba(255,255,255,.94); color: #c62828; border: 1px solid #f4c7c7;
+  border-radius: 4px; font-size: 12px; font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15); pointer-events: none;
+}
+#status:empty { display: none; }
+
 /* on-map legend: active ingredients (with provenance) + count color scale */
 #map-legend {
   /* Track the resizable panel so the legend stays anchored to the map's
