@@ -55,6 +55,10 @@
       <div id="conditions"></div>
       <button id="add-cond" class="secondary">+ Add ingredient</button>
 
+      <label for="smooth">Spatial buffer: <span id="smooth-readout" class="readout">off</span></label>
+      <input id="smooth" type="range" min="0" max="3" step="1" value="0" />
+      <p class="muted" style="font-size:11px; margin-top:-2px">Visually extends each cell's count to nearby cells (max-filter, ~3 km per cell). Useful when joint overlaps are spotty but coherent — does <em>not</em> reflect a physical buffer. Click-inspect and the % stat still use actual per-cell values.</p>
+
       <label for="floor">Show cells meeting at least</label>
       <div class="row">
         <input id="floor" type="range" min="1" max="1" step="1" value="1" />

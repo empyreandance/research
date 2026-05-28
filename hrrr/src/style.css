@@ -18,7 +18,9 @@ label.inline input { width: auto; padding: 0; }
 
 /* on-map legend: active ingredients (with provenance) + count color scale */
 #map-legend {
-  position: fixed; bottom: 16px; left: 356px; z-index: 5;
+  /* Track the resizable panel so the legend stays anchored to the map's
+     left edge instead of overlapping the sidebar at wider panel widths. */
+  position: fixed; bottom: 16px; left: calc(var(--panel-w, 380px) + 22px); z-index: 5;
   background: rgba(255,255,255,.94); border: 1px solid #ccc; border-radius: 6px;
   padding: 8px 10px; font-size: 12px; max-width: 330px; box-shadow: 0 1px 6px rgba(0,0,0,.2);
 }

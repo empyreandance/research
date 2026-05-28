@@ -30,7 +30,7 @@ const els = Object.fromEntries(
    "inspect-loc", "inspect-table", "inspect-close",
    "preset-select", "preset-load", "preset-save", "preset-share", "preset-delete",
    "preset-export", "preset-import", "preset-file", "authoring", "export-builtin",
-   "hover", "hover-toggle", "export-image", "outlook-legend",
+   "hover", "hover-toggle", "export-image", "outlook-legend", "smooth", "smooth-readout",
   ].map((id) => [id, document.getElementById(id)]),
 );
 
@@ -38,6 +38,7 @@ const state = {
   cycle: null, params: [], byId: {}, fhList: [0], forecastHour: 0,
   group: null, mapper: null, bbox: null, nx: 0, lat: null, lon: null,
   fieldCache: new Map(), groups: new Map(), last: null, builtins: [], conusMask: null, levels: [],
+  smoothRadius: 0,
   outlookData: {},
 };
 
@@ -52,6 +53,7 @@ const map = new maplibregl.Map({
 setupPanelResize();
 setupOutlooks();
 setupArrowScrub();
+setupSmooth();
 
 async function init() {
   try {
@@ -681,12 +683,53 @@ async function updateMap() {
 
 function renderCount() {
   const { count, shape, n } = state.last;
+  const [ny, nx] = shape;
   const floor = Math.min(Number(els["floor"].value), n);
+  const r = Number(state.smoothRadius || 0);
+  // Smooth only affects what's painted on the map; the raw count drives the
+  // % window stat and the click-inspect drill-down (which read state.last).
+  const painted = r > 0 ? maxFilterSeparable(count, ny, nx, r) : count;
   const { dataUrl, coordinates } = reproject(
-    { data: count, shape }, countColorFn(floor, n), state.mapper, state.bbox, state.conusMask);
+    { data: painted, shape }, countColorFn(floor, n), state.mapper, state.bbox, state.conusMask);
   showOverlay(dataUrl, coordinates);
   updateWindowStat();
   renderLegend(floor, n);
+}
+
+// Separable horizontal+vertical max filter over a Uint8 grid. O(n*m*(rx+ry))
+// — fast enough at HRRR resolution for any interactive radius (1-3 cells).
+function maxFilterSeparable(arr, ny, nx, r) {
+  if (r <= 0) return arr;
+  const tmp = new Uint8Array(arr.length);
+  const out = new Uint8Array(arr.length);
+  for (let i = 0; i < ny; i++) {
+    const row = i * nx;
+    for (let j = 0; j < nx; j++) {
+      const j0 = Math.max(0, j - r), j1 = Math.min(nx - 1, j + r);
+      let m = 0;
+      for (let jj = j0; jj <= j1; jj++) { const v = arr[row + jj]; if (v > m) m = v; }
+      tmp[row + j] = m;
+    }
+  }
+  for (let i = 0; i < ny; i++) {
+    const i0 = Math.max(0, i - r), i1 = Math.min(ny - 1, i + r);
+    for (let j = 0; j < nx; j++) {
+      let m = 0;
+      for (let ii = i0; ii <= i1; ii++) { const v = tmp[ii * nx + j]; if (v > m) m = v; }
+      out[i * nx + j] = m;
+    }
+  }
+  return out;
+}
+
+function setupSmooth() {
+  if (!els["smooth"]) return;
+  els["smooth"].addEventListener("input", () => {
+    const r = Number(els["smooth"].value);
+    state.smoothRadius = r;
+    els["smooth-readout"].textContent = r === 0 ? "off" : `${r} cell${r > 1 ? "s" : ""}`;
+    if (state.last) renderCount();
+  });
 }
 
 // Percentage of the *visible map area* (not all of CONUS) meeting the floor —
