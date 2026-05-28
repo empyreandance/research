@@ -54,6 +54,7 @@ setupPanelResize();
 setupOutlooks();
 setupArrowScrub();
 setupSmooth();
+setupBorders();
 
 async function init() {
   try {
@@ -639,15 +640,13 @@ async function getField(paramId, levelIdx = null, fh = state.forecastHour) {
   return state.fieldCache.get(key);
 }
 
-// Background-load the active ingredients for FH-1 and FH+1 so arrow-key
-// scrubbing is smooth. Fire-and-forget; cached promises dedupe duplicates.
-function preloadAdjacent() {
-  const idx = state.fhList.indexOf(state.forecastHour);
-  if (idx < 0) return;
+// Background-load *every* forecast hour in the cycle for the active ingredients,
+// so any scrubbing destination is already in memory. Fire-and-forget; cached
+// promises dedupe duplicates, and the browser caps concurrency on its own.
+function preloadAll() {
   const conds = readConditions().filter((c) => c.paramId);
-  for (const i of [idx - 1, idx + 1]) {
-    if (i < 0 || i >= state.fhList.length) continue;
-    const fh = state.fhList[i];
+  for (const fh of state.fhList) {
+    if (fh === state.forecastHour) continue;
     getGroup(fh).catch(() => {});
     for (const c of conds) getField(c.paramId, c.levelIdx, fh).catch(() => {});
   }
@@ -675,7 +674,7 @@ async function updateMap() {
     }
     state.last = { conds, fields, count, shape, n: conds.length };
     renderCount();
-    preloadAdjacent();
+    preloadAll();
   } catch (e) {
     els["status"].textContent = `Error: ${e.message}`;
   }
@@ -720,6 +719,46 @@ function maxFilterSeparable(arr, ny, nx, r) {
     }
   }
   return out;
+}
+
+// Lazy-loaded reference border layers (county + NWS CWA). Files live in
+// hrrr/data/ so they're served same-origin — no CORS, no external dependency.
+const BORDER_LAYERS = {
+  county: { url: "data/counties.geojson", color: "#777", width: 0.5, opacity: 0.55 },
+  cwa:    { url: "data/cwa.geojson",      color: "#1b365d", width: 1.4, opacity: 0.75 },
+};
+
+function setupBorders() {
+  document.querySelectorAll(".brd").forEach((cb) =>
+    cb.addEventListener("change", () => toggleBorder(cb.dataset.brd, cb.checked, cb)));
+}
+
+async function toggleBorder(kind, on, cb) {
+  const cfg = BORDER_LAYERS[kind];
+  if (!cfg) return;
+  const src = `brd-${kind}`, lineId = `${src}-line`;
+  if (!on) {
+    if (map.getLayer(lineId)) map.removeLayer(lineId);
+    if (map.getSource(src)) map.removeSource(src);
+    return;
+  }
+  try {
+    if (!map.getSource(src)) {
+      const r = await fetch(cfg.url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      map.addSource(src, { type: "geojson", data: await r.json() });
+    }
+    // Render just below the conus state outline (which stays on top) and above
+    // the HRRR count overlay.
+    const before = map.getLayer("conus-outline") ? "conus-outline" : undefined;
+    map.addLayer({
+      id: lineId, type: "line", source: src,
+      paint: { "line-color": cfg.color, "line-width": cfg.width, "line-opacity": cfg.opacity },
+    }, before);
+  } catch (e) {
+    if (cb) cb.checked = false;
+    els["status"].textContent = `Couldn't load ${kind} borders: ${e.message}`;
+  }
 }
 
 function setupSmooth() {
