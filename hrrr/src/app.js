@@ -196,21 +196,35 @@ function colorizeERO(gj) {
   }
 }
 
-// Build (once) a small diagonal-hatch tile in the given color, for fill-pattern.
-function ensureHatch(color) {
-  const name = `hatch-${color}`;
+// Build (once) one of SPC's three Conditional Intensity Group hatch patterns:
+//   CIG1 = sparse dashed diagonals
+//   CIG2 = solid diagonals
+//   CIG3 = cross-hatch (both diagonals)
+// Always black on transparent — drawn on top of the probability fill, exactly
+// mirroring SPC's March-2026 CIG rendering (which replaced the old SIGN label).
+function ensureCigPattern(level) {
+  const name = `cig${level}`;
   if (map.hasImage(name)) return name;
-  const s = 8;
+  const s = 10;
   const cv = document.createElement("canvas");
   cv.width = cv.height = s;
   const ctx = cv.getContext("2d");
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(0, s); ctx.lineTo(s, 0);
-  ctx.moveTo(-s, s); ctx.lineTo(s, -s);
-  ctx.moveTo(0, 2 * s); ctx.lineTo(2 * s, 0);
-  ctx.stroke();
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 1.3;
+  ctx.lineCap = "butt";
+  const drawDiag = (slope, dash) => {
+    ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    if (slope > 0) {
+      for (let i = -1; i <= 1; i++) { ctx.moveTo(0, i * s); ctx.lineTo(s, (i + 1) * s); }
+    } else {
+      for (let i = 0; i <= 2; i++) { ctx.moveTo(0, i * s); ctx.lineTo(s, (i - 1) * s); }
+    }
+    ctx.stroke();
+  };
+  if (level === "1") drawDiag(+1, [3, 3]);
+  else if (level === "2") drawDiag(+1, null);
+  else if (level === "3") { drawDiag(+1, null); drawDiag(-1, null); }
   const img = ctx.getImageData(0, 0, s, s);
   map.addImage(name, { width: s, height: s, data: new Uint8Array(img.data.buffer) });
   return name;
@@ -223,10 +237,13 @@ function setupOutlooks() {
 
 async function toggleOutlook(kind, on, cb) {
   const src = `otlk-${kind}`, fillId = `${src}-fill`, lineId = `${src}-line`;
+  const cigSrc = `otlk-cig-${kind}`, cigFillId = `${cigSrc}-fill`, cigLineId = `${cigSrc}-line`;
   if (!on) {
-    [fillId, lineId].forEach((l) => { if (map.getLayer(l)) map.removeLayer(l); });
+    [fillId, lineId, cigFillId, cigLineId].forEach((l) => { if (map.getLayer(l)) map.removeLayer(l); });
     if (map.getSource(src)) map.removeSource(src);
+    if (map.getSource(cigSrc)) map.removeSource(cigSrc);
     delete state.outlookData[kind];
+    delete state.outlookData[`cig-${kind}`];
     renderOutlookLegend();
     return;
   }
@@ -236,17 +253,13 @@ async function toggleOutlook(kind, on, cb) {
     const gj = await resp.json();
     if (kind === "ero") colorizeERO(gj);
     if (map.getSource(src)) map.removeSource(src);
-    // Per-color diagonal hatch (mirrors SPC's hatching) so the ingredient map
-    // underneath stays readable; "<2%" base areas have empty fill and are skipped.
-    for (const f of gj.features || []) {
-      const fc = f.properties && f.properties.fill;
-      if (fc) { ensureHatch(fc); f.properties._pat = `hatch-${fc}`; }
-    }
     map.addSource(src, { type: "geojson", data: gj });
+    // Probability/categorical: SPC's authentic colored fills, dialed to low
+    // opacity so the ingredient count-map still reads through.
     map.addLayer({
       id: fillId, type: "fill", source: src,
       filter: ["!=", ["get", "fill"], ""],
-      paint: { "fill-pattern": ["get", "_pat"] },
+      paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.3 },
     });
     map.addLayer({
       id: lineId, type: "line", source: src,
@@ -254,6 +267,39 @@ async function toggleOutlook(kind, on, cb) {
       paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
     });
     state.outlookData[kind] = gj;
+
+    // For torn/wind/hail, overlay SPC's paired Conditional Intensity Group layer
+    // (March-2026: CIG1 dashed / CIG2 solid / CIG3 cross-hatch, all in black).
+    if (kind === "torn" || kind === "wind" || kind === "hail") {
+      try {
+        const r = await fetch(`${SPC_BASE}cig${kind}.lyr.geojson`);
+        if (r.ok) {
+          const cgj = await r.json();
+          for (const f of cgj.features || []) {
+            const p = f.properties || {};
+            const lvl = String(p.LABEL || "").replace(/^CIG/, ""); // "CIG2" -> "2"
+            if (lvl === "1" || lvl === "2" || lvl === "3") {
+              ensureCigPattern(lvl);
+              p._cigpat = `cig${lvl}`;
+            }
+          }
+          if (map.getSource(cigSrc)) map.removeSource(cigSrc);
+          map.addSource(cigSrc, { type: "geojson", data: cgj });
+          map.addLayer({
+            id: cigFillId, type: "fill", source: cigSrc,
+            filter: ["has", "_cigpat"],
+            paint: { "fill-pattern": ["get", "_cigpat"] },
+          });
+          map.addLayer({
+            id: cigLineId, type: "line", source: cigSrc,
+            filter: ["has", "_cigpat"],
+            paint: { "line-color": "#000", "line-width": 1.2 },
+          });
+          state.outlookData[`cig-${kind}`] = cgj;
+        }
+      } catch (_) { /* CIG layer is best-effort; ignore if missing */ }
+    }
+
     renderOutlookLegend();
   } catch (e) {
     if (cb) cb.checked = false;
@@ -264,16 +310,29 @@ async function toggleOutlook(kind, on, cb) {
 function renderOutlookLegend() {
   const el = els["outlook-legend"];
   if (!el) return;
+  // Dedup by LABEL2/LABEL (not fill), so CIG1/2/3 — which share a placeholder
+  // fill — appear as distinct rows. CIG entries get a hatch-styled swatch.
+  const hatchBg = "repeating-linear-gradient(45deg,#000 0 1.5px,transparent 1.5px 5px)";
   let html = "";
   for (const kind of Object.keys(state.outlookData)) {
     const seen = new Set(), rows = [];
     for (const f of state.outlookData[kind].features || []) {
       const p = f.properties || {};
-      if (!p.fill || seen.has(p.fill)) continue;
-      seen.add(p.fill);
-      rows.push(`<div class="legend-row"><span class="sw" style="background:${p.fill};border-color:${p.stroke || "#888"}"></span>${p.LABEL2 || p.LABEL || ""}</div>`);
+      const key = p.LABEL2 || p.LABEL || p.fill;
+      if (!key || seen.has(key)) continue;
+      if (!p.fill && !p._cigpat) continue; // skip empty placeholders
+      seen.add(key);
+      const bg = p._cigpat ? hatchBg : (p.fill || "#888");
+      const border = p.stroke || "#888";
+      rows.push(`<div class="legend-row"><span class="sw" style="background:${bg};border-color:${border}"></span>${p.LABEL2 || p.LABEL || ""}</div>`);
     }
-    if (rows.length) html += `<div class="otlk-sub">SPC ${OUTLOOK_NAMES[kind] || kind} · Day 1</div>${rows.join("")}`;
+    if (rows.length) {
+      const isCig = kind.startsWith("cig-");
+      const baseKind = isCig ? kind.slice(4) : kind;
+      const source = baseKind === "ero" ? "WPC" : "SPC";
+      const cigTag = isCig ? " CIG" : "";
+      html += `<div class="otlk-sub">${source} ${OUTLOOK_NAMES[baseKind] || baseKind}${cigTag} · Day 1</div>${rows.join("")}`;
+    }
   }
   el.innerHTML = html;
   el.hidden = !html;
