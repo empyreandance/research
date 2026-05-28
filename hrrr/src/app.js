@@ -46,9 +46,11 @@ const map = new maplibregl.Map({
   preserveDrawingBuffer: true, // required so the map canvas can be exported to PNG
 });
 
-// Wire the resize handle immediately (not inside the async init), so the
-// sidebar is draggable the moment the page loads, before data finishes loading.
+// Wire the resize handle and outlook toggles immediately (not inside the async
+// init), so the sidebar is draggable AND the outlook checkboxes are responsive
+// from the moment the page loads — before any data finishes loading.
 setupPanelResize();
+setupOutlooks();
 
 async function init() {
   try {
@@ -92,7 +94,6 @@ async function init() {
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
-    setupOutlooks();
     updateMap();
   } catch (e) {
     els["cycle-info"].textContent = `Could not load data: ${e.message}`;
@@ -222,7 +223,8 @@ function ensureCigPattern(level) {
     }
     ctx.stroke();
   };
-  if (level === "1") drawDiag(+1, [3, 3]);
+  // SPC: CIG1 = forward-slash dashed, CIG2 = backslash solid, CIG3 = solid cross.
+  if (level === "1") drawDiag(-1, [3, 3]);
   else if (level === "2") drawDiag(+1, null);
   else if (level === "3") { drawDiag(+1, null); drawDiag(-1, null); }
   const img = ctx.getImageData(0, 0, s, s);
@@ -254,18 +256,23 @@ async function toggleOutlook(kind, on, cb) {
     if (kind === "ero") colorizeERO(gj);
     if (map.getSource(src)) map.removeSource(src);
     map.addSource(src, { type: "geojson", data: gj });
+    // Outlooks render UNDER the HRRR count overlay (and under the conus outline
+    // before that layer exists), so the ingredient map sits on top.
+    const before = map.getLayer("count") ? "count"
+                 : map.getLayer("conus-outline") ? "conus-outline"
+                 : undefined;
     // Probability/categorical: SPC's authentic colored fills, dialed to low
     // opacity so the ingredient count-map still reads through.
     map.addLayer({
       id: fillId, type: "fill", source: src,
       filter: ["!=", ["get", "fill"], ""],
       paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.3 },
-    });
+    }, before);
     map.addLayer({
       id: lineId, type: "line", source: src,
       filter: ["!=", ["get", "stroke"], ""],
       paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
-    });
+    }, before);
     state.outlookData[kind] = gj;
 
     // For torn/wind/hail, overlay SPC's paired Conditional Intensity Group layer
@@ -289,12 +296,12 @@ async function toggleOutlook(kind, on, cb) {
             id: cigFillId, type: "fill", source: cigSrc,
             filter: ["has", "_cigpat"],
             paint: { "fill-pattern": ["get", "_cigpat"] },
-          });
+          }, before);
           map.addLayer({
             id: cigLineId, type: "line", source: cigSrc,
             filter: ["has", "_cigpat"],
             paint: { "line-color": "#000", "line-width": 1.2 },
-          });
+          }, before);
           state.outlookData[`cig-${kind}`] = cgj;
         }
       } catch (_) { /* CIG layer is best-effort; ignore if missing */ }
