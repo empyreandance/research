@@ -37,7 +37,7 @@ const els = Object.fromEntries(
 const state = {
   cycle: null, params: [], byId: {}, fhList: [0], forecastHour: 0,
   group: null, mapper: null, bbox: null, nx: 0, lat: null, lon: null,
-  fieldCache: new Map(), last: null, builtins: [], conusMask: null, levels: [],
+  fieldCache: new Map(), groups: new Map(), last: null, builtins: [], conusMask: null, levels: [],
   outlookData: {},
 };
 
@@ -51,6 +51,7 @@ const map = new maplibregl.Map({
 // from the moment the page loads — before any data finishes loading.
 setupPanelResize();
 setupOutlooks();
+setupArrowScrub();
 
 async function init() {
   try {
@@ -156,8 +157,9 @@ function setupForecastHourSlider() {
 }
 
 async function openCurrentForecastHour(readGeo) {
-  state.fieldCache.clear();
-  state.group = await openForecastHour(DATA_BASE_URL, state.cycle.cycle_id, state.forecastHour);
+  // No cache clear: groups + fields persist across FH switches, so revisited
+  // and pre-loaded forecast hours are instant.
+  state.group = await getGroup(state.forecastHour);
   if (readGeo) {
     const geo = await gridGeo(state.group);
     state.mapper = geo.mapper;
@@ -235,6 +237,27 @@ function ensureCigPattern(level) {
 function setupOutlooks() {
   document.querySelectorAll(".otlk").forEach((cb) =>
     cb.addEventListener("change", () => toggleOutlook(cb.dataset.otlk, cb.checked, cb)));
+}
+
+// Arrow keys scrub forecast hours (anywhere on the page, as long as the user
+// isn't actively typing in an input/select/textarea — including the FH slider
+// itself, whose native arrow-key behavior already works).
+function setupArrowScrub() {
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    const ae = document.activeElement;
+    if (ae && /^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName)) return;
+    const fh = els["fh"];
+    if (!fh) return;
+    const cur = Number(fh.value);
+    const max = Number(fh.max);
+    const next = e.key === "ArrowLeft" ? Math.max(0, cur - 1) : Math.min(max, cur + 1);
+    if (next !== cur) {
+      fh.value = String(next);
+      fh.dispatchEvent(new Event("change"));
+      e.preventDefault();
+    }
+  });
 }
 
 async function toggleOutlook(kind, on, cb) {
@@ -593,12 +616,39 @@ function refreshCondMeta() {
 
 // --- count + render --------------------------------------------------------
 
-async function getField(paramId, levelIdx = null) {
-  const key = `${paramId}@${levelIdx ?? ""}`;
+// Cache the zarr group per forecast hour so we open each FH at most once.
+function getGroup(fh) {
+  if (!state.groups.has(fh)) {
+    state.groups.set(fh, openForecastHour(DATA_BASE_URL, state.cycle.cycle_id, fh));
+  }
+  return state.groups.get(fh);
+}
+
+// Cache reads per (paramId, fh, levelIdx). Storing the in-flight promise dedupes
+// concurrent calls (e.g. an updateMap fetch racing with a preload).
+async function getField(paramId, levelIdx = null, fh = state.forecastHour) {
+  const key = `${paramId}@${levelIdx ?? ""}@${fh}`;
   if (!state.fieldCache.has(key)) {
-    state.fieldCache.set(key, await readVariable(state.group, paramId, levelIdx));
+    state.fieldCache.set(key, (async () => {
+      const group = await getGroup(fh);
+      return readVariable(group, paramId, levelIdx);
+    })());
   }
   return state.fieldCache.get(key);
+}
+
+// Background-load the active ingredients for FH-1 and FH+1 so arrow-key
+// scrubbing is smooth. Fire-and-forget; cached promises dedupe duplicates.
+function preloadAdjacent() {
+  const idx = state.fhList.indexOf(state.forecastHour);
+  if (idx < 0) return;
+  const conds = readConditions().filter((c) => c.paramId);
+  for (const i of [idx - 1, idx + 1]) {
+    if (i < 0 || i >= state.fhList.length) continue;
+    const fh = state.fhList[i];
+    getGroup(fh).catch(() => {});
+    for (const c of conds) getField(c.paramId, c.levelIdx, fh).catch(() => {});
+  }
 }
 
 async function updateMap() {
@@ -623,6 +673,7 @@ async function updateMap() {
     }
     state.last = { conds, fields, count, shape, n: conds.length };
     renderCount();
+    preloadAdjacent();
   } catch (e) {
     els["status"].textContent = `Error: ${e.message}`;
   }
