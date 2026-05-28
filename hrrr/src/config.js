@@ -15,4 +15,4 @@ const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
 // which rejects relative paths. In dev we resolve .devdata against the page URL.
 export const DATA_BASE_URL = isLocalhost
   ? new URL(".devdata", document.baseURI).href.replace(/\/+$/, "")
-  : "https://pub-9ece7dfcee1e477280d8b1bb67a0fab5.r2.dev";
+  : "https://hrrr-data.alexcooke.co";

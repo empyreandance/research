@@ -66,8 +66,7 @@ async function init() {
     state.fhList = cycle.forecast_hours;
     state.forecastHour = state.fhList[0];
 
-    els["cycle-info"].textContent =
-      `Cycle ${cycle.cycle_id} · ${state.params.length} parameters available`;
+    renderCycleInfo();
     setupForecastHourSlider();
     await openCurrentForecastHour(/*readGeo=*/ true);
 
@@ -154,9 +153,21 @@ function setupForecastHourSlider() {
   els["fh"].addEventListener("change", async () => {
     state.forecastHour = state.fhList[Number(els["fh"].value)];
     els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
+    renderCycleInfo();
     await openCurrentForecastHour(false);
     updateMap();
   });
+}
+
+// Sidebar header line: cycle id + parameter count, plus a sub-line with the
+// currently selected FH and its UTC valid time (re-rendered on every FH change).
+function renderCycleInfo() {
+  const c = state.cycle;
+  if (!c) return;
+  const fh = `f${String(state.forecastHour).padStart(2, "0")}`;
+  els["cycle-info"].innerHTML =
+    `Cycle ${c.cycle_id} · ${state.params.length} parameters` +
+    `<br>${fh} valid ${validTimeUTC()}`;
 }
 
 async function openCurrentForecastHour(readGeo) {
@@ -242,16 +253,16 @@ function setupOutlooks() {
     cb.addEventListener("change", () => toggleOutlook(cb.dataset.otlk, cb.checked, cb)));
 }
 
-// Arrow keys scrub forecast hours (anywhere on the page, as long as the user
-// isn't actively typing in an input/select/textarea — including the FH slider
-// itself, whose native arrow-key behavior already works).
+// Arrow keys scrub forecast hours from anywhere on the page. The only skip is
+// when focus is on the FH slider itself — its native arrow behavior already
+// scrubs, so handling here too would double-fire. Other inputs/selects lose
+// their native arrow behavior; that's deliberate per user preference.
 function setupArrowScrub() {
   document.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    const ae = document.activeElement;
-    if (ae && /^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName)) return;
     const fh = els["fh"];
     if (!fh) return;
+    if (document.activeElement === fh) return; // native arrow handles it
     const cur = Number(fh.value);
     const max = Number(fh.max);
     const next = e.key === "ArrowLeft" ? Math.max(0, cur - 1) : Math.min(max, cur + 1);
