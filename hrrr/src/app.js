@@ -265,12 +265,20 @@ async function toggleOutlook(kind, on, cb) {
     // opacity so the ingredient count-map still reads through.
     map.addLayer({
       id: fillId, type: "fill", source: src,
-      filter: ["!=", ["get", "fill"], ""],
+      // Exclude CIG features — they live in the separate CIG layer and render
+      // as hatching only, on top of whatever color is already underneath.
+      filter: ["all",
+        ["!=", ["get", "fill"], ""],
+        ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
+      ],
       paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.3 },
     }, before);
     map.addLayer({
       id: lineId, type: "line", source: src,
-      filter: ["!=", ["get", "stroke"], ""],
+      filter: ["all",
+        ["!=", ["get", "stroke"], ""],
+        ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
+      ],
       paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
     }, before);
     state.outlookData[kind] = gj;
@@ -322,9 +330,13 @@ function renderOutlookLegend() {
   const hatchBg = "repeating-linear-gradient(45deg,#000 0 1.5px,transparent 1.5px 5px)";
   let html = "";
   for (const kind of Object.keys(state.outlookData)) {
+    const isCig = kind.startsWith("cig-");
     const seen = new Set(), rows = [];
     for (const f of state.outlookData[kind].features || []) {
       const p = f.properties || {};
+      // In a probability kind, hide CIG features — the dedicated cig-kind layer
+      // and its sub-legend cover them; here they'd just duplicate as a gray row.
+      if (!isCig && /^CIG[123]$/.test(p.LABEL || "")) continue;
       const key = p.LABEL2 || p.LABEL || p.fill;
       if (!key || seen.has(key)) continue;
       if (!p.fill && !p._cigpat) continue; // skip empty placeholders
@@ -334,7 +346,6 @@ function renderOutlookLegend() {
       rows.push(`<div class="legend-row"><span class="sw" style="background:${bg};border-color:${border}"></span>${p.LABEL2 || p.LABEL || ""}</div>`);
     }
     if (rows.length) {
-      const isCig = kind.startsWith("cig-");
       const baseKind = isCig ? kind.slice(4) : kind;
       const source = baseKind === "ero" ? "WPC" : "SPC";
       const cigTag = isCig ? " CIG" : "";
