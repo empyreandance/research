@@ -21,6 +21,15 @@
       <label for="fh">Forecast hour: <span id="fh-readout">f00</span></label>
       <input id="fh" type="range" min="0" max="0" step="1" value="0" />
 
+      <h2>SPC outlooks <span class="muted">Day 1</span></h2>
+      <div id="outlooks">
+        <label class="inline"><input type="checkbox" class="otlk" data-otlk="cat" /> Categorical</label>
+        <label class="inline"><input type="checkbox" class="otlk" data-otlk="torn" /> Tornado prob</label>
+        <label class="inline"><input type="checkbox" class="otlk" data-otlk="wind" /> Wind prob</label>
+        <label class="inline"><input type="checkbox" class="otlk" data-otlk="hail" /> Hail prob</label>
+      </div>
+      <div id="outlook-legend" hidden></div>
+
       <h2>Presets</h2>
       <select id="preset-select"><option value="">— choose a preset —</option></select>
       <div class="preset-actions">

@@ -30,7 +30,7 @@ const els = Object.fromEntries(
    "inspect-loc", "inspect-table", "inspect-close",
    "preset-select", "preset-load", "preset-save", "preset-share", "preset-delete",
    "preset-export", "preset-import", "preset-file", "authoring", "export-builtin",
-   "hover", "hover-toggle", "export-image",
+   "hover", "hover-toggle", "export-image", "outlook-legend",
   ].map((id) => [id, document.getElementById(id)]),
 );
 
@@ -38,6 +38,7 @@ const state = {
   cycle: null, params: [], byId: {}, fhList: [0], forecastHour: 0,
   group: null, mapper: null, bbox: null, nx: 0, lat: null, lon: null,
   fieldCache: new Map(), last: null, builtins: [], conusMask: null, levels: [],
+  outlookData: {},
 };
 
 const map = new maplibregl.Map({
@@ -93,6 +94,7 @@ async function init() {
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
+    setupOutlooks();
     updateMap();
   } catch (e) {
     els["cycle-info"].textContent = `Could not load data: ${e.message}`;
@@ -169,6 +171,70 @@ async function openCurrentForecastHour(readGeo) {
 }
 
 // --- presets ---------------------------------------------------------------
+
+// ─── SPC Day 1 convective outlook overlays ────────────────────────────────
+// Fetched straight from SPC (its server is CORS-open), and the GeoJSON carries
+// its own official fill/stroke colors + labels — so we style the layers and
+// build the legend directly from the data. "<2%" base areas have empty fill and
+// are filtered out.
+const SPC_BASE = "https://www.spc.noaa.gov/products/outlook/day1otlk_";
+const OUTLOOK_NAMES = { cat: "Categorical", torn: "Tornado", wind: "Wind", hail: "Hail" };
+
+function setupOutlooks() {
+  document.querySelectorAll(".otlk").forEach((cb) =>
+    cb.addEventListener("change", () => toggleOutlook(cb.dataset.otlk, cb.checked, cb)));
+}
+
+async function toggleOutlook(kind, on, cb) {
+  const src = `otlk-${kind}`, fillId = `${src}-fill`, lineId = `${src}-line`;
+  if (!on) {
+    [fillId, lineId].forEach((l) => { if (map.getLayer(l)) map.removeLayer(l); });
+    if (map.getSource(src)) map.removeSource(src);
+    delete state.outlookData[kind];
+    renderOutlookLegend();
+    return;
+  }
+  try {
+    const resp = await fetch(`${SPC_BASE}${kind}.lyr.geojson`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const gj = await resp.json();
+    if (map.getSource(src)) map.removeSource(src);
+    map.addSource(src, { type: "geojson", data: gj });
+    map.addLayer({
+      id: fillId, type: "fill", source: src,
+      filter: ["!=", ["get", "fill"], ""],
+      paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.35 },
+    });
+    map.addLayer({
+      id: lineId, type: "line", source: src,
+      filter: ["!=", ["get", "stroke"], ""],
+      paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
+    });
+    state.outlookData[kind] = gj;
+    renderOutlookLegend();
+  } catch (e) {
+    if (cb) cb.checked = false;
+    els["status"].textContent = `Couldn't load SPC ${OUTLOOK_NAMES[kind] || kind} outlook (${e.message}).`;
+  }
+}
+
+function renderOutlookLegend() {
+  const el = els["outlook-legend"];
+  if (!el) return;
+  let html = "";
+  for (const kind of Object.keys(state.outlookData)) {
+    const seen = new Set(), rows = [];
+    for (const f of state.outlookData[kind].features || []) {
+      const p = f.properties || {};
+      if (!p.fill || seen.has(p.fill)) continue;
+      seen.add(p.fill);
+      rows.push(`<div class="legend-row"><span class="sw" style="background:${p.fill};border-color:${p.stroke || "#888"}"></span>${p.LABEL2 || p.LABEL || ""}</div>`);
+    }
+    if (rows.length) html += `<div class="otlk-sub">SPC ${OUTLOOK_NAMES[kind] || kind} · Day 1</div>${rows.join("")}`;
+  }
+  el.innerHTML = html;
+  el.hidden = !html;
+}
 
 function setupPresets() {
   refreshPresetSelect();
