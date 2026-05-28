@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "landspout",
+  "name": "Landspout / non-mesocyclone tornado",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "tornado",
+  "description": "Vertical-stretching tornadoes along slow boundaries — not driven by a mid-level mesocyclone. WFO Louisville tip sheet (Non-Mesocyclone Tornadoes): 0-3 km lapse rate > 8 °C/km, near-zero CIN, weak deep-layer shear, modest CAPE. The CIN and pre-existing-boundary checks aren't directly representable here, so this preset captures the kinematic + thermal signature only; pair with surface convergence in your own eyeball check. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": ">=", "value": 500, "units": "J/kg", "level": null },
+    { "parameter_id": "lapse_0_3km", "operator": ">=", "value": 8.0, "units": "degC/km", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": "<=", "value": 25, "units": "kt", "level": null },
+    { "parameter_id": "srh_0_1km", "operator": "<=", "value": 100, "units": "m2/s2", "level": null }
+  ]
+}

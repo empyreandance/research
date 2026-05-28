@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "long_lived_supercell",
+  "name": "Long-lived supercell",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "supercell",
+  "description": "Tighter thresholds than the generic supercell preset — flags environments where individual cells can persist for hours. WFO Louisville tip sheet: 0-8 km shear > 52 kt (BRNSHR > 80-100 m²/s²) and large CAPE. Modern effective-layer composites (EBWD, ESRH) are used here as the operational stand-ins for BRNSHR. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": ">=", "value": 2000, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 55, "units": "kt", "level": null },
+    { "parameter_id": "ebwd", "operator": ">=", "value": 25, "units": "m/s", "level": null },
+    { "parameter_id": "esrh", "operator": ">=", "value": 250, "units": "m2/s2", "level": null }
+  ]
+}

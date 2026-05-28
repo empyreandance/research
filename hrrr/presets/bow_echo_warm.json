@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "bow_echo_warm",
+  "name": "Bow echo (warm season)",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "wind",
+  "description": "High instability + concentrated low-level shear + a moist (not too dry, not too wet) mid-troposphere — Johns/Hirt-style warm-season bow echo pattern, often along a quasi-stationary low-level thermal boundary. WFO Louisville tip sheet (Bow Echoes - warm season): 0-2.5 km shear 35-50 kt, 700-500 mb mean RH 50-80 %, CAPE often near 4500 J/kg. 0-3 km shear is used here as the 0-2.5 km proxy. Distinct from the existing derecho preset, which emphasizes stronger flow aloft. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": ">=", "value": 2500, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_3km_magnitude", "operator": ">=", "value": 35, "units": "kt", "level": null },
+    { "parameter_id": "mean_rh_700_500", "operator": ">=", "value": 50, "units": "%", "level": null },
+    { "parameter_id": "mean_rh_700_500", "operator": "<=", "value": 80, "units": "%", "level": null }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "id": "mini_supercell",
+  "name": "Mini-supercell (cold-core)",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "supercell",
+  "description": "Shallow, low-CAPE supercells in the cold sector east/northeast of a cold-core 500 mb low. WFO Louisville tip sheet (Mini-Supercells): total CAPE ≤ 1000 J/kg, EL below 300 mb (~9 km), surface dewpoints ≥ mid-50s, 0-3 km CAPE concentrated near surface so even modest helicity can spin up updrafts. EL height is used here as a proxy for the EL pressure criterion. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mucape", "operator": "<=", "value": 1000, "units": "J/kg", "level": null },
+    { "parameter_id": "el_height", "operator": "<=", "value": 9000, "units": "m", "level": null },
+    { "parameter_id": "d2m", "operator": ">=", "value": 13, "units": "degC", "level": null },
+    { "parameter_id": "srh_0_1km", "operator": ">=", "value": 100, "units": "m2/s2", "level": null }
+  ]
+}

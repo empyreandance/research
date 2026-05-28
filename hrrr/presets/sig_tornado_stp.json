@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "id": "sig_tornado_stp",
+  "name": "Significant tornado (STP ≥ 1)",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "tornado",
+  "description": "Significant Tornado Parameter (effective layer) ≥ 1 — SPC's operational threshold above which significant (EF2+) tornadoes become climatologically favored. STP is a multiplicative composite of MLCAPE, ESRH, EBWD, MLLCL, and MLCIN, so it bakes in most of the WFO Louisville hodograph/thermo checklist in one number. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "stp_effective", "operator": ">=", "value": 1, "units": "dimensionless", "level": null }
+  ]
+}

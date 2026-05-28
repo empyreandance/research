@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "id": "long_track_tornado",
+  "name": "Long-track tornado environment",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "tornado",
+  "description": "Very strong deep-layer flow + concentrated low-level helicity + buoyancy + low LCL — distinguishes long-track from generic tornadic environments. WFO Louisville tip sheet (Long Track Tornadoes): 0-1 SRH ~261 m²/s², 0-8 km shear ≥ 60-70 kt, 500 mb jet ~75 kt, MLCAPE supportive, low LCL. 0-6 km shear is used here as a 0-8 proxy. Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "mlcape_180mb", "operator": ">=", "value": 1500, "units": "J/kg", "level": null },
+    { "parameter_id": "shear_0_6km_magnitude", "operator": ">=", "value": 60, "units": "kt", "level": null },
+    { "parameter_id": "srh_0_1km", "operator": ">=", "value": 250, "units": "m2/s2", "level": null },
+    { "parameter_id": "lcl_height", "operator": "<=", "value": 1000, "units": "m", "level": null },
+    { "parameter_id": "wind_speed_pressure", "operator": ">=", "value": 60, "units": "kt", "level": 500 }
+  ]
+}

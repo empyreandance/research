@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "hail_to_surface",
+  "name": "Hail surviving to surface",
+  "origin": "builtin",
+  "category": "severe_convective",
+  "subcategory": "hail",
+  "description": "Direct HRRR column hail diameter, paired with melting-environment checks so the field flags cells where hail is both forming aloft AND likely to reach the ground at severe (≥ 1 inch) size. WFO Louisville tip sheet (Melting issues): freezing/wet-bulb-zero level < 10500 ft (~3200 m), limited warm-cloud depth (LCL → 0 °C). Companion to `large_hail` (which is environmental). Starting point — tune across cycles.",
+  "thresholds": [
+    { "parameter_id": "max_hail_col", "operator": ">=", "value": 0.025, "units": "m", "level": null },
+    { "parameter_id": "freezing_level", "operator": "<=", "value": 3200, "units": "m", "level": null },
+    { "parameter_id": "warm_cloud_depth", "operator": "<=", "value": 3500, "units": "m", "level": null }
+  ]
+}
