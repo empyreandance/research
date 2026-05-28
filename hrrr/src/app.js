@@ -78,10 +78,8 @@ async function init() {
     const shared = decodeFromHash();
     if (shared?.thresholds?.length) {
       applyConditions(conditionsFromBundle(shared));
-    } else {
-      addConditionRow();
-      addConditionRow();
     }
+    // Otherwise start with no ingredients — updateMap() shows "Add an ingredient".
     setupPresets();
     els["add-cond"].addEventListener("click", () => addConditionRow());
     els["apply"].addEventListener("click", updateMap);
@@ -178,7 +176,45 @@ async function openCurrentForecastHour(readGeo) {
 // build the legend directly from the data. "<2%" base areas have empty fill and
 // are filtered out.
 const SPC_BASE = "https://www.spc.noaa.gov/products/outlook/day1otlk_";
-const OUTLOOK_NAMES = { cat: "Categorical", torn: "Tornado", wind: "Wind", hail: "Hail" };
+// WPC ERO has no CORS + carries no colors, so the worker mirrors it to R2 and we
+// apply WPC's palette client-side (keyed by the OUTLOOK level word).
+const ERO_URL = `${DATA_BASE_URL}/outlooks/wpc_ero_day1.geojson`;
+const OUTLOOK_NAMES = { cat: "Categorical", torn: "Tornado", wind: "Wind", hail: "Hail", ero: "Excessive rainfall" };
+const ERO_COLORS = {
+  Marginal: { fill: "#66A366", stroke: "#2E7D32" },
+  Slight:   { fill: "#E8E84A", stroke: "#B0B000" },
+  Moderate: { fill: "#E0782E", stroke: "#A8480F" },
+  High:     { fill: "#CC44CC", stroke: "#800080" },
+};
+const outlookUrl = (kind) => (kind === "ero" ? ERO_URL : `${SPC_BASE}${kind}.lyr.geojson`);
+function colorizeERO(gj) {
+  for (const f of gj.features || []) {
+    const p = f.properties || (f.properties = {});
+    const c = ERO_COLORS[String(p.OUTLOOK || "").split(/[ (]/)[0]];
+    if (c) { p.fill = c.fill; p.stroke = c.stroke; p.LABEL2 = p.OUTLOOK; }
+    else { p.fill = ""; p.stroke = ""; }
+  }
+}
+
+// Build (once) a small diagonal-hatch tile in the given color, for fill-pattern.
+function ensureHatch(color) {
+  const name = `hatch-${color}`;
+  if (map.hasImage(name)) return name;
+  const s = 8;
+  const cv = document.createElement("canvas");
+  cv.width = cv.height = s;
+  const ctx = cv.getContext("2d");
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(0, s); ctx.lineTo(s, 0);
+  ctx.moveTo(-s, s); ctx.lineTo(s, -s);
+  ctx.moveTo(0, 2 * s); ctx.lineTo(2 * s, 0);
+  ctx.stroke();
+  const img = ctx.getImageData(0, 0, s, s);
+  map.addImage(name, { width: s, height: s, data: new Uint8Array(img.data.buffer) });
+  return name;
+}
 
 function setupOutlooks() {
   document.querySelectorAll(".otlk").forEach((cb) =>
@@ -195,15 +231,22 @@ async function toggleOutlook(kind, on, cb) {
     return;
   }
   try {
-    const resp = await fetch(`${SPC_BASE}${kind}.lyr.geojson`);
+    const resp = await fetch(outlookUrl(kind));
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const gj = await resp.json();
+    if (kind === "ero") colorizeERO(gj);
     if (map.getSource(src)) map.removeSource(src);
+    // Per-color diagonal hatch (mirrors SPC's hatching) so the ingredient map
+    // underneath stays readable; "<2%" base areas have empty fill and are skipped.
+    for (const f of gj.features || []) {
+      const fc = f.properties && f.properties.fill;
+      if (fc) { ensureHatch(fc); f.properties._pat = `hatch-${fc}`; }
+    }
     map.addSource(src, { type: "geojson", data: gj });
     map.addLayer({
       id: fillId, type: "fill", source: src,
       filter: ["!=", ["get", "fill"], ""],
-      paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.35 },
+      paint: { "fill-pattern": ["get", "_pat"] },
     });
     map.addLayer({
       id: lineId, type: "line", source: src,

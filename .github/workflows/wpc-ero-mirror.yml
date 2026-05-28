@@ -1,0 +1,47 @@
+name: Mirror WPC ERO to R2
+
+# WPC's Excessive Rainfall Outlook GeoJSON has no CORS headers, so the browser
+# can't fetch it directly. This mirrors the Day 1 ERO into the R2 bucket (which
+# has CORS for research.alexcooke.co) a few times a day, so the HRRR tool's
+# "Excessive rainfall" overlay can read it. Free GitHub Actions compute — no
+# server involved. (Trigger manually anytime via "Run workflow".)
+
+on:
+  schedule:
+    - cron: "20 1,9,16,21 * * *" # shortly after WPC's typical ERO issuance times
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch WPC ERO Day 1 and upload to R2
+        env:
+          R2_KEY: ${{ secrets.HRRR_R2_ACCESS_KEY_ID }}
+          R2_SECRET: ${{ secrets.HRRR_R2_SECRET_ACCESS_KEY }}
+        run: |
+          pip install --quiet boto3 requests
+          python3 - <<'PY'
+          import os, json, requests, boto3
+          SRC = "https://www.wpc.ncep.noaa.gov/exper/eromap/geojson/Day1_Latest.geojson"
+          r = requests.get(SRC, timeout=60)
+          r.raise_for_status()
+          gj = json.loads(r.content)  # validate it parses
+          assert gj.get("type") == "FeatureCollection", "not a FeatureCollection"
+          boto3.client(
+              "s3",
+              endpoint_url="https://817fc9f791704e3418596f7427194bc2.r2.cloudflarestorage.com",
+              aws_access_key_id=os.environ["R2_KEY"],
+              aws_secret_access_key=os.environ["R2_SECRET"],
+          ).put_object(
+              Bucket="hrrr-tool",
+              Key="outlooks/wpc_ero_day1.geojson",
+              Body=r.content,
+              ContentType="application/geo+json",
+              CacheControl="no-cache",
+          )
+          print(f"uploaded outlooks/wpc_ero_day1.geojson ({len(r.content)} bytes, {len(gj['features'])} features)")
+          PY
