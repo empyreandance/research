@@ -5,7 +5,7 @@
   "origin": "builtin",
   "category": "severe_convective",
   "subcategory": "tornado",
-  "description": "Vertical-stretching tornadoes along slow boundaries — not driven by a mid-level mesocyclone. WFO Louisville tip sheet (Non-Mesocyclone Tornadoes): 0-3 km lapse rate > 8 °C/km, near-zero CIN, weak deep-layer shear, modest CAPE. The CIN and pre-existing-boundary checks aren't directly representable here, so this preset captures the kinematic + thermal signature only; pair with surface convergence in your own eyeball check. Starting point — tune across cycles.",
+  "description": "Vertical-stretching tornadoes along slow boundaries — not driven by a mid-level mesocyclone. WFO Louisville tip sheet (Non-Mesocyclone Tornadoes): 0-3 km lapse rate > 8 °C/km, near-zero CIN, weak deep-layer shear, modest CAPE. The CIN and pre-existing-boundary checks aren't directly representable here, so this preset captures the kinematic + thermal signature only; pair with surface convergence in your own eyeball check. Note: lapse_0_3km uses the SPC mesoanalysis recipe (T_2m minus T at 3 km AGL, divided by 3 km), which over high terrain (>1500 m) routinely exceeds the dry-adiabatic lapse rate due to surface radiative heating + free-atmosphere temperatures at the interpolated 3 km AGL height. Discount results over the intermountain West / Front Range. Starting point — tune across cycles.",
   "thresholds": [
     { "parameter_id": "mucape", "operator": ">=", "value": 500, "units": "J/kg", "level": null },
     { "parameter_id": "lapse_0_3km", "operator": ">=", "value": 8.0, "units": "degC/km", "level": null },
