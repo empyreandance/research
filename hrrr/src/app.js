@@ -1472,8 +1472,11 @@ function consensusStripSVG(fhs, consensus, currentFH) {
       const xStart = xScale(runStart);
       const xEnd   = xScale(runEnd + 1);
       const xMid   = (xStart + xEnd) / 2;
-      const startD = new Date(initMs + fhs[runStart]   * 3600 * 1000);
-      const endD   = new Date(initMs + fhs[runEnd + 1] * 3600 * 1000);
+      // Label as the hour ENDING at each FH (meteorological "valid-through"
+      // convention), so box i — visually [xScale(i), xScale(i+1)] — reads as
+      // "(fhs[i]-1)Z to fhs[i]Z" rather than "fhs[i]Z to fhs[i+1]Z".
+      const startD = new Date(initMs + (fhs[runStart]    - 1) * 3600 * 1000);
+      const endD   = new Date(initMs + (fhs[runEnd + 1]  - 1) * 3600 * 1000);
       // Plain "22Z" when the run stays inside one UTC day; otherwise prefix
       // each end with a weekday abbreviation so "22Z–05Z" isn't ambiguous.
       const crossesDay =
