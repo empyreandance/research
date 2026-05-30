@@ -1,9 +1,9 @@
 {
   "office": "PAH",
-  "product_id": "202605300738-KPAH-FXUS63-AFDPAH",
-  "afd_time": "2026-05-30T07:38:00Z",
+  "product_id": "202605301124-KPAH-FXUS63-AFDPAH",
+  "afd_time": "2026-05-30T11:24:00Z",
   "section_type": "discussion",
-  "updated": "2026-05-30T07:59:52.102882+00:00",
+  "updated": "2026-05-30T12:17:53.350483+00:00",
   "query_preview": "..\nIssued at 237 AM CDT Sat May 30 2026\n\nIncreased moisture and humid conditions will linger through Monday \nwith a frontal boundary and low pressure system nearby. Chances for \nshowers and storms will be around 30-40% today before dropping to \naround 15 to 20% Sunday. The frontal boundary that is focusing the \nshowers and few thunderstorms today will weaken and lose its \ndefinition tonight into Sunday allowing the chances of rain to \ndiminish. By Monday, a warm front will lift northeast toward the \narea before stalling out across the Quad State. This will lead to \nthe uptick in precipitation chances through the day Monday. Heavy \ndownpours and lightning will be the main concerns with any of the \nstorms. PWAT values are still pushing into the 90th percentile (1.5-\n2\"), which again supports heavy downpour potential. Weak flow/shear \nwill lead to slow or nearly stationary movement, allowing for \nlocalized heavy rainfall and the potential for localized flooding \nissues.\n\nThe chances for showers diminish Tuesday through Thursday with less \nhumid conditions in place. This will be a result of a cold front \ndrifting south through the area and dry high pressure building in \nfrom the north. Temperatures will generally be in the 70s to low 80s \nthrough the whole forecast period, but the more noticeable drop in \nhumidity will arrive around Tuesday.",
   "analogs": [
     {
@@ -51,9 +51,53 @@
       }
     },
     {
-      "datetime_utc": "2023-06-17T18:04Z",
-      "source_file": "PAH_2023_17_1804.txt",
-      "similarity": 0.9738739132881165,
+      "datetime_utc": "2023-06-18T04:31Z",
+      "source_file": "PAH_2023_18_0431.txt",
+      "similarity": 0.9738737344741821,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 4,
+            "tornado": 1,
+            "severe_hail": 3,
+            "flood": 3
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-06-17T23:10Z",
+      "source_file": "PAH_2023_17_2310.txt",
+      "similarity": 0.9738737344741821,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -97,53 +141,9 @@
       }
     },
     {
-      "datetime_utc": "2023-06-18T04:31Z",
-      "source_file": "PAH_2023_18_0431.txt",
-      "similarity": 0.9738739132881165,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 4,
-            "tornado": 1,
-            "severe_hail": 3,
-            "flood": 3
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2023-08-26T03:42Z",
       "source_file": "PAH_2023_26_0342.txt",
-      "similarity": 0.9738494157791138,
+      "similarity": 0.973849356174469,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -185,7 +185,7 @@
     {
       "datetime_utc": "2023-08-25T23:41Z",
       "source_file": "PAH_2023_25_2341.txt",
-      "similarity": 0.9738494157791138,
+      "similarity": 0.973849356174469,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -267,7 +267,7 @@
     {
       "datetime_utc": "2022-08-30T18:04Z",
       "source_file": "PAH_2022_30_1804.txt",
-      "similarity": 0.9718604683876038,
+      "similarity": 0.9718605279922485,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -462,7 +462,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.65,
-    "mean_similarity": 0.9662655478715897,
+    "mean_similarity": 0.9662655282020569,
     "base_rate": 0.6371019688016355,
     "signal_value": 0.012898031198364523,
     "percentile": 41,
@@ -471,8 +471,8 @@
     "n_total": 10,
     "n_severe_signal": 65,
     "n_total_signal": 100,
-    "product_id": "202605300738-KPAH-FXUS63-AFDPAH",
-    "afd_time": "2026-05-30T07:38:00Z",
-    "updated": "2026-05-30T07:59:52.102882+00:00"
+    "product_id": "202605301124-KPAH-FXUS63-AFDPAH",
+    "afd_time": "2026-05-30T11:24:00Z",
+    "updated": "2026-05-30T12:17:53.350483+00:00"
   }
 }
