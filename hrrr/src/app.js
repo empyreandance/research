@@ -31,11 +31,13 @@ const els = Object.fromEntries(
    "preset-select", "preset-load", "preset-save", "preset-share", "preset-delete",
    "preset-export", "preset-import", "preset-file", "authoring", "export-builtin",
    "hover", "hover-toggle", "export-image", "outlook-legend", "smooth", "smooth-readout",
+   "extended-toggle", "extended-toggle-row",
   ].map((id) => [id, document.getElementById(id)]),
 );
 
 const state = {
-  cycle: null, params: [], byId: {}, fhList: [0], forecastHour: 0,
+  cycle: null, global: null, params: [], byId: {}, fhList: [0], forecastHour: 0,
+  useExtended: localStorage.getItem("hrrr.useExtended") === "true",
   group: null, mapper: null, bbox: null, nx: 0, lat: null, lon: null,
   fieldCache: new Map(), groups: new Map(), last: null, builtins: [], conusMask: null, levels: [],
   smoothRadius: 0,
@@ -67,7 +69,8 @@ setupBorders();
 
 async function init() {
   try {
-    const { cycle } = await loadManifests(DATA_BASE_URL);
+    const { global, cycle } = await loadManifests(DATA_BASE_URL, state.useExtended);
+    state.global = global;
     state.cycle = cycle;
     // Include 3D pressure-level params; a per-condition level picker handles them.
     state.params = cycle.parameters.filter((p) => p.ui_visible);
@@ -76,6 +79,7 @@ async function init() {
     state.forecastHour = state.fhList[0];
 
     renderCycleInfo();
+    syncExtendedToggle();
     setupForecastHourSlider();
     await openCurrentForecastHour(/*readGeo=*/ true);
 
@@ -108,6 +112,11 @@ async function init() {
       hideInspectMarker();
     });
     document.getElementById("ts-open").addEventListener("click", () => openTimeSeries(state.lastClick));
+    els["extended-toggle"].addEventListener("change", async (e) => {
+      state.useExtended = e.target.checked;
+      localStorage.setItem("hrrr.useExtended", String(state.useExtended));
+      await switchCycle();
+    });
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
@@ -176,6 +185,54 @@ function setupForecastHourSlider() {
     if (state.lastHover) renderHover(state.lastHover);
     refreshOutlooksForFH();
   });
+}
+
+// Show/hide the "Extended forecast (48 hr)" checkbox based on whether the
+// global manifest actually carries an extended pointer. Until the updated
+// ingest worker has run at least one extended cycle, the checkbox stays
+// hidden (no point exposing a toggle that can't switch anywhere).
+function syncExtendedToggle() {
+  const row = els["extended-toggle-row"];
+  const cb = els["extended-toggle"];
+  if (!row || !cb) return;
+  const available = !!state.global?.current_extended_cycle_manifest_key;
+  row.hidden = !available;
+  cb.checked = state.useExtended && available;
+}
+
+// Swap the active cycle to whichever pointer state.useExtended now selects.
+// Tears down everything tied to the OLD cycle (field/group caches, last
+// computed map, inspect/hover positions) so nothing leaks across the swap,
+// then re-inits cycle metadata + FH slider + map. Active outlooks re-pick
+// the right day for the new FH valid time via refreshOutlooksForFH.
+async function switchCycle() {
+  els["status"].textContent = "Switching cycle…";
+  state.fieldCache.clear();
+  state.groups.clear();
+  state.last = null;
+  state.lastClick = null;
+  state.lastHover = null;
+  els["inspect"].hidden = true;
+  els["hover"].hidden = true;
+  hideInspectMarker();
+
+  const { global, cycle } = await loadManifests(DATA_BASE_URL, state.useExtended);
+  state.global = global;
+  state.cycle = cycle;
+  state.params = cycle.parameters.filter((p) => p.ui_visible);
+  state.byId = Object.fromEntries(state.params.map((p) => [p.id, p]));
+  state.fhList = cycle.forecast_hours;
+  state.forecastHour = state.fhList[0];
+
+  els["fh"].max = String(state.fhList.length - 1);
+  els["fh"].value = "0";
+  els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
+  renderCycleInfo();
+  syncExtendedToggle();
+
+  await openCurrentForecastHour(false);
+  await updateMap();
+  refreshOutlooksForFH();
 }
 
 // Sidebar header line: cycle id + parameter count, plus a sub-line with the

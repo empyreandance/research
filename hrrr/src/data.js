@@ -7,12 +7,22 @@
 import * as zarr from "https://esm.sh/zarrita@0.7.3";
 import { makeGridMapper } from "./proj.js";
 
-/** Fetch the global manifest, then the cycle manifest it points at. */
-export async function loadManifests(baseUrl) {
+/** Fetch the global manifest, then the cycle manifest it points at.
+ *
+ * The global manifest carries two pointers: `current_cycle` (every hour) and
+ * `current_extended_cycle` (only updated on 00/06/12/18 Z runs, preserved
+ * unchanged through the standard cycles in between). With `useExtended=true`,
+ * follow the extended pointer instead — used by the sidebar's "Extended
+ * forecast (48 hr)" toggle. Falls back to the standard pointer if the
+ * extended one isn't populated yet (ingest worker still on old code, or no
+ * extended cycle has run since deploy).
+ */
+export async function loadManifests(baseUrl, useExtended = false) {
   const global = await (await fetch(`${baseUrl}/manifest.json`)).json();
-  const cycle = await (
-    await fetch(`${baseUrl}/${global.cycle_manifest_key}`)
-  ).json();
+  const key = useExtended && global.current_extended_cycle_manifest_key
+    ? global.current_extended_cycle_manifest_key
+    : global.cycle_manifest_key;
+  const cycle = await (await fetch(`${baseUrl}/${key}`)).json();
   return { global, cycle };
 }
 
