@@ -1334,7 +1334,7 @@ async function exportTimeSeries() {
 
 function renderTimeSeriesBody(modal, { conds, fhs, series, consensus }) {
   const ctxLine = state.cycle
-    ? `Cycle ${state.cycle.cycle_id} · ${fhs.length} forecast hours · current f${String(state.forecastHour).padStart(2, "0")}`
+    ? `Cycle ${state.cycle.cycle_id} · ${fhs.length} forecast hours`
     : "";
   let html = `<p class="muted ts-context">${ctxLine}</p>`;
   html += `<div class="ts-section">
@@ -1481,11 +1481,7 @@ function consensusStripSVG(fhs, consensus, currentFH) {
   consensus.forEach((pass, i) => {
     boxes += `<rect x="${pad.left + i * boxW + 0.5}" y="${stripY}" width="${boxW - 1}" height="${stripH}" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
   });
-  const curIdx = fhs.indexOf(currentFH);
-  const curLine = curIdx >= 0
-    ? `<line x1="${pad.left + (curIdx + 0.5) * boxW}" y1="${stripY - 2}" x2="${pad.left + (curIdx + 0.5) * boxW}" y2="${stripY + stripH + 4}" stroke="#1565c0" stroke-width="2"/>`
-    : "";
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}${curLine}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}</svg>`;
 }
 
 // CARTO Positron: a clean, muted, free basemap (no account/token) — the light
