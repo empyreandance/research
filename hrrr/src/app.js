@@ -1428,14 +1428,21 @@ function chartSVG(cond, fhs, values, currentFH) {
 
 // Top "all ingredients met" strip — one filled box per FH, green if all
 // thresholds pass at that cell at that hour, gray otherwise. Each run of
-// consecutive green hours gets bracket tick marks at its bounds and a
-// "fNN–fMM" label above so the danger windows pop visually.
+// consecutive green hours gets bracket tick marks at its bounds and a UTC
+// time label above so the danger windows pop visually.
 function consensusStripSVG(fhs, consensus, currentFH) {
   const W = 760, H = 48;
   const pad = { left: 52, right: 14 };
   const w = W - pad.left - pad.right;
   const boxW = w / fhs.length;
   const stripY = 24, stripH = 18;
+
+  // Cycle init time (UTC ms); each FH valid time is init + fh*3600s.
+  const id = state.cycle?.cycle_id || "";
+  const initMs = id.length >= 10
+    ? Date.UTC(+id.slice(0, 4), +id.slice(4, 6) - 1, +id.slice(6, 8), +id.slice(8, 10))
+    : 0;
+  const WKDS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // Walk consensus, find each run of trues, draw label + tick marks.
   let labels = "";
@@ -1448,10 +1455,19 @@ function consensusStripSVG(fhs, consensus, currentFH) {
       const xStart = pad.left + runStart * boxW;
       const xEnd   = pad.left + i * boxW;
       const xMid   = (xStart + xEnd) / 2;
-      const startFh = fhs[runStart], endFh = fhs[runEnd];
-      const text = startFh === endFh
-        ? `f${String(startFh).padStart(2, "0")}`
-        : `f${String(startFh).padStart(2, "0")}–f${String(endFh).padStart(2, "0")}`;
+      const startD = new Date(initMs + fhs[runStart] * 3600 * 1000);
+      const endD   = new Date(initMs + fhs[runEnd]   * 3600 * 1000);
+      // Plain "22Z" when the run stays inside one UTC day; otherwise prefix
+      // each end with a weekday abbreviation so "22Z–05Z" isn't ambiguous.
+      const crossesDay =
+        startD.getUTCFullYear() !== endD.getUTCFullYear() ||
+        startD.getUTCMonth()    !== endD.getUTCMonth()    ||
+        startD.getUTCDate()     !== endD.getUTCDate();
+      const fmt = (d) => {
+        const hh = String(d.getUTCHours()).padStart(2, "0") + "Z";
+        return crossesDay ? `${WKDS[d.getUTCDay()]} ${hh}` : hh;
+      };
+      const text = fhs[runStart] === fhs[runEnd] ? fmt(startD) : `${fmt(startD)}–${fmt(endD)}`;
       labels +=
         `<line x1="${xStart}" y1="${stripY - 5}" x2="${xStart}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
         `<line x1="${xEnd}" y1="${stripY - 5}" x2="${xEnd}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
