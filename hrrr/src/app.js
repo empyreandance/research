@@ -40,6 +40,7 @@ const state = {
   fieldCache: new Map(), groups: new Map(), last: null, builtins: [], conusMask: null, levels: [],
   smoothRadius: 0,
   lastClick: null, // {lng, lat} of the most recent click-to-inspect; null when closed
+  lastHover: null, // {lng, lat} of the cursor's last position over the map; null when off-map
   outlookData: {},
 };
 
@@ -163,8 +164,10 @@ function setupForecastHourSlider() {
     renderCycleInfo();
     await openCurrentForecastHour(false);
     await updateMap();
-    // If the inspect panel is open, redraw it against the new FH's fields.
+    // If the inspect panel and/or hover readout are showing a position, redraw
+    // them against the new FH's fields so the values track the slider.
     if (state.lastClick) renderInspect(state.lastClick);
+    if (state.lastHover) renderHover(state.lastHover);
   });
 }
 
@@ -939,16 +942,19 @@ function showOverlay(dataUrl, coordinates) {
 
 function setupHover() {
   let queued = false;
-  let lastEvt = null;
   map.on("mousemove", (e) => {
-    lastEvt = e;
+    state.lastHover = { lng: e.lngLat.lng, lat: e.lngLat.lat };
     if (queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; onMapHover(lastEvt); });
+    requestAnimationFrame(() => { queued = false; renderHover(state.lastHover); });
   });
-  map.on("mouseout", () => (els["hover"].hidden = true));
+  map.on("mouseout", () => {
+    state.lastHover = null;
+    els["hover"].hidden = true;
+  });
   els["hover-toggle"].addEventListener("change", () => {
     if (!els["hover-toggle"].checked) els["hover"].hidden = true;
+    else if (state.lastHover) renderHover(state.lastHover);
   });
 }
 
@@ -963,9 +969,11 @@ function cellIndexAt(lng, lat) {
   return k;
 }
 
-function onMapHover(e) {
+// Render the hover readout for a stored lng/lat. Called on mousemove (via rAF)
+// and on FH change so the readout tracks the slider while the cursor is parked.
+function renderHover(ll) {
   if (!state.last || !els["hover-toggle"].checked) { els["hover"].hidden = true; return; }
-  const k = cellIndexAt(e.lngLat.lng, e.lngLat.lat);
+  const k = cellIndexAt(ll.lng, ll.lat);
   if (k < 0) { els["hover"].hidden = true; return; }
   const { conds, fields } = state.last;
   let met = 0;
@@ -979,7 +987,7 @@ function onMapHover(e) {
       `<b>${vstr}</b> ${c.meta?.units || ""}</div>`;
   });
   els["hover"].innerHTML =
-    `<div class="hover-head">${e.lngLat.lat.toFixed(2)}, ${e.lngLat.lng.toFixed(2)} · ${met}/${conds.length} met</div>${rows}`;
+    `<div class="hover-head">${ll.lat.toFixed(2)}, ${ll.lng.toFixed(2)} · ${met}/${conds.length} met</div>${rows}`;
   els["hover"].hidden = false;
 }
 
