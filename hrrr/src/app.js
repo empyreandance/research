@@ -41,7 +41,11 @@ const state = {
   smoothRadius: 0,
   lastClick: null, // {lng, lat} of the most recent click-to-inspect; null when closed
   lastHover: null, // {lng, lat} of the cursor's last position over the map; null when off-map
-  outlookData: {},
+  outlookData: {},        // kind ("cat"/"torn"/...) and "cig-<kind>" -> currently-displayed GeoJSON
+  outlookEnabled: {},     // kind -> true if the checkbox is on
+  outlookActiveDay: {},   // kind -> SPC outlook day (1/2/3) currently shown
+  outlookInWindow: {},    // kind -> true if the active day's VALID/EXPIRE covers the current FH's valid time
+  outlookCache: new Map(),// URL -> in-flight or resolved Promise<GeoJSON>; dedupes fetches across day swaps
 };
 
 const map = new maplibregl.Map({
@@ -169,6 +173,7 @@ function setupForecastHourSlider() {
     // them against the new FH's fields so the values track the slider.
     if (state.lastClick) renderInspect(state.lastClick);
     if (state.lastHover) renderHover(state.lastHover);
+    refreshOutlooksForFH();
   });
 }
 
@@ -200,23 +205,32 @@ async function openCurrentForecastHour(readGeo) {
 
 // --- presets ---------------------------------------------------------------
 
-// ─── SPC Day 1 convective outlook overlays ────────────────────────────────
+// ─── SPC convective + WPC ERO outlook overlays ────────────────────────────
 // Fetched straight from SPC (its server is CORS-open), and the GeoJSON carries
 // its own official fill/stroke colors + labels — so we style the layers and
 // build the legend directly from the data. "<2%" base areas have empty fill and
 // are filtered out.
-const SPC_BASE = "https://www.spc.noaa.gov/products/outlook/day1otlk_";
-// WPC ERO has no CORS + carries no colors, so the worker mirrors it to R2 and we
-// apply WPC's palette client-side (keyed by the OUTLOOK level word).
-const ERO_URL = `${DATA_BASE_URL}/outlooks/wpc_ero_day1.geojson`;
+//
+// Multi-day awareness: each outlook GeoJSON has VALID/EXPIRE properties (UTC
+// YYYYMMDDHHMM) marking the window it covers. When the user scrubs forecast
+// hours, the active outlook auto-switches to the day whose window contains the
+// current FH's valid time. SPC publishes most products for Day 1+2, cat through
+// Day 3; WPC ERO is Day 1 only here because the GitHub Actions mirror (see
+// .github/workflows/wpc-ero-mirror.yml) only fetches Day 1.
+const SPC_BASE = "https://www.spc.noaa.gov/products/outlook/";
 const OUTLOOK_NAMES = { cat: "Categorical", torn: "Tornado", wind: "Wind", hail: "Hail", ero: "Excessive rainfall" };
+const OUTLOOK_DAYS = { cat: [1, 2, 3], torn: [1, 2], wind: [1, 2], hail: [1, 2], ero: [1] };
 const ERO_COLORS = {
   Marginal: { fill: "#66A366", stroke: "#2E7D32" },
   Slight:   { fill: "#E8E84A", stroke: "#B0B000" },
   Moderate: { fill: "#E0782E", stroke: "#A8480F" },
   High:     { fill: "#CC44CC", stroke: "#800080" },
 };
-const outlookUrl = (kind) => (kind === "ero" ? ERO_URL : `${SPC_BASE}${kind}.lyr.geojson`);
+function outlookUrl(kind, day) {
+  if (kind === "ero") return `${DATA_BASE_URL}/outlooks/wpc_ero_day${day}.geojson`;
+  return `${SPC_BASE}day${day}otlk_${kind}.lyr.geojson`;
+}
+const cigUrl = (kind, day) => `${SPC_BASE}day${day}otlk_cig${kind}.lyr.geojson`;
 function colorizeERO(gj) {
   for (const f of gj.features || []) {
     const p = f.properties || (f.properties = {});
@@ -287,89 +301,179 @@ function setupArrowScrub() {
   });
 }
 
+// Parse SPC's YYYYMMDDHHMM date strings to a JS UTC ms timestamp.
+function spcDateMs(s) {
+  if (typeof s !== "string" || s.length < 12) return NaN;
+  return Date.UTC(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8),
+                  +s.slice(8, 10), +s.slice(10, 12));
+}
+
+// All features in a single SPC outlook share VALID/EXPIRE (the day's window);
+// take the first feature with parseable dates.
+function outlookWindow(gj) {
+  for (const f of (gj.features || [])) {
+    const v = spcDateMs(f.properties?.VALID);
+    const e = spcDateMs(f.properties?.EXPIRE);
+    if (Number.isFinite(v) && Number.isFinite(e)) return { valid: v, expire: e };
+  }
+  return { valid: NaN, expire: NaN };
+}
+
+// Current FH's UTC valid time as ms. Mirrors validTimeUTC() but returns ms.
+function validTimeMs() {
+  const id = state.cycle.cycle_id;
+  const init = Date.UTC(+id.slice(0, 4), +id.slice(4, 6) - 1, +id.slice(6, 8), +id.slice(8, 10));
+  return init + state.forecastHour * 3600 * 1000;
+}
+
+// Cached fetch keyed by URL: every (kind, day) URL ends up in the same Map so
+// repeat scrubs across the same day boundary don't re-download.
+function fetchOutlookData(url, kind) {
+  if (!state.outlookCache.has(url)) {
+    state.outlookCache.set(url, (async () => {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const gj = await r.json();
+      if (kind === "ero") colorizeERO(gj);
+      return gj;
+    })());
+  }
+  return state.outlookCache.get(url);
+}
+
+// Pick the day whose VALID/EXPIRE window contains validMs. Falls back to the
+// first day that loads at all (kept with inWindow=false so the legend can flag
+// the stale display rather than silently showing the wrong window).
+async function pickOutlookForFH(kind, validMs) {
+  let fallback = null;
+  for (const day of OUTLOOK_DAYS[kind] || [1]) {
+    let gj;
+    try { gj = await fetchOutlookData(outlookUrl(kind, day), kind); }
+    catch { continue; } // skip days that 404 (e.g., issuance gap)
+    const w = outlookWindow(gj);
+    if (Number.isFinite(w.valid) && validMs >= w.valid && validMs < w.expire) {
+      return { day, gj, inWindow: true };
+    }
+    if (!fallback) fallback = { day, gj, inWindow: false };
+  }
+  return fallback;
+}
+
 async function toggleOutlook(kind, on, cb) {
-  const src = `otlk-${kind}`, fillId = `${src}-fill`, lineId = `${src}-line`;
-  const cigSrc = `otlk-cig-${kind}`, cigFillId = `${cigSrc}-fill`, cigLineId = `${cigSrc}-line`;
   if (!on) {
-    [fillId, lineId, cigFillId, cigLineId].forEach((l) => { if (map.getLayer(l)) map.removeLayer(l); });
-    if (map.getSource(src)) map.removeSource(src);
-    if (map.getSource(cigSrc)) map.removeSource(cigSrc);
+    state.outlookEnabled[kind] = false;
+    removeOutlookLayers(kind);
     delete state.outlookData[kind];
     delete state.outlookData[`cig-${kind}`];
+    delete state.outlookActiveDay[kind];
+    delete state.outlookInWindow[kind];
     renderOutlookLegend();
     return;
   }
+  state.outlookEnabled[kind] = true;
+  await applyOutlook(kind, cb);
+}
+
+// Add/update the outlook for `kind` against the current FH. Called on toggle
+// (with cb so failure can untick the checkbox) and on every FH change. If a
+// source already exists, it's a setData() update — no flicker, no layer reset.
+async function applyOutlook(kind, cb = null) {
   try {
-    const resp = await fetch(outlookUrl(kind));
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const gj = await resp.json();
-    if (kind === "ero") colorizeERO(gj);
-    if (map.getSource(src)) map.removeSource(src);
-    map.addSource(src, { type: "geojson", data: gj });
+    const picked = await pickOutlookForFH(kind, validTimeMs());
+    if (!picked) throw new Error("no outlook data available");
+    const src = `otlk-${kind}`, fillId = `${src}-fill`, lineId = `${src}-line`;
     // Outlooks render UNDER the HRRR count overlay (and under the conus outline
     // before that layer exists), so the ingredient map sits on top.
     const before = map.getLayer("count") ? "count"
                  : map.getLayer("conus-outline") ? "conus-outline"
                  : undefined;
-    // Probability/categorical: SPC's authentic colored fills, dialed to low
-    // opacity so the ingredient count-map still reads through.
-    map.addLayer({
-      id: fillId, type: "fill", source: src,
-      // Exclude CIG features — they live in the separate CIG layer and render
-      // as hatching only, on top of whatever color is already underneath.
-      filter: ["all",
-        ["!=", ["get", "fill"], ""],
-        ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
-      ],
-      paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.3 },
-    }, before);
-    map.addLayer({
-      id: lineId, type: "line", source: src,
-      filter: ["all",
-        ["!=", ["get", "stroke"], ""],
-        ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
-      ],
-      paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
-    }, before);
-    state.outlookData[kind] = gj;
-
-    // For torn/wind/hail, overlay SPC's paired Conditional Intensity Group layer
-    // (March-2026: CIG1 dashed / CIG2 solid / CIG3 cross-hatch, all in black).
-    if (kind === "torn" || kind === "wind" || kind === "hail") {
-      try {
-        const r = await fetch(`${SPC_BASE}cig${kind}.lyr.geojson`);
-        if (r.ok) {
-          const cgj = await r.json();
-          for (const f of cgj.features || []) {
-            const p = f.properties || {};
-            const lvl = String(p.LABEL || "").replace(/^CIG/, ""); // "CIG2" -> "2"
-            if (lvl === "1" || lvl === "2" || lvl === "3") {
-              ensureCigPattern(lvl);
-              p._cigpat = `cig${lvl}`;
-            }
-          }
-          if (map.getSource(cigSrc)) map.removeSource(cigSrc);
-          map.addSource(cigSrc, { type: "geojson", data: cgj });
-          map.addLayer({
-            id: cigFillId, type: "fill", source: cigSrc,
-            filter: ["has", "_cigpat"],
-            paint: { "fill-pattern": ["get", "_cigpat"] },
-          }, before);
-          map.addLayer({
-            id: cigLineId, type: "line", source: cigSrc,
-            filter: ["has", "_cigpat"],
-            paint: { "line-color": "#000", "line-width": 1.2 },
-          }, before);
-          state.outlookData[`cig-${kind}`] = cgj;
-        }
-      } catch (_) { /* CIG layer is best-effort; ignore if missing */ }
+    if (map.getSource(src)) {
+      map.getSource(src).setData(picked.gj);
+    } else {
+      map.addSource(src, { type: "geojson", data: picked.gj });
+      // Probability/categorical: SPC's authentic colored fills, dialed to low
+      // opacity so the ingredient count-map still reads through.
+      map.addLayer({
+        id: fillId, type: "fill", source: src,
+        // Exclude CIG features — they live in the separate CIG layer and render
+        // as hatching only, on top of whatever color is already underneath.
+        filter: ["all",
+          ["!=", ["get", "fill"], ""],
+          ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
+        ],
+        paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.3 },
+      }, before);
+      map.addLayer({
+        id: lineId, type: "line", source: src,
+        filter: ["all",
+          ["!=", ["get", "stroke"], ""],
+          ["!", ["in", ["get", "LABEL"], ["literal", ["CIG1", "CIG2", "CIG3"]]]],
+        ],
+        paint: { "line-color": ["get", "stroke"], "line-width": 1.5 },
+      }, before);
     }
+    state.outlookData[kind] = picked.gj;
+    state.outlookActiveDay[kind] = picked.day;
+    state.outlookInWindow[kind] = picked.inWindow;
 
+    // CIG layer (March-2026: CIG1 dashed / CIG2 solid / CIG3 cross-hatch, all
+    // in black) — follows the same day as the prob outlook for torn/wind/hail.
+    if (kind === "torn" || kind === "wind" || kind === "hail") {
+      await applyCigOutlook(kind, picked.day, before);
+    }
     renderOutlookLegend();
   } catch (e) {
     if (cb) cb.checked = false;
-    els["status"].textContent = `Couldn't load SPC ${OUTLOOK_NAMES[kind] || kind} outlook (${e.message}).`;
+    state.outlookEnabled[kind] = false;
+    els["status"].textContent = `Couldn't load ${OUTLOOK_NAMES[kind] || kind} outlook (${e.message}).`;
   }
+}
+
+async function applyCigOutlook(kind, day, before) {
+  const cigSrc = `otlk-cig-${kind}`, cigFillId = `${cigSrc}-fill`, cigLineId = `${cigSrc}-line`;
+  let cgj;
+  try { cgj = await fetchOutlookData(cigUrl(kind, day), "cig"); }
+  catch { return; } // CIG may legitimately be missing for some day/kind; silent skip
+  for (const f of cgj.features || []) {
+    const p = f.properties || {};
+    const lvl = String(p.LABEL || "").replace(/^CIG/, ""); // "CIG2" -> "2"
+    if (lvl === "1" || lvl === "2" || lvl === "3") {
+      ensureCigPattern(lvl);
+      p._cigpat = `cig${lvl}`;
+    }
+  }
+  if (map.getSource(cigSrc)) {
+    map.getSource(cigSrc).setData(cgj);
+  } else {
+    map.addSource(cigSrc, { type: "geojson", data: cgj });
+    map.addLayer({
+      id: cigFillId, type: "fill", source: cigSrc,
+      filter: ["has", "_cigpat"],
+      paint: { "fill-pattern": ["get", "_cigpat"] },
+    }, before);
+    map.addLayer({
+      id: cigLineId, type: "line", source: cigSrc,
+      filter: ["has", "_cigpat"],
+      paint: { "line-color": "#000", "line-width": 1.2 },
+    }, before);
+  }
+  state.outlookData[`cig-${kind}`] = cgj;
+}
+
+function removeOutlookLayers(kind) {
+  for (const src of [`otlk-${kind}`, `otlk-cig-${kind}`]) {
+    for (const lid of [`${src}-fill`, `${src}-line`]) {
+      if (map.getLayer(lid)) map.removeLayer(lid);
+    }
+    if (map.getSource(src)) map.removeSource(src);
+  }
+}
+
+// Re-apply every enabled outlook after a forecast-hour change. Sources already
+// exist, so each call collapses to a setData() — no flicker, no layer reset.
+async function refreshOutlooksForFH() {
+  const kinds = Object.keys(state.outlookEnabled).filter((k) => state.outlookEnabled[k]);
+  await Promise.all(kinds.map((k) => applyOutlook(k)));
 }
 
 function renderOutlookLegend() {
@@ -399,7 +503,10 @@ function renderOutlookLegend() {
       const baseKind = isCig ? kind.slice(4) : kind;
       const source = baseKind === "ero" ? "WPC" : "SPC";
       const cigTag = isCig ? " CIG" : "";
-      html += `<div class="otlk-sub">${source} ${OUTLOOK_NAMES[baseKind] || baseKind}${cigTag} · Day 1</div>${rows.join("")}`;
+      const day = state.outlookActiveDay[baseKind] ?? 1;
+      const warn = state.outlookInWindow[baseKind] === false
+        ? ` <span class="otlk-warn">(outside this FH's window)</span>` : "";
+      html += `<div class="otlk-sub">${source} ${OUTLOOK_NAMES[baseKind] || baseKind}${cigTag} · Day ${day}${warn}</div>${rows.join("")}`;
     }
   }
   el.innerHTML = html;
