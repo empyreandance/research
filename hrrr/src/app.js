@@ -1432,20 +1432,20 @@ function chartSVG(cond, fhs, values, currentFH) {
 // consecutive green hours gets bracket tick marks at its bounds and a UTC
 // time label above so the danger windows pop visually.
 //
-// Box i is laid out so its center aligns with the corresponding chart point
-// xScale(i) = pad.left + (i / (n-1)) * w. End boxes are clipped to the chart
-// x-range so the strip spans exactly the same horizontal extent as the
-// per-ingredient charts below it (no off-by-one half-box overhang).
+// Box i represents the HOUR STARTING AT FH i — it spans
+// [xScale(i), xScale(i+1)] colored by consensus[i]. So a passing f14 paints
+// a green block from the f14 chart point to the f15 chart point. n-1 boxes
+// total for n forecast hours; the very last FH (consensus[n-1]) has no
+// following hour to extend into and is not drawn as a box (its value still
+// contributes to the 'X of N forecast hours' tally above the strip).
 function consensusStripSVG(fhs, consensus, currentFH) {
   const W = 760, H = 48;
   const pad = { left: 52, right: 14 };
   const w = W - pad.left - pad.right;
   const stripY = 24, stripH = 18;
   const n = fhs.length;
-  const half = n > 1 ? w / (2 * (n - 1)) : w / 2;
+  // Same xScale as the per-ingredient charts so box edges land on points.
   const xScale = (i) => n === 1 ? pad.left + w / 2 : pad.left + (i / (n - 1)) * w;
-  const boxLeft  = (i) => Math.max(pad.left,     xScale(i) - half);
-  const boxRight = (i) => Math.min(pad.left + w, xScale(i) + half);
 
   // Cycle init time (UTC ms); each FH valid time is init + fh*3600s.
   const id = state.cycle?.cycle_id || "";
@@ -1454,19 +1454,26 @@ function consensusStripSVG(fhs, consensus, currentFH) {
     : 0;
   const WKDS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // Walk consensus, find each run of trues, draw label + tick marks.
+  let boxes = "";
+  for (let i = 0; i < n - 1; i++) {
+    const x = xScale(i), wid = xScale(i + 1) - x;
+    boxes += `<rect x="${x}" y="${stripY}" width="${wid}" height="${stripH}" fill="${consensus[i] ? "#43a047" : "#e0e0e0"}"/>`;
+  }
+
+  // Walk box indices 0..n-2 and group runs of true boxes. Run a..b spans
+  // [xScale(a), xScale(b+1)] visually and [fhs[a], fhs[b+1]] in valid time.
   let labels = "";
   let runStart = -1;
-  for (let i = 0; i <= consensus.length; i++) {
-    const v = i < consensus.length ? consensus[i] : false;
+  for (let i = 0; i <= n - 1; i++) {
+    const v = i < n - 1 ? consensus[i] : false;
     if (v && runStart < 0) runStart = i;
     if (!v && runStart >= 0) {
       const runEnd = i - 1;
-      const xStart = boxLeft(runStart);
-      const xEnd   = boxRight(runEnd);
+      const xStart = xScale(runStart);
+      const xEnd   = xScale(runEnd + 1);
       const xMid   = (xStart + xEnd) / 2;
-      const startD = new Date(initMs + fhs[runStart] * 3600 * 1000);
-      const endD   = new Date(initMs + fhs[runEnd]   * 3600 * 1000);
+      const startD = new Date(initMs + fhs[runStart]   * 3600 * 1000);
+      const endD   = new Date(initMs + fhs[runEnd + 1] * 3600 * 1000);
       // Plain "22Z" when the run stays inside one UTC day; otherwise prefix
       // each end with a weekday abbreviation so "22Z–05Z" isn't ambiguous.
       const crossesDay =
@@ -1477,7 +1484,7 @@ function consensusStripSVG(fhs, consensus, currentFH) {
         const hh = String(d.getUTCHours()).padStart(2, "0") + "Z";
         return crossesDay ? `${WKDS[d.getUTCDay()]} ${hh}` : hh;
       };
-      const text = fhs[runStart] === fhs[runEnd] ? fmt(startD) : `${fmt(startD)}–${fmt(endD)}`;
+      const text = `${fmt(startD)}–${fmt(endD)}`;
       labels +=
         `<line x1="${xStart}" y1="${stripY - 5}" x2="${xStart}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
         `<line x1="${xEnd}" y1="${stripY - 5}" x2="${xEnd}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
@@ -1487,11 +1494,6 @@ function consensusStripSVG(fhs, consensus, currentFH) {
     }
   }
 
-  let boxes = "";
-  consensus.forEach((pass, i) => {
-    const x = boxLeft(i), wid = boxRight(i) - x;
-    boxes += `<rect x="${x + 0.5}" y="${stripY}" width="${Math.max(0, wid - 1)}" height="${stripH}" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
-  });
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}</svg>`;
 }
 
