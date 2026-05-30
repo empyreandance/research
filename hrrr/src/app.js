@@ -1186,6 +1186,7 @@ async function openTimeSeries(ll) {
   if (!conds.length) return;
 
   const modal = ensureTSModal();
+  setTSCoords(ll);
   const ctxLine = state.cycle
     ? `Cycle ${state.cycle.cycle_id} · ${state.fhList.length} forecast hours`
     : "";
@@ -1226,7 +1227,10 @@ function ensureTSModal() {
     <div class="ts-panel">
       <div class="ts-header">
         <h2 id="ts-title">Time-series</h2>
-        <button id="ts-close" class="link">✕</button>
+        <div class="ts-actions">
+          <button id="ts-export" class="link" title="Download as PNG">📷 Export</button>
+          <button id="ts-close" class="link" title="Close (Esc)">✕</button>
+        </div>
       </div>
       <div class="ts-body"></div>
     </div>`;
@@ -1234,10 +1238,98 @@ function ensureTSModal() {
   const close = () => { modal.hidden = true; };
   modal.querySelector(".ts-backdrop").addEventListener("click", close);
   modal.querySelector("#ts-close").addEventListener("click", close);
+  modal.querySelector("#ts-export").addEventListener("click", exportTimeSeries);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modal.hidden) close();
   });
   return modal;
+}
+
+// Stash the click coordinates on the modal for the export filename — set
+// right before the modal is populated so they match the displayed data.
+function setTSCoords(ll) {
+  const modal = document.getElementById("ts-modal");
+  if (!modal) return;
+  modal.dataset.lat = ll.lat.toFixed(2);
+  modal.dataset.lng = ll.lng.toFixed(2);
+}
+
+const escapeXML = (s) => String(s)
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+// Roll up every chart in the modal into one big SVG, rasterize via canvas,
+// and download as PNG. Each chart's inner SVG content is re-embedded into a
+// translated+scaled <g> on the composite so layout stays consistent.
+async function exportTimeSeries() {
+  const modal = document.getElementById("ts-modal");
+  if (!modal || modal.hidden) return;
+  const body = modal.querySelector(".ts-body");
+  const baseW = 820;
+  const pad = 18;
+  let y = pad;
+  const parts = [];
+
+  const title = modal.querySelector("#ts-title").textContent;
+  parts.push(`<text x="${pad}" y="${y + 14}" font-size="15" font-weight="700" fill="#222">${escapeXML(title)}</text>`);
+  y += 22;
+  const ctx = modal.querySelector(".ts-context");
+  if (ctx) {
+    parts.push(`<text x="${pad}" y="${y + 12}" font-size="11" fill="#666">${escapeXML(ctx.textContent)}</text>`);
+    y += 18;
+  }
+  y += 6;
+
+  body.querySelectorAll(".ts-section").forEach((sect) => {
+    const lbl = sect.querySelector(".ts-label");
+    if (lbl) {
+      const txt = lbl.textContent.trim().replace(/\s+/g, " ");
+      parts.push(`<text x="${pad}" y="${y + 12}" font-size="12" font-weight="600" fill="#333">${escapeXML(txt)}</text>`);
+      y += 18;
+    }
+    const svg = sect.querySelector("svg");
+    if (svg) {
+      const vb = (svg.getAttribute("viewBox") || "0 0 760 110").split(/\s+/).map(Number);
+      const [, , vw, vh] = vb;
+      const scale = (baseW - pad * 2) / vw;
+      parts.push(`<g transform="translate(${pad} ${y}) scale(${scale})">${svg.innerHTML}</g>`);
+      y += vh * scale + 8;
+    }
+  });
+  y += pad;
+
+  // Inline font CSS so rasterizing into canvas keeps the system-ui look the
+  // user sees on screen; otherwise the SVG default ("serif") would render.
+  const fontCss = `<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif;}</style>`;
+  const composite =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${baseW}" height="${y}" viewBox="0 0 ${baseW} ${y}">` +
+    `${fontCss}<rect width="${baseW}" height="${y}" fill="#fff"/>${parts.join("")}</svg>`;
+
+  // Render to canvas at 2x for crispness, then download.
+  const dpr = 2;
+  const url = URL.createObjectURL(new Blob([composite], { type: "image/svg+xml;charset=utf-8" }));
+  try {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error("SVG decode failed")); img.src = url; });
+    const canvas = document.createElement("canvas");
+    canvas.width = baseW * dpr;
+    canvas.height = y * dpr;
+    const cx = canvas.getContext("2d");
+    cx.scale(dpr, dpr);
+    cx.drawImage(img, 0, 0);
+    canvas.toBlob((blob) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      const ll = (modal.dataset.lat && modal.dataset.lng) ? `_${modal.dataset.lat}_${modal.dataset.lng}` : "";
+      const cyc = state.cycle?.cycle_id || "hrrr";
+      const fh = `f${String(state.forecastHour).padStart(2, "0")}`;
+      a.download = `hrrr-ts-${cyc}-${fh}${ll}.png`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }, "image/png");
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 function renderTimeSeriesBody(modal, { conds, fhs, series, consensus }) {
@@ -1335,21 +1427,49 @@ function chartSVG(cond, fhs, values, currentFH) {
 }
 
 // Top "all ingredients met" strip — one filled box per FH, green if all
-// thresholds pass at that cell at that hour, gray otherwise.
+// thresholds pass at that cell at that hour, gray otherwise. Each run of
+// consecutive green hours gets bracket tick marks at its bounds and a
+// "fNN–fMM" label above so the danger windows pop visually.
 function consensusStripSVG(fhs, consensus, currentFH) {
-  const W = 760, H = 30;
+  const W = 760, H = 48;
   const pad = { left: 52, right: 14 };
   const w = W - pad.left - pad.right;
   const boxW = w / fhs.length;
+  const stripY = 24, stripH = 18;
+
+  // Walk consensus, find each run of trues, draw label + tick marks.
+  let labels = "";
+  let runStart = -1;
+  for (let i = 0; i <= consensus.length; i++) {
+    const v = i < consensus.length ? consensus[i] : false;
+    if (v && runStart < 0) runStart = i;
+    if (!v && runStart >= 0) {
+      const runEnd = i - 1;
+      const xStart = pad.left + runStart * boxW;
+      const xEnd   = pad.left + i * boxW;
+      const xMid   = (xStart + xEnd) / 2;
+      const startFh = fhs[runStart], endFh = fhs[runEnd];
+      const text = startFh === endFh
+        ? `f${String(startFh).padStart(2, "0")}`
+        : `f${String(startFh).padStart(2, "0")}–f${String(endFh).padStart(2, "0")}`;
+      labels +=
+        `<line x1="${xStart}" y1="${stripY - 5}" x2="${xStart}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
+        `<line x1="${xEnd}" y1="${stripY - 5}" x2="${xEnd}" y2="${stripY - 1}" stroke="#1b5e20" stroke-width="1.5"/>` +
+        `<line x1="${xStart}" y1="${stripY - 5}" x2="${xEnd}" y2="${stripY - 5}" stroke="#1b5e20" stroke-width="1.5"/>` +
+        `<text x="${xMid}" y="${stripY - 8}" text-anchor="middle" font-size="10" font-weight="700" fill="#1b5e20">${text}</text>`;
+      runStart = -1;
+    }
+  }
+
   let boxes = "";
   consensus.forEach((pass, i) => {
-    boxes += `<rect x="${pad.left + i * boxW + 0.5}" y="6" width="${boxW - 1}" height="18" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
+    boxes += `<rect x="${pad.left + i * boxW + 0.5}" y="${stripY}" width="${boxW - 1}" height="${stripH}" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
   });
   const curIdx = fhs.indexOf(currentFH);
   const curLine = curIdx >= 0
-    ? `<line x1="${pad.left + (curIdx + 0.5) * boxW}" y1="2" x2="${pad.left + (curIdx + 0.5) * boxW}" y2="28" stroke="#1565c0" stroke-width="2"/>`
+    ? `<line x1="${pad.left + (curIdx + 0.5) * boxW}" y1="${stripY - 2}" x2="${pad.left + (curIdx + 0.5) * boxW}" y2="${stripY + stripH + 4}" stroke="#1565c0" stroke-width="2"/>`
     : "";
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${curLine}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}${curLine}</svg>`;
 }
 
 // CARTO Positron: a clean, muted, free basemap (no account/token) — the light
