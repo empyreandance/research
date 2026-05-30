@@ -1,10 +1,15 @@
 name: Mirror WPC ERO to R2
 
 # WPC's Excessive Rainfall Outlook GeoJSON has no CORS headers, so the browser
-# can't fetch it directly. This mirrors the Day 1 ERO into the R2 bucket (which
+# can't fetch it directly. This mirrors Day 1/2/3 EROs into the R2 bucket (which
 # has CORS for research.alexcooke.co) a few times a day, so the HRRR tool's
-# "Excessive rainfall" overlay can read it. Free GitHub Actions compute — no
+# "Excessive rainfall" overlay can read them. Free GitHub Actions compute — no
 # server involved. (Trigger manually anytime via "Run workflow".)
+#
+# WPC features don't carry VALID/EXPIRE properties (unlike SPC outlooks), so we
+# inject them at mirror time based on the current UTC date, using the standard
+# WPC convention: Day N covers [most-recent-past-12Z + (N-1)*24h, +N*24h).
+# The frontend's outlook day-picker relies on those properties.
 
 on:
   schedule:
@@ -18,30 +23,51 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Fetch WPC ERO Day 1 and upload to R2
+      - name: Fetch WPC ERO Day 1/2/3 and upload to R2
         env:
           R2_KEY: ${{ secrets.HRRR_R2_ACCESS_KEY_ID }}
           R2_SECRET: ${{ secrets.HRRR_R2_SECRET_ACCESS_KEY }}
         run: |
           pip install --quiet boto3 requests
           python3 - <<'PY'
-          import os, json, requests, boto3
-          SRC = "https://www.wpc.ncep.noaa.gov/exper/eromap/geojson/Day1_Latest.geojson"
-          r = requests.get(SRC, timeout=60)
-          r.raise_for_status()
-          gj = json.loads(r.content)  # validate it parses
-          assert gj.get("type") == "FeatureCollection", "not a FeatureCollection"
-          boto3.client(
+          import os, json, datetime as dt, requests, boto3
+
+          # Most recent past 12Z UTC = Day 1 window start.
+          now = dt.datetime.now(dt.timezone.utc)
+          today_12z = now.replace(hour=12, minute=0, second=0, microsecond=0)
+          base = today_12z if now >= today_12z else today_12z - dt.timedelta(days=1)
+
+          def stamp(t):  # YYYYMMDDHHMM, matches SPC's VALID/EXPIRE format
+              return t.strftime("%Y%m%d%H%M")
+
+          s3 = boto3.client(
               "s3",
               endpoint_url="https://817fc9f791704e3418596f7427194bc2.r2.cloudflarestorage.com",
               aws_access_key_id=os.environ["R2_KEY"],
               aws_secret_access_key=os.environ["R2_SECRET"],
-          ).put_object(
-              Bucket="hrrr-tool",
-              Key="outlooks/wpc_ero_day1.geojson",
-              Body=r.content,
-              ContentType="application/geo+json",
-              CacheControl="no-cache",
           )
-          print(f"uploaded outlooks/wpc_ero_day1.geojson ({len(r.content)} bytes, {len(gj['features'])} features)")
+
+          for day in (1, 2, 3):
+              src = f"https://www.wpc.ncep.noaa.gov/exper/eromap/geojson/Day{day}_Latest.geojson"
+              r = requests.get(src, timeout=60)
+              r.raise_for_status()
+              gj = json.loads(r.content)
+              assert gj.get("type") == "FeatureCollection", f"Day {day}: not a FeatureCollection"
+
+              valid_t  = base + dt.timedelta(days=day - 1)
+              expire_t = base + dt.timedelta(days=day)
+              valid_s, expire_s = stamp(valid_t), stamp(expire_t)
+              for f in gj.get("features", []):
+                  p = f.setdefault("properties", {})
+                  p["VALID"] = valid_s
+                  p["EXPIRE"] = expire_s
+
+              body = json.dumps(gj).encode()
+              key  = f"outlooks/wpc_ero_day{day}.geojson"
+              s3.put_object(
+                  Bucket="hrrr-tool", Key=key, Body=body,
+                  ContentType="application/geo+json", CacheControl="no-cache",
+              )
+              print(f"uploaded {key} ({len(body)} bytes, {len(gj['features'])} features, "
+                    f"valid {valid_s}-{expire_s})")
           PY

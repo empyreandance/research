@@ -107,6 +107,7 @@ async function init() {
       state.lastClick = null;
       hideInspectMarker();
     });
+    document.getElementById("ts-open").addEventListener("click", () => openTimeSeries(state.lastClick));
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
@@ -219,7 +220,7 @@ async function openCurrentForecastHour(readGeo) {
 // .github/workflows/wpc-ero-mirror.yml) only fetches Day 1.
 const SPC_BASE = "https://www.spc.noaa.gov/products/outlook/";
 const OUTLOOK_NAMES = { cat: "Categorical", torn: "Tornado", wind: "Wind", hail: "Hail", ero: "Excessive rainfall" };
-const OUTLOOK_DAYS = { cat: [1, 2, 3], torn: [1, 2], wind: [1, 2], hail: [1, 2], ero: [1] };
+const OUTLOOK_DAYS = { cat: [1, 2, 3], torn: [1, 2], wind: [1, 2], hail: [1, 2], ero: [1, 2, 3] };
 const ERO_COLORS = {
   Marginal: { fill: "#66A366", stroke: "#2E7D32" },
   Slight:   { fill: "#E8E84A", stroke: "#B0B000" },
@@ -1168,6 +1169,187 @@ function showInspectMarker(ll) {
 function hideInspectMarker() {
   if (map.getLayer("inspect-marker")) map.removeLayer("inspect-marker");
   if (map.getSource("inspect-marker")) map.removeSource("inspect-marker");
+}
+
+// --- time-series modal -----------------------------------------------------
+// Opens a modal with one chart per ingredient at the inspected cell across
+// every forecast hour in the cycle, plus a top "all ingredients met" consensus
+// strip so the user can see the window where every threshold lines up. Data
+// comes from state.fieldCache (preloadAll fills it after first paint), so this
+// is fast — each (cond, fh) lookup is an O(1) cell index into a cached array.
+
+async function openTimeSeries(ll) {
+  if (!ll || !state.last) return;
+  const cellK = cellIndexAt(ll.lng, ll.lat);
+  if (cellK < 0) return;
+  const conds = state.last.conds;
+  if (!conds.length) return;
+
+  const modal = ensureTSModal();
+  const ctxLine = state.cycle
+    ? `Cycle ${state.cycle.cycle_id} · ${state.fhList.length} forecast hours`
+    : "";
+  modal.querySelector("#ts-title").textContent =
+    `Time-series · ${ll.lat.toFixed(2)}, ${ll.lng.toFixed(2)}`;
+  modal.querySelector(".ts-body").innerHTML =
+    `<p class="muted ts-context">${ctxLine}</p><p class="muted">Loading values across all forecast hours…</p>`;
+  modal.hidden = false;
+
+  // Sample each (cond, fh) at the inspect cell. getField is cached, so this
+  // is fast once preloadAll has run; any uncached FH is fetched on demand.
+  const fhs = state.fhList;
+  const series = await Promise.all(conds.map(async (c) => {
+    const out = new Array(fhs.length).fill(NaN);
+    await Promise.all(fhs.map(async (fh, i) => {
+      try {
+        const field = await getField(c.paramId, c.levelIdx, fh);
+        out[i] = field.data[cellK];
+      } catch { /* leave NaN */ }
+    }));
+    return out;
+  }));
+
+  const consensus = fhs.map((_, fi) =>
+    conds.every((c, ci) => Number.isFinite(series[ci][fi]) && OPS[c.op](series[ci][fi], c.value)));
+
+  renderTimeSeriesBody(modal, { ll, conds, fhs, series, consensus });
+}
+
+function ensureTSModal() {
+  let modal = document.getElementById("ts-modal");
+  if (modal) return modal;
+  modal = document.createElement("div");
+  modal.id = "ts-modal";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="ts-backdrop"></div>
+    <div class="ts-panel">
+      <div class="ts-header">
+        <h2 id="ts-title">Time-series</h2>
+        <button id="ts-close" class="link">✕</button>
+      </div>
+      <div class="ts-body"></div>
+    </div>`;
+  document.body.appendChild(modal);
+  const close = () => { modal.hidden = true; };
+  modal.querySelector(".ts-backdrop").addEventListener("click", close);
+  modal.querySelector("#ts-close").addEventListener("click", close);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.hidden) close();
+  });
+  return modal;
+}
+
+function renderTimeSeriesBody(modal, { conds, fhs, series, consensus }) {
+  const ctxLine = state.cycle
+    ? `Cycle ${state.cycle.cycle_id} · ${fhs.length} forecast hours · current f${String(state.forecastHour).padStart(2, "0")}`
+    : "";
+  let html = `<p class="muted ts-context">${ctxLine}</p>`;
+  html += `<div class="ts-section">
+    <div class="ts-label"><b>All ingredients met</b>
+      <span class="ts-thr">(${consensus.filter(Boolean).length} of ${fhs.length} forecast hours)</span></div>
+    ${consensusStripSVG(fhs, consensus, state.forecastHour)}
+  </div>`;
+  conds.forEach((cond, i) => {
+    html += `<div class="ts-section">
+      <div class="ts-label"><b>${condName(cond)}</b>
+        <span class="ts-thr">${OP_LABELS[cond.op]} ${cond.value}${cond.meta?.units ? " " + cond.meta.units : ""}</span></div>
+      ${chartSVG(cond, fhs, series[i], state.forecastHour)}
+    </div>`;
+  });
+  modal.querySelector(".ts-body").innerHTML = html;
+}
+
+// Compact number formatter for axis labels — fewer decimals for big values.
+function niceNum(v) {
+  if (!Number.isFinite(v)) return "—";
+  const a = Math.abs(v);
+  return a >= 100 ? v.toFixed(0) : a >= 10 ? v.toFixed(1) : v.toFixed(2);
+}
+
+// Per-ingredient line chart: value vs FH, with the threshold drawn as a dashed
+// line, the passing half-plane shaded green, points/segments colored
+// pass-green / fail-red, and the current FH highlighted with a vertical line.
+function chartSVG(cond, fhs, values, currentFH) {
+  const W = 760, H = 110;
+  const pad = { top: 8, right: 14, bottom: 22, left: 52 };
+  const w = W - pad.left - pad.right;
+  const h = H - pad.top - pad.bottom;
+  const finite = values.filter(Number.isFinite);
+  if (!finite.length) {
+    return `<svg viewBox="0 0 ${W} ${H}" class="ts-chart"><text x="${W/2}" y="${H/2}" text-anchor="middle" fill="#888" font-size="11">no data at this cell</text></svg>`;
+  }
+  let vmin = Math.min(...finite, cond.value);
+  let vmax = Math.max(...finite, cond.value);
+  if (vmin === vmax) { vmin -= 1; vmax += 1; }
+  const range = vmax - vmin;
+  const yMin = vmin - 0.06 * range, yMax = vmax + 0.06 * range;
+  const yScale = (v) => pad.top + h - (v - yMin) / (yMax - yMin) * h;
+  const xScale = (i) => fhs.length === 1
+    ? pad.left + w / 2
+    : pad.left + (i / (fhs.length - 1)) * w;
+
+  const thrY = yScale(cond.value);
+  // Shade the passing half-plane: above the threshold for ≥/>, below for ≤/<.
+  let band = "";
+  if (cond.op === ">=" || cond.op === ">") {
+    band = `<rect x="${pad.left}" y="${pad.top}" width="${w}" height="${Math.max(0, thrY - pad.top)}" fill="#e8f5e9"/>`;
+  } else if (cond.op === "<=" || cond.op === "<") {
+    band = `<rect x="${pad.left}" y="${thrY}" width="${w}" height="${Math.max(0, pad.top + h - thrY)}" fill="#e8f5e9"/>`;
+  }
+  const thrLine = `<line x1="${pad.left}" y1="${thrY}" x2="${pad.left + w}" y2="${thrY}" stroke="#666" stroke-width="1" stroke-dasharray="4 3"/>`;
+
+  let segs = "", pts = "";
+  for (let i = 0; i < fhs.length; i++) {
+    const v = values[i];
+    if (!Number.isFinite(v)) continue;
+    const pass = OPS[cond.op](v, cond.value);
+    pts += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="2.3" fill="${pass ? "#1b5e20" : "#b71c1c"}"/>`;
+    if (i > 0 && Number.isFinite(values[i - 1])) {
+      const passPrev = OPS[cond.op](values[i - 1], cond.value);
+      const segColor = (pass && passPrev) ? "#1b5e20"
+                     : (!pass && !passPrev) ? "#b71c1c" : "#888";
+      segs += `<line x1="${xScale(i - 1)}" y1="${yScale(values[i - 1])}" x2="${xScale(i)}" y2="${yScale(v)}" stroke="${segColor}" stroke-width="1.5"/>`;
+    }
+  }
+
+  const curIdx = fhs.indexOf(currentFH);
+  const curLine = curIdx >= 0
+    ? `<line x1="${xScale(curIdx)}" y1="${pad.top}" x2="${xScale(curIdx)}" y2="${pad.top + h}" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="2 2"/>`
+    : "";
+
+  // X labels: sparse — about 10 ticks across the range.
+  const step = Math.max(1, Math.ceil(fhs.length / 10));
+  let xLabels = "";
+  for (let i = 0; i < fhs.length; i += step) {
+    xLabels += `<text x="${xScale(i)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="#555">f${String(fhs[i]).padStart(2, "0")}</text>`;
+  }
+  const yLabels = `
+    <text x="${pad.left - 4}" y="${pad.top + 9}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMax)}</text>
+    <text x="${pad.left - 4}" y="${pad.top + h - 1}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMin)}</text>
+    <text x="${pad.left - 4}" y="${thrY + 3}" text-anchor="end" font-size="10" fill="#666">${niceNum(cond.value)}</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">
+    ${band}${thrLine}${segs}${pts}${curLine}${xLabels}${yLabels}
+  </svg>`;
+}
+
+// Top "all ingredients met" strip — one filled box per FH, green if all
+// thresholds pass at that cell at that hour, gray otherwise.
+function consensusStripSVG(fhs, consensus, currentFH) {
+  const W = 760, H = 30;
+  const pad = { left: 52, right: 14 };
+  const w = W - pad.left - pad.right;
+  const boxW = w / fhs.length;
+  let boxes = "";
+  consensus.forEach((pass, i) => {
+    boxes += `<rect x="${pad.left + i * boxW + 0.5}" y="6" width="${boxW - 1}" height="18" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
+  });
+  const curIdx = fhs.indexOf(currentFH);
+  const curLine = curIdx >= 0
+    ? `<line x1="${pad.left + (curIdx + 0.5) * boxW}" y1="2" x2="${pad.left + (curIdx + 0.5) * boxW}" y2="28" stroke="#1565c0" stroke-width="2"/>`
+    : "";
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${curLine}</svg>`;
 }
 
 // CARTO Positron: a clean, muted, free basemap (no account/token) — the light
