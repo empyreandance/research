@@ -1405,11 +1405,6 @@ function chartSVG(cond, fhs, values, currentFH) {
     }
   }
 
-  const curIdx = fhs.indexOf(currentFH);
-  const curLine = curIdx >= 0
-    ? `<line x1="${xScale(curIdx)}" y1="${pad.top}" x2="${xScale(curIdx)}" y2="${pad.top + h}" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="2 2"/>`
-    : "";
-
   // X labels: sparse — about 10 ticks across the range.
   const step = Math.max(1, Math.ceil(fhs.length / 10));
   let xLabels = "";
@@ -1422,7 +1417,7 @@ function chartSVG(cond, fhs, values, currentFH) {
     <text x="${pad.left - 4}" y="${thrY + 3}" text-anchor="end" font-size="10" fill="#666">${niceNum(cond.value)}</text>`;
 
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">
-    ${band}${thrLine}${segs}${pts}${curLine}${xLabels}${yLabels}
+    ${band}${thrLine}${segs}${pts}${xLabels}${yLabels}
   </svg>`;
 }
 
