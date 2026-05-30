@@ -39,6 +39,7 @@ const state = {
   group: null, mapper: null, bbox: null, nx: 0, lat: null, lon: null,
   fieldCache: new Map(), groups: new Map(), last: null, builtins: [], conusMask: null, levels: [],
   smoothRadius: 0,
+  lastClick: null, // {lng, lat} of the most recent click-to-inspect; null when closed
   outlookData: {},
 };
 
@@ -96,7 +97,10 @@ async function init() {
       els["floor-readout"].textContent = els["floor"].value;
       if (state.last) renderCount(); // re-color without recomputing
     });
-    els["inspect-close"].addEventListener("click", () => (els["inspect"].hidden = true));
+    els["inspect-close"].addEventListener("click", () => {
+      els["inspect"].hidden = true;
+      state.lastClick = null;
+    });
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
     setupHover();
@@ -158,7 +162,9 @@ function setupForecastHourSlider() {
     els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
     renderCycleInfo();
     await openCurrentForecastHour(false);
-    updateMap();
+    await updateMap();
+    // If the inspect panel is open, redraw it against the new FH's fields.
+    if (state.lastClick) renderInspect(state.lastClick);
   });
 }
 
@@ -980,8 +986,15 @@ function onMapHover(e) {
 // --- click to inspect ------------------------------------------------------
 
 function onMapClick(e) {
+  state.lastClick = { lng: e.lngLat.lng, lat: e.lngLat.lat };
+  renderInspect(state.lastClick);
+}
+
+// Render the inspect panel for a stored lng/lat. Called both on click and on
+// FH change, so the panel stays in sync with the currently-displayed forecast.
+function renderInspect(ll) {
   if (!state.last) return;
-  const k = cellIndexAt(e.lngLat.lng, e.lngLat.lat);
+  const k = cellIndexAt(ll.lng, ll.lat);
   if (k < 0) {
     els["inspect"].hidden = true;
     return;
@@ -1006,7 +1019,7 @@ function onMapClick(e) {
   }).map((c) => condName(c));
 
   els["inspect-loc"].textContent =
-    `${e.lngLat.lat.toFixed(2)}, ${e.lngLat.lng.toFixed(2)} · f${String(state.forecastHour).padStart(2, "0")} · ${met} of ${conds.length} met`;
+    `${ll.lat.toFixed(2)}, ${ll.lng.toFixed(2)} · f${String(state.forecastHour).padStart(2, "0")} · ${met} of ${conds.length} met`;
   els["inspect-table"].innerHTML =
     "<tr><th>Ingredient</th><th>Value</th><th>Threshold</th><th></th></tr>" + rows +
     (limiting.length ? `<tr><td colspan="4" class="limiting">Limiting: ${limiting.join(", ")}</td></tr>` : "");

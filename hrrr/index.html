@@ -75,12 +75,6 @@
         <button id="apply">Update map</button>
         <button id="export-image" class="secondary">Export image</button>
       </div>
-      <section id="inspect" hidden>
-        <h2>Inspect <button id="inspect-close" class="link">✕</button></h2>
-        <p id="inspect-loc" class="muted"></p>
-        <table id="inspect-table"></table>
-      </section>
-
       <footer class="muted">
         <div><span class="badge badge-hrrr">HRRR</span> direct from the model</div>
         <div><span class="badge badge-calc">calc</span> calculated by this tool</div>
@@ -91,6 +85,11 @@
     <p id="status"></p>
     <div id="hover" hidden></div>
     <div id="map-legend" hidden></div>
+    <section id="inspect" hidden>
+      <h2>Inspect <button id="inspect-close" class="link">✕</button></h2>
+      <p id="inspect-loc" class="muted"></p>
+      <table id="inspect-table"></table>
+    </section>
   </div>
 
   <script type="module" src="src/app.js"></script>
