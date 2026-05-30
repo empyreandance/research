@@ -1411,10 +1411,16 @@ function chartSVG(cond, fhs, values, currentFH) {
   for (let i = 0; i < fhs.length; i += step) {
     xLabels += `<text x="${xScale(i)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="#555">f${String(fhs[i]).padStart(2, "0")}</text>`;
   }
-  const yLabels = `
-    <text x="${pad.left - 4}" y="${pad.top + 9}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMax)}</text>
-    <text x="${pad.left - 4}" y="${pad.top + h - 1}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMin)}</text>
-    <text x="${pad.left - 4}" y="${thrY + 3}" text-anchor="end" font-size="10" fill="#666">${niceNum(cond.value)}</text>`;
+  // Threshold label is always drawn; min/max labels are suppressed when they
+  // would visually overlap it (e.g. when the data hugs the threshold and the
+  // 6 % y-padding leaves min/max within a few values of the threshold itself).
+  const maxLabelY = pad.top + 9, minLabelY = pad.top + h - 1, thrLabelY = thrY + 3;
+  const showMax = Math.abs(thrLabelY - maxLabelY) > 11;
+  const showMin = Math.abs(minLabelY - thrLabelY) > 11;
+  const yLabels =
+    (showMax ? `<text x="${pad.left - 4}" y="${maxLabelY}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMax)}</text>` : "") +
+    (showMin ? `<text x="${pad.left - 4}" y="${minLabelY}" text-anchor="end" font-size="10" fill="#555">${niceNum(yMin)}</text>` : "") +
+    `<text x="${pad.left - 4}" y="${thrLabelY}" text-anchor="end" font-size="10" fill="#666">${niceNum(cond.value)}</text>`;
 
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">
     ${band}${thrLine}${segs}${pts}${xLabels}${yLabels}
@@ -1425,12 +1431,21 @@ function chartSVG(cond, fhs, values, currentFH) {
 // thresholds pass at that cell at that hour, gray otherwise. Each run of
 // consecutive green hours gets bracket tick marks at its bounds and a UTC
 // time label above so the danger windows pop visually.
+//
+// Box i is laid out so its center aligns with the corresponding chart point
+// xScale(i) = pad.left + (i / (n-1)) * w. End boxes are clipped to the chart
+// x-range so the strip spans exactly the same horizontal extent as the
+// per-ingredient charts below it (no off-by-one half-box overhang).
 function consensusStripSVG(fhs, consensus, currentFH) {
   const W = 760, H = 48;
   const pad = { left: 52, right: 14 };
   const w = W - pad.left - pad.right;
-  const boxW = w / fhs.length;
   const stripY = 24, stripH = 18;
+  const n = fhs.length;
+  const half = n > 1 ? w / (2 * (n - 1)) : w / 2;
+  const xScale = (i) => n === 1 ? pad.left + w / 2 : pad.left + (i / (n - 1)) * w;
+  const boxLeft  = (i) => Math.max(pad.left,     xScale(i) - half);
+  const boxRight = (i) => Math.min(pad.left + w, xScale(i) + half);
 
   // Cycle init time (UTC ms); each FH valid time is init + fh*3600s.
   const id = state.cycle?.cycle_id || "";
@@ -1447,8 +1462,8 @@ function consensusStripSVG(fhs, consensus, currentFH) {
     if (v && runStart < 0) runStart = i;
     if (!v && runStart >= 0) {
       const runEnd = i - 1;
-      const xStart = pad.left + runStart * boxW;
-      const xEnd   = pad.left + i * boxW;
+      const xStart = boxLeft(runStart);
+      const xEnd   = boxRight(runEnd);
       const xMid   = (xStart + xEnd) / 2;
       const startD = new Date(initMs + fhs[runStart] * 3600 * 1000);
       const endD   = new Date(initMs + fhs[runEnd]   * 3600 * 1000);
@@ -1474,7 +1489,8 @@ function consensusStripSVG(fhs, consensus, currentFH) {
 
   let boxes = "";
   consensus.forEach((pass, i) => {
-    boxes += `<rect x="${pad.left + i * boxW + 0.5}" y="${stripY}" width="${boxW - 1}" height="${stripH}" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
+    const x = boxLeft(i), wid = boxRight(i) - x;
+    boxes += `<rect x="${x + 0.5}" y="${stripY}" width="${Math.max(0, wid - 1)}" height="${stripH}" fill="${pass ? "#43a047" : "#e0e0e0"}"/>`;
   });
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}</svg>`;
 }
