@@ -85,12 +85,15 @@
     <p id="status"></p>
     <div id="hover" hidden></div>
     <div id="map-legend" hidden></div>
-    <section id="inspect" hidden>
-      <h2>Inspect <button id="inspect-close" class="link">✕</button></h2>
-      <p id="inspect-loc" class="muted"></p>
-      <table id="inspect-table"></table>
-    </section>
   </div>
+  <!-- Outside #app on purpose: #app is display:flex, so a missing CSS rule
+       (e.g. stale browser cache) would otherwise let #inspect become a
+       stretched flex child. As a body child it's always free-floating. -->
+  <section id="inspect" hidden>
+    <h2>Inspect <button id="inspect-close" class="link">✕</button></h2>
+    <p id="inspect-loc" class="muted"></p>
+    <table id="inspect-table"></table>
+  </section>
 
   <script type="module" src="src/app.js"></script>
 </body>

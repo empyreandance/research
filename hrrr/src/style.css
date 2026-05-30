@@ -104,18 +104,20 @@ code { background: #eee; padding: 0 3px; border-radius: 2px; font-size: 11px; }
 .legend-row.legend-dim { opacity: 0.35; }
 .sw { width: 16px; height: 12px; border-radius: 2px; display: inline-block; border: 1px solid rgba(0,0,0,.2); }
 
-/* Click-inspect panel: floats over the map at bottom-right so it stays
-   visible while scrubbing forecast hours and doesn't compete with the
-   sidebar's vertical real estate. */
+/* Click-inspect panel: floats over the map at bottom-right, mirroring the
+   bottom-left map-legend. Stays visible while scrubbing forecast hours and
+   doesn't compete with the sidebar's vertical real estate. */
 #inspect {
   position: fixed; bottom: 16px; right: 16px; z-index: 5;
-  background: rgba(255,255,255,.96); border: 1px solid #ccc; border-radius: 6px;
-  padding: 8px 12px; max-width: 420px; box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  width: 330px; max-height: calc(100vh - 32px); overflow-y: auto;
+  background: rgba(255,255,255,.94); border: 1px solid #ccc; border-radius: 6px;
+  padding: 8px 10px; font-size: 12px; box-shadow: 0 1px 6px rgba(0,0,0,.2);
 }
-#inspect h2 { margin: 0 0 4px; font-size: 13px; text-transform: uppercase;
+#inspect h2 { margin: 0 0 2px; font-size: 12px; text-transform: uppercase;
               letter-spacing: .04em; color: #555; display: flex;
-              justify-content: space-between; align-items: center; }
-#inspect #inspect-loc { margin: 0 0 4px; }
+              justify-content: space-between; align-items: center;
+              border-bottom: 1px solid #eee; padding-bottom: 4px; }
+#inspect #inspect-loc { margin: 4px 0 2px; font-size: 11px; }
 #inspect table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
 #inspect th, #inspect td { text-align: left; padding: 3px 4px; border-bottom: 1px solid #eee; }
 #inspect tr.pass td { color: #1b5e20; }
