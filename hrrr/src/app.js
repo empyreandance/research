@@ -101,6 +101,7 @@ async function init() {
     els["inspect-close"].addEventListener("click", () => {
       els["inspect"].hidden = true;
       state.lastClick = null;
+      hideInspectMarker();
     });
     map.on("click", onMapClick);
     map.on("moveend", () => { if (state.last) updateWindowStat(); });
@@ -1005,6 +1006,7 @@ function renderInspect(ll) {
   const k = cellIndexAt(ll.lng, ll.lat);
   if (k < 0) {
     els["inspect"].hidden = true;
+    hideInspectMarker();
     return;
   }
   const { conds, fields } = state.last;
@@ -1032,6 +1034,33 @@ function renderInspect(ll) {
     "<tr><th>Ingredient</th><th>Value</th><th>Threshold</th><th></th></tr>" + rows +
     (limiting.length ? `<tr><td colspan="4" class="limiting">Limiting: ${limiting.join(", ")}</td></tr>` : "");
   els["inspect"].hidden = false;
+  showInspectMarker(ll);
+}
+
+// Marker for the clicked inspect point — a small filled circle with a white
+// halo so it reads on both light basemap and any colored count overlay. Source
+// + layer are created lazily on first use; subsequent renders just setData.
+function showInspectMarker(ll) {
+  const data = { type: "Feature", geometry: { type: "Point", coordinates: [ll.lng, ll.lat] } };
+  if (map.getSource("inspect-marker")) {
+    map.getSource("inspect-marker").setData(data);
+    return;
+  }
+  map.addSource("inspect-marker", { type: "geojson", data });
+  map.addLayer({
+    id: "inspect-marker", type: "circle", source: "inspect-marker",
+    paint: {
+      "circle-radius": 6,
+      "circle-color": "#1565c0",          // matches the HRRR provenance blue
+      "circle-stroke-color": "#fff",
+      "circle-stroke-width": 2,
+    },
+  });
+}
+
+function hideInspectMarker() {
+  if (map.getLayer("inspect-marker")) map.removeLayer("inspect-marker");
+  if (map.getSource("inspect-marker")) map.removeSource("inspect-marker");
 }
 
 // CARTO Positron: a clean, muted, free basemap (no account/token) — the light
