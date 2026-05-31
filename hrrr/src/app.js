@@ -809,36 +809,59 @@ function refreshCondMeta() {
 // --- count + render --------------------------------------------------------
 
 // Cache the zarr group per forecast hour so we open each FH at most once.
+// Crucially, evict on failure: a rejected promise must NOT stay cached, or that
+// forecast hour would throw "Failed to fetch" forever until the cache is wiped.
 function getGroup(fh) {
   if (!state.groups.has(fh)) {
-    state.groups.set(fh, openForecastHour(DATA_BASE_URL, state.cycle.cycle_id, fh));
+    const p = openForecastHour(DATA_BASE_URL, state.cycle.cycle_id, fh);
+    p.catch(() => state.groups.delete(fh));
+    state.groups.set(fh, p);
   }
   return state.groups.get(fh);
 }
 
 // Cache reads per (paramId, fh, levelIdx). Storing the in-flight promise dedupes
-// concurrent calls (e.g. an updateMap fetch racing with a preload).
+// concurrent calls (e.g. an updateMap fetch racing with a preload). Retries a
+// few times on transient fetch failures, and never caches a hard failure (so a
+// dropped chunk self-heals on the next scroll instead of needing a toggle).
 async function getField(paramId, levelIdx = null, fh = state.forecastHour) {
   const key = `${paramId}@${levelIdx ?? ""}@${fh}`;
   if (!state.fieldCache.has(key)) {
-    state.fieldCache.set(key, (async () => {
-      const group = await getGroup(fh);
-      return readVariable(group, paramId, levelIdx);
-    })());
+    const p = (async () => {
+      let lastErr;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const group = await getGroup(fh);
+          return await readVariable(group, paramId, levelIdx);
+        } catch (e) {
+          lastErr = e;
+          state.groups.delete(fh); // re-open the group on the next attempt
+          await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+        }
+      }
+      throw lastErr;
+    })();
+    p.catch(() => state.fieldCache.delete(key));
+    state.fieldCache.set(key, p);
   }
   return state.fieldCache.get(key);
 }
 
 // Background-load *every* forecast hour in the cycle for the active ingredients,
-// so any scrubbing destination is already in memory. Fire-and-forget; cached
-// promises dedupe duplicates, and the browser caps concurrency on its own.
+// so any scrubbing destination is already in memory. Runs through a small
+// concurrency pool: firing all FHs at once floods R2 (a 48-hour cycle is ~2.5x
+// the requests of a 19-hour one) and drops fetches. Fire-and-forget; getField
+// retries and won't cache failures, so the pool just keeps the burst civil.
 function preloadAll() {
   const conds = readConditions().filter((c) => c.paramId);
+  const tasks = [];
   for (const fh of state.fhList) {
     if (fh === state.forecastHour) continue;
-    getGroup(fh).catch(() => {});
-    for (const c of conds) getField(c.paramId, c.levelIdx, fh).catch(() => {});
+    for (const c of conds) tasks.push(() => getField(c.paramId, c.levelIdx, fh).catch(() => {}));
   }
+  let i = 0;
+  const worker = async () => { while (i < tasks.length) await tasks[i++](); };
+  Array.from({ length: 6 }, worker); // 6-wide pool, fire-and-forget
 }
 
 async function updateMap() {
