@@ -189,7 +189,13 @@ async function updateMac() {
     document.getElementById("mac-load").textContent = loadPct || "–";
 
     setBar("mac-mem-bar", "mac-mem-text", hb.memory_used_gb, hb.memory_total_gb);
+    // Disk: show FREE space. A headless service can't read Finder's
+    // purgeable-aware "used", so disk_used_gb over-reports reclaimable cache;
+    // free space is the stable, meaningful "will it fill up?" number.
     setBar("mac-disk-bar", "mac-disk-text", hb.disk_used_gb, hb.disk_total_gb);
+    const diskFreeGb = Math.max(0, (hb.disk_total_gb || 0) - (hb.disk_used_gb || 0));
+    document.getElementById("mac-disk-text").textContent =
+      `${diskFreeGb} GB free of ${hb.disk_total_gb} GB`;
 
     const dEl = document.getElementById("mac-daemons");
     dEl.innerHTML = "";
