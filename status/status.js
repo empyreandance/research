@@ -178,7 +178,7 @@ async function updateMac() {
     const hb = f.body;
     const age = ageSeconds(hb.updated);
     const cls = classifyAge(age, THRESH.heartbeat);
-    paint("card-mac", st(cls), `${hb.host || "host"} · heartbeat ${fmtAge(age)} ago`);
+    paint("card-mac", st(cls), `heartbeat ${fmtAge(age)} ago`);
 
     // Detailed panel.
     metrics.hidden = false;
