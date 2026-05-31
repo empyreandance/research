@@ -35,9 +35,19 @@ jobs:
         id: decide
         env:
           FORCE: ${{ github.event.inputs.force }}
+          # Read manifest.json straight from R2 via the S3 API (AWS CLI is
+          # preinstalled on the runner). The public hrrr-data.alexcooke.co URL
+          # is fronted by Cloudflare, which 403s the runner's datacenter IP /
+          # non-browser UA -- so use the credentialed S3 endpoint instead.
+          AWS_ACCESS_KEY_ID: ${{ secrets.HRRR_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.HRRR_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
         run: |
           set -euo pipefail
-          age=$(python3 -c "import json,urllib.request,datetime as D; d=json.load(urllib.request.urlopen('https://hrrr-data.alexcooke.co/manifest.json')); u=D.datetime.fromisoformat(d['updated']); print(int((D.datetime.now(D.timezone.utc)-u).total_seconds()))")
+          aws s3api get-object \
+            --endpoint-url https://817fc9f791704e3418596f7427194bc2.r2.cloudflarestorage.com \
+            --bucket hrrr-tool --key manifest.json /tmp/manifest.json >/dev/null
+          age=$(python3 -c "import json,datetime as D; d=json.load(open('/tmp/manifest.json')); u=D.datetime.fromisoformat(d['updated']); print(int((D.datetime.now(D.timezone.utc)-u).total_seconds()))")
           echo "Live HRRR cycle is ${age}s old (~$((age/60)) min). Threshold: 14400s (4h)."
           if [ "${FORCE:-false}" = "true" ] || [ "$age" -ge 14400 ]; then
             echo "==> stale (or forced): running fallback ingest."
