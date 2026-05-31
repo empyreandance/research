@@ -1,0 +1,78 @@
+name: HRRR watchdog
+
+# Free cloud safety net for the HRRR Threshold Tool. The ingest normally runs on
+# the Mac Studio (hourly). If that box is down, the live cycle goes stale; this
+# workflow notices and runs the ingest itself on a GitHub Actions runner so the
+# site keeps moving forward (slower than the Mac -- a full cycle is ~2-3 h on a
+# 4 vCPU runner -- but better than stale data). It no-ops while the Mac is healthy.
+#
+# Lives in `research` (not hrrr-ingest) because the R2 secrets are here; it checks
+# out the public hrrr-ingest repo to run the pipeline. Public repo => free minutes.
+
+on:
+  schedule:
+    - cron: "35 * * * *"          # hourly, well after the Mac's :05 tick + its streaming window
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run the ingest even if the live cycle is fresh (for testing)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hrrr-watchdog
+  cancel-in-progress: false       # never interrupt an in-flight fallback ingest
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240          # a full cycle can take ~2-3 h on a GHA runner
+    steps:
+      - name: Check live cycle freshness and decide
+        id: decide
+        env:
+          FORCE: ${{ github.event.inputs.force }}
+        run: |
+          set -euo pipefail
+          age=$(python3 -c "import json,urllib.request,datetime as D; d=json.load(urllib.request.urlopen('https://hrrr-data.alexcooke.co/manifest.json')); u=D.datetime.fromisoformat(d['updated']); print(int((D.datetime.now(D.timezone.utc)-u).total_seconds()))")
+          echo "Live HRRR cycle is ${age}s old (~$((age/60)) min). Threshold: 14400s (4h)."
+          if [ "${FORCE:-false}" = "true" ] || [ "$age" -ge 14400 ]; then
+            echo "==> stale (or forced): running fallback ingest."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "==> fresh: nothing to do (the Mac is keeping up)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout hrrr-ingest
+        if: steps.decide.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: empyreandance/hrrr-ingest
+
+      - name: Install uv
+        if: steps.decide.outputs.run == 'true'
+        uses: astral-sh/setup-uv@v5
+
+      - name: Fallback ingest (writes the current cycle to R2)
+        if: steps.decide.outputs.run == 'true'
+        working-directory: ingest
+        env:
+          R2_ENDPOINT_URL: https://817fc9f791704e3418596f7427194bc2.r2.cloudflarestorage.com
+          R2_ACCESS_KEY_ID: ${{ secrets.HRRR_R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.HRRR_R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hrrr-tool
+          # Runner is 4 vCPU / 16 GB; keep workers modest and tiles high to bound RSS.
+          INGEST_WORKERS: "4"
+          PARCEL_TILES: "8"
+          WORK_DIR: /tmp/hrrr-ingest
+          LOG_FILE: /tmp/hrrr-ingest.log
+          LOG_LEVEL: INFO
+        run: |
+          uv sync --frozen
+          # eccodes ships its C library in the wheel on Linux, so cfgrib works with
+          # no system packages (wgrib2 is absent -> the worker auto-uses cfgrib).
+          uv run python -m hrrr_ingest.orchestrator
