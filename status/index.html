@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Suite Status</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Suite Status</h1>
+    <span id="last-refresh" class="muted" aria-live="polite">refreshing…</span>
+  </header>
+
+  <main id="cards">
+    <!-- Tool feeds -->
+    <section class="card" id="card-hrrr">
+      <div class="card-head">
+        <span class="pill" data-pill>· · ·</span>
+        <h2>HRRR Threshold Tool</h2>
+      </div>
+      <p class="summary" data-summary>Checking…</p>
+    </section>
+
+    <section class="card" id="card-qlcs">
+      <div class="card-head">
+        <span class="pill" data-pill>· · ·</span>
+        <h2>QLCS Tornado</h2>
+      </div>
+      <p class="summary" data-summary>Checking…</p>
+    </section>
+
+    <section class="card" id="card-dewpoint">
+      <div class="card-head">
+        <span class="pill" data-pill>· · ·</span>
+        <h2>Dewpoint EFI</h2>
+      </div>
+      <p class="summary" data-summary>Checking…</p>
+    </section>
+
+    <!-- Mac Studio appliance -->
+    <section class="card" id="card-mac">
+      <div class="card-head">
+        <span class="pill" data-pill>· · ·</span>
+        <h2>Mac Studio</h2>
+      </div>
+      <p class="summary" data-summary>Checking…</p>
+
+      <dl class="metrics" id="mac-metrics" hidden>
+        <div class="metric"><dt>Uptime</dt><dd id="mac-uptime">–</dd></div>
+        <div class="metric"><dt>CPU load</dt><dd id="mac-load">–</dd></div>
+        <div class="metric metric-bar">
+          <dt>Memory</dt>
+          <dd>
+            <span id="mac-mem-text">–</span>
+            <div class="bar"><div class="bar-fill" id="mac-mem-bar"></div></div>
+          </dd>
+        </div>
+        <div class="metric metric-bar">
+          <dt>Disk</dt>
+          <dd>
+            <span id="mac-disk-text">–</span>
+            <div class="bar"><div class="bar-fill" id="mac-disk-bar"></div></div>
+          </dd>
+        </div>
+        <div class="metric"><dt>Daemons</dt><dd id="mac-daemons" class="daemons">–</dd></div>
+        <div class="metric"><dt>Heartbeat</dt><dd id="mac-hb-age">–</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer class="muted">
+    Polls every 30&nbsp;s · data from R2 + the Mac Studio heartbeat
+  </footer>
+
+  <script src="status.js"></script>
+</body>
+</html>
