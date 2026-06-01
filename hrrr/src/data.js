@@ -26,17 +26,50 @@ export async function loadManifests(baseUrl, useExtended = false) {
   return { global, cycle };
 }
 
-/** Open one forecast hour's Zarr group. */
-export function openForecastHour(baseUrl, cycleId, forecastHour) {
-  const ff = String(forecastHour).padStart(2, "0");
-  const store = new zarr.FetchStore(`${baseUrl}/cycles/${cycleId}/f${ff}`);
-  return zarr.open(store, { kind: "group" });
+// Schema 2.0: one sharded store per cycle (cycles/<id>/data.zarr) with a
+// forecast_hour dimension, instead of a group per forecast hour. We open the
+// store once and slice the forecast_hour axis. The "group" handle the rest of
+// the app passes around is now { root, fhIndex } into that single store.
+const _storeCache = new Map(); // cycleId -> Promise<{ root, fhs }>
+
+async function openStore(baseUrl, cycleId) {
+  if (!_storeCache.has(cycleId)) {
+    const p = (async () => {
+      const store = new zarr.FetchStore(`${baseUrl}/cycles/${cycleId}/data.zarr`);
+      const root = await zarr.open(store, { kind: "group" });
+      const fhArr = await zarr.open(root.resolve("forecast_hour"), { kind: "array" });
+      const fhs = Array.from((await zarr.get(fhArr)).data);
+      return { root, fhs };
+    })();
+    p.catch(() => _storeCache.delete(cycleId)); // don't cache a failed open
+    _storeCache.set(cycleId, p);
+  }
+  return _storeCache.get(cycleId);
 }
 
-/** Read a 2D variable in full as { data, shape }. (3D vars: pass a level index.) */
+/** A handle for one forecast hour: the shared store root + this hour's index. */
+export async function openForecastHour(baseUrl, cycleId, forecastHour) {
+  const { root, fhs } = await openStore(baseUrl, cycleId);
+  const fhIndex = fhs.indexOf(forecastHour);
+  if (fhIndex < 0) throw new Error(`forecast hour ${forecastHour} not in cycle ${cycleId}`);
+  return { root, fhIndex };
+}
+
+/** Read a whole array (for coords that don't depend on forecast hour). */
+async function readWhole(root, name) {
+  const arr = await zarr.open(root.resolve(name), { kind: "array" });
+  const chunk = await zarr.get(arr);
+  return { data: chunk.data, shape: chunk.shape };
+}
+
+/** Read a data variable at this handle's forecast hour as { data, shape }.
+ *  Vars are dimensioned [forecast_hour, (isobaricInhPa,) y, x]; 3D vars take a
+ *  level index. Returns a [y, x] slice either way. */
 export async function readVariable(group, name, level = null) {
-  const arr = await zarr.open(group.resolve(name), { kind: "array" });
-  const selection = arr.shape.length === 3 ? [level ?? 0, null, null] : null;
+  const arr = await zarr.open(group.root.resolve(name), { kind: "array" });
+  const selection = arr.shape.length === 4
+    ? [group.fhIndex, level ?? 0, null, null]  // [fh, level, y, x]
+    : [group.fhIndex, null, null];             // [fh, y, x]
   const chunk = await zarr.get(arr, selection);
   return { data: chunk.data, shape: chunk.shape };
 }
@@ -44,8 +77,7 @@ export async function readVariable(group, name, level = null) {
 /** Pressure levels (hPa) of the 3D fields, in storage order; [] if none. */
 export async function readLevels(group) {
   try {
-    const arr = await zarr.open(group.resolve("isobaricInhPa"), { kind: "array" });
-    return Array.from((await zarr.get(arr)).data);
+    return Array.from((await readWhole(group.root, "isobaricInhPa")).data);
   } catch {
     return [];
   }
@@ -57,8 +89,8 @@ export async function readLevels(group) {
  * geographic bounding box. Used to reproject overlays into Web Mercator.
  */
 export async function gridGeo(group) {
-  const lat = await readVariable(group, "latitude");
-  const lon = await readVariable(group, "longitude");
+  const lat = await readWhole(group.root, "latitude");
+  const lon = await readWhole(group.root, "longitude");
   const nx = lat.shape[1];
   const wrap = (x) => (x > 180 ? x - 360 : x); // 0..360 -> -180..180
   const mapper = makeGridMapper(wrap(lon.data[0]), lat.data[0]); // SW cell = (j=0,i=0)
