@@ -1,14 +1,14 @@
 {
   "office": "BGM",
-  "product_id": "202606010510-KBGM-FXUS61-AFDBGM",
-  "afd_time": "2026-06-01T05:10:00Z",
+  "product_id": "202606011017-KBGM-FXUS61-AFDBGM",
+  "afd_time": "2026-06-01T10:17:00Z",
   "section_type": "discussion",
-  "updated": "2026-06-01T05:18:51.738610+00:00",
+  "updated": "2026-06-01T12:11:44.638628+00:00",
   "query_preview": "..\nKEY MESSAGE 1...\n\nWith an upper level Omega blocking pattern present over the country, \nthe forecast will be fairly consistent for the next couple of days. \nWhile an upper trough will extend over the Northeast, surface high \npressure will help conditions mostly dry through at least midweek.\nA weak shortwave and daytime heating will likely kick off \nisolated showers this afternoon and evening. With the surface \nhigh present, moisture will be limited, so anything that can \ndevelop will be light. Given that NBM guidance did not have any \nPoPs for this time period, a blend of NAMNest, GFS, and manual \nedits were used to include areas of slight chance PoPs given the\nisolated coverage expected. Models show weak instability and\nshear, but not enough to have the confidence to include thunder\nin the forecast. Patchy fog will also be possible tonight, \nmainly within the Catskills and river valleys. Guidance \ncontinue to favor dry conditions for Tuesday. \n\nTemperatures under this pattern will max out in the 60s and 70s\nand drop into the 40s and 50s at night. With northerly flow, \nclear skies, and light winds all expected, temperatures were \nlowered below NBM guidance for tonight.\n\nKey Message 2...\n\nThe Omega block will begin to lose its shape midweek as the ridge in \nthe Central US drifts eastward and the trough over the eastern US \nfills as it moves out of the region. This will result in a warming \ntrend through the end of the week thanks to warm air advection under \nwest to southwesterly flow. High temperatures will climb into the \n80s for most by Thursday. With surface high pressure still an \ninfluence, conditions will be mostly dry. There is a frontal system \nthat approaches the region late in the week but it begins to slow \ndown as it does. Some pop up showers ahead of the front will be \npossible, though the better chance for rain will be when the front \nfinally pushes through. There remains uncertainty as guidance \ncontinue to differ on the timing, though there will be potential for \nrain at some point over the weekend.",
   "analogs": [
     {
-      "datetime_utc": "2016-09-16T10:48Z",
-      "source_file": "BGM_2016_16_1048.txt",
+      "datetime_utc": "2016-09-16T08:02Z",
+      "source_file": "BGM_2016_16_0802.txt",
       "similarity": 0.9470014572143555,
       "label": "severe_wind",
       "is_severe": true,
@@ -50,9 +50,65 @@
       }
     },
     {
+      "datetime_utc": "2024-07-11T05:13Z",
+      "source_file": "BGM_2024_11_0513.txt",
+      "similarity": 0.9452402591705322,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 7,
+            "severe_wind": 14
+          }
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 236,
+            "tornado": 4,
+            "flood": 4,
+            "severe_hail": 5
+          }
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 212,
+            "tornado": 9,
+            "flood": 4
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 49,
+            "flood": 2,
+            "severe_hail": 1
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2024-07-10T17:31Z",
       "source_file": "BGM_2024_10_1731.txt",
-      "similarity": 0.9452403783798218,
+      "similarity": 0.9452402591705322,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -107,57 +163,61 @@
       }
     },
     {
-      "datetime_utc": "2024-07-11T05:13Z",
-      "source_file": "BGM_2024_11_0513.txt",
-      "similarity": 0.9452403783798218,
+      "datetime_utc": "2021-07-06T06:16Z",
+      "source_file": "BGM_2021_06_0616.txt",
+      "similarity": 0.942542314529419,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 181,
+            "severe_hail": 25
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 92,
+            "severe_hail": 6,
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 15,
+            "severe_wind": 39,
+            "flood": 19,
+            "tornado": 1
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 6,
+            "severe_wind": 22
+          }
+        },
+        "4": {
           "label": "flood",
           "counts": {
             "flood": 1
           }
         },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
+        "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 7,
-            "severe_wind": 14
-          }
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 236,
-            "tornado": 4,
-            "flood": 4,
-            "severe_hail": 5
-          }
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 212,
-            "tornado": 9,
-            "flood": 4
+            "flood": 27,
+            "severe_wind": 19
           }
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 49,
-            "flood": 2,
-            "severe_hail": 1
+            "severe_wind": 12,
+            "flood": 18
           }
         }
       }
@@ -165,7 +225,7 @@
     {
       "datetime_utc": "2021-07-05T19:46Z",
       "source_file": "BGM_2021_05_1946.txt",
-      "similarity": 0.9425424933433533,
+      "similarity": 0.942542314529419,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -223,69 +283,9 @@
       }
     },
     {
-      "datetime_utc": "2021-07-06T00:23Z",
-      "source_file": "BGM_2021_06_0023.txt",
-      "similarity": 0.9425424933433533,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 181,
-            "severe_hail": 25
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 92,
-            "severe_hail": 6,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 15,
-            "severe_wind": 39,
-            "flood": 19,
-            "tornado": 1
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 6,
-            "severe_wind": 22
-          }
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 27,
-            "severe_wind": 19
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 12,
-            "flood": 18
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2021-09-23T08:45Z",
-      "source_file": "BGM_2021_23_0845.txt",
-      "similarity": 0.9416612386703491,
+      "datetime_utc": "2021-09-23T11:15Z",
+      "source_file": "BGM_2021_23_1115.txt",
+      "similarity": 0.9416611194610596,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -325,9 +325,9 @@
       }
     },
     {
-      "datetime_utc": "2014-05-27T10:40Z",
-      "source_file": "BGM_2014_27_1040.txt",
-      "similarity": 0.9408236742019653,
+      "datetime_utc": "2014-05-27T08:18Z",
+      "source_file": "BGM_2014_27_0818.txt",
+      "similarity": 0.9408233761787415,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -367,9 +367,9 @@
       }
     },
     {
-      "datetime_utc": "2021-07-12T23:58Z",
-      "source_file": "BGM_2021_12_2358.txt",
-      "similarity": 0.9407874941825867,
+      "datetime_utc": "2021-07-12T19:00Z",
+      "source_file": "BGM_2021_12_1900.txt",
+      "similarity": 0.9407873153686523,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -425,7 +425,7 @@
     {
       "datetime_utc": "2021-07-13T04:34Z",
       "source_file": "BGM_2021_13_0434.txt",
-      "similarity": 0.9407874941825867,
+      "similarity": 0.9407873153686523,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -480,9 +480,9 @@
       }
     },
     {
-      "datetime_utc": "2016-01-14T05:52Z",
-      "source_file": "BGM_2016_14_0552.txt",
-      "similarity": 0.9400590062141418,
+      "datetime_utc": "2016-01-14T06:58Z",
+      "source_file": "BGM_2016_14_0658.txt",
+      "similarity": 0.9400587677955627,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -534,7 +534,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.69,
-    "mean_similarity": 0.9357941704988479,
+    "mean_similarity": 0.9357940071821212,
     "base_rate": 0.5056064682664336,
     "signal_value": 0.18439353173356632,
     "percentile": 57,
@@ -543,8 +543,8 @@
     "n_total": 10,
     "n_severe_signal": 69,
     "n_total_signal": 100,
-    "product_id": "202606010510-KBGM-FXUS61-AFDBGM",
-    "afd_time": "2026-06-01T05:10:00Z",
-    "updated": "2026-06-01T05:18:51.738610+00:00"
+    "product_id": "202606011017-KBGM-FXUS61-AFDBGM",
+    "afd_time": "2026-06-01T10:17:00Z",
+    "updated": "2026-06-01T12:11:44.638628+00:00"
   }
 }

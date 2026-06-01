@@ -1,15 +1,15 @@
 {
   "office": "UNR",
-  "product_id": "202606010507-KUNR-FXUS63-AFDUNR",
-  "afd_time": "2026-06-01T05:07:00Z",
+  "product_id": "202606011153-KUNR-FXUS63-AFDUNR",
+  "afd_time": "2026-06-01T11:53:00Z",
   "section_type": "discussion",
-  "updated": "2026-06-01T05:18:51.738610+00:00",
+  "updated": "2026-06-01T12:11:44.638628+00:00",
   "query_preview": "..(This Evening Through Sunday)\nIssued at 157 PM MDT Sun May 31 2026\n\nAn area of low pressure just to our west will support additional \nrounds of isolated to scattered showers and thunderstorms today and \nMonday. Today, cells are especially firing over the Black Hills \ncorridor (although a few cells have been noted in northeastern \nWyoming too) and will push east with time. Today's environment \nfeatures modest CAPE, but very little wind shear, so the severe \nweather threat seems very limited/isolated and brief in duration \nwith a \"pulse\" storm mode. It is worth noting that any storms that \ncan track east off the terrain into the South Dakota plains will \nhave access to the best instability and sfc moisture per \nmesoanalysis and short-term model projections, yet the lack of shear \nwill tend to limit storm organization and longevity. Monday, wind \nshear increases, but instability remains modest, so the overall \nsevere threat remains low/isolated with perhaps gusty winds or hail \non a few of the stronger cells. Northeast Wyoming, the Black Hills, \nand adjacent South Dakota plains will again be favored for isolated \nto scattered activity. High temperatures both days will generally \ntop out in the 70s, with some 80s possible across our southern South \nDakota counties.\n\nTuesday is starting to look more concerning, with a significant \nincrease in both deep-layer wind shear (as high as 30-40kts) \noverlapping with higher instability (possibly 2,000 J/kg SBCAPE), \nputting us at risk for a multicell to supercell storm mode with \ngreater risks for damaging winds and large hail...all ahead of a \nshortwave and cold front. Moisture continues to look good as well. \nThe NWS Storm Prediction Center has issued a Slight Risk (Level 2 of \n5) for severe thunderstorms across most of our South Dakota \ncounties, and a Marginal Risk (Level 1 of 5) across northeastern \nWyoming. We'll definitely be keeping an eye on Tuesday's environment \nin the days ahead. Storm initiation currently looks to occur\nbetween 1 PM and 3 PM.\n\nAn unsettled pattern with daily chances of at least isolated showers \nand thunderstorms will continue through the end of the week. High \ntemperatures by next weekend may make a run back toward the 90s.",
   "analogs": [
     {
-      "datetime_utc": "2021-07-11T09:20Z",
-      "source_file": "UNR_2021_11_0920.txt",
-      "similarity": 0.9704477787017822,
+      "datetime_utc": "2021-07-11T11:17Z",
+      "source_file": "UNR_2021_11_1117.txt",
+      "similarity": 0.9704477190971375,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -55,9 +55,61 @@
       }
     },
     {
+      "datetime_utc": "2025-06-21T23:44Z",
+      "source_file": "UNR_2025_21_2344_1.txt",
+      "similarity": 0.9700512886047363,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 7
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 21
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-06-22T05:00Z",
       "source_file": "UNR_2025_22_0500.txt",
-      "similarity": 0.9700514078140259,
+      "similarity": 0.9700512886047363,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -109,61 +161,9 @@
       }
     },
     {
-      "datetime_utc": "2025-06-21T23:44Z",
-      "source_file": "UNR_2025_21_2344_1.txt",
-      "similarity": 0.9700514078140259,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 7
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 6,
-            "severe_wind": 21
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2007-05-13T09:28Z",
       "source_file": "UNR_2007_13_0928.txt",
-      "similarity": 0.9699221849441528,
+      "similarity": 0.9699222445487976,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -210,7 +210,7 @@
     {
       "datetime_utc": "2022-06-16T19:47Z",
       "source_file": "UNR_2022_16_1947.txt",
-      "similarity": 0.9697864055633545,
+      "similarity": 0.9697862863540649,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -258,7 +258,7 @@
     {
       "datetime_utc": "2022-06-17T04:06Z",
       "source_file": "UNR_2022_17_0406.txt",
-      "similarity": 0.9697864055633545,
+      "similarity": 0.9697862863540649,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -306,59 +306,9 @@
       }
     },
     {
-      "datetime_utc": "2019-05-28T20:12Z",
-      "source_file": "UNR_2019_28_2012.txt",
-      "similarity": 0.9697554707527161,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 23,
-            "winter": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 18,
-            "flood": 10
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "flood": 1,
-            "severe_hail": 5
-          }
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 42
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 4
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2019-05-29T04:28Z",
       "source_file": "UNR_2019_29_0428.txt",
-      "similarity": 0.9697554707527161,
+      "similarity": 0.9697552919387817,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -406,9 +356,102 @@
       }
     },
     {
+      "datetime_utc": "2019-05-28T20:12Z",
+      "source_file": "UNR_2019_28_2012.txt",
+      "similarity": 0.9697552919387817,
+      "label": "severe_hail",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 23,
+            "winter": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 18,
+            "flood": 10
+          }
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "flood": 1,
+            "severe_hail": 5
+          }
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 42
+          }
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 4
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-05-22T20:05Z",
+      "source_file": "UNR_2022_22_2005.txt",
+      "similarity": 0.9691659212112427,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 22
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 28,
+            "severe_hail": 5
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2022-05-23T04:42Z",
       "source_file": "UNR_2022_23_0442.txt",
-      "similarity": 0.9691661596298218,
+      "similarity": 0.9691659212112427,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -450,55 +493,12 @@
           }
         }
       }
-    },
-    {
-      "datetime_utc": "2022-05-22T23:26Z",
-      "source_file": "UNR_2022_22_2326.txt",
-      "similarity": 0.9691661596298218,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 6,
-            "severe_wind": 22
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 28,
-            "severe_hail": 5
-          }
-        }
-      }
     }
   ],
   "signal": {
     "level": "HIGH",
     "severe_fraction": 1.0,
-    "mean_similarity": 0.9670801705121994,
+    "mean_similarity": 0.9670800578594207,
     "base_rate": 0.46000706797031454,
     "signal_value": 0.5399929320296855,
     "percentile": 100,
@@ -507,8 +507,8 @@
     "n_total": 10,
     "n_severe_signal": 100,
     "n_total_signal": 100,
-    "product_id": "202606010507-KUNR-FXUS63-AFDUNR",
-    "afd_time": "2026-06-01T05:07:00Z",
-    "updated": "2026-06-01T05:18:51.738610+00:00"
+    "product_id": "202606011153-KUNR-FXUS63-AFDUNR",
+    "afd_time": "2026-06-01T11:53:00Z",
+    "updated": "2026-06-01T12:11:44.638628+00:00"
   }
 }
