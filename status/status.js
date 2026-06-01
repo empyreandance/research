@@ -29,7 +29,7 @@ const URLS = {
 const THRESH = {
   hrrr: [90 * 60, 4 * 3600],
   qlcs: [4 * 60, 10 * 60],  // MRMS ~2min cadence + ~45s processing: green <4min, slow <10min
-  dewpoint: [28 * 3600, 48 * 3600],
+  dewpoint: [7 * 3600, 13 * 3600],   // runs every 6h (05:30/11:30/17:30/23:30 UTC)
   heartbeat: [10 * 60, 30 * 60],
 };
 
@@ -143,7 +143,7 @@ async function updateDewpoint() {
     const age = ageSeconds(f.body.generated_utc);
     const cls = classifyAge(age, THRESH.dewpoint);
     const cyc = f.body.cycle ? `${f.body.cycle} ` : "";
-    paint("card-dewpoint", st(cls), `${cyc}· ${fmtAge(age)} old · ~daily`);
+    paint("card-dewpoint", st(cls), `${cyc}· ${fmtAge(age)} old · ~6-hourly`);
   } catch (_) {
     paint("card-dewpoint", ST_OFFLINE, "offline");
   }
@@ -219,6 +219,48 @@ async function updateMac() {
   }
 }
 
+// ---- GHA-driven tools (assets/status/tools.json = last successful run) ------
+
+const GHA_TOOLS = [
+  { key: "wind",       label: "Wind",            thresh: [90 * 60, 4 * 3600] },   // hourly
+  { key: "caast",      label: "CAAST",           thresh: [90 * 60, 4 * 3600] },   // hourly
+  { key: "efi",        label: "EFI",             thresh: [70 * 60, 3 * 3600] },   // every 30 min
+  { key: "apt",        label: "Apparent Temp",   thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "temp",       label: "Temperature Map", thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "streak",     label: "Streak Map",      thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "time_since", label: "Time-Since-Temp", thresh: [26 * 3600, 50 * 3600] }, // daily
+];
+
+function ensureToolCard(key, label) {
+  let card = document.getElementById(`card-${key}`);
+  if (!card) {
+    card = document.createElement("section");
+    card.className = "card";
+    card.id = `card-${key}`;
+    card.innerHTML =
+      `<div class="card-head"><span class="pill" data-pill>· · ·</span><h2>${label}</h2></div>` +
+      `<p class="summary" data-summary>Checking…</p>`;
+    document.getElementById("gha-tools").appendChild(card);
+  }
+  return `card-${key}`;
+}
+
+async function updateGhaTools() {
+  let tools = null;
+  try {
+    const r = await fetch("/assets/status/tools.json", { cache: "no-store" });
+    if (r.ok) tools = (await r.json()).tools || {};
+  } catch (_) { /* leave null → offline */ }
+  for (const t of GHA_TOOLS) {
+    const id = ensureToolCard(t.key, t.label);
+    if (!tools) { paint(id, ST_OFFLINE, "status manifest unreachable"); continue; }
+    const upd = tools[t.key] && tools[t.key].updated;
+    if (!upd) { paint(id, ST_UNMIGRATED, "no successful run yet", { dim: true }); continue; }
+    const age = ageSeconds(upd);
+    paint(id, st(classifyAge(age, t.thresh)), `ran ${fmtAge(age)} ago`);
+  }
+}
+
 // ---- loop ------------------------------------------------------------------
 
 function stamp() {
@@ -228,7 +270,7 @@ function stamp() {
 }
 
 async function refresh() {
-  await Promise.allSettled([updateHRRR(), updateQLCS(), updateDewpoint(), updateMac()]);
+  await Promise.allSettled([updateHRRR(), updateQLCS(), updateDewpoint(), updateMac(), updateGhaTools()]);
   stamp();
 }
 

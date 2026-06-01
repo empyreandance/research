@@ -1,0 +1,77 @@
+name: Status manifest
+
+# Writes assets/status/tools.json — each GHA-driven tool's last SUCCESSFUL run
+# time, from the Actions API (not git-commit time, so a healthy cron that
+# produced no new commit still counts as fresh; a failing/skipped cron goes
+# stale). Both status pages read this one file, so adding a tool is a one-line
+# change here and no existing workflow is touched.
+
+on:
+  schedule:
+    - cron: "*/20 * * * *"   # every 20 min — finer than any tool's cadence
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: status-manifest
+  cancel-in-progress: true
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build status manifest (last successful run per workflow)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from datetime import datetime, timezone
+          # tool key -> the workflow file that produces it
+          WF = {
+              "caast":      "caast_hourly.yml",
+              "wind":       "fetch-wind.yml",
+              "efi":        "efi-daily.yml",
+              "apt":        "daily_apt_map.yml",
+              "temp":       "daily_temp_map.yml",
+              "streak":     "daily_streak_map.yml",
+              "time_since": "daily_time_since_temp.yml",
+          }
+          repo = os.environ["REPO"]
+          def last_success(wf):
+              try:
+                  out = subprocess.check_output(
+                      ["gh", "api",
+                       f"repos/{repo}/actions/workflows/{wf}/runs?status=success&per_page=1",
+                       "--jq", ".workflow_runs[0].updated_at // empty"],
+                      text=True).strip()
+                  return out or None
+              except Exception:
+                  return None
+          data = {
+              "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "tools": {k: {"updated": last_success(wf)} for k, wf in WF.items()},
+          }
+          os.makedirs("assets/status", exist_ok=True)
+          with open("assets/status/tools.json", "w") as f:
+              json.dump(data, f, indent=2)
+          print(json.dumps(data, indent=2))
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/status/tools.json
+          if git diff --staged --quiet; then
+            echo "no freshness change"; exit 0
+          fi
+          git commit -m "status manifest $(date -u +%H:%MZ)"
+          git pull --rebase --autostash origin main || true
+          git push
