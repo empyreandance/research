@@ -62,6 +62,19 @@ async function readWhole(root, name) {
   return { data: chunk.data, shape: chunk.shape };
 }
 
+/** Undo scaled-int16 packing → Float32. Fields are stored as int16 with CF
+ *  `scale_factor`/`add_offset` (and `_FillValue`=-32768 for NaN) to halve bytes;
+ *  zarrita reads the raw ints, so we apply value = raw*scale + offset here. Vars
+ *  written as plain float (constant/all-NaN fields) pass through untouched. */
+function unpack(chunk, attrs) {
+  const s = attrs?.scale_factor, o = attrs?.add_offset, fv = attrs?._FillValue;
+  if (s == null && o == null && fv == null) return { data: chunk.data, shape: chunk.shape };
+  const src = chunk.data, out = new Float32Array(src.length);
+  const sf = s ?? 1, of = o ?? 0;
+  for (let i = 0; i < src.length; i++) out[i] = src[i] === fv ? NaN : src[i] * sf + of;
+  return { data: out, shape: chunk.shape };
+}
+
 /** Read a data variable at this handle's forecast hour as { data, shape }.
  *  Vars are dimensioned [forecast_hour, (isobaricInhPa,) y, x]; 3D vars take a
  *  level index. Returns a [y, x] slice either way. */
@@ -71,7 +84,7 @@ export async function readVariable(group, name, level = null) {
     ? [group.fhIndex, level ?? 0, null, null]  // [fh, level, y, x]
     : [group.fhIndex, null, null];             // [fh, y, x]
   const chunk = await zarr.get(arr, selection);
-  return { data: chunk.data, shape: chunk.shape };
+  return unpack(chunk, arr.attrs);
 }
 
 /** Pressure levels (hPa) of the 3D fields, in storage order; [] if none. */
