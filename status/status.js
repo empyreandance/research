@@ -222,9 +222,9 @@ async function updateMac() {
 // ---- GHA-driven tools (assets/status/tools.json = last successful run) ------
 
 const GHA_TOOLS = [
-  { key: "wind",       label: "Wind",            thresh: [7 * 3600, 13 * 3600] }, // cron hourly, ~6h in practice (GH throttling)
-  { key: "caast",      label: "CAAST",           thresh: [3 * 3600, 6 * 3600] },  // hourly (+ throttle margin)
-  { key: "efi",        label: "EFI",             thresh: [7 * 3600, 13 * 3600] }, // cron */30, ~6h in practice
+  { key: "wind",       label: "Wind",            thresh: [13 * 3600, 26 * 3600] }, // ~6h cadence in practice, generous
+  { key: "caast",      label: "CAAST",           thresh: [3 * 3600, 6 * 3600] },   // hourly (+ throttle margin)
+  { key: "efi",        label: "EFI",             thresh: [13 * 3600, 26 * 3600] }, // source releases every 12h
   { key: "apt",        label: "Apparent Temp",   thresh: [26 * 3600, 50 * 3600] }, // daily
   { key: "temp",       label: "Temperature Map", thresh: [26 * 3600, 50 * 3600] }, // daily
   { key: "streak",     label: "Streak Map",      thresh: [26 * 3600, 50 * 3600] }, // daily
