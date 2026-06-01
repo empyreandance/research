@@ -5,9 +5,10 @@
  *
  * Freshness source per feed (see Phase-1 spec + decisions):
  *   HRRR     — manifest body `.updated` (cycle publish time); cycle from `.current_cycle`
- *   QLCS     — `Last-Modified` header (the sidecar re-uploads latest.json ~every 10s,
- *              so this is the real-time pipeline-liveness signal the <60s threshold wants);
- *              the body `scan_time` is also shown so a stalled poller is visible in text.
+ *   QLCS     — `Last-Modified` header. The sidecar re-uploads latest.json once per
+ *              new MRMS scan (~every 2 min), not every 10s, so freshness is judged on
+ *              a few-minute cadence (see THRESH.qlcs); the body `scan_time` is also
+ *              shown so a stalled poller is visible in text.
  *   Dewpoint — body `.generated_utc` (truer "data generated" time than upload)
  *   Mac      — heartbeat body `.updated`, plus all the host metrics
  *
@@ -27,7 +28,7 @@ const URLS = {
 // Color thresholds in seconds: [green-under, yellow-under]; at/above 2nd => red.
 const THRESH = {
   hrrr: [90 * 60, 4 * 3600],
-  qlcs: [60, 5 * 60],
+  qlcs: [4 * 60, 10 * 60],  // MRMS ~2min cadence + ~45s processing: green <4min, slow <10min
   dewpoint: [28 * 3600, 48 * 3600],
   heartbeat: [10 * 60, 30 * 60],
 };
