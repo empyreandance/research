@@ -222,13 +222,13 @@ async function updateMac() {
 // ---- GHA-driven tools (assets/status/tools.json = last successful run) ------
 
 const GHA_TOOLS = [
-  { key: "wind",       label: "Wind",            thresh: [13 * 3600, 26 * 3600] }, // ~6h cadence in practice, generous
-  { key: "caast",      label: "CAAST",           thresh: [3 * 3600, 6 * 3600] },   // hourly (+ throttle margin)
-  { key: "efi",        label: "EFI",             thresh: [13 * 3600, 26 * 3600] }, // source releases every 12h
-  { key: "apt",        label: "Apparent Temp",   thresh: [26 * 3600, 50 * 3600] }, // daily
-  { key: "temp",       label: "Temperature Map", thresh: [26 * 3600, 50 * 3600] }, // daily
-  { key: "streak",     label: "Streak Map",      thresh: [26 * 3600, 50 * 3600] }, // daily
-  { key: "time_since", label: "Time-Since-Temp", thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "wind",       label: "Fetch Tool",            thresh: [13 * 3600, 26 * 3600] }, // ~6h cadence in practice
+  { key: "caast",      label: "CAAST",                 thresh: [3 * 3600, 6 * 3600] },    // hourly (+ throttle margin)
+  { key: "efi",        label: "EFI Viewer",            thresh: [13 * 3600, 26 * 3600] }, // source releases every 12h
+  { key: "apt",        label: "Apparent Temp Anomaly", thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "temp",       label: "Temp Anomaly",          thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "streak",     label: "Temp Streak",           thresh: [26 * 3600, 50 * 3600] }, // daily
+  { key: "time_since", label: "Time Since Temp",       thresh: [26 * 3600, 50 * 3600] }, // daily
 ];
 
 function ensureToolCard(key, label) {

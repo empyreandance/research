@@ -15,6 +15,29 @@
   </header>
 
   <main id="cards">
+    <!-- Server appliance — full-width banner across the top -->
+    <section class="card server" id="card-mac">
+      <div class="card-head">
+        <span class="pill" data-pill>· · ·</span>
+        <h2>Server</h2>
+        <span class="summary inline" data-summary>Checking…</span>
+      </div>
+      <dl class="metrics" id="mac-metrics" hidden>
+        <div class="metric"><dt>Uptime</dt><dd id="mac-uptime">–</dd></div>
+        <div class="metric"><dt>CPU load</dt><dd id="mac-load">–</dd></div>
+        <div class="metric metric-bar">
+          <dt>Memory</dt>
+          <dd><span id="mac-mem-text">–</span><div class="bar"><div class="bar-fill" id="mac-mem-bar"></div></div></dd>
+        </div>
+        <div class="metric metric-bar">
+          <dt>Disk</dt>
+          <dd><span id="mac-disk-text">–</span><div class="bar"><div class="bar-fill" id="mac-disk-bar"></div></div></dd>
+        </div>
+        <div class="metric"><dt>Daemons</dt><dd id="mac-daemons" class="daemons">–</dd></div>
+        <div class="metric"><dt>Heartbeat</dt><dd id="mac-hb-age">–</dd></div>
+      </dl>
+    </section>
+
     <!-- Tool feeds -->
     <section class="card" id="card-hrrr">
       <div class="card-head">
@@ -42,36 +65,6 @@
 
     <!-- Other GHA-driven tools — cards injected from assets/status/tools.json -->
     <div id="gha-tools" style="display: contents"></div>
-
-    <!-- Server appliance -->
-    <section class="card" id="card-mac">
-      <div class="card-head">
-        <span class="pill" data-pill>· · ·</span>
-        <h2>Server</h2>
-      </div>
-      <p class="summary" data-summary>Checking…</p>
-
-      <dl class="metrics" id="mac-metrics" hidden>
-        <div class="metric"><dt>Uptime</dt><dd id="mac-uptime">–</dd></div>
-        <div class="metric"><dt>CPU load</dt><dd id="mac-load">–</dd></div>
-        <div class="metric metric-bar">
-          <dt>Memory</dt>
-          <dd>
-            <span id="mac-mem-text">–</span>
-            <div class="bar"><div class="bar-fill" id="mac-mem-bar"></div></div>
-          </dd>
-        </div>
-        <div class="metric metric-bar">
-          <dt>Disk</dt>
-          <dd>
-            <span id="mac-disk-text">–</span>
-            <div class="bar"><div class="bar-fill" id="mac-disk-bar"></div></div>
-          </dd>
-        </div>
-        <div class="metric"><dt>Daemons</dt><dd id="mac-daemons" class="daemons">–</dd></div>
-        <div class="metric"><dt>Heartbeat</dt><dd id="mac-hb-age">–</dd></div>
-      </dl>
-    </section>
   </main>
 
   <footer class="muted">
