@@ -1,5 +1,5 @@
 "use strict";
-const REFRESH_MS = 10000;  // public mirror: matches ~10s R2 publish
+const REFRESH_MS = 30000;  // public mirror: matches ~30s R2 publish
 const $ = (id) => document.getElementById(id);
 const netHist = [];           // rolling {down, up} bytes/s for the sparkline
 const MAXPTS = 90;
