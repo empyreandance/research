@@ -3,74 +3,84 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
-  <title>Suite Status</title>
+  <title>Server · live</title>
   <link rel="stylesheet" href="style.css">
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac745e4de4a442a9bc0d94056b67e871"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac745e4de4a442a9bc0d94056b67e871"}'></script>
 </head>
 <body>
   <header>
-    <h1>Suite Status</h1>
-    <span id="last-refresh" class="muted" aria-live="polite">refreshing…</span>
+    <h1>Server <span class="live-dot" id="livedot"></span></h1>
+    <div class="sub"><span id="uptime">—</span> · <span id="refresh" class="muted">connecting…</span></div>
   </header>
 
-  <main id="cards">
-    <!-- Server appliance — full-width banner across the top -->
-    <section class="card server" id="card-mac">
-      <div class="card-head">
-        <span class="pill" data-pill>· · ·</span>
-        <h2>Server</h2>
-        <span class="summary inline" data-summary>Checking…</span>
-      </div>
-      <dl class="metrics" id="mac-metrics" hidden>
-        <div class="metric"><dt>Uptime</dt><dd id="mac-uptime">–</dd></div>
-        <div class="metric"><dt>CPU load</dt><dd id="mac-load">–</dd></div>
-        <div class="metric metric-bar">
-          <dt>Memory</dt>
-          <dd><span id="mac-mem-text">–</span><div class="bar"><div class="bar-fill" id="mac-mem-bar"></div></div></dd>
-        </div>
-        <div class="metric metric-bar">
-          <dt>Disk</dt>
-          <dd><span id="mac-disk-text">–</span><div class="bar"><div class="bar-fill" id="mac-disk-bar"></div></div></dd>
-        </div>
-        <div class="metric"><dt>Daemons</dt><dd id="mac-daemons" class="daemons">–</dd></div>
-        <div class="metric"><dt>Heartbeat</dt><dd id="mac-hb-age">–</dd></div>
-      </dl>
+  <main>
+    <section class="card">
+      <h2>CPU <span class="big" id="cpu-pct">—</span></h2>
+      <div class="cores" id="cores"></div>
+      <div class="muted small" id="loadavg">load —</div>
     </section>
 
-    <!-- Tool feeds -->
-    <section class="card" id="card-hrrr">
-      <div class="card-head">
-        <span class="pill" data-pill>· · ·</span>
-        <h2>HRRR Threshold Tool</h2>
-      </div>
-      <p class="summary" data-summary>Checking…</p>
+    <section class="card">
+      <h2>Memory</h2>
+      <div class="big" id="mem-text">—</div>
+      <div class="bar"><div class="bar-fill" id="mem-bar"></div></div>
     </section>
 
-    <section class="card" id="card-qlcs">
-      <div class="card-head">
-        <span class="pill" data-pill>· · ·</span>
-        <h2>QLCS Tornado</h2>
-      </div>
-      <p class="summary" data-summary>Checking…</p>
+    <section class="card">
+      <h2>Network</h2>
+      <div class="netrow"><span class="arrow down">↓</span><span class="big" id="net-down">—</span></div>
+      <div class="netrow"><span class="arrow up">↑</span><span class="big" id="net-up">—</span></div>
+      <canvas id="net-spark" height="48"></canvas>
     </section>
 
-    <section class="card" id="card-dewpoint">
-      <div class="card-head">
-        <span class="pill" data-pill>· · ·</span>
-        <h2>Dewpoint EFI</h2>
-      </div>
-      <p class="summary" data-summary>Checking…</p>
+    <section class="card">
+      <h2>Disk</h2>
+      <div class="big" id="disk-text">—</div>
+      <div class="bar"><div class="bar-fill" id="disk-bar"></div></div>
     </section>
 
-    <!-- Other GHA-driven tools — cards injected from assets/status/tools.json -->
-    <div id="gha-tools" style="display: contents"></div>
+    <section class="card">
+      <h2>Power</h2>
+      <div class="big" id="power-text">—</div>
+      <div class="muted small" id="power-sub">—</div>
+      <div class="muted small" id="power-24h">—</div>
+    </section>
+
+    <section class="card wide">
+      <h2>Daemons</h2>
+      <div class="daemons" id="daemons"></div>
+    </section>
+
+    <section class="card wide">
+      <h2>HRRR <span class="muted small" id="hrrr-now"></span></h2>
+      <div class="hrrr-rows">
+        <div class="hrrr-row"><span class="label">Current</span><span id="hrrr-current">—</span></div>
+        <div class="hrrr-row"><span class="label">Latest 19-hr</span><span id="hrrr-19h">—</span></div>
+        <div class="hrrr-row"><span class="label">Latest 48-hr</span><span id="hrrr-48h">—</span></div>
+      </div>
+    </section>
+
+    <section class="card wide">
+      <h2>QLCS <span class="muted small" id="qlcs-now"></span></h2>
+      <pre class="logtail" id="qlcs-log"></pre>
+    </section>
+
+    <section class="card wide">
+      <h2>Dewpoint EFI <span class="muted small">cloud · GitHub Actions (not this box)</span></h2>
+      <div id="dewpoint">—</div>
+    </section>
+
+    <section class="card wide">
+      <h2>Other tools <span class="muted small">GitHub Actions · last successful run</span></h2>
+      <div class="daemons" id="gha-tools"></div>
+    </section>
+
+    <section class="card wide">
+      <h2>Usage <span class="muted small" id="usage-note">page views per tool</span></h2>
+      <div class="hrrr-rows" id="usage"><span class="muted">—</span></div>
+    </section>
   </main>
 
-  <footer class="muted">
-    Polls every 30&nbsp;s · data from R2 + the server heartbeat
-  </footer>
-
-  <script src="status.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
