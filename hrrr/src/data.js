@@ -38,7 +38,9 @@ async function openStore(baseUrl, cycleId) {
       const store = new zarr.FetchStore(`${baseUrl}/cycles/${cycleId}/data.zarr`);
       const root = await zarr.open(store, { kind: "group" });
       const fhArr = await zarr.open(root.resolve("forecast_hour"), { kind: "array" });
-      const fhs = Array.from((await zarr.get(fhArr)).data);
+      // forecast_hour is stored int64 → zarrita yields a BigInt64Array. Coerce to
+      // plain Numbers so fhs.indexOf(forecastHour) (a Number) matches (0n !== 0).
+      const fhs = Array.from((await zarr.get(fhArr)).data, Number);
       return { root, fhs };
     })();
     p.catch(() => _storeCache.delete(cycleId)); // don't cache a failed open
