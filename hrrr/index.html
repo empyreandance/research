@@ -13,6 +13,9 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac745e4de4a442a9bc0d94056b67e871"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
+  <!-- Mobile only (CSS-gated): opens the controls drawer over the map. -->
+  <button id="panel-toggle" aria-controls="panel" aria-expanded="false">☰ Controls</button>
+  <div id="drawer-scrim"></div>
   <div id="app">
     <aside id="panel">
       <h1>HRRR Threshold Tool</h1>
@@ -21,7 +24,7 @@
         <input type="checkbox" id="extended-toggle" />
         Extended forecast (48 hr)
       </label>
-      <label class="inline"><input type="checkbox" id="hover-toggle" checked /> Cursor readout on hover</label>
+      <label class="inline" id="hover-toggle-row"><input type="checkbox" id="hover-toggle" checked /> Cursor readout on hover</label>
 
       <label for="fh">Forecast hour: <span id="fh-readout">f00</span></label>
       <input id="fh" type="range" min="0" max="0" step="1" value="0" />

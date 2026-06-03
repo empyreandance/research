@@ -62,6 +62,7 @@ map.keyboard.disable();
 // init), so the sidebar is draggable AND the outlook checkboxes are responsive
 // from the moment the page loads — before any data finishes loading.
 setupPanelResize();
+setupDrawer();
 setupOutlooks();
 setupArrowScrub();
 setupSmooth();
@@ -167,6 +168,25 @@ function setupPanelResize() {
   window.addEventListener("touchmove", onMove, { passive: false });
   window.addEventListener("mouseup", stop);
   window.addEventListener("touchend", stop);
+}
+
+// Mobile side drawer: #panel slides in over the map, toggled by #panel-toggle
+// and dismissed by tapping the scrim. The button/scrim are display:none on
+// desktop (the media query reveals them), so this is a no-op there. Applying
+// the map ("Update map") also closes it so the result is immediately visible.
+function setupDrawer() {
+  const toggle = document.getElementById("panel-toggle");
+  const scrim = document.getElementById("drawer-scrim");
+  if (!toggle || !scrim) return;
+  const setOpen = (open) => {
+    document.body.classList.toggle("drawer-open", open);
+    toggle.textContent = open ? "✕ Close" : "☰ Controls";
+    toggle.setAttribute("aria-expanded", String(open));
+  };
+  toggle.addEventListener("click", () =>
+    setOpen(!document.body.classList.contains("drawer-open")));
+  scrim.addEventListener("click", () => setOpen(false));
+  els["apply"].addEventListener("click", () => setOpen(false));
 }
 
 function setupForecastHourSlider() {

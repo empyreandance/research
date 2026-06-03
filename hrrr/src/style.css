@@ -170,3 +170,48 @@ code { background: #eee; padding: 0 3px; border-radius: 2px; font-size: 11px; }
 .badge-hrrr { background: var(--hrrr); }
 .badge-calc { background: var(--derived); }
 footer { margin-top: 24px; line-height: 1.8; }
+
+/* ── Mobile: side drawer ──────────────────────────────────────────────────
+   Desktop stays a flex row (sidebar | map). On narrow screens the map fills
+   the viewport and #panel becomes a slide-in drawer over it, toggled by
+   #panel-toggle and dismissed by the scrim. Everything is gated behind the
+   media query, so the desktop layout is byte-for-byte unchanged. */
+#panel-toggle { display: none; }   /* shown only inside the media query */
+#drawer-scrim { display: none; }
+
+@media (max-width: 760px) {
+  #panel-toggle {
+    display: block; position: fixed; top: 10px; left: 10px; z-index: 28;
+    width: auto; margin: 0; padding: 8px 12px; font-size: 13px; font-weight: 600;
+    background: #1565c0; color: #fff; border: 0; border-radius: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.3);
+  }
+  #panel-resize { display: none; }   /* drag-to-resize is mouse-only */
+
+  /* Take the panel out of flow → the map flex child spans the full width. */
+  #panel {
+    position: fixed; top: 0; left: 0; z-index: 30;
+    width: min(86vw, 360px); flex: none; height: 100vh; height: 100dvh;
+    box-shadow: 2px 0 16px rgba(0,0,0,.28);
+    transform: translateX(-100%); transition: transform .25s ease;
+  }
+  body.drawer-open #panel { transform: translateX(0); }
+
+  #drawer-scrim {
+    position: fixed; inset: 0; z-index: 25; background: rgba(0,0,0,.38);
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+  }
+  body.drawer-open #drawer-scrim { display: block; opacity: 1; pointer-events: auto; }
+  /* While open, the toggle becomes a Close button sitting above the scrim,
+     clear of the drawer's left edge. */
+  body.drawer-open #panel-toggle { z-index: 31; left: auto; right: 10px; }
+
+  /* Overlays were anchored to the (now off-screen) sidebar width — re-pin them
+     to the viewport edges. */
+  #status { left: 12px; top: 54px; max-width: calc(100vw - 24px); }
+  #map-legend { left: 10px; right: auto; bottom: 10px; max-width: calc(100vw - 20px); }
+  #inspect { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 58vh; }
+
+  /* Hover readout is mouse-only; tap-to-inspect replaces it on touch. */
+  #hover, #hover-toggle-row { display: none; }
+}
