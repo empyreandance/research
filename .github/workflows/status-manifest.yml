@@ -7,8 +7,23 @@ name: Status manifest
 # change here and no existing workflow is touched.
 
 on:
+  # Regenerate the instant any tracked tool finishes. Scheduled crons on GitHub
+  # are heavily throttled — our "*/20" actually fired only every ~3-5h, so
+  # tools.json would freeze and read "stale" while the tools were in fact fine
+  # (and a cron that fired mid-run recorded the *previous* success). workflow_run
+  # fires on completion and isn't throttled, so the manifest tracks real runs.
+  workflow_run:
+    workflows:
+      - "Hourly CAAST Update"
+      - "Fetch Wind Data"
+      - "Daily EFI Update"
+      - "Daily Apparent Temperature Map"
+      - "Daily Temperature Map"
+      - "Daily Streak Map"
+      - "Daily Time Since Temperature Map"
+    types: [completed]
   schedule:
-    - cron: "*/20 * * * *"   # every 20 min — finer than any tool's cadence
+    - cron: "0 */2 * * *"   # fallback only (GitHub throttles frequent crons)
   workflow_dispatch:
 
 permissions:
