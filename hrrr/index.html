@@ -15,6 +15,11 @@
 <body>
   <!-- Mobile only (CSS-gated): opens the controls drawer over the map. -->
   <button id="panel-toggle" aria-controls="panel" aria-expanded="false">☰ Controls</button>
+  <div id="fh-step" role="group" aria-label="Forecast hour">
+    <button id="fh-prev" aria-label="Previous forecast hour">‹</button>
+    <span id="fh-step-readout">f00</span>
+    <button id="fh-next" aria-label="Next forecast hour">›</button>
+  </div>
   <div id="drawer-scrim"></div>
   <div id="app">
     <aside id="panel">

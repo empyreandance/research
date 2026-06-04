@@ -25,7 +25,8 @@ const condName = (c) =>
   `${c.meta?.description || c.paramId}${c.levelVal != null ? ` @ ${c.levelVal} mb` : ""}`;
 
 const els = Object.fromEntries(
-  ["cycle-info", "fh", "fh-readout", "conditions", "cond-count", "add-cond",
+  ["cycle-info", "fh", "fh-readout", "fh-prev", "fh-next", "fh-step-readout",
+   "conditions", "cond-count", "add-cond",
    "floor", "floor-readout", "apply", "status", "map-legend", "inspect",
    "inspect-loc", "inspect-table", "inspect-close",
    "preset-select", "preset-load", "preset-save", "preset-share", "preset-delete",
@@ -187,15 +188,39 @@ function setupDrawer() {
     setOpen(!document.body.classList.contains("drawer-open")));
   scrim.addEventListener("click", () => setOpen(false));
   els["apply"].addEventListener("click", () => setOpen(false));
+  // Mobile top-bar forecast-hour stepper (scrub without opening the drawer).
+  if (els["fh-prev"]) els["fh-prev"].addEventListener("click", () => stepFh(-1));
+  if (els["fh-next"]) els["fh-next"].addEventListener("click", () => stepFh(1));
+}
+
+// Keep both forecast-hour readouts in sync: the slider's (in the drawer) and
+// the mobile top-bar stepper's.
+function syncFhReadouts() {
+  const txt = `f${String(state.forecastHour).padStart(2, "0")}`;
+  els["fh-readout"].textContent = txt;
+  if (els["fh-step-readout"]) els["fh-step-readout"].textContent = txt;
+}
+
+// Step the FH slider by ±1 and fire its change handler. Shared by the arrow
+// keys and the mobile prev/next buttons. No-op at the ends or before data loads.
+function stepFh(delta) {
+  const fh = els["fh"];
+  if (!fh) return;
+  const cur = Number(fh.value), max = Number(fh.max);
+  const next = Math.max(0, Math.min(max, cur + delta));
+  if (next !== cur) {
+    fh.value = String(next);
+    fh.dispatchEvent(new Event("change"));
+  }
 }
 
 function setupForecastHourSlider() {
   els["fh"].max = String(state.fhList.length - 1);
   els["fh"].value = "0";
-  els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
+  syncFhReadouts();
   els["fh"].addEventListener("change", async () => {
     state.forecastHour = state.fhList[Number(els["fh"].value)];
-    els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
+    syncFhReadouts();
     renderCycleInfo();
     await openCurrentForecastHour(false);
     await updateMap();
@@ -246,7 +271,7 @@ async function switchCycle() {
 
   els["fh"].max = String(state.fhList.length - 1);
   els["fh"].value = "0";
-  els["fh-readout"].textContent = `f${String(state.forecastHour).padStart(2, "0")}`;
+  syncFhReadouts();
   renderCycleInfo();
   syncExtendedToggle();
 
@@ -365,17 +390,9 @@ function setupOutlooks() {
 function setupArrowScrub() {
   document.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    const fh = els["fh"];
-    if (!fh) return;
-    if (document.activeElement === fh) return; // native arrow handles it
-    const cur = Number(fh.value);
-    const max = Number(fh.max);
-    const next = e.key === "ArrowLeft" ? Math.max(0, cur - 1) : Math.min(max, cur + 1);
-    if (next !== cur) {
-      fh.value = String(next);
-      fh.dispatchEvent(new Event("change"));
-      e.preventDefault();
-    }
+    if (document.activeElement === els["fh"]) return; // native arrow handles it
+    stepFh(e.key === "ArrowLeft" ? -1 : 1);
+    e.preventDefault();
   });
 }
 
