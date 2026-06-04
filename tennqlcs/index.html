@@ -112,6 +112,7 @@ body{background:#0a0c10;color:#e0e4ec;font-family:'Outfit',sans-serif;overflow:h
   <button class="cbtn on" id="c-refl" onclick="tog('refl')">REFL</button>
   <button class="cbtn on" id="c-az" onclick="tog('az')">AZSHEAR</button>
   <button class="cbtn on" id="c-mk" onclick="tog('mk')">MARKERS</button>
+  <button class="cbtn on" id="c-qtor" onclick="tog('qtor')" style="display:none">QTOR</button>
   <div class="slider-box">
     <label>MARKER OPACITY</label>
     <input type="range" min="10" max="100" value="100" oninput="mkOp=this.value/100;applyVis()">
@@ -132,6 +133,11 @@ body{background:#0a0c10;color:#e0e4ec;font-family:'Outfit',sans-serif;overflow:h
   <h3>Reflectivity (dBZ)</h3>
   <div class="legend-bar" style="background:linear-gradient(90deg,#04e9e7,#019ff4,#0300f4,#02fd02,#01c501,#008e00,#fdf802,#e5bc00,#fd9500,#fd0000,#d40000,#bc0000,#f800fd,#9854c6)"></div>
   <div class="legend-labels"><span>5</span><span>20</span><span>35</span><span>50</span><span>65</span></div>
+  <div id="qtor-legend" style="display:none;margin-top:12px">
+    <h3>QTor (leading line)</h3>
+    <div class="legend-bar" style="background:linear-gradient(90deg,#f0f0f0,#d9d9d9,#bdbdbd,#fdd0a2,#fdae6b,#f16913,#ef3b2c,#cb181d,#a50f15,#67000d)"></div>
+    <div class="legend-labels"><span>0.5</span><span>2</span><span>3</span><span>4</span><span>5+</span></div>
+  </div>
 </div>
 <div class="nodata" id="nodata"><h2>Waiting for data</h2><p>Select LIVE or load a historical date</p></div>
 <div id="map"></div>
@@ -158,17 +164,28 @@ fetch(CWA_URL).then(r=>r.ok?r.json():null).then(d=>{
 });
 
 // State
-let mode='live',reflLayer=null,markers=[],contourLines=[],torMarkers=[];
+let mode='live',reflLayer=null,markers=[],contourLines=[],torMarkers=[],qtorLayers=[];
 let lastScan=null,pollTm=null;
 let histData=null,hFrame=0,playTm=null,playSpd=500;
 let mkOp=1.0;
-const vis={refl:true,az:true,mk:true};
+const vis={refl:true,az:true,mk:true,qtor:true};
 
 function azColor(v){
   if(v>=12)return'#ff1744';
   if(v>=8)return'#ff6d00';
   if(v>=6)return'#ffc400';
   return'#aaaaaa';
+}
+
+// QTor leading-line colormap — matches the QTor codebook's discrete scale
+// (BoundaryNorm over [0.5,1,1.5,2,2.5,3,3.5,4,4.5,5], 9 bands + over-color).
+function qtorColor(v){
+  if(v==null||v<0.5)return null;        // below scale: not drawn
+  if(v>=5)return'#67000d';
+  const bands=[[4.5,'#a50f15'],[4,'#cb181d'],[3.5,'#ef3b2c'],[3,'#f16913'],
+               [2.5,'#fdae6b'],[2,'#fdd0a2'],[1.5,'#bdbdbd'],[1,'#d9d9d9'],[0.5,'#f0f0f0']];
+  for(const [t,c] of bands){if(v>=t)return c;}
+  return null;
 }
 
 function setMode(m){mode=m;
@@ -201,6 +218,7 @@ function tog(k){vis[k]=!vis[k];document.getElementById('c-'+k).classList.toggle(
 function applyVis(){
   if(reflLayer)reflLayer.setOpacity(vis.refl?0.85:0);
   contourLines.forEach(l=>{if(vis.az)l.addTo(map);else map.removeLayer(l);});
+  qtorLayers.forEach(l=>{if(vis.qtor)l.addTo(map);else map.removeLayer(l);});
   markers.forEach(m=>{
     if(vis.mk){m.addTo(map);if(m.setOpacity)m.setOpacity(mkOp);if(m.setStyle)m.setStyle({opacity:mkOp});}
     else map.removeLayer(m);
@@ -211,6 +229,7 @@ function clearAll(){
   if(reflLayer){map.removeLayer(reflLayer);reflLayer=null;}
   markers.forEach(m=>map.removeLayer(m));markers=[];
   contourLines.forEach(l=>map.removeLayer(l));contourLines=[];
+  qtorLayers.forEach(l=>map.removeLayer(l));qtorLayers=[];
   torMarkers.forEach(m=>map.removeLayer(m));torMarkers=[];
 }
 
@@ -240,6 +259,23 @@ function renderFrame(data){
           iconSize:[0,0]})});
         if(vis.az)lbl.addTo(map);
         contourLines.push(lbl);
+      }
+    });
+  }
+
+  // QTor leading lines — per-segment colored polylines (gust-front tornado potential)
+  const hasQtor=data.qtor_lines&&data.qtor_lines.length;
+  document.getElementById('c-qtor').style.display=hasQtor?'':'none';
+  document.getElementById('qtor-legend').style.display=hasQtor?'block':'none';
+  if(hasQtor){
+    data.qtor_lines.forEach(ln=>{
+      const c=ln.coords,q=ln.qtor;
+      for(let k=0;k<c.length-1;k++){
+        const col=qtorColor(q[k]);
+        if(!col)continue;
+        const seg=L.polyline([c[k],c[k+1]],{color:col,weight:5,opacity:0.95,lineCap:'round'});
+        if(vis.qtor)seg.addTo(map);
+        qtorLayers.push(seg);
       }
     });
   }
@@ -310,7 +346,7 @@ function showLiveFrame(i){
   if(liveFollowing&&age<300){b.textContent='LIVE';b.className='badge badge-live';}
   else if(liveFollowing){b.textContent=Math.floor(age/60)+'m AGO';b.className='badge badge-stale';}
   else{b.textContent='REVIEW';b.className='badge badge-hist';}
-  renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,_liveBase:LIVE_BASE+'/'});
+  renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:f.qtor_lines,_liveBase:LIVE_BASE+'/'});
   document.getElementById('flbl').textContent=(i+1)+'/'+liveData.n_frames;
   document.getElementById('tlp').style.width=(100*(i+1)/liveData.n_frames)+'%';
   if(liveEnvTimeline)updateEnvPanel(new Date().toISOString(),liveEnvTimeline);
@@ -381,7 +417,7 @@ function updateEnvPanel(frameTime,tl_override){
 
 function showFrame(i){if(!histData||i<0||i>=histData.n_frames)return;hFrame=i;
   const f=histData.frames[i];
-  renderFrame({bounds:histData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,tornadoes:histData.tornadoes,scanTime:f.time});
+  renderFrame({bounds:histData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:f.qtor_lines,tornadoes:histData.tornadoes,scanTime:f.time});
   updateEnvPanel(f.time,histData.env_timeline);
   document.getElementById('stime').textContent=f.time_str;
   document.getElementById('flbl').textContent=(i+1)+'/'+histData.n_frames;
