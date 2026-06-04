@@ -316,7 +316,15 @@ function renderFrame(data){
 }
 
 // Live
-let liveData=null,liveFrame=-1,liveEnvTimeline=null,liveFollowing=true;
+let liveData=null,liveFrame=-1,liveEnvTimeline=null,liveFollowing=true,liveQtor=null;
+// QTor (live sidecar) applies only to the newest frame, and only if its scan is
+// fresh relative to that frame (within ~8 min).
+function liveQtorFor(frameDt,isNewest){
+  if(!isNewest||!liveQtor||!liveQtor.qtor_lines||!liveQtor.qtor_lines.length)return null;
+  if(!liveQtor.scan_time)return null;
+  if(Math.abs(new Date(liveQtor.scan_time).getTime()-frameDt.getTime())>8*60000)return null;
+  return liveQtor.qtor_lines;
+}
 function startPoll(){if(pollTm)return;pollTm=setInterval(loadLive,5000);loadLive();}
 function stopPoll(){if(pollTm){clearInterval(pollTm);pollTm=null;}}
 async function loadLive(){if(mode!=='live')return;try{
@@ -325,6 +333,10 @@ async function loadLive(){if(mode!=='live')return;try{
   document.getElementById('nodata').style.display='none';
   liveData=d;
   if(d.env_timeline&&d.env_timeline.length)liveEnvTimeline=d.env_timeline;
+
+  // QTor live sidecar (separate process; best-effort)
+  try{const rq=await fetch(LIVE_BASE+'/data/qtor_live.json?t='+Date.now());
+    if(rq.ok)liveQtor=await rq.json();}catch(e){}
 
   // Show playback controls
   if(d.n_frames>1)document.getElementById('hctl').classList.add('vis');
@@ -346,7 +358,7 @@ function showLiveFrame(i){
   if(liveFollowing&&age<300){b.textContent='LIVE';b.className='badge badge-live';}
   else if(liveFollowing){b.textContent=Math.floor(age/60)+'m AGO';b.className='badge badge-stale';}
   else{b.textContent='REVIEW';b.className='badge badge-hist';}
-  renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:f.qtor_lines,_liveBase:LIVE_BASE+'/'});
+  renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:liveQtorFor(dt,liveFollowing),_liveBase:LIVE_BASE+'/'});
   document.getElementById('flbl').textContent=(i+1)+'/'+liveData.n_frames;
   document.getElementById('tlp').style.width=(100*(i+1)/liveData.n_frames)+'%';
   if(liveEnvTimeline)updateEnvPanel(new Date().toISOString(),liveEnvTimeline);
