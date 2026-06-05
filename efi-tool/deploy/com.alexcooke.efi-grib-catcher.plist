@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.alexcooke.efi-grib-catcher</string>
+
+  <!-- Run as the user so rclone finds ~/.config/rclone and gh finds its auth.
+       A LaunchDaemon with UserName still starts at boot with nobody logged in. -->
+  <key>UserName</key>
+  <string>alex</string>
+  <key>GroupName</key>
+  <string>staff</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/alex/research/efi-tool/deploy/run-catcher.sh</string>
+  </array>
+
+  <!-- launchd starts with an almost-empty environment; brew (rclone/gh) need PATH. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/alex</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <!-- Continuous poller: restart it if it ever exits. -->
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Background</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/alex/efi-catcher/catcher.out</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/alex/efi-catcher/catcher.err</string>
+</dict>
+</plist>

@@ -572,6 +572,24 @@ function formatStep(hours) {
 // ---- Build a single table (ESAT layout: steps as rows, params as columns) ----
 function buildTable(efiData, sotData, steps, paramNames, label) {
   if (!efiData || Object.keys(efiData).length === 0) {
+    const isRegionEmpty = label.includes('ESAT');
+    // CWA-clipped table when the live GRIB hasn't posted: a warning banner over
+    // the table, not stale numbers. (Region table down is just generic.)
+    if (!isRegionEmpty && DATA && DATA.grids_stale) {
+      return `<div class="table-card">
+        <div class="table-card-header">
+          <h2>${label}</h2>
+          <span class="badge">CWA MAX</span>
+        </div>
+        <div style="margin:14px;padding:14px 16px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.45);border-radius:8px;color:#eab308;font-size:0.85rem;line-height:1.55;">
+          <strong>⚠ Awaiting latest ECMWF GRIB</strong><br>
+          Precise CWA-clipped EFI/SOT values need the current grid, which hasn't
+          posted to WPC yet. Rather than show stale numbers, this table is blank
+          until it arrives (refreshes automatically). The <em>ESAT Region</em>
+          table is live, but covers a <strong>broader area than the CWA</strong>.
+        </div>
+      </div>`;
+    }
     return `<div class="table-card">
       <div class="table-card-header">
         <h2>${label}</h2>
@@ -745,10 +763,17 @@ function updateMeta() {
     genEl.textContent = `Processed: ${d.toUTCString()}`;
   }
 
-  // Show warning banner if ESAT endpoint was unavailable.
+  // Page-top banner is only for the ESAT-endpoint-down case (Region table falls
+  // back to grid data). The GRIB-pending / blanked-CWA notice lives over the CWA
+  // table itself (see buildTable), not here.
   const warning = document.getElementById("esat-warning");
   if (warning) {
-    warning.style.display = (DATA.esat_available === false) ? "block" : "none";
+    if (DATA.esat_available === false) {
+      warning.style.display = "block";
+      warning.innerHTML = `<strong>⚠ ESAT endpoint unavailable</strong> — The Region Table values are computed from GRIB grid data as a fallback instead of pulled from the operational ESAT endpoint. Values should be close to official ESAT output but may differ slightly due to regional definition differences. CWA-clipped values in the left table are unaffected.`;
+    } else {
+      warning.style.display = "none";
+    }
   }
 }
 
@@ -1019,6 +1044,19 @@ function updateEsatTitle(param, stepHours) {
 async function updateMap(cwaId, param, stepHours) {
   if (!mapSvg) return;
   if (!cwaId) return;
+
+  // Current data or nothing: when the grids aren't from the live run (ESAT-only
+  // mode, GRIB not yet posted) we do NOT render last-good fields. Blank the map
+  // and explain — stale map detail is misleading, same as stale table values.
+  if (DATA && DATA.grids_stale) {
+    ["#g-contours","#g-counties","#g-states","#g-sot","#g-sot-labels","#g-cwa","#g-region-box","#g-cities"]
+      .forEach(g => mapSvg.select(g).selectAll("*").remove());
+    const titleEl = document.getElementById("esat-title");
+    if (titleEl) titleEl.innerHTML =
+      `<span style="color:#eab308;">⚠ Map unavailable — awaiting the latest ECMWF GRIB.</span>` +
+      `<br><span style="font-size:0.8rem;color:var(--text-dim);">EFI/SOT map fields need the current grid (not yet posted to WPC). The ESAT Region table remains live.</span>`;
+    return;
+  }
 
   const cwaData = await loadCwaGrid(cwaId);
   if (!cwaData) return;

@@ -10,6 +10,12 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+# EFI tool: downloaded GRIBs + shapefile cache + local web output (never commit)
+efi-tool/data/
+efi-tool/web/
+*.grb2
+*.grb2.part
+
 # Runtime data
 pids
 *.pid

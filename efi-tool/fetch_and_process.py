@@ -6,21 +6,30 @@ Downloads the latest EFI/SOT GRIB2 file from WPC's public FTP server,
 clips the fields to each NWS CWA polygon, and writes JSON files for
 the web frontend.
 
-Run daily via cron after the 00Z ECMWF run is processed (typically
-available by ~09-10 UTC):
+The WPC public FTP mirror is unreliable — the GRIB often lands late, fails
+to push, or gets purged — while NCEP's ESAT endpoint (which is fed from the
+same upstream run over a different pipe) stays current.  So this script has
+two modes:
 
-    0 10 * * * cd /path/to/efi-tool && python3 fetch_and_process.py
+    full  — GRIB is available: clip the grids, fetch exact ESAT table values,
+            write efi_latest.json + per-CWA grids/*.json.
+    esat  — GRIB is missing: fetch fresh ESAT table values, carry the
+            last-good grids and CWA-clipped values forward unchanged, and
+            flag the output as grids_stale so the frontend warns the user.
 
-Data source
------------
-https://ftp.wpc.ncep.noaa.gov/efi/
+Mode is auto-detected from FTP availability; force it with --mode.
+A stdlib-only `--mode check` prints CI gating output (new_data / mode) without
+importing the heavy scientific stack.
 
-The file contains all 9 EFI parameters plus their corresponding SOT
-(Shift of Tails) fields, plus model climate reference data, on a 0.5°
-global grid out to ~10 days.
+Run every 30 min via the efi-daily workflow.
 
-Dependencies
+Data sources
 ------------
+GRIB:  https://ftp.wpc.ncep.noaa.gov/efi/   (gridded, unreliable)
+ESAT:  https://satable.ncep.noaa.gov/        (per-CWA tables, reliable)
+
+Dependencies (full mode only)
+-----------------------------
     pip install cfgrib xarray numpy geopandas shapely requests
 
 On some systems you also need the eccodes library:
@@ -28,6 +37,10 @@ On some systems you also need the eccodes library:
     - Ubuntu: sudo apt install libeccodes-dev
 """
 
+# NOTE: keep module-level imports to the standard library only, so that
+# `--mode check` runs on a bare Python (CI gating step) without cfgrib,
+# geopandas, numpy, etc. installed.  Heavy libs are imported lazily inside
+# the functions that need them.
 import json
 import os
 import sys
@@ -35,14 +48,8 @@ import glob
 import ftplib
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
-
-import geopandas as gpd
-import numpy as np
-import requests
-import xarray as xr
-from shapely.geometry import box
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -54,9 +61,23 @@ DATA_DIR = PROJECT_DIR / "data"
 WEB_DIR = PROJECT_DIR / "web"
 JSON_DIR = WEB_DIR / "data"
 
+# The committed, deployed data (assets/efi at the repo root).  In ESAT-only
+# mode we read the last-good run from here to carry grids/clipped values
+# forward, since the local web/data dir is empty on a fresh CI checkout.
+DEPLOYED_DIR = PROJECT_DIR.parent / "assets" / "efi"
+DEPLOYED_LATEST_JSON = DEPLOYED_DIR / "efi_latest.json"
+
 # WPC FTP server
 FTP_HOST = "ftp.wpc.ncep.noaa.gov"
 FTP_DIR = "/efi"
+
+# Durable R2 mirror of the GRIB, maintained by grib_catcher.py on the Mac
+# Studio (the WPC FTP drops the file quickly; the catcher grabs it the moment
+# it appears and stashes it here).  Read publicly, no creds needed.
+R2_EFI_BASE = "https://hrrr-data.alexcooke.co/efi-grib"
+
+# ECMWF EFI is produced from the 00Z and 12Z ensemble runs.
+EFI_CYCLE_HOURS = (0, 12)
 
 # NWS CWA shapefile — downloaded once, cached locally.
 CWA_SHAPEFILE_URL = (
@@ -88,24 +109,90 @@ TARGET_CWAS = None
 
 def fetch_latest_grib():
     """
-    Connects to the WPC FTP server, finds the most recent EFI GRIB2
-    file, and downloads it to DATA_DIR.  Returns the local file path.
+    Get the latest EFI GRIB2 to DATA_DIR.  Tries the WPC FTP first; if it has
+    no GRIB (the common case — it drops the file quickly), falls back to the
+    durable R2 mirror maintained by grib_catcher.py.  Returns the local path,
+    or None if neither source has it (caller then goes ESAT-only).
     """
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    path = _fetch_grib_from_ftp()
+    if path is not None:
+        return path
+    print("  WPC FTP had no GRIB — checking R2 mirror (grib-catcher) ...")
+    return _fetch_grib_from_r2()
 
+
+def _fetch_grib_from_r2():
+    """Pull the catcher's mirrored GRIB from R2 via its public URL (stdlib)."""
+    import urllib.request
+
+    try:
+        name = urllib.request.urlopen(
+            f"{R2_EFI_BASE}/latest.txt", timeout=20
+        ).read().decode().strip()
+    except Exception as e:
+        print(f"  R2 mirror unavailable: {e}")
+        return None
+    if not name:
+        print("  R2 mirror has no pointer yet.")
+        return None
+
+    local_path = DATA_DIR / name
+    if local_path.exists():
+        print(f"  Already have {name} (from R2 mirror).")
+        return local_path
+
+    print(f"  Pulling {name} from R2 mirror ...")
+    tmp_fd, tmp_name = tempfile.mkstemp(dir=str(DATA_DIR), suffix=".part")
+    os.close(tmp_fd)
+    tmp_path = Path(tmp_name)
+    try:
+        urllib.request.urlretrieve(f"{R2_EFI_BASE}/latest.grb2", str(tmp_path))
+        tmp_path.replace(local_path)
+    except Exception as e:
+        print(f"  R2 download failed: {e}")
+        tmp_path.unlink(missing_ok=True)
+        return None
+    print(f"  Saved {local_path}  ({local_path.stat().st_size / 1e6:.1f} MB) from R2")
+    return local_path
+
+
+def _fetch_grib_from_ftp():
+    """
+    Connects to the WPC FTP server, finds the most recent EFI GRIB2
+    file, and downloads it to DATA_DIR.  Returns the local file path,
+    or None if the FTP server has no GRIB (the common failure mode —
+    the caller then falls back to the R2 mirror, then ESAT-only).
+    """
     print(f"Connecting to {FTP_HOST} ...")
-    ftp = ftplib.FTP(FTP_HOST)
-    ftp.login()  # anonymous
-    ftp.cwd(FTP_DIR)
+    try:
+        ftp = ftplib.FTP(FTP_HOST, timeout=60)
+        ftp.login()  # anonymous
+        ftp.cwd(FTP_DIR)
+    except Exception as e:
+        print(f"  FTP connection failed: {e}")
+        return None
 
     # List files and pick the newest .grb2 / .grib2
     files = []
-    ftp.retrlines("NLST", files.append)
+    try:
+        ftp.retrlines("NLST", files.append)
+    except Exception as e:
+        print(f"  FTP listing failed: {e}")
+        try:
+            ftp.quit()
+        except Exception:
+            pass
+        return None
+
     grib_files = [f for f in files if f.endswith((".grb2", ".grib2"))]
     if not grib_files:
-        print("ERROR: No GRIB2 files found on FTP server.")
-        print(f"  Files found: {files}")
-        sys.exit(1)
+        print("  No GRIB2 files on FTP server (will fall back to ESAT-only).")
+        try:
+            ftp.quit()
+        except Exception:
+            pass
+        return None
 
     # Sort by name (they typically include a date stamp) — newest last.
     grib_files.sort()
@@ -117,9 +204,25 @@ def fetch_latest_grib():
         ftp.quit()
         return local_path
 
+    # Download to a temp file first, then atomically rename, so an
+    # interrupted transfer never leaves a half-written GRIB that the
+    # exists() check above would treat as complete next run.
     print(f"Downloading {target} ...")
-    with open(local_path, "wb") as fh:
-        ftp.retrbinary(f"RETR {target}", fh.write)
+    tmp_fd, tmp_name = tempfile.mkstemp(dir=str(DATA_DIR), suffix=".part")
+    os.close(tmp_fd)
+    tmp_path = Path(tmp_name)
+    try:
+        with open(tmp_path, "wb") as fh:
+            ftp.retrbinary(f"RETR {target}", fh.write)
+        tmp_path.replace(local_path)
+    except Exception as e:
+        print(f"  Download failed: {e}")
+        tmp_path.unlink(missing_ok=True)
+        try:
+            ftp.quit()
+        except Exception:
+            pass
+        return None
 
     ftp.quit()
     print(f"Saved to {local_path}  ({local_path.stat().st_size / 1e6:.1f} MB)")
@@ -135,6 +238,8 @@ def load_cwa_polygons():
     Downloads (once) and loads the NWS CWA boundary shapefile.
     Returns a GeoDataFrame with CWA identifiers and geometry.
     """
+    import geopandas as gpd
+
     CWA_SHAPEFILE_LOCAL.mkdir(parents=True, exist_ok=True)
 
     # Check if already downloaded.
@@ -195,6 +300,7 @@ def load_efi_sot(grib_path):
     We select the 90th percentile (upper tail) to get a 2D field.
     """
     import cfgrib
+    import xarray as xr
 
     print("Loading EFI fields ...")
     efi_datasets = cfgrib.open_datasets(
@@ -242,6 +348,8 @@ def clip_to_cwa(ds, cwa_geom, var_names=None):
 
     Returns a dict: {variable_name: {step_hours: max_value, ...}, ...}
     """
+    import numpy as np
+
     if var_names is None:
         var_names = list(ds.data_vars)
 
@@ -369,6 +477,8 @@ def extract_grid_for_cwa(ds, cwa_geom, var_names=None, padding_deg=2.5):
     }
     At 0.5° resolution this is ~20x20 cells for a typical CWA — very compact.
     """
+    import numpy as np
+
     if var_names is None:
         var_names = list(ds.data_vars)
 
@@ -492,6 +602,8 @@ def compute_full_domain_stats(ds, var_names=None):
     Computes the max value of each variable across the FULL image domain
     for each forecast step.  This reproduces the original ESAT table behavior.
     """
+    import numpy as np
+
     if var_names is None:
         var_names = list(ds.data_vars)
 
@@ -585,6 +697,8 @@ def fetch_esat_table(cwa_id, init_time_str):
 
     init_time_str should be like "2026040212" (YYYYMMDDHH).
     """
+    import requests
+
     yr = init_time_str[0:4]
     mo = init_time_str[4:6]
     dy = init_time_str[6:8]
@@ -596,7 +710,7 @@ def fetch_esat_table(cwa_id, init_time_str):
         requests.post(gen_url, data={
             "yr": yr, "mo": mo, "dy": dy, "hr": hr,
             "r": cwa_id.lower(), "interval": "24", "model": "ens",
-            "cachetime": str(int(datetime.now().timestamp() * 1000)),
+            "cachetime": str(int(datetime.now(timezone.utc).timestamp() * 1000)),
         }, timeout=15)
     except Exception:
         pass  # Generation may fail but the file might already exist.
@@ -647,19 +761,86 @@ def fetch_esat_table(cwa_id, init_time_str):
 
 
 # ---------------------------------------------------------------------------
-# Step 5: Orchestrate everything
+# ESAT run discovery + bulk fetch (works with no GRIB at all)
 # ---------------------------------------------------------------------------
 
-def main():
-    JSON_DIR.mkdir(parents=True, exist_ok=True)
+def _esat_candidates(now=None, lookback_days=4):
+    """Yield YYYYMMDDHH init strings, newest first, for recent EFI cycles."""
+    if now is None:
+        now = datetime.now(timezone.utc)
+    day0 = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    cycles = []
+    for d in range(lookback_days + 1):
+        base = day0 - timedelta(days=d)
+        for hh in EFI_CYCLE_HOURS:
+            t = base.replace(hour=hh)
+            if t <= now:
+                cycles.append(t)
+    cycles.sort(reverse=True)
+    for t in cycles:
+        yield t.strftime("%Y%m%d%H")
 
-    # 1. Download
-    grib_path = fetch_latest_grib()
 
-    # 2. Load CWA polygons
-    cwa_gdf = load_cwa_polygons()
+def latest_esat_init(probe):
+    """
+    Find the newest EFI run available on ESAT.  `probe(cwa, init_str)` must
+    return truthy table data when that run exists, else None.  Returns
+    (init_str, seed_data) for the first available cycle, or (None, None).
+    """
+    for init_str in _esat_candidates():
+        data = probe("HNX", init_str)
+        if data:
+            print(f"  Latest ESAT run: {init_str}")
+            return init_str, data
+    return None, None
 
-    # 3. Load EFI and SOT
+
+def fetch_all_esat(cwa_ids, esat_init_str, seed=None):
+    """Fetch ESAT table values for many CWAs in parallel. Returns {cwa: data}."""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    esat_cache = {}
+    remaining = list(cwa_ids)
+    if seed is not None and "HNX" in remaining:
+        esat_cache["HNX"] = seed
+        remaining = [c for c in remaining if c != "HNX"]
+
+    def _fetch(cwa):
+        return cwa, fetch_esat_table(cwa, esat_init_str)
+
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        futures = {pool.submit(_fetch, c): c for c in remaining}
+        done = 0
+        for fut in as_completed(futures):
+            cwa, data = fut.result()
+            if data:
+                esat_cache[cwa] = data
+            done += 1
+            if done % 20 == 0:
+                print(f"    ... {done}/{len(remaining)}")
+
+    # Sequential retry for CONUS CWAs that failed (skip territories).
+    territories = {"PPG", "PQE", "PQW", "GUM", "HFO", "SJU", "KEY"}
+    failed = [c for c in remaining if c not in esat_cache and c not in territories]
+    if failed:
+        print(f"  Retrying {len(failed)} failed CWAs sequentially ...")
+        for cwa in failed:
+            time.sleep(1.0)
+            data = fetch_esat_table(cwa, esat_init_str)
+            if data:
+                esat_cache[cwa] = data
+
+    return esat_cache
+
+
+# ---------------------------------------------------------------------------
+# Full pipeline (GRIB available)
+# ---------------------------------------------------------------------------
+
+def run_full(grib_path, cwa_gdf):
+    import numpy as np
+
+    # Load EFI and SOT
     efi_ds, sot_ds = load_efi_sot(grib_path)
 
     efi_vars = [v for v in efi_ds.data_vars if v in EFI_PARAM_NAMES]
@@ -686,7 +867,6 @@ def main():
     esat_init_str = None
     if init_time:
         try:
-            # init_time is nanosecond epoch as string.
             if init_time.isdigit():
                 init_dt = datetime.fromtimestamp(int(init_time) / 1e9, tz=timezone.utc)
             else:
@@ -696,7 +876,6 @@ def main():
         except Exception as e:
             print(f"  Could not parse init time for ESAT: {e}")
 
-    # 4. Per-CWA stats.
     if TARGET_CWAS:
         process_cwas = cwa_gdf[cwa_gdf["cwa"].isin(TARGET_CWAS)]
     else:
@@ -710,49 +889,18 @@ def main():
     print("\nFetching ESAT table values ...")
     esat_cache = {}
     if esat_init_str:
-        # Test one CWA first to see if this run is available on ESAT.
-        test_cwa = "HNX"
-        if TARGET_CWAS:
-            test_cwa = TARGET_CWAS[0]
+        test_cwa = TARGET_CWAS[0] if TARGET_CWAS else "HNX"
         print(f"  Testing ESAT availability with {test_cwa} ...")
         test_data = fetch_esat_table(test_cwa, esat_init_str)
         if test_data:
-            esat_cache[test_cwa] = test_data
-            remaining = [row["cwa"] for _, row in process_cwas.iterrows()
-                         if row["cwa"] != test_cwa]
-            print(f"  ESAT available — fetching {len(remaining)} CWAs in parallel ...")
-
-            from concurrent.futures import ThreadPoolExecutor, as_completed
-
-            def _fetch(cwa):
-                return cwa, fetch_esat_table(cwa, esat_init_str)
-
-            with ThreadPoolExecutor(max_workers=10) as pool:
-                futures = {pool.submit(_fetch, c): c for c in remaining}
-                done_count = 0
-                for future in as_completed(futures):
-                    cwa, data = future.result()
-                    if data:
-                        esat_cache[cwa] = data
-                    done_count += 1
-                    if done_count % 20 == 0:
-                        print(f"    ... {done_count}/{len(remaining)}")
-
-            # Sequential retry for CONUS CWAs that failed (skip territories).
-            territories = {"PPG", "PQE", "PQW", "GUM", "HFO", "SJU", "KEY"}
-            failed = [c for c in remaining
-                      if c not in esat_cache and c not in territories]
-            if failed:
-                print(f"  Retrying {len(failed)} failed CWAs sequentially ...")
-                for cwa in failed:
-                    time.sleep(1.0)
-                    data = fetch_esat_table(cwa, esat_init_str)
-                    if data:
-                        esat_cache[cwa] = data
-
+            all_cwas = [row["cwa"] for _, row in process_cwas.iterrows()]
+            if test_cwa not in all_cwas:
+                all_cwas = [test_cwa] + all_cwas
+            print(f"  ESAT available — fetching {len(all_cwas)} CWAs in parallel ...")
+            esat_cache = fetch_all_esat(all_cwas, esat_init_str, seed=test_data)
             print(f"  Fetched ESAT values for {len(esat_cache)} CWAs")
         else:
-            print(f"  ESAT not available for this run — falling back to grid-based regional max")
+            print("  ESAT not available for this run — falling back to grid-based regional max")
     else:
         print("  No init time — falling back to grid-based regional max")
 
@@ -791,17 +939,18 @@ def main():
         else:
             print("no grid points in CWA")
 
-    # 5. Build the output JSON.
-    # Track whether ESAT endpoint was available (affects frontend warning).
+    # Build the output JSON.
     esat_available = len(esat_cache) > 0
     output = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "init_time": init_time,
+        "esat_init": esat_init_str,
         "steps_hours": sorted(steps),
         "source_file": grib_path.name,
         "param_names": EFI_PARAM_NAMES,
         "esat_available": esat_available,
         "esat_cwa_count": len(esat_cache),
+        "grids_stale": False,
         "by_cwa": cwa_results,
         "cwa_list": sorted(cwa_results.keys()),
     }
@@ -826,6 +975,219 @@ def main():
     print(f"Wrote {len(cwa_grids)} per-CWA grid files to {grids_dir}/")
     print(f"CWAs processed: {len(cwa_results)}")
     print("Done.")
+
+
+# ---------------------------------------------------------------------------
+# ESAT-only pipeline (GRIB missing — table updates, grids carried forward)
+# ---------------------------------------------------------------------------
+
+def run_esat_only():
+    """
+    Produce a fresh efi_latest.json from ESAT alone.  The per-CWA grids/*.json
+    and the CWA-clipped (efi/sot) table values are NOT recomputed — they're
+    carried forward from the last good full run (read from the deployed
+    assets) and the output is flagged grids_stale so the frontend warns.
+    Returns True if it wrote output, False if no ESAT data was available.
+    """
+    prev = {}
+    if DEPLOYED_LATEST_JSON.exists():
+        try:
+            prev = json.loads(DEPLOYED_LATEST_JSON.read_text())
+        except Exception as e:
+            print(f"  Could not read deployed JSON ({DEPLOYED_LATEST_JSON}): {e}")
+
+    esat_init_str, seed = latest_esat_init(fetch_esat_table)
+    if not esat_init_str:
+        print("  No EFI run available on ESAT either.")
+        return False
+
+    # CWA list: reuse the last deployed list (grids already on disk for these).
+    cwa_ids = prev.get("cwa_list")
+    if not cwa_ids:
+        cwa_ids = sorted(p.stem for p in (DEPLOYED_DIR / "grids").glob("*.json"))
+    if TARGET_CWAS:
+        cwa_ids = [c for c in cwa_ids if c in TARGET_CWAS]
+    if "HNX" not in cwa_ids:
+        cwa_ids = ["HNX"] + list(cwa_ids)
+
+    print(f"  Fetching ESAT values for {len(cwa_ids)} CWAs (init {esat_init_str}) ...")
+    esat_cache = fetch_all_esat(cwa_ids, esat_init_str, seed=seed)
+    print(f"  Got ESAT values for {len(esat_cache)} CWAs")
+
+    # Forecast steps come from the ESAT tables themselves.
+    steps = set()
+    for data in esat_cache.values():
+        for var_steps in data.values():
+            steps.update(int(h) for h in var_steps.keys())
+    steps = sorted(steps)
+
+    # The precise CWA-clipped values (efi/sot) require the GRIB. Without it we
+    # leave them BLANK rather than serve stale numbers — stale precise values
+    # read as current and are misleading. The frontend blanks that table and
+    # explains via the banner. Only the broader-area ESAT Region values (which
+    # are genuinely fresh) are populated here.
+    by_cwa = {}
+    for cwa in sorted(esat_cache.keys()):
+        by_cwa[cwa] = {
+            "efi": {},                        # blanked — needs the GRIB
+            "sot": {},                        # blanked — needs the GRIB
+            "regional_efi": esat_cache[cwa],  # fresh from ESAT (broader area)
+            "regional_sot": {},               # ESAT carries no SOT
+        }
+
+    init_dt = datetime.strptime(esat_init_str, "%Y%m%d%H").replace(tzinfo=timezone.utc)
+    output = {
+        "generated_utc": datetime.now(timezone.utc).isoformat(),
+        "init_time": init_dt.isoformat(),
+        "esat_init": esat_init_str,
+        "steps_hours": steps,
+        "source_file": f"ESAT {esat_init_str} — GRIB pending on WPC",
+        "param_names": EFI_PARAM_NAMES,
+        "esat_available": True,
+        "esat_cwa_count": len(esat_cache),
+        # Grids are NOT from this run → the frontend blanks the CWA table + map
+        # (current data or nothing; never stale).
+        "grids_stale": True,
+        "by_cwa": by_cwa,
+        "cwa_list": sorted(by_cwa.keys()),
+    }
+
+    JSON_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = JSON_DIR / "efi_latest.json"
+    out_path.write_text(json.dumps(output, indent=2))
+
+    print(f"\nESAT-only update written: {out_path}")
+    print(f"  ESAT Region table live @ {esat_init_str}; CWA table + map blanked (no current GRIB)")
+    print(f"  CWAs: {len(by_cwa)}")
+    return True
+
+
+# ---------------------------------------------------------------------------
+# CI gating check (stdlib only — no heavy deps)
+# ---------------------------------------------------------------------------
+
+def run_check():
+    """
+    Decide whether there is new data worth running for, without importing the
+    scientific stack.  Prints `new_data=` and `mode=` lines (GITHUB_OUTPUT
+    format).  mode is one of full | esat | none.
+    """
+    import urllib.request
+    import urllib.parse
+
+    # 1. Latest GRIB on the WPC FTP (may be absent).
+    latest_grib = ""
+    try:
+        ftp = ftplib.FTP(FTP_HOST, timeout=30)
+        ftp.login()
+        ftp.cwd(FTP_DIR)
+        files = []
+        ftp.retrlines("NLST", files.append)
+        ftp.quit()
+        gribs = sorted(f for f in files if f.endswith((".grb2", ".grib2")))
+        latest_grib = gribs[-1] if gribs else ""
+    except Exception as e:
+        print(f"# FTP check failed: {e}")
+
+    # If the FTP has nothing, the catcher may still have mirrored a GRIB to R2.
+    if not latest_grib:
+        try:
+            latest_grib = urllib.request.urlopen(
+                f"{R2_EFI_BASE}/latest.txt", timeout=15
+            ).read().decode().strip()
+        except Exception:
+            pass
+
+    # 2. Latest ESAT run (stdlib probe — no requests).
+    def _probe(cwa, init_str):
+        gen = "https://satable.ncep.noaa.gov/phpService/generateEFItable.php"
+        body = urllib.parse.urlencode({
+            "yr": init_str[:4], "mo": init_str[4:6], "dy": init_str[6:8],
+            "hr": init_str[8:10], "r": cwa.lower(), "interval": "24",
+            "model": "ens", "cachetime": "1",
+        }).encode()
+        try:
+            urllib.request.urlopen(
+                urllib.request.Request(gen, data=body), timeout=15
+            ).read()
+        except Exception:
+            pass
+        time.sleep(1.0)
+        url = ("https://satable.ncep.noaa.gov/efi/php/parseToJson.php"
+               f"?pt={cwa.lower()}_ens_efi_24h_{init_str}.txt")
+        try:
+            raw = urllib.request.urlopen(url, timeout=15).read()
+            return (json.loads(raw).get("params")) or None
+        except Exception:
+            return None
+
+    latest_esat, _ = latest_esat_init(_probe)
+
+    # 3. What's currently deployed.
+    dep = {}
+    if DEPLOYED_LATEST_JSON.exists():
+        try:
+            dep = json.loads(DEPLOYED_LATEST_JSON.read_text())
+        except Exception:
+            pass
+    dep_source = dep.get("source_file", "")
+    dep_esat = dep.get("esat_init", "")
+
+    if latest_grib and latest_grib != dep_source:
+        mode, new = "full", "true"
+    elif latest_esat and latest_esat != dep_esat:
+        mode, new = "esat", "true"
+    else:
+        mode, new = "none", "false"
+
+    print(f"# grib={latest_grib or '-'} esat={latest_esat or '-'} "
+          f"dep_source={dep_source or '-'} dep_esat={dep_esat or '-'}")
+    print(f"new_data={new}")
+    print(f"mode={mode}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description="EFI/SOT ingest + processing")
+    parser.add_argument(
+        "--mode", choices=["auto", "full", "esat", "check"], default="auto",
+        help="auto: detect GRIB and pick full/esat; check: stdlib CI gate.",
+    )
+    args = parser.parse_args()
+
+    if args.mode == "check":
+        sys.exit(run_check())
+
+    JSON_DIR.mkdir(parents=True, exist_ok=True)
+
+    if args.mode == "esat":
+        ok = run_esat_only()
+        sys.exit(0 if ok else 0)  # a normal upstream gap is not an error
+
+    # auto or full: try the GRIB first.
+    grib_path = fetch_latest_grib()
+
+    if grib_path is not None:
+        cwa_gdf = load_cwa_polygons()
+        run_full(grib_path, cwa_gdf)
+        return
+
+    if args.mode == "full":
+        print("ERROR: --mode full but no GRIB available on FTP.")
+        sys.exit(1)
+
+    # auto + no GRIB → ESAT-only (carry grids forward).
+    print("No GRIB on FTP — running ESAT-only update (grids carried forward).")
+    ok = run_esat_only()
+    if not ok:
+        print("No EFI data from FTP or ESAT — leaving deployed data unchanged.")
+    # exit 0 either way: a missing upstream run is normal, not a failure.
 
 
 if __name__ == "__main__":

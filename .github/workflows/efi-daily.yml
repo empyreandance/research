@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
+  # Fired by grib_catcher.py on the Mac Studio the instant a new GRIB is
+  # caught and mirrored to R2 — bypasses cron throttling for prompt grids.
+  repository_dispatch:
+    types: [efi-grib-available]
 
 jobs:
   update:
@@ -13,53 +17,70 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for new EFI data
-        id: check
-        run: |
-          LATEST=$(curl -s --list-only ftp://ftp.wpc.ncep.noaa.gov/efi/ | grep '\.grb2$' | sort | tail -1)
-          echo "Latest on FTP: $LATEST"
-          CURRENT=""
-          if [ -f assets/efi/efi_latest.json ]; then
-            CURRENT=$(python3 -c "import json; print(json.load(open('assets/efi/efi_latest.json')).get('source_file',''))")
-          fi
-          echo "Currently deployed: $CURRENT"
-          if [ "$LATEST" = "$CURRENT" ]; then
-            echo "No new data. Skipping."
-            echo "new_data=false" >> $GITHUB_OUTPUT
-          else
-            echo "New data found!"
-            echo "new_data=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Set up Python
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Install system dependencies
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
-        run: sudo apt-get update && sudo apt-get install -y libeccodes-dev
+      # Lightweight, stdlib-only gate. Detects whether the WPC GRIB advanced
+      # (mode=full) or only ESAT advanced while the GRIB is missing/stale
+      # (mode=esat), or there's nothing new (mode=none). No heavy deps yet.
+      - name: Check for new EFI data
+        id: check
+        working-directory: efi-tool
+        run: python3 fetch_and_process.py --mode check >> "$GITHUB_OUTPUT"
 
-      - name: Install Python dependencies
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
-        run: pip install cfgrib xarray numpy geopandas shapely requests
+      # Resolve the run mode. Manual dispatch with nothing new → auto-detect.
+      - name: Resolve mode
+        id: mode
+        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch'
+        run: |
+          MODE="${{ steps.check.outputs.mode }}"
+          # Manual/catcher dispatch with nothing new → auto-detect.
+          if { [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ github.event_name }}" = "repository_dispatch" ]; } && { [ "$MODE" = "none" ] || [ -z "$MODE" ]; }; then
+            MODE="auto"
+          fi
+          # Run "full" as "auto" so a GRIB that vanishes between this check and
+          # the run degrades gracefully to ESAT-only instead of hard-failing.
+          if [ "$MODE" = "full" ]; then
+            MODE="auto"
+          fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "Resolved run mode: $MODE"
+
+      # eccodes + the scientific stack are only needed to decode the GRIB.
+      # ESAT-only runs need just `requests`.
+      - name: Install dependencies
+        if: steps.mode.outputs.mode != ''
+        run: |
+          if [ "${{ steps.mode.outputs.mode }}" = "esat" ]; then
+            pip install requests
+          else
+            sudo apt-get update && sudo apt-get install -y libeccodes-dev
+            pip install cfgrib xarray numpy geopandas shapely requests
+          fi
 
       - name: Run EFI pipeline
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        if: steps.mode.outputs.mode != ''
         working-directory: efi-tool
-        run: python3 fetch_and_process.py
+        run: python3 fetch_and_process.py --mode "${{ steps.mode.outputs.mode }}"
 
       - name: Copy output to assets
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        if: steps.mode.outputs.mode != ''
         run: |
           mkdir -p assets/efi/grids
           cp efi-tool/web/data/efi_latest.json assets/efi/
-          cp efi-tool/web/data/grids/*.json assets/efi/grids/
+          # Grids only exist after a full (GRIB) run; in ESAT-only mode the
+          # last-good grids in assets/efi/grids are deliberately left in place.
+          if ls efi-tool/web/data/grids/*.json >/dev/null 2>&1; then
+            cp efi-tool/web/data/grids/*.json assets/efi/grids/
+          else
+            echo "No new grids this run (ESAT-only) — keeping existing grids."
+          fi
           cp efi-tool/us_cities.json assets/efi/us_cities.json
 
       - name: Commit and push
-        if: steps.check.outputs.new_data == 'true' || github.event_name == 'workflow_dispatch'
+        if: steps.mode.outputs.mode != ''
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
