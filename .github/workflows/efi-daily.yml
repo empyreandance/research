@@ -28,7 +28,11 @@ jobs:
       - name: Check for new EFI data
         id: check
         working-directory: efi-tool
-        run: python3 fetch_and_process.py --mode check >> "$GITHUB_OUTPUT"
+        run: |
+          # Only the new_data= / mode= lines belong in GITHUB_OUTPUT; diagnostics
+          # go to the log. (A stray non-key=value line breaks the output parser.)
+          python3 fetch_and_process.py --mode check | tee /tmp/efi_check.txt || true
+          grep -E '^(new_data|mode)=' /tmp/efi_check.txt >> "$GITHUB_OUTPUT" || true
 
       # Resolve the run mode. Manual dispatch with nothing new → auto-detect.
       - name: Resolve mode
