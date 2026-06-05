@@ -1,15 +1,63 @@
 {
   "office": "BIS",
-  "product_id": "202606050205-KBIS-FXUS63-AFDBIS",
-  "afd_time": "2026-06-05T02:05:00Z",
+  "product_id": "202606050531-KBIS-FXUS63-AFDBIS",
+  "afd_time": "2026-06-05T05:31:00Z",
   "section_type": "discussion",
-  "updated": "2026-06-05T04:49:13.780775+00:00",
+  "updated": "2026-06-05T08:54:43.608670+00:00",
   "query_preview": "..\nIssued at 211 PM CDT Thu Jun 4 2026\n\nAn active weather pattern will continue through the next week with \nperiodic showers and thunderstorms, and near daily chances for \nsevere thunderstorms somewhere within the forecast area.\n\nFor today, mostly dry conditions are expected as surface low \npressure over southern Manitoba gradually churns eastward and keeps \ndrier air over most of the forecast area. That said, Gulf moisture \npresent over South Dakota may advect into far southern North Dakota. \nThis could provide a little enhanced instability late this afternoon \nor evening. Combined with marginal shear, there is a low chance for \nsevere thunderstorms near the ND/SD border, though severe storms\nare favored to remain focused mainly south of the state. 60 mph\nwinds and quarter sized hail are the most likely threats. \n\nOvernight tonight, isolated to scattered showers and possibly a few \nthunderstorms are possible across most of the forecast area. These \nare not anticipated to be severe at this time. A few of these may \nlinger into early Friday morning, though overall Friday should be \nmostly sunny to partly cloudy. A few diurnal showers and \nthunderstorms could be forced from WAA off developing southwesterly \nflow aloft Friday afternoon, though available moisture appears \nlimited and these would be favored primarily over the eastern \nhalf of the state. With weak deep layer shear and limited \ninstability, any thunderstorms Friday afternoon will likely \nremain sub-severe.\n\nAs alluded to by mentions of southwesterly flow aloft in the \nprevious paragraph, low pressure will partially dig into the \nwest CONUS this weekend with associated trough lifting through \nthe Northern Plains. This will increase the severe weather \nthreat Saturday and especially Sunday. Current models favor Gulf\nmoisture streaming into western ND on Saturday. However, the \nstrongest forcing off mid-level s/w energy is favored to remain\nin Montana, while uncertainty in location of surface low \ndevelopment remains. Overall, concur with SPC and CSU machine \nlearning that Saturday will favor eastern Montana more than \nwestern North Dakota for severe weather, though a conditional \nthreat, especially along and near the ND/SD border remains.\n\nSunday currently contains the highest risk of the severe \nweather outlook as aforementioned trough continues lifting \nthrough the Northern Plains. With more favorable upper level \ndynamics and models in fair model agreement on a surface low \nsliding through North Dakota, severe weather seems probable to \nsome extent. One fly in the ointment is a secondary upper level \ncirculation progged southeast of the state. This may result in a\nsharp gradient in the strength of deep layer shear from \nnorthwest to southeast where stronger shear is favored in \nnorthwestern parts of the region and weaker shear in the \nsoutheast. This would favor severe weather in the western half \nof the state similar to SPCs outlook with lower probabilities \nfurther east, and a case where storm intensity may decrease as \nstorms track eastward. \n\nModels favor another trough digging into the west CONUS next\nweek. However, there is disagreement in regard to the amplitude\nof this next trough, as well as the timing when/if it lifts \nthrough the Northern Plains. All in all, periodic shower and \nthunderstorm chances are expected next week with occasional \nsevere weather possible. \n\nWarm temperatures in the mid 80s to the low and possibly mid \n90s are expected for most of the state Saturday and Sunday. A \ncooldown is then expected Monday behind a cold frontal boundary,\nafter which warm temperatures and another cool down are favored\nfor the middle and end of the week. Of note, gusty southerly\nwinds are expected Saturday and Sunday across most of the state.",
   "analogs": [
     {
-      "datetime_utc": "2022-06-13T05:43Z",
-      "source_file": "BIS_2022_13_0543.txt",
-      "similarity": 0.9822428226470947,
+      "datetime_utc": "2022-06-12T23:57Z",
+      "source_file": "BIS_2022_12_2357.txt",
+      "similarity": 0.9822427034378052,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 17
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 20,
+            "severe_wind": 48
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 6
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-06-13T02:31Z",
+      "source_file": "BIS_2022_13_0231.txt",
+      "similarity": 0.9822427034378052,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -57,57 +105,53 @@
       }
     },
     {
-      "datetime_utc": "2022-06-12T23:57Z",
-      "source_file": "BIS_2022_12_2357.txt",
-      "similarity": 0.9822428226470947,
-      "label": "severe_wind",
+      "datetime_utc": "2019-06-16T01:39Z",
+      "source_file": "BIS_2019_16_0139.txt",
+      "similarity": 0.9806988835334778,
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 17
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "severe_wind",
+          "label": "winter",
           "counts": {
-            "severe_hail": 20,
-            "severe_wind": 48
+            "winter": 1
           }
         },
         "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 6
-          }
-        },
-        "3": {
           "label": "quiet",
           "counts": {}
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "flood": 2,
+            "severe_hail": 1
+          }
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "severe_wind",
+          "label": "flood",
           "counts": {
-            "severe_wind": 1
+            "flood": 1
           }
         },
         "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2019-06-15T19:36Z",
       "source_file": "BIS_2019_15_1936.txt",
-      "similarity": 0.9806989431381226,
+      "similarity": 0.9806988835334778,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -153,53 +197,9 @@
       }
     },
     {
-      "datetime_utc": "2019-06-16T01:39Z",
-      "source_file": "BIS_2019_16_0139.txt",
-      "similarity": 0.9806989431381226,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "flood": 2,
-            "severe_hail": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2015-06-03T04:50Z",
-      "source_file": "BIS_2015_03_0450.txt",
-      "similarity": 0.98003089427948,
+      "datetime_utc": "2015-06-03T02:13Z",
+      "source_file": "BIS_2015_03_0213.txt",
+      "similarity": 0.9800307750701904,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -242,7 +242,7 @@
     {
       "datetime_utc": "2015-06-02T19:14Z",
       "source_file": "BIS_2015_02_1914.txt",
-      "similarity": 0.98003089427948,
+      "similarity": 0.9800307750701904,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -288,8 +288,8 @@
       }
     },
     {
-      "datetime_utc": "2022-05-25T11:32Z",
-      "source_file": "BIS_2022_25_1132.txt",
+      "datetime_utc": "2022-05-25T17:17Z",
+      "source_file": "BIS_2022_25_1717.txt",
       "similarity": 0.9796566963195801,
       "label": "severe_wind",
       "is_severe": true,
@@ -336,52 +336,9 @@
       }
     },
     {
-      "datetime_utc": "2016-06-02T04:48Z",
-      "source_file": "BIS_2016_02_0448.txt",
-      "similarity": 0.9796430468559265,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 7
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2016-06-01T20:20Z",
       "source_file": "BIS_2016_01_2020.txt",
-      "similarity": 0.9796430468559265,
+      "similarity": 0.9796428680419922,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -422,17 +379,66 @@
       }
     },
     {
-      "datetime_utc": "2023-06-06T03:17Z",
-      "source_file": "BIS_2023_06_0317.txt",
-      "similarity": 0.9796320199966431,
+      "datetime_utc": "2016-06-02T02:37Z",
+      "source_file": "BIS_2016_02_0237.txt",
+      "similarity": 0.9796428680419922,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 7
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-06-05T19:46Z",
+      "source_file": "BIS_2023_05_1946.txt",
+      "similarity": 0.9796318411827087,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "1": {
           "label": "quiet",
           "counts": {}
         },
-        "1": {
+        "2": {
           "label": "tornado",
           "counts": {
             "severe_wind": 10,
@@ -440,22 +446,18 @@
             "tornado": 1
           }
         },
-        "2": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 7,
             "severe_wind": 4
           }
         },
-        "3": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2
           }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -471,7 +473,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9761428701877594,
+    "mean_similarity": 0.9761427682638169,
     "base_rate": 0.4111681812195443,
     "signal_value": 0.5388318187804557,
     "percentile": 70,
@@ -480,8 +482,8 @@
     "n_total": 10,
     "n_severe_signal": 95,
     "n_total_signal": 100,
-    "product_id": "202606050205-KBIS-FXUS63-AFDBIS",
-    "afd_time": "2026-06-05T02:05:00Z",
-    "updated": "2026-06-05T04:49:13.780775+00:00"
+    "product_id": "202606050531-KBIS-FXUS63-AFDBIS",
+    "afd_time": "2026-06-05T05:31:00Z",
+    "updated": "2026-06-05T08:54:43.608670+00:00"
   }
 }
