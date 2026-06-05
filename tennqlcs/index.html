@@ -187,6 +187,12 @@ function qtorColor(v){
   for(const [t,c] of bands){if(v>=t)return c;}
   return null;
 }
+// Show/hide the QTOR toggle + legend at the dataset level (persistent across
+// frames). `on` = the loaded case (or live feed) carries QTor at all.
+function setQtorUI(on){
+  document.getElementById('c-qtor').style.display=on?'':'none';
+  document.getElementById('qtor-legend').style.display=on?'block':'none';
+}
 
 function setMode(m){mode=m;
   document.getElementById('m-live').classList.toggle('on',m==='live');
@@ -263,11 +269,10 @@ function renderFrame(data){
     });
   }
 
-  // QTor leading lines — per-segment colored polylines (gust-front tornado potential)
-  const hasQtor=data.qtor_lines&&data.qtor_lines.length;
-  document.getElementById('c-qtor').style.display=hasQtor?'':'none';
-  document.getElementById('qtor-legend').style.display=hasQtor?'block':'none';
-  if(hasQtor){
+  // QTor leading lines — per-segment colored polylines (gust-front tornado potential).
+  // Toggle/legend visibility is set at the dataset level (see setQtorUI), not per
+  // frame, so the toggle stays put even on frames that happen to have no QTor line.
+  if(data.qtor_lines&&data.qtor_lines.length){
     data.qtor_lines.forEach(ln=>{
       const c=ln.coords,q=ln.qtor;
       for(let k=0;k<c.length-1;k++){
@@ -358,6 +363,7 @@ function showLiveFrame(i){
   if(liveFollowing&&age<300){b.textContent='LIVE';b.className='badge badge-live';}
   else if(liveFollowing){b.textContent=Math.floor(age/60)+'m AGO';b.className='badge badge-stale';}
   else{b.textContent='REVIEW';b.className='badge badge-hist';}
+  setQtorUI(!!liveQtor);   // persistent while the live sidecar is available
   renderFrame({bounds:liveData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:liveQtorFor(dt,liveFollowing),_liveBase:LIVE_BASE+'/'});
   document.getElementById('flbl').textContent=(i+1)+'/'+liveData.n_frames;
   document.getElementById('tlp').style.width=(100*(i+1)/liveData.n_frames)+'%';
@@ -429,6 +435,7 @@ function updateEnvPanel(frameTime,tl_override){
 
 function showFrame(i){if(!histData||i<0||i>=histData.n_frames)return;hFrame=i;
   const f=histData.frames[i];
+  setQtorUI(!!histData.qtor);   // persistent: based on the case, not this frame
   renderFrame({bounds:histData.bounds,refl_img:f.refl_img,contours:f.contours,tracks:f.tracks,qtor_lines:f.qtor_lines,tornadoes:histData.tornadoes,scanTime:f.time});
   updateEnvPanel(f.time,histData.env_timeline);
   document.getElementById('stime').textContent=f.time_str;
