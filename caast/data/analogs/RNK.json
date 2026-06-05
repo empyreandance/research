@@ -1,15 +1,15 @@
 {
   "office": "RNK",
-  "product_id": "202606051653-KRNK-FXUS61-AFDRNK",
-  "afd_time": "2026-06-05T16:53:00Z",
+  "product_id": "202606052337-KRNK-FXUS61-AFDRNK",
+  "afd_time": "2026-06-05T23:37:00Z",
   "section_type": "discussion",
-  "updated": "2026-06-05T18:14:05.947516+00:00",
+  "updated": "2026-06-05T23:40:28.187504+00:00",
   "query_preview": "..\nKEY MESSAGE 1: Trend for more diurnal driven shower/storm\nactivity next week but not a washout.\n\nModels keep us staying dry with warm temperatures into Saturday.\nA frontal boundary slides south later Sunday. Best areal\ncoverage for showers/storms appears to stay along and north of\nI-64.\n\nDaytime heating Sunday and boundary-layer dewpoints in the 60s \nare expected to support moderate afternoon instability ahead of \nthe cold front. Forecast soundings indicate largely \nunidirectional wind profiles with 30-40 kt of deep-layer shear, \nwhich would favor some cold pool organization with an associated\nrisk for locally damaging wind gusts into early evening, mainly\nin the Piedmont and points east.\n\nThe aforementioned frontal boundary will move south of us Monday\nbut another wave shifts the warm front back north Monday across\nKY/TN such that higher pops will be over the upper TN Valley\nwith lower chances further east. Numerical models seem to agree\non this but EC model is drier. We are likely to see cooler \nhighs in the mountains if the wedge sets up faster with more \nclouds and showers, with potential highs in the 70s. The NBM is \nstill warmer, which is a known bias for wedges. The high slides\nsouth over time with flow turning more south/southwest with \nresidual boundary in the area. This will lead to more of a \ndiurnal trend for showers/storms midweek. Much needed rain but \nnot a washout and not everyone will see rain, but humidity \nlevels look to be on the increase.",
   "analogs": [
     {
       "datetime_utc": "2006-07-23T07:25Z",
       "source_file": "RNK_2006_23_0725.txt",
-      "similarity": 0.9506973624229431,
+      "similarity": 0.9506973028182983,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -52,8 +52,64 @@
       }
     },
     {
-      "datetime_utc": "2008-07-05T18:45Z",
-      "source_file": "RNK_2008_05_1845.txt",
+      "datetime_utc": "2008-07-06T09:00Z",
+      "source_file": "RNK_2008_06_0900.txt",
+      "similarity": 0.9505457878112793,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 12,
+            "severe_hail": 10,
+            "tornado": 1,
+            "flood": 2
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 55,
+            "severe_wind": 18,
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 14,
+            "severe_wind": 59
+          }
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 85,
+            "tornado": 2
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2008-07-05T23:28Z",
+      "source_file": "RNK_2008_05_2328.txt",
       "similarity": 0.9505457878112793,
       "label": "tornado",
       "is_severe": true,
@@ -112,65 +168,9 @@
       }
     },
     {
-      "datetime_utc": "2008-07-06T05:45Z",
-      "source_file": "RNK_2008_06_0545.txt",
-      "similarity": 0.9505457878112793,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 12,
-            "severe_hail": 10,
-            "tornado": 1,
-            "flood": 2
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 55,
-            "severe_wind": 18,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 14,
-            "severe_wind": 59
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 85,
-            "tornado": 2
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2006-07-04T10:38Z",
-      "source_file": "RNK_2006_04_1038.txt",
-      "similarity": 0.9489589929580688,
+      "datetime_utc": "2006-07-04T00:56Z",
+      "source_file": "RNK_2006_04_0056.txt",
+      "similarity": 0.9489588737487793,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -215,7 +215,7 @@
     {
       "datetime_utc": "2006-07-03T22:56Z",
       "source_file": "RNK_2006_03_2256.txt",
-      "similarity": 0.9489589929580688,
+      "similarity": 0.9489588737487793,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -261,8 +261,8 @@
       }
     },
     {
-      "datetime_utc": "2007-04-30T08:07Z",
-      "source_file": "RNK_2007_30_0807.txt",
+      "datetime_utc": "2007-04-30T07:58Z",
+      "source_file": "RNK_2007_30_0758.txt",
       "similarity": 0.9484292268753052,
       "label": "severe_wind",
       "is_severe": true,
@@ -303,9 +303,9 @@
       }
     },
     {
-      "datetime_utc": "2007-04-29T19:09Z",
-      "source_file": "RNK_2007_29_1909.txt",
-      "similarity": 0.9477940797805786,
+      "datetime_utc": "2007-04-29T17:26Z",
+      "source_file": "RNK_2007_29_1726.txt",
+      "similarity": 0.9477939605712891,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -347,7 +347,7 @@
     {
       "datetime_utc": "2006-08-24T05:24Z",
       "source_file": "RNK_2006_24_0524.txt",
-      "similarity": 0.9476562142372131,
+      "similarity": 0.9476562738418579,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -393,7 +393,7 @@
     {
       "datetime_utc": "2006-08-23T19:02Z",
       "source_file": "RNK_2006_23_1902.txt",
-      "similarity": 0.9476562142372131,
+      "similarity": 0.9476562738418579,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -432,9 +432,9 @@
       }
     },
     {
-      "datetime_utc": "2025-07-04T05:30Z",
-      "source_file": "RNK_2025_04_0530.txt",
-      "similarity": 0.944205105304718,
+      "datetime_utc": "2025-07-04T05:12Z",
+      "source_file": "RNK_2025_04_0512.txt",
+      "similarity": 0.9442050457000732,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -488,7 +488,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.81,
-    "mean_similarity": 0.9325945943593978,
+    "mean_similarity": 0.9325945657491684,
     "base_rate": 0.6031592832094714,
     "signal_value": 0.20684071679052862,
     "percentile": 61,
@@ -497,8 +497,8 @@
     "n_total": 10,
     "n_severe_signal": 81,
     "n_total_signal": 100,
-    "product_id": "202606051653-KRNK-FXUS61-AFDRNK",
-    "afd_time": "2026-06-05T16:53:00Z",
-    "updated": "2026-06-05T18:14:05.947516+00:00"
+    "product_id": "202606052337-KRNK-FXUS61-AFDRNK",
+    "afd_time": "2026-06-05T23:37:00Z",
+    "updated": "2026-06-05T23:40:28.187504+00:00"
   }
 }
