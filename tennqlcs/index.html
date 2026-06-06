@@ -275,10 +275,19 @@ function renderFrame(data){
   if(data.qtor_lines&&data.qtor_lines.length){
     data.qtor_lines.forEach(ln=>{
       const c=ln.coords,q=ln.qtor;
+      // Dark casing first (underneath): the QTor colormap's low end is white/gray,
+      // which is invisible on bright reflectivity — the casing keeps it readable on
+      // any background. Two passes so all colored segments sit above all casings.
+      for(let k=0;k<c.length-1;k++){
+        if(!qtorColor(q[k]))continue;
+        const cas=L.polyline([c[k],c[k+1]],{color:'#0a0a0a',weight:8,opacity:0.8,lineCap:'round'});
+        if(vis.qtor)cas.addTo(map);
+        qtorLayers.push(cas);
+      }
       for(let k=0;k<c.length-1;k++){
         const col=qtorColor(q[k]);
         if(!col)continue;
-        const seg=L.polyline([c[k],c[k+1]],{color:col,weight:5,opacity:0.95,lineCap:'round'});
+        const seg=L.polyline([c[k],c[k+1]],{color:col,weight:4.5,opacity:1,lineCap:'round'});
         if(vis.qtor)seg.addTo(map);
         qtorLayers.push(seg);
       }
