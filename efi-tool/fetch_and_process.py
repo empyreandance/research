@@ -951,6 +951,9 @@ def run_full(grib_path, cwa_gdf):
         "esat_available": esat_available,
         "esat_cwa_count": len(esat_cache),
         "grids_stale": False,
+        "grids_init_time": init_time,
+        "grids_source_file": grib_path.name,
+        "grids_steps_hours": sorted(steps),
         "by_cwa": cwa_results,
         "cwa_list": sorted(cwa_results.keys()),
     }
@@ -1030,19 +1033,36 @@ def run_esat_only():
             steps.update(int(h) for h in var_steps.keys())
     steps = sorted(steps)
 
-    # The precise CWA-clipped values (efi/sot) require the GRIB. Without it we
-    # leave them BLANK rather than serve stale numbers — stale precise values
-    # read as current and are misleading. The frontend blanks that table and
-    # explains via the banner. Only the broader-area ESAT Region values (which
-    # are genuinely fresh) are populated here.
+    # Grid metadata from the most recent FULL run, propagated forward through
+    # successive ESAT-only runs. The ESAT Region table moves to the new cycle,
+    # but the precise CWA-clipped table + map keep the last full grid, clearly
+    # labeled a cycle behind (grids_init_time/_steps_hours), until that cycle's
+    # GRIB posts. Only if there's NO prior grid at all do we blank (cold start).
+    if prev.get("grids_stale", True):
+        grids_init = prev.get("grids_init_time")
+        grids_src = prev.get("grids_source_file")
+        grids_steps = prev.get("grids_steps_hours")
+    else:  # prev was a full run
+        grids_init = prev.get("grids_init_time") or prev.get("init_time")
+        grids_src = prev.get("grids_source_file") or prev.get("source_file")
+        grids_steps = prev.get("grids_steps_hours") or prev.get("steps_hours")
+    have_grid = bool(grids_init)
+
+    prev_by_cwa = prev.get("by_cwa", {})
     by_cwa = {}
-    for cwa in sorted(esat_cache.keys()):
-        by_cwa[cwa] = {
-            "efi": {},                        # blanked — needs the GRIB
-            "sot": {},                        # blanked — needs the GRIB
-            "regional_efi": esat_cache[cwa],  # fresh from ESAT (broader area)
-            "regional_sot": {},               # ESAT carries no SOT
+    for cwa in sorted(set(list(esat_cache.keys()) + list(prev_by_cwa.keys()))):
+        pc = prev_by_cwa.get(cwa, {})
+        entry = {
+            # Carried CWA clip from the last full run (one cycle behind), or
+            # blank if we've never had a grid for this CWA.
+            "efi": pc.get("efi", {}) if have_grid else {},
+            "sot": pc.get("sot", {}) if have_grid else {},
+            # ESAT Region values are FRESH at the new cycle (broader area).
+            "regional_efi": esat_cache.get(cwa, {}),
+            "regional_sot": pc.get("regional_sot", {}) if have_grid else {},
         }
+        if entry["regional_efi"] or entry["efi"]:
+            by_cwa[cwa] = entry
 
     init_dt = datetime.strptime(esat_init_str, "%Y%m%d%H").replace(tzinfo=timezone.utc)
     output = {
@@ -1054,9 +1074,13 @@ def run_esat_only():
         "param_names": EFI_PARAM_NAMES,
         "esat_available": True,
         "esat_cwa_count": len(esat_cache),
-        # Grids are NOT from this run → the frontend blanks the CWA table + map
-        # (current data or nothing; never stale).
+        # ESAT Region table is at this (new) cycle; the grid/CWA table is the
+        # carried full run identified by grids_init_time. grids_stale=True tells
+        # the frontend to label the CWA table + map with the grid's own cycle.
         "grids_stale": True,
+        "grids_init_time": grids_init,
+        "grids_source_file": grids_src,
+        "grids_steps_hours": grids_steps,
         "by_cwa": by_cwa,
         "cwa_list": sorted(by_cwa.keys()),
     }
@@ -1066,7 +1090,10 @@ def run_esat_only():
     out_path.write_text(json.dumps(output, indent=2))
 
     print(f"\nESAT-only update written: {out_path}")
-    print(f"  ESAT Region table live @ {esat_init_str}; CWA table + map blanked (no current GRIB)")
+    if have_grid:
+        print(f"  ESAT Region live @ {esat_init_str}; grid/CWA table carried from {grids_src} (cycle behind)")
+    else:
+        print(f"  ESAT Region live @ {esat_init_str}; no prior grid — CWA table + map blank")
     print(f"  CWAs: {len(by_cwa)}")
     return True
 

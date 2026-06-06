@@ -570,11 +570,11 @@ function formatStep(hours) {
 }
 
 // ---- Build a single table (ESAT layout: steps as rows, params as columns) ----
-function buildTable(efiData, sotData, steps, paramNames, label) {
+function buildTable(efiData, sotData, steps, paramNames, label, initRaw) {
   if (!efiData || Object.keys(efiData).length === 0) {
     const isRegionEmpty = label.includes('ESAT');
-    // CWA-clipped table when the live GRIB hasn't posted: a warning banner over
-    // the table, not stale numbers. (Region table down is just generic.)
+    // Empty CWA table only happens at cold start (no GRIB has ever run) — there
+    // is genuinely no grid to carry. Explain rather than show a bare "no data".
     if (!isRegionEmpty && DATA && DATA.grids_stale) {
       return `<div class="table-card">
         <div class="table-card-header">
@@ -582,11 +582,10 @@ function buildTable(efiData, sotData, steps, paramNames, label) {
           <span class="badge">CWA MAX</span>
         </div>
         <div style="margin:14px;padding:14px 16px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.45);border-radius:8px;color:#eab308;font-size:0.85rem;line-height:1.55;">
-          <strong>⚠ Awaiting latest ECMWF GRIB</strong><br>
-          Precise CWA-clipped EFI/SOT values need the current grid, which hasn't
-          posted to WPC yet. Rather than show stale numbers, this table is blank
-          until it arrives (refreshes automatically). The <em>ESAT Region</em>
-          table is live, but covers a <strong>broader area than the CWA</strong>.
+          <strong>⚠ Awaiting ECMWF GRIB</strong><br>
+          Precise CWA-clipped EFI/SOT values need the gridded GRIB, which hasn't
+          posted to WPC yet. The <em>ESAT Region</em> table is live, but covers a
+          <strong>broader area than the CWA</strong>.
         </div>
       </div>`;
     }
@@ -612,13 +611,17 @@ function buildTable(efiData, sotData, steps, paramNames, label) {
   const cwaFromLabel = label.split(" ")[0] || "";
   const isRegion = label.includes('ESAT');
 
-  // Parse init time for the table title and step labels.
+  // Parse init time for the table title and step labels. Each table is stamped
+  // with its OWN run: the CWA-clipped table follows the grid (which may be a
+  // cycle behind in ESAT-only mode), the ESAT Region table follows the live
+  // ESAT run. Caller passes the right init via initRaw.
   let initDate = null;
   let initHourStr = "";
   let tableTitle = label;  // fallback
-  if (DATA && DATA.init_time) {
+  const tableInitRaw = initRaw || (DATA && DATA.init_time);
+  if (tableInitRaw) {
     try {
-      initDate = parseInitTime(DATA.init_time);
+      initDate = parseInitTime(tableInitRaw);
       if (initDate && !isNaN(initDate.getTime())) {
         const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
         initHourStr = `${String(initDate.getUTCHours()).padStart(2,"0")}Z`;
@@ -628,11 +631,26 @@ function buildTable(efiData, sotData, steps, paramNames, label) {
     } catch(e) { console.warn("Title parse error:", e); }
   }
 
+  // When the grid is a cycle behind (ESAT-only update), label the CWA table so
+  // its values are never mistaken for the current cycle.
+  let staleStrip = "";
+  if (!isRegion && DATA && DATA.grids_stale) {
+    const ed = parseInitTime(DATA.init_time);
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const esatStr = (ed && !isNaN(ed.getTime()))
+      ? `${months[ed.getUTCMonth()]} ${ed.getUTCDate()} ${String(ed.getUTCHours()).padStart(2,"0")}Z`
+      : "the latest run";
+    staleStrip = `<div style="margin:0;padding:8px 14px;background:rgba(234,179,8,0.1);border-bottom:1px solid rgba(234,179,8,0.35);color:#eab308;font-size:0.78rem;line-height:1.4;">
+      ⚠ Grid from the run above — the latest GRIB (${esatStr} cycle) hasn't posted to WPC yet. The <em>ESAT Region</em> table is current; this CWA grid refreshes when it lands.
+    </div>`;
+  }
+
   let html = `<div class="table-card">
     <div class="table-card-header">
       <h2>${tableTitle || label}</h2>
       <span class="badge ${isRegion ? 'full' : ''}">${isRegion ? 'REGION MAX' : 'CWA MAX'}</span>
     </div>
+    ${staleStrip}
     <div class="table-scroll">
     <table>
     <thead><tr>
@@ -721,9 +739,14 @@ function render(cwaId) {
     regionSot = DATA.by_cwa[cwaId].regional_sot;
   }
 
+  // The CWA-clipped table follows the grid run (its own steps + init, which may
+  // be a cycle behind the live ESAT Region table in ESAT-only mode).
+  const gridSteps = DATA.grids_steps_hours || steps;
+  const gridInit = DATA.grids_init_time || DATA.init_time;
+
   let html = `<div class="tables-container">`;
-  html += buildTable(cwaEfi, cwaSot, steps, paramNames, cwaId ? `${cwaId} CWA Only` : "Select a CWA");
-  html += buildTable(regionEfi, regionSot, steps, paramNames, cwaId ? `${cwaId} ESAT Region` : "ESAT Region");
+  html += buildTable(cwaEfi, cwaSot, gridSteps, paramNames, cwaId ? `${cwaId} CWA Only` : "Select a CWA", gridInit);
+  html += buildTable(regionEfi, regionSot, steps, paramNames, cwaId ? `${cwaId} ESAT Region` : "ESAT Region", DATA.init_time);
   html += `</div>`;
 
   content.innerHTML = html;
@@ -1020,10 +1043,13 @@ function updateEsatTitle(param, stepHours) {
   if (!titleEl) return;
   const name = ESAT_NAMES[param] || param;
   const stepLo = Math.max(0, stepHours - 24);
+  // The map shows the grid, so label it with the grid's cycle (which may be a
+  // cycle behind the live ESAT run when grids_stale).
+  const mapInitRaw = (DATA && DATA.grids_init_time) || (DATA && DATA.init_time);
   let timeStr = "";
-  if (DATA && DATA.init_time) {
+  if (mapInitRaw) {
     try {
-      const init = parseInitTime(DATA.init_time);
+      const init = parseInitTime(mapInitRaw);
       if (init && !isNaN(init.getTime())) {
         const vStart = new Date(init.getTime() + stepLo * 3600000);
         const vEnd = new Date(init.getTime() + stepHours * 3600000);
@@ -1036,28 +1062,20 @@ function updateEsatTitle(param, stepHours) {
       }
     } catch(e) {}
   }
+  const staleNote = (DATA && DATA.grids_stale)
+    ? ` &nbsp;<span style="color:#eab308;">(grid one cycle behind — newer GRIB pending)</span>` : "";
   titleEl.innerHTML =
     `ECMWF EFI (shaded) and SOT (contours) for <b>${name}</b> &nbsp;&#8212;&nbsp; ${stepLo}&#8211;${stepHours}-h forecast valid` +
-    (timeStr ? `<br>${timeStr}` : "");
+    (timeStr ? `<br>${timeStr}${staleNote}` : "");
 }
 
 async function updateMap(cwaId, param, stepHours) {
   if (!mapSvg) return;
   if (!cwaId) return;
 
-  // Current data or nothing: when the grids aren't from the live run (ESAT-only
-  // mode, GRIB not yet posted) we do NOT render last-good fields. Blank the map
-  // and explain — stale map detail is misleading, same as stale table values.
-  if (DATA && DATA.grids_stale) {
-    ["#g-contours","#g-counties","#g-states","#g-sot","#g-sot-labels","#g-cwa","#g-region-box","#g-cities"]
-      .forEach(g => mapSvg.select(g).selectAll("*").remove());
-    const titleEl = document.getElementById("esat-title");
-    if (titleEl) titleEl.innerHTML =
-      `<span style="color:#eab308;">⚠ Map unavailable — awaiting the latest ECMWF GRIB.</span>` +
-      `<br><span style="font-size:0.8rem;color:var(--text-dim);">EFI/SOT map fields need the current grid (not yet posted to WPC). The ESAT Region table remains live.</span>`;
-    return;
-  }
-
+  // The map renders the grid on disk, which may be a cycle behind in ESAT-only
+  // mode (labeled as such by updateEsatTitle via grids_init_time). At cold start
+  // there's no grid file at all → loadCwaGrid returns null and we bail below.
   const cwaData = await loadCwaGrid(cwaId);
   if (!cwaData) return;
   const states = await loadStates();
