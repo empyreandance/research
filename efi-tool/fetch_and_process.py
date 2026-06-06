@@ -1001,6 +1001,15 @@ def run_esat_only():
         print("  No EFI run available on ESAT either.")
         return False
 
+    # Never regress. If the deployed run is already at this cycle or newer (a
+    # full GRIB run for the same cycle, or ESAT briefly serving an older one),
+    # refuse to overwrite it with an ESAT-only update — a full grid is strictly
+    # better than blanked grids for the same cycle, and we must never go back.
+    dep_cycle = int(prev["esat_init"]) if str(prev.get("esat_init", "")).isdigit() else 0
+    if dep_cycle and int(esat_init_str) <= dep_cycle:
+        print(f"  Deployed cycle {dep_cycle} >= ESAT {esat_init_str} — not downgrading; nothing to do.")
+        return False
+
     # CWA list: reuse the last deployed list (grids already on disk for these).
     cwa_ids = prev.get("cwa_list")
     if not cwa_ids:
@@ -1132,10 +1141,15 @@ def run_check():
             pass
     dep_source = dep.get("source_file", "")
     dep_esat = dep.get("esat_init", "")
+    dep_cycle = int(dep_esat) if str(dep_esat).isdigit() else 0
 
+    # Only ever move FORWARD. A GRIB that isn't the deployed one → full run.
+    # An ESAT cycle is only worth an esat-only run if it is STRICTLY NEWER than
+    # what's deployed — otherwise a flaky ESAT serving an older cycle (or the
+    # same cycle we already have as a full grid run) would regress/clobber it.
     if latest_grib and latest_grib != dep_source:
         mode, new = "full", "true"
-    elif latest_esat and latest_esat != dep_esat:
+    elif latest_esat and str(latest_esat).isdigit() and int(latest_esat) > dep_cycle:
         mode, new = "esat", "true"
     else:
         mode, new = "none", "false"
