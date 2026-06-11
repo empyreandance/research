@@ -9,12 +9,12 @@
   <style>
     :root {
       --bg: #f4f5f7; --card: #ffffff; --text: #14171a; --muted: #6b7280;
-      --border: #e3e6ea; --accent: #2563eb; --bar: #2563eb;
+      --border: #e3e6ea; --accent: #2563eb; --bar: #2563eb; --bar2: #14b8a6;
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0f1216; --card: #1a1f26; --text: #e8eaed; --muted: #9aa1ab;
-        --border: #2a323c; --accent: #60a5fa; --bar: #60a5fa;
+        --border: #2a323c; --accent: #60a5fa; --bar: #60a5fa; --bar2: #2dd4bf;
       }
     }
     * { box-sizing: border-box; }
@@ -29,20 +29,33 @@
     header { padding: 20px 16px 8px; display: flex; flex-direction: column; gap: 4px; }
     header h1 { margin: 0; font-size: 1.5rem; font-weight: 650; }
     header .meta { color: var(--muted); font-size: 0.85rem; }
-    .controls { padding: 8px 16px 0; display: flex; gap: 6px; flex-wrap: wrap; }
-    .controls button {
+    .controls {
+      padding: 8px 16px 0; display: flex; gap: 6px; flex-wrap: wrap;
+      align-items: center;
+    }
+    .controls button, .controls input[type="date"] {
       appearance: none; background: var(--card); color: var(--text);
       border: 1px solid var(--border); border-radius: 999px;
       padding: 6px 14px; font: inherit; font-size: 0.85rem; cursor: pointer;
+      color-scheme: light dark;
     }
-    .controls button.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .controls button.active, .controls button.primary {
+      background: var(--accent); color: white; border-color: var(--accent);
+    }
+    .controls input[type="date"] {
+      border-radius: 8px; cursor: text;
+    }
+    .controls .date-group { display: none; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .controls .date-group.shown { display: flex; }
+    .controls .date-group span { color: var(--muted); font-size: 0.85rem; }
     main {
       display: grid; grid-template-columns: 1fr; gap: 14px;
-      padding: 12px 16px 24px; max-width: 900px; margin: 0 auto;
+      padding: 12px 16px 24px; max-width: 1000px; margin: 0 auto;
     }
     @media (min-width: 720px) {
       main { grid-template-columns: 1fr 1fr; }
       .card.wide { grid-column: 1 / -1; }
+      .card.half { grid-column: span 1; }
     }
     .card {
       background: var(--card); border: 1px solid var(--border);
@@ -52,21 +65,35 @@
       margin: 0 0 12px; font-size: 0.9rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);
     }
-    .big-num { font-size: 2.5rem; font-weight: 700; line-height: 1; }
+    .big-num { font-size: 2.4rem; font-weight: 700; line-height: 1; }
     .big-num + .muted { margin-top: 4px; font-size: 0.85rem; color: var(--muted); }
+    .stat-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-pair > div + div { padding-left: 16px; border-left: 1px solid var(--border); }
+    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
     table.bars { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     table.bars td { padding: 6px 0; vertical-align: middle; }
     table.bars td.label { width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
     table.bars td.label a { color: var(--text); text-decoration: none; }
     table.bars td.label a:hover { text-decoration: underline; }
     table.bars td.bar-cell { width: auto; }
-    table.bars td.count { width: 48px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); padding-left: 8px; }
+    table.bars td.count { width: 56px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); padding-left: 8px; }
     .bar-bg { background: var(--border); border-radius: 4px; height: 8px; overflow: hidden; }
     .bar-fg { background: var(--bar); height: 100%; border-radius: 4px; }
-    .chart { width: 100%; height: 140px; display: block; }
+    table.daily {
+      width: 100%; border-collapse: collapse; font-size: 0.9rem;
+      font-variant-numeric: tabular-nums;
+    }
+    table.daily th, table.daily td {
+      padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--border);
+    }
+    table.daily th { font-weight: 600; font-size: 0.75rem; text-transform: uppercase; color: var(--muted); }
+    table.daily th:first-child, table.daily td:first-child { text-align: left; }
+    table.daily tr:last-child td { border-bottom: none; }
+    .daily-wrap { max-height: 360px; overflow-y: auto; margin-top: 4px; }
+    .chart { width: 100%; height: 160px; display: block; }
     .chart-axis { fill: var(--muted); font-size: 10px; font-family: inherit; }
     .chart-line { fill: none; stroke: var(--bar); stroke-width: 2; }
-    .chart-area { fill: var(--bar); opacity: 0.15; }
+    .chart-area { fill: var(--bar); opacity: 0.18; }
     .chart-grid { stroke: var(--border); stroke-width: 1; }
     .loading, .empty { color: var(--muted); font-size: 0.9rem; padding: 8px 0; }
     .err { color: #d23b3b; font-size: 0.85rem; padding: 8px 0; }
@@ -84,6 +111,13 @@
     <button data-days="7">7 days</button>
     <button data-days="30" class="active">30 days</button>
     <button data-days="90">90 days</button>
+    <button data-custom>Custom…</button>
+    <div class="date-group" id="date-group">
+      <input type="date" id="date-since">
+      <span>to</span>
+      <input type="date" id="date-until">
+      <button class="primary" id="apply-custom">Apply</button>
+    </div>
   </div>
   <main id="root">
     <div class="card wide loading" id="initial-loading">Fetching analytics…</div>
@@ -98,21 +132,51 @@
     const root = document.getElementById("root");
     const meta = document.getElementById("meta");
     const rangeButtons = document.getElementById("range-buttons");
+    const dateGroup = document.getElementById("date-group");
+    const dateSince = document.getElementById("date-since");
+    const dateUntil = document.getElementById("date-until");
+    const applyBtn = document.getElementById("apply-custom");
 
-    let currentDays = 30;
+    // Default custom inputs: last 30 days
+    const today = new Date();
+    const monthAgo = new Date(today.getTime() - 30 * 86400 * 1000);
+    dateUntil.value = today.toISOString().slice(0, 10);
+    dateSince.value = monthAgo.toISOString().slice(0, 10);
 
     rangeButtons.addEventListener("click", (e) => {
-      const btn = e.target.closest("button[data-days]");
+      const btn = e.target.closest("button");
       if (!btn) return;
-      currentDays = parseInt(btn.dataset.days, 10);
-      [...rangeButtons.children].forEach(b => b.classList.toggle("active", b === btn));
-      load(currentDays);
+      if (btn.dataset.days) {
+        [...rangeButtons.querySelectorAll("button")].forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        dateGroup.classList.remove("shown");
+        loadByDays(parseInt(btn.dataset.days, 10));
+      } else if (btn.hasAttribute("data-custom")) {
+        [...rangeButtons.querySelectorAll("button")].forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        dateGroup.classList.add("shown");
+      }
     });
 
-    async function load(days) {
-      root.innerHTML = `<div class="card wide loading">Fetching analytics for last ${days} days…</div>`;
+    applyBtn.addEventListener("click", () => {
+      if (!dateSince.value || !dateUntil.value) return;
+      if (dateSince.value > dateUntil.value) {
+        const tmp = dateSince.value; dateSince.value = dateUntil.value; dateUntil.value = tmp;
+      }
+      loadByRange(dateSince.value, dateUntil.value);
+    });
+
+    async function loadByDays(days) {
+      await load(`?days=${days}`);
+    }
+    async function loadByRange(since, until) {
+      await load(`?since=${since}&until=${until}`);
+    }
+
+    async function load(qs) {
+      root.innerHTML = `<div class="card wide loading">Fetching analytics…</div>`;
       try {
-        const r = await fetch(`${ENDPOINT}?days=${days}`, { cache: "no-store" });
+        const r = await fetch(`${ENDPOINT}${qs}`, { cache: "no-store" });
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const payload = await r.json();
         const errs = payload?.data?.errors;
@@ -125,57 +189,98 @@
 
     function render(payload) {
       const acct = payload.data.data.viewer.accounts[0] || {};
-      const totalCount = (acct.totals || []).reduce((s, x) => s + x.count, 0);
-      const days = payload.days;
+      const totals = (acct.totals || [])[0] || { count: 0, sum: { visits: 0 } };
+      const totalViews = totals.count;
+      const totalVisits = totals.sum?.visits || 0;
       const since = payload.since;
-      const avg = days ? Math.round(totalCount / days) : 0;
+      const untilEx = payload.untilExclusive;
+      const lastIncluded = new Date(new Date(untilEx).getTime() - 86400 * 1000).toISOString().slice(0, 10);
+      const days = Math.round((new Date(untilEx) - new Date(since)) / (86400 * 1000));
 
-      meta.textContent = `${totalCount.toLocaleString()} views in last ${days} days · since ${since} · avg ${avg}/day`;
+      meta.textContent = `${since} → ${lastIncluded} (${days} days) · ${totalViews.toLocaleString()} views · ${totalVisits.toLocaleString()} sessions`;
 
       const blocks = [];
 
-      // Total card
+      // Stat pair card: total views and visits
       blocks.push(`
-        <div class="card">
-          <h2>Total page views</h2>
-          <div class="big-num">${totalCount.toLocaleString()}</div>
-          <div class="muted">across last ${days} days</div>
+        <div class="card wide">
+          <h2>Headline</h2>
+          <div class="stat-pair">
+            <div>
+              <div class="stat-label">Page views</div>
+              <div class="big-num">${totalViews.toLocaleString()}</div>
+              <div class="muted">≈ ${Math.round(totalViews / Math.max(days, 1))} per day</div>
+            </div>
+            <div>
+              <div class="stat-label">Sessions</div>
+              <div class="big-num">${totalVisits.toLocaleString()}</div>
+              <div class="muted">Cloudflare's nearest analog to unique visitors</div>
+            </div>
+          </div>
         </div>
       `);
 
-      // Sparkline / daily chart
+      // Daily chart + table
+      const dailyRows = buildDailySeries(acct.byDay || [], since, untilEx);
       blocks.push(`
-        <div class="card">
+        <div class="card wide">
           <h2>Daily trend</h2>
-          ${dailyChart(acct.byDay || [], days)}
+          ${dailyChart(dailyRows)}
+          <div class="daily-wrap">
+            <table class="daily">
+              <thead><tr><th>Date</th><th>Views</th><th>Sessions</th></tr></thead>
+              <tbody>
+                ${[...dailyRows].reverse().map(d => `
+                  <tr>
+                    <td>${d.date}</td>
+                    <td>${d.count.toLocaleString()}</td>
+                    <td>${d.visits.toLocaleString()}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
         </div>
       `);
 
-      // Top paths
       blocks.push(barsCard("wide", "Top pages", acct.byPath || [], d => {
         const path = d.dimensions.requestPath || "(unknown)";
         return { label: `<a href="${path}">${escapeHtml(path)}</a>`, raw: path };
-      }, 12));
+      }, 15));
 
-      // Top countries
       blocks.push(barsCard("", "Top countries", acct.byCountry || [], d => {
         const c = d.dimensions.countryName || "(unknown)";
         return { label: escapeHtml(c), raw: c };
-      }, 8));
+      }, 10));
 
-      // Top referrers
       blocks.push(barsCard("", "Top referrers", acct.byReferer || [], d => {
         const r = d.dimensions.refererHost || "(direct)";
         return { label: escapeHtml(r), raw: r };
-      }, 8));
+      }, 10));
 
-      // Devices
       blocks.push(barsCard("wide", "Device types", acct.byDevice || [], d => {
         const t = d.dimensions.deviceType || "(unknown)";
         return { label: escapeHtml(t), raw: t };
       }, 5));
 
       root.innerHTML = blocks.join("\n");
+    }
+
+    function buildDailySeries(byDay, sinceISO, untilExISO) {
+      const byDate = new Map();
+      for (const row of byDay) {
+        byDate.set(row.dimensions.date, { count: row.count, visits: row.sum?.visits || 0 });
+      }
+      const out = [];
+      const start = new Date(sinceISO + "T00:00:00Z");
+      const end = new Date(untilExISO + "T00:00:00Z");
+      const ms = 86400 * 1000;
+      for (let t = start.getTime(); t < end.getTime(); t += ms) {
+        const iso = new Date(t).toISOString().slice(0, 10);
+        const m = byDate.get(iso) || { count: 0, visits: 0 };
+        out.push({ date: iso, count: m.count, visits: m.visits });
+      }
+      return out;
     }
 
     function barsCard(modifier, title, rows, mapper, limit) {
@@ -198,37 +303,26 @@
       return `<div class="card ${modifier}"><h2>${title}</h2><table class="bars">${lines}</table></div>`;
     }
 
-    function dailyChart(rows, totalDays) {
-      // Fill in any missing days with 0
-      const byDate = new Map(rows.map(r => [r.dimensions.date, r.count]));
-      const points = [];
-      const end = new Date();
-      for (let i = totalDays - 1; i >= 0; i--) {
-        const d = new Date(end.getTime() - i * 86400 * 1000);
-        const iso = d.toISOString().slice(0, 10);
-        points.push({ date: iso, count: byDate.get(iso) || 0 });
-      }
-      if (!points.length) return `<div class="empty">No data.</div>`;
-      const W = 600, H = 140, PAD = { l: 28, r: 6, t: 8, b: 18 };
+    function dailyChart(rows) {
+      if (!rows.length) return `<div class="empty">No data.</div>`;
+      const W = 800, H = 160, PAD = { l: 36, r: 8, t: 10, b: 22 };
       const w = W - PAD.l - PAD.r;
       const h = H - PAD.t - PAD.b;
-      const max = Math.max(...points.map(p => p.count), 1);
-      const xScale = i => PAD.l + (i / Math.max(1, points.length - 1)) * w;
+      const max = Math.max(...rows.map(p => p.count), 1);
+      const xScale = i => PAD.l + (rows.length > 1 ? (i / (rows.length - 1)) * w : w / 2);
       const yScale = v => PAD.t + h - (v / max) * h;
-      const pathLine = points.map((p, i) => `${i === 0 ? "M" : "L"}${xScale(i).toFixed(1)},${yScale(p.count).toFixed(1)}`).join(" ");
-      const pathArea = `${pathLine} L${xScale(points.length - 1).toFixed(1)},${PAD.t + h} L${xScale(0).toFixed(1)},${PAD.t + h} Z`;
-      const firstDate = points[0].date;
-      const lastDate = points[points.length - 1].date;
+      const pathLine = rows.map((p, i) => `${i === 0 ? "M" : "L"}${xScale(i).toFixed(1)},${yScale(p.count).toFixed(1)}`).join(" ");
+      const pathArea = `${pathLine} L${xScale(rows.length - 1).toFixed(1)},${PAD.t + h} L${xScale(0).toFixed(1)},${PAD.t + h} Z`;
       return `
         <svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
           <line class="chart-grid" x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${PAD.t + h}"/>
           <line class="chart-grid" x1="${PAD.l}" y1="${PAD.t + h}" x2="${W - PAD.r}" y2="${PAD.t + h}"/>
-          <text class="chart-axis" x="${PAD.l - 4}" y="${PAD.t + 8}" text-anchor="end">${max}</text>
-          <text class="chart-axis" x="${PAD.l - 4}" y="${PAD.t + h}" text-anchor="end">0</text>
+          <text class="chart-axis" x="${PAD.l - 6}" y="${PAD.t + 8}" text-anchor="end">${max}</text>
+          <text class="chart-axis" x="${PAD.l - 6}" y="${PAD.t + h}" text-anchor="end">0</text>
           <path class="chart-area" d="${pathArea}"/>
           <path class="chart-line" d="${pathLine}"/>
-          <text class="chart-axis" x="${PAD.l}" y="${H - 4}" text-anchor="start">${firstDate}</text>
-          <text class="chart-axis" x="${W - PAD.r}" y="${H - 4}" text-anchor="end">${lastDate}</text>
+          <text class="chart-axis" x="${PAD.l}" y="${H - 6}" text-anchor="start">${rows[0].date}</text>
+          <text class="chart-axis" x="${W - PAD.r}" y="${H - 6}" text-anchor="end">${rows[rows.length - 1].date}</text>
         </svg>
       `;
     }
@@ -238,7 +332,7 @@
     }
     function escapeAttr(s) { return escapeHtml(s); }
 
-    load(currentDays);
+    loadByDays(30);
   </script>
 </body>
 </html>
