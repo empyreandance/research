@@ -1,15 +1,15 @@
 {
   "office": "BOI",
-  "product_id": "202606200004-KBOI-FXUS65-AFDBOI",
-  "afd_time": "2026-06-20T00:04:00Z",
+  "product_id": "202606200645-KBOI-FXUS65-AFDBOI",
+  "afd_time": "2026-06-20T06:45:00Z",
   "section_type": "long_term",
-  "updated": "2026-06-20T04:42:41.674343+00:00",
-  "query_preview": "/Monday through Friday/...\nIssued 221 PM MDT FRI JUN 19 2026\nA ridge of high pressure will build over the West Coast beginning \nMonday, bringing a warming and drying trend to the region through \nthe middle of the week. Valley high temperatures will reach the \nupper 90s to low triple digits by Wednesday. A shortwave trough\nwill then move into the region late Wednesday into Thursday. \nThis will bring slight cooling, breezy valley winds, and a low \nchance of showers and thunderstorms over high terrain on \nThursday/Friday. Model variance remains high on the strength of \nthe trough and the extent of moisture, but the best agreement \nexists for precipitation to stay over eastern Idaho. Long range \nmodels hint at a stronger closed low to move into the Pacific \nNorthwest by late Friday, which would bring much cooler \ntemperatures and precipitation for the end of the week.",
+  "updated": "2026-06-20T08:30:06.089784+00:00",
+  "query_preview": "/Tuesday through Saturday/...\nIssued 221 PM MDT FRI JUN 19 2026\nA ridge of high pressure will build over the West Coast beginning \nMonday, bringing a warming and drying trend to the region through \nthe middle of the week. Valley high temperatures will reach the \nupper 90s to low triple digits by Wednesday. A shortwave trough\nwill then move into the region late Wednesday into Thursday. \nThis will bring slight cooling, breezy valley winds, and a low \nchance of showers and thunderstorms over high terrain on \nThursday/Friday. Model variance remains high on the strength of \nthe trough and the extent of moisture, but the best agreement \nexists for precipitation to stay over eastern Idaho. Long range \nmodels hint at a stronger closed low to move into the Pacific \nNorthwest by late Friday, which would bring much cooler \ntemperatures and precipitation for the end of the week.",
   "analogs": [
     {
       "datetime_utc": "2004-07-07T09:18Z",
       "source_file": "BOI_2004_07_0918.txt",
-      "similarity": 0.8929674625396729,
+      "similarity": 0.8914889693260193,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -44,9 +44,53 @@
       }
     },
     {
+      "datetime_utc": "2009-06-14T02:33Z",
+      "source_file": "BOI_2009_14_0233.txt",
+      "similarity": 0.8500444889068604,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 6
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2,
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 2
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2009-06-13T21:31Z",
       "source_file": "BOI_2009_13_2131.txt",
-      "similarity": 0.8565097451210022,
+      "similarity": 0.8500444889068604,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -89,16 +133,94 @@
       }
     },
     {
-      "datetime_utc": "2009-06-14T02:33Z",
-      "source_file": "BOI_2009_14_0233.txt",
-      "similarity": 0.8565097451210022,
-      "label": "tornado",
+      "datetime_utc": "2005-09-05T03:50Z",
+      "source_file": "BOI_2005_05_0350.txt",
+      "similarity": 0.8385217189788818,
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "flood",
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "winter",
           "counts": {
-            "flood": 6
+            "winter": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-07-02T16:00Z",
+      "source_file": "BOI_2024_02_1600.txt",
+      "similarity": 0.8345315456390381,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2008-06-25T04:44Z",
+      "source_file": "BOI_2008_25_0444.txt",
+      "similarity": 0.8308476209640503,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
           }
         },
         "1": {
@@ -110,11 +232,96 @@
           "counts": {}
         },
         "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 2,
-            "flood": 1
+            "severe_hail": 2
           }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 12,
+            "severe_hail": 1
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2008-06-24T20:37Z",
+      "source_file": "BOI_2008_24_2037.txt",
+      "similarity": 0.8308476209640503,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 12,
+            "severe_hail": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2005-08-09T03:42Z",
+      "source_file": "BOI_2005_09_0342.txt",
+      "similarity": 0.8295121192932129,
+      "label": "severe_hail",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -125,17 +332,15 @@
           "counts": {}
         },
         "6": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 2
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2024-07-02T16:00Z",
-      "source_file": "BOI_2024_02_1600.txt",
-      "similarity": 0.8517047166824341,
+      "datetime_utc": "2007-01-29T10:18Z",
+      "source_file": "BOI_2007_29_1018.txt",
+      "similarity": 0.8276988863945007,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -172,7 +377,7 @@
     {
       "datetime_utc": "2009-07-01T15:50Z",
       "source_file": "BOI_2009_01_1550.txt",
-      "similarity": 0.8500587940216064,
+      "similarity": 0.8243710994720459,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -219,229 +424,22 @@
           "counts": {}
         }
       }
-    },
-    {
-      "datetime_utc": "2005-09-05T03:50Z",
-      "source_file": "BOI_2005_05_0350.txt",
-      "similarity": 0.8487567901611328,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2008-06-24T20:37Z",
-      "source_file": "BOI_2008_24_2037.txt",
-      "similarity": 0.834356963634491,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 12,
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2008-06-25T03:49Z",
-      "source_file": "BOI_2008_25_0349.txt",
-      "similarity": 0.834356963634491,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 12,
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2005-07-19T09:55Z",
-      "source_file": "BOI_2005_19_0955.txt",
-      "similarity": 0.8274551630020142,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2005-08-09T03:42Z",
-      "source_file": "BOI_2005_09_0342.txt",
-      "similarity": 0.826073408126831,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
     }
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.31,
-    "mean_similarity": 0.797727530002594,
+    "severe_fraction": 0.36,
+    "mean_similarity": 0.7889906966686249,
     "base_rate": 0.36275012827090813,
-    "signal_value": -0.052750128270908136,
-    "percentile": 37,
+    "signal_value": -0.0027501282709081476,
+    "percentile": 44,
     "office_lift": 0.1224698717290919,
-    "n_severe": 8,
+    "n_severe": 7,
     "n_total": 10,
-    "n_severe_signal": 31,
+    "n_severe_signal": 36,
     "n_total_signal": 100,
-    "product_id": "202606200004-KBOI-FXUS65-AFDBOI",
-    "afd_time": "2026-06-20T00:04:00Z",
-    "updated": "2026-06-20T04:42:41.674343+00:00"
+    "product_id": "202606200645-KBOI-FXUS65-AFDBOI",
+    "afd_time": "2026-06-20T06:45:00Z",
+    "updated": "2026-06-20T08:30:06.089784+00:00"
   }
 }
