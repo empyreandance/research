@@ -1,15 +1,15 @@
 {
   "office": "MAF",
-  "product_id": "202606202223-KMAF-FXUS64-AFDMAF",
-  "afd_time": "2026-06-20T22:23:00Z",
+  "product_id": "202606210325-KMAF-FXUS64-AFDMAF",
+  "afd_time": "2026-06-21T03:25:00Z",
   "section_type": "long_term",
-  "updated": "2026-06-20T22:37:00.617057+00:00",
+  "updated": "2026-06-21T07:12:07.962068+00:00",
   "query_preview": "..\n(Monday through Friday)\nIssued at 101 PM CDT Sat Jun 20 2026\n\nIt will either be hot next week, or very hot. Normally high \npressure develops over the southeastern United States this time\nof year, increasing easterly steering flow and sending tropical \nsystems into the western gulf while pushing modified semi-tropical\nair into West Texas. This pattern is not to be seen next week \nwith the westerlies dominating. Thus gulf moisture remains to our\neast allowing us to mix to 700-500mb and creating the hot \ntemperatures. Models show a couple of weak cold fronts approach \nthe area but provide little if any relief. Rain chances will \nmostly hold to the mountains and adjacent plains.\n\nHennig",
   "analogs": [
     {
-      "datetime_utc": "2021-12-20T11:02Z",
-      "source_file": "MAF_2021_20_1102.txt",
-      "similarity": 0.991163432598114,
+      "datetime_utc": "2021-12-20T09:13Z",
+      "source_file": "MAF_2021_20_0913.txt",
+      "similarity": 0.9911633729934692,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -44,8 +44,8 @@
       }
     },
     {
-      "datetime_utc": "2025-01-11T23:22Z",
-      "source_file": "MAF_2025_11_2322_1.txt",
+      "datetime_utc": "2025-01-11T20:37Z",
+      "source_file": "MAF_2025_11_2037.txt",
       "similarity": 0.9909290075302124,
       "label": "winter",
       "is_severe": false,
@@ -128,15 +128,17 @@
       }
     },
     {
-      "datetime_utc": "2023-07-23T05:25Z",
-      "source_file": "MAF_2023_23_0525.txt",
+      "datetime_utc": "2023-07-22T18:55Z",
+      "source_file": "MAF_2023_22_1855.txt",
       "similarity": 0.9909262657165527,
-      "label": "quiet",
-      "is_severe": false,
+      "label": "severe_hail",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
         },
         "1": {
           "label": "quiet",
@@ -165,17 +167,15 @@
       }
     },
     {
-      "datetime_utc": "2023-07-22T18:55Z",
-      "source_file": "MAF_2023_22_1855.txt",
+      "datetime_utc": "2023-07-23T05:25Z",
+      "source_file": "MAF_2023_23_0525.txt",
       "similarity": 0.9909262657165527,
-      "label": "severe_hail",
-      "is_severe": true,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
@@ -278,48 +278,9 @@
       }
     },
     {
-      "datetime_utc": "2024-02-29T04:31Z",
-      "source_file": "MAF_2024_29_0431.txt",
-      "similarity": 0.9904910326004028,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 22
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2024-02-28T23:45Z",
       "source_file": "MAF_2024_28_2345.txt",
-      "similarity": 0.9904910326004028,
+      "similarity": 0.9904909133911133,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -358,9 +319,48 @@
       }
     },
     {
+      "datetime_utc": "2024-02-29T04:31Z",
+      "source_file": "MAF_2024_29_0431.txt",
+      "similarity": 0.9904909133911133,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 22
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2022-07-17T08:45Z",
       "source_file": "MAF_2022_17_0845.txt",
-      "similarity": 0.9904698133468628,
+      "similarity": 0.9904699325561523,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -404,7 +404,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.67,
-    "mean_similarity": 0.9883696180582047,
+    "mean_similarity": 0.9883696168661118,
     "base_rate": 0.5431329330394467,
     "signal_value": 0.1268670669605534,
     "percentile": 48,
@@ -413,8 +413,8 @@
     "n_total": 10,
     "n_severe_signal": 67,
     "n_total_signal": 100,
-    "product_id": "202606202223-KMAF-FXUS64-AFDMAF",
-    "afd_time": "2026-06-20T22:23:00Z",
-    "updated": "2026-06-20T22:37:00.617057+00:00"
+    "product_id": "202606210325-KMAF-FXUS64-AFDMAF",
+    "afd_time": "2026-06-21T03:25:00Z",
+    "updated": "2026-06-21T07:12:07.962068+00:00"
   }
 }
