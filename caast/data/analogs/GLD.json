@@ -1,15 +1,15 @@
 {
   "office": "GLD",
-  "product_id": "202606251806-KGLD-FXUS63-AFDGLD",
-  "afd_time": "2026-06-25T18:06:00Z",
+  "product_id": "202606252001-KGLD-FXUS63-AFDGLD",
+  "afd_time": "2026-06-25T20:01:00Z",
   "section_type": "long_term",
-  "updated": "2026-06-25T18:28:47.224807+00:00",
-  "query_preview": "/MONDAY THROUGH WEDNESDAY/...\nIssued at 125 PM MDT Wed Jun 24 2026\n\nFriday, our region is forecast to transition out of a mostly zonal \npattern into a weak ridging pattern with an incoming trough west of \nthe Rocky Mountains. High temperatures are forecast in the 70s to \n80s with around a 20% chance of showers and thunderstorms in the \nlate afternoon/evening. Storm coverage will likely be limited due to \nthe upper-level ridge pattern, but isolated storms could produce \nlarge hail and strong winds. Saturday and Sunday will be hot and dry \nwith highs forecast in the 90s to 100s. Relative humidity (RH) \nvalues will drop into the low teens Saturday and Sunday afternoon \nalong with wind gusts up to 40 mph are possible. Given the recent \nsubstantial rainfall across the county warning area (CWA), this \nlessens fire weather concerns, though conditions will continue to be \nmonitored.\n\nConditions cool slightly in the wake of a cold frontal passage \nMonday. High temperatures are forecast in the upper 80s to 90s for \nMonday and Tuesday. Potential for a more active pattern returns \nafter Tuesday as an incoming trough is forecast to move through our \nregion. Low confidence on specifics since this is the end of the \nforecast period.",
+  "updated": "2026-06-25T21:04:48.564507+00:00",
+  "query_preview": "/MONDAY THROUGH THURSDAY/...\nIssued at 149 PM MDT Thu Jun 25 2026\n\nThe long term period is shaping up to be fairly consistent for our \ncounty warning area (CWA). Persistent southwest upper-level flow is \nforecast to be over the region through at least Thursday. This will \nresult in warm temperatures and a windy work week. High temperatures \nare forecast in the 90s through Thursday. Expect the afternoons to \nbe windy with gusts of 25 to 35 mph possible. The western portion of \nthe CWA will be on the higher side of wind gusts. Embedded \nshortwaves will bring afternoon precipitation chances each day, but \nProbability of Precipitation (PoPs) are only around 25% each \nafternoon. \n\nFire weather conditions will be the big question for next week. \nRelative humidity (RH) values are forecast to fall into the teens \nacross the western CWA accompanied by strong afternoon winds. \nGrassland Fire Danger Index (GFDI) values are forecast in the high \nto extreme category. However, given the recent substantial rainfall, \nfuels may remain unreceptive, which could mitigate the overall fire \nweather threat despite the hot, dry, and windy conditions.",
   "analogs": [
     {
       "datetime_utc": "2004-12-27T04:22Z",
       "source_file": "GLD_2004_27_0422.txt",
-      "similarity": 0.9166648387908936,
+      "similarity": 0.9386692047119141,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -46,7 +46,7 @@
     {
       "datetime_utc": "2005-07-21T07:41Z",
       "source_file": "GLD_2005_21_0741.txt",
-      "similarity": 0.9013056755065918,
+      "similarity": 0.906078577041626,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -86,9 +86,9 @@
       }
     },
     {
-      "datetime_utc": "2004-02-13T21:02Z",
-      "source_file": "GLD_2004_13_2102.txt",
-      "similarity": 0.8784103989601135,
+      "datetime_utc": "2004-03-18T09:45Z",
+      "source_file": "GLD_2004_18_0945.txt",
+      "similarity": 0.8746586441993713,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -123,27 +123,33 @@
       }
     },
     {
-      "datetime_utc": "2004-11-18T20:47Z",
-      "source_file": "GLD_2004_18_2047.txt",
-      "similarity": 0.8681144714355469,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2022-06-13T17:17Z",
+      "source_file": "GLD_2022_13_1717.txt",
+      "similarity": 0.8732919692993164,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 22,
+            "severe_wind": 4
+          }
         },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 2
+          }
         },
         "4": {
           "label": "quiet",
@@ -154,15 +160,17 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
         }
       }
     },
     {
       "datetime_utc": "2004-08-06T09:09Z",
       "source_file": "GLD_2004_06_0909.txt",
-      "similarity": 0.8652194738388062,
+      "similarity": 0.870941162109375,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -209,54 +217,9 @@
       }
     },
     {
-      "datetime_utc": "2022-06-13T08:05Z",
-      "source_file": "GLD_2022_13_0805.txt",
-      "similarity": 0.8636195659637451,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 22,
-            "severe_wind": 4
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 2
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2006-06-16T21:06Z",
       "source_file": "GLD_2006_16_2106.txt",
-      "similarity": 0.8619610667228699,
+      "similarity": 0.8692536354064941,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -311,116 +274,125 @@
       }
     },
     {
-      "datetime_utc": "2009-08-01T07:01Z",
-      "source_file": "GLD_2009_01_0701.txt",
-      "similarity": 0.8593577146530151,
-      "label": "tornado",
+      "datetime_utc": "2017-09-23T10:30Z",
+      "source_file": "GLD_2017_23_1030.txt",
+      "similarity": 0.8575966358184814,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 20,
-            "severe_wind": 9,
-            "tornado": 3,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 17,
-            "severe_hail": 5
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 7,
-            "severe_wind": 4
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 9,
-            "severe_wind": 3,
-            "flood": 2
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2005-06-29T20:02Z",
-      "source_file": "GLD_2005_29_2002.txt",
-      "similarity": 0.8582910299301147,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 16,
-            "severe_wind": 3
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 29,
-            "severe_wind": 1
-          }
-        },
-        "3": {
           "label": "severe_hail",
           "counts": {
-            "severe_hail": 10
+            "severe_hail": 3
           }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 2
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 58,
-            "severe_wind": 6,
-            "tornado": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 42,
-            "severe_wind": 12
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 31,
-            "severe_wind": 11
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2004-03-18T09:45Z",
-      "source_file": "GLD_2004_18_0945.txt",
-      "similarity": 0.8568887710571289,
+      "datetime_utc": "2005-09-26T20:00Z",
+      "source_file": "GLD_2005_26_2000.txt",
+      "similarity": 0.8551814556121826,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2004-11-18T20:47Z",
+      "source_file": "GLD_2004_18_2047.txt",
+      "similarity": 0.8524907827377319,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2004-02-13T21:02Z",
+      "source_file": "GLD_2004_13_2102.txt",
+      "similarity": 0.8513215780258179,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -458,17 +430,17 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.59,
-    "mean_similarity": 0.8072914177179337,
+    "mean_similarity": 0.8001166224479676,
     "base_rate": 0.5554927387724815,
     "signal_value": 0.03450726122751846,
     "percentile": 40,
     "office_lift": 0.21788726122751845,
-    "n_severe": 6,
+    "n_severe": 5,
     "n_total": 10,
     "n_severe_signal": 59,
     "n_total_signal": 100,
-    "product_id": "202606251806-KGLD-FXUS63-AFDGLD",
-    "afd_time": "2026-06-25T18:06:00Z",
-    "updated": "2026-06-25T18:28:47.224807+00:00"
+    "product_id": "202606252001-KGLD-FXUS63-AFDGLD",
+    "afd_time": "2026-06-25T20:01:00Z",
+    "updated": "2026-06-25T21:04:48.564507+00:00"
   }
 }
