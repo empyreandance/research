@@ -1,15 +1,15 @@
 {
   "office": "PUB",
-  "product_id": "202606271030-KPUB-FXUS65-AFDPUB",
-  "afd_time": "2026-06-27T10:30:00Z",
+  "product_id": "202606271715-KPUB-FXUS65-AFDPUB",
+  "afd_time": "2026-06-27T17:15:00Z",
   "section_type": "long_term",
-  "updated": "2026-06-27T12:21:21.763295+00:00",
+  "updated": "2026-06-27T18:20:14.074746+00:00",
   "query_preview": "/SUNDAY THROUGH FRIDAY/...\nIssued at 113 AM MDT Sat Jun 27 2026\n\nSunday - Friday: For the remainder of the forecast period, a rather \npersistent pattern will be in place, bringing numerous days of fire \nweather concerns. The southwesterly flow will remain in place across \nthe region, bringing more dry and windy conditions to south central \nand southeastern Colorado. With the persistent dry and windy \npattern, critical fire weather conditions are expected every day \nduring this forecast period. The strongest winds are expected Sunday \nand Monday however, when the gradient between troughing to the NW \nand ridging to the east is tightest. These two days will have the \ngreatest concern for fire weather in terms of severity and coverage \nacross south central and southeastern. Beyond all of that, while an \nisolated shower or thunderstorm can't be ruled out next week across \nthe region, dry conditions are anticipated to prevail. If a \nthunderstorm were to develop, it may also bring a dry lightning \nthreat as well. Otherwise, more mostly clear skies and above \nseasonal temperatures are expected for the area.",
   "analogs": [
     {
       "datetime_utc": "2005-08-23T09:25Z",
       "source_file": "PUB_2005_23_0925.txt",
-      "similarity": 0.9818752408027649,
+      "similarity": 0.9818753004074097,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -55,7 +55,7 @@
     {
       "datetime_utc": "2011-07-06T11:19Z",
       "source_file": "PUB_2011_06_1119.txt",
-      "similarity": 0.9797123670578003,
+      "similarity": 0.9797124266624451,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -116,7 +116,7 @@
     {
       "datetime_utc": "2009-08-03T20:25Z",
       "source_file": "PUB_2009_03_2025.txt",
-      "similarity": 0.9776337742805481,
+      "similarity": 0.9776337146759033,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -163,7 +163,7 @@
     {
       "datetime_utc": "2004-06-25T20:30Z",
       "source_file": "PUB_2004_25_2030.txt",
-      "similarity": 0.9773832559585571,
+      "similarity": 0.9773833751678467,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -247,7 +247,7 @@
     {
       "datetime_utc": "2009-06-29T11:02Z",
       "source_file": "PUB_2009_29_1102.txt",
-      "similarity": 0.9763648509979248,
+      "similarity": 0.9763649702072144,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -295,28 +295,25 @@
       }
     },
     {
-      "datetime_utc": "2012-09-04T21:10Z",
-      "source_file": "PUB_2012_04_2110.txt",
-      "similarity": 0.973057746887207,
+      "datetime_utc": "2012-09-05T05:14Z",
+      "source_file": "PUB_2012_05_0514.txt",
+      "similarity": 0.9730578660964966,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 1
-          }
-        },
-        "1": {
           "label": "quiet",
           "counts": {}
         },
-        "2": {
+        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 5
           }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -337,25 +334,28 @@
       }
     },
     {
-      "datetime_utc": "2012-09-05T05:14Z",
-      "source_file": "PUB_2012_05_0514.txt",
-      "similarity": 0.973057746887207,
+      "datetime_utc": "2012-09-04T21:10Z",
+      "source_file": "PUB_2012_04_2110.txt",
+      "similarity": 0.9730578660964966,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 1
+          }
+        },
+        "1": {
           "label": "quiet",
           "counts": {}
         },
-        "1": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 5
           }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -485,7 +485,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.89,
-    "mean_similarity": 0.9634838390350342,
+    "mean_similarity": 0.9634839564561843,
     "base_rate": 0.5385662843828487,
     "signal_value": 0.3514337156171513,
     "percentile": 64,
@@ -494,8 +494,8 @@
     "n_total": 10,
     "n_severe_signal": 89,
     "n_total_signal": 100,
-    "product_id": "202606271030-KPUB-FXUS65-AFDPUB",
-    "afd_time": "2026-06-27T10:30:00Z",
-    "updated": "2026-06-27T12:21:21.763295+00:00"
+    "product_id": "202606271715-KPUB-FXUS65-AFDPUB",
+    "afd_time": "2026-06-27T17:15:00Z",
+    "updated": "2026-06-27T18:20:14.074746+00:00"
   }
 }
