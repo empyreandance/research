@@ -1,15 +1,15 @@
 {
   "office": "UNR",
-  "product_id": "202606290459-KUNR-FXUS63-AFDUNR",
-  "afd_time": "2026-06-29T04:59:00Z",
+  "product_id": "202606291139-KUNR-FXUS63-AFDUNR",
+  "afd_time": "2026-06-29T11:39:00Z",
   "section_type": "discussion",
-  "updated": "2026-06-29T06:07:16.835277+00:00",
+  "updated": "2026-06-29T16:13:18.731077+00:00",
   "query_preview": "..(This Evening Through Sunday)\nIssued at 1208 PM MDT Sun Jun 28 2026\n\nCurrent Water Vapor and upper air models show the upper low \ncurrently over north central MT, with southwest flow over the \nforecast area. 17Z Surface analysis shows a boundary running from \nnorthwestern SD down into southeastern WY. Winds are currently \nlight out of the south to southwest. Radar has some light returns \nin northwestern SD moving northeast into ND. \n\nMain concern in the near-term will be potential for severe \nthunderstorms tonight into Monday morning. Mostly dry conditions are \nexpected this afternoon, but southeasterly LLJ ramps up this evening \ninto the overnight hours, bringing moisture into the region. Surface \nlow is expected to develop over northeastern CO and move \nnortheastward into the area by tonight. As low enters the region and \nLLJ increases, strong to severe storms are expected to develop. \nWhile we could see some showers/storms develop in the early evening, \nHREF and HRRR show the stronger storms starting up between 03-06Z. \nCAMS currently show strong to severe storms developing in \nsouthwestern SD and the Black hills in this timeframe, then moving \nnortheast. Thermal profiles will support elevated storms with hail \nbeing the main threat from these, however strong to severe wind \ngusts cannot be ruled out. \n\nMonday will be dry but windy, as strong mixing will support wind \ngusts 45 to 55 mph. A Wind Advisory has been issued for much of \nwestern SD, including the foothills late morning into the early\nevening. Another shortwave is progged to move through the\ncentral/northern plains late Tuesday into Wednesday, supporting\nthe potential for some showers/storms. Southwest flow continues\nthough the week, with weak disturbances prompting near daily\nchances for at least isolated precipitation the latter half of the\nweek. Upper high in southeastern CONUS also builds over the week,\nsupporting a gradual warmup. Temperatures climbing into the 90s \nwill be possible Thursday through Saturday.",
   "analogs": [
     {
       "datetime_utc": "2025-06-24T19:06Z",
       "source_file": "UNR_2025_24_1906.txt",
-      "similarity": 0.9786389470100403,
+      "similarity": 0.9786388874053955,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -61,9 +61,9 @@
       }
     },
     {
-      "datetime_utc": "2017-06-23T08:37Z",
-      "source_file": "UNR_2017_23_0837_1.txt",
-      "similarity": 0.9778583645820618,
+      "datetime_utc": "2017-06-23T16:59Z",
+      "source_file": "UNR_2017_23_1659.txt",
+      "similarity": 0.977858304977417,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -108,8 +108,8 @@
       }
     },
     {
-      "datetime_utc": "2023-07-13T19:57Z",
-      "source_file": "UNR_2023_13_1957_1.txt",
+      "datetime_utc": "2023-07-13T23:16Z",
+      "source_file": "UNR_2023_13_2316.txt",
       "similarity": 0.9777588844299316,
       "label": "tornado",
       "is_severe": true,
@@ -215,9 +215,9 @@
       }
     },
     {
-      "datetime_utc": "2020-06-16T11:25Z",
-      "source_file": "UNR_2020_16_1125.txt",
-      "similarity": 0.977696418762207,
+      "datetime_utc": "2020-06-16T17:19Z",
+      "source_file": "UNR_2020_16_1719.txt",
+      "similarity": 0.9776962995529175,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -272,7 +272,7 @@
     {
       "datetime_utc": "2007-06-17T16:31Z",
       "source_file": "UNR_2007_17_1631.txt",
-      "similarity": 0.9776281118392944,
+      "similarity": 0.9776279926300049,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -322,9 +322,67 @@
       }
     },
     {
-      "datetime_utc": "2020-06-28T19:45Z",
-      "source_file": "UNR_2020_28_1945.txt",
-      "similarity": 0.9770718216896057,
+      "datetime_utc": "2020-06-29T05:55Z",
+      "source_file": "UNR_2020_29_0555.txt",
+      "similarity": 0.9770717024803162,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 28,
+            "severe_wind": 8
+          }
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 8
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 30,
+            "severe_hail": 35,
+            "tornado": 4
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 6
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 21,
+            "severe_hail": 6,
+            "flood": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 43,
+            "severe_wind": 57
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2020-06-28T23:00Z",
+      "source_file": "UNR_2020_28_2300.txt",
+      "similarity": 0.9770717024803162,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -381,67 +439,9 @@
       }
     },
     {
-      "datetime_utc": "2020-06-29T05:55Z",
-      "source_file": "UNR_2020_29_0555.txt",
-      "similarity": 0.9770718216896057,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 28,
-            "severe_wind": 8
-          }
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 8
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 30,
-            "severe_hail": 35,
-            "tornado": 4
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 6
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 21,
-            "severe_hail": 6,
-            "flood": 1
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 43,
-            "severe_wind": 57
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-07-10T10:21Z",
-      "source_file": "UNR_2024_10_1021.txt",
-      "similarity": 0.9770165681838989,
+      "datetime_utc": "2024-07-10T08:24Z",
+      "source_file": "UNR_2024_10_0824.txt",
+      "similarity": 0.9770164489746094,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -494,9 +494,9 @@
       }
     },
     {
-      "datetime_utc": "2024-06-17T08:41Z",
-      "source_file": "UNR_2024_17_0841.txt",
-      "similarity": 0.9770131707191467,
+      "datetime_utc": "2024-06-17T16:43Z",
+      "source_file": "UNR_2024_17_1643.txt",
+      "similarity": 0.977013111114502,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -549,7 +549,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.9749552476406097,
+    "mean_similarity": 0.9749551683664321,
     "base_rate": 0.46000706797031454,
     "signal_value": 0.5299929320296854,
     "percentile": 85,
@@ -558,8 +558,8 @@
     "n_total": 10,
     "n_severe_signal": 99,
     "n_total_signal": 100,
-    "product_id": "202606290459-KUNR-FXUS63-AFDUNR",
-    "afd_time": "2026-06-29T04:59:00Z",
-    "updated": "2026-06-29T06:07:16.835277+00:00"
+    "product_id": "202606291139-KUNR-FXUS63-AFDUNR",
+    "afd_time": "2026-06-29T11:39:00Z",
+    "updated": "2026-06-29T16:13:18.731077+00:00"
   }
 }
