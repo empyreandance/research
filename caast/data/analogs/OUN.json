@@ -1,15 +1,15 @@
 {
   "office": "OUN",
-  "product_id": "202607020949-KOUN-FXUS64-AFDOUN",
-  "afd_time": "2026-07-02T09:49:00Z",
+  "product_id": "202607021744-KOUN-FXUS64-AFDOUN",
+  "afd_time": "2026-07-02T17:44:00Z",
   "section_type": "long_term",
-  "updated": "2026-07-02T12:23:18.315842+00:00",
-  "query_preview": "..\n(Sunday through Wednesday)\nIssued at 225 AM CDT Thu Jul 2 2026\n\nStorm chances increase south of I-40 by daylight Saturday through \nthe remainder of the morning.  Models are inconsistent in handling \nthe cold front with the ECMWF pushing it through on Monday as a \nbackdoor front while the GFS solution washes it out on the \nKansas/Oklahoma state lines with weak surface flow/winds through at \nleast the first half of the week. Our upper air pattern starts \nbecoming more chaotic with the upper ridge lifting the main jet \nstream flow further north into Canada then breaks down into numerous \nshortwave troughs.  This will result in storm chances every day but \nwould be rather isolated where some of our areas could see rain \nwhile others won't.  Temperatures on Sunday will return to near \nnormal meaning normal hot & muggy but no widespread excessive \nheating. However strong surface moisture across southeast Oklahoma \nwill persist so heat indices may reach excessive in that area early \nnext week.",
+  "updated": "2026-07-02T18:04:06.269985+00:00",
+  "query_preview": "..\n(Sunday through Wednesday)\nIssued at 225 AM CDT Thu Jul 2 2026\n\nStorm chances increase south of I-40 by daylight Sunday through \nthe remainder of the morning. Models are inconsistent in handling \nthe cold front with the ECMWF pushing it through on Monday as a \nbackdoor front while the GFS solution washes it out on the \nKansas/Oklahoma state lines with weak surface flow/winds through \nat least the first half of the week. Our upper air pattern starts \nbecoming more chaotic with the upper ridge lifting the main jet \nstream flow further north into Canada then breaks down into \nnumerous shortwave troughs. This will result in storm chances \nevery day but would be rather isolated where some of our areas \ncould see rain while others won't. Temperatures on Sunday will \nreturn to near normal meaning normal hot & muggy but no widespread\nexcessive heating. However strong surface moisture across \nsoutheast Oklahoma will persist so heat indices may reach \nexcessive in that area early next week.",
   "analogs": [
     {
       "datetime_utc": "2025-07-24T11:23Z",
       "source_file": "OUN_2025_24_1123.txt",
-      "similarity": 0.9910539388656616,
+      "similarity": 0.9907948970794678,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -57,7 +57,7 @@
     {
       "datetime_utc": "2012-03-19T20:54Z",
       "source_file": "OUN_2012_19_2054.txt",
-      "similarity": 0.9893843531608582,
+      "similarity": 0.9894973635673523,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -102,7 +102,7 @@
     {
       "datetime_utc": "2018-07-07T19:38Z",
       "source_file": "OUN_2018_07_1938.txt",
-      "similarity": 0.9890235662460327,
+      "similarity": 0.9886137843132019,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -146,7 +146,7 @@
     {
       "datetime_utc": "2016-07-18T20:09Z",
       "source_file": "OUN_2016_18_2009.txt",
-      "similarity": 0.988166868686676,
+      "similarity": 0.9876699447631836,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -183,7 +183,7 @@
     {
       "datetime_utc": "2008-04-03T18:45Z",
       "source_file": "OUN_2008_03_1845.txt",
-      "similarity": 0.9871792793273926,
+      "similarity": 0.9864404201507568,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -237,9 +237,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-31T23:52Z",
-      "source_file": "OUN_2024_31_2352.txt",
-      "similarity": 0.9861512780189514,
+      "datetime_utc": "2024-07-31T20:18Z",
+      "source_file": "OUN_2024_31_2018.txt",
+      "similarity": 0.9856317043304443,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -281,7 +281,7 @@
     {
       "datetime_utc": "2024-07-01T03:57Z",
       "source_file": "OUN_2024_01_0357.txt",
-      "similarity": 0.9861512780189514,
+      "similarity": 0.9856317043304443,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -330,46 +330,42 @@
       }
     },
     {
-      "datetime_utc": "2016-06-14T20:24Z",
-      "source_file": "OUN_2016_14_2024.txt",
-      "similarity": 0.986090898513794,
-      "label": "severe_wind",
+      "datetime_utc": "2016-03-23T18:00Z",
+      "source_file": "OUN_2016_23_1800.txt",
+      "similarity": 0.9855536222457886,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
+            "severe_hail": 71,
+            "severe_wind": 7,
+            "tornado": 1
           }
         },
         "1": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_hail": 21,
-            "severe_wind": 8,
-            "flood": 5
+            "severe_hail": 2
           }
         },
         "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 22,
-            "severe_hail": 1
+            "winter": 14,
+            "severe_wind": 3,
+            "severe_hail": 3
           }
         },
         "4": {
-          "label": "severe_wind",
+          "label": "winter",
           "counts": {
-            "flood": 1,
-            "severe_hail": 2,
-            "severe_wind": 2
+            "winter": 7
           }
         },
         "5": {
@@ -383,56 +379,52 @@
       }
     },
     {
-      "datetime_utc": "2025-07-23T06:47Z",
-      "source_file": "OUN_2025_23_0647.txt",
-      "similarity": 0.9856339693069458,
-      "label": "severe_wind",
+      "datetime_utc": "2011-03-19T02:38Z",
+      "source_file": "OUN_2011_19_0238_1.txt",
+      "similarity": 0.9855513572692871,
+      "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_wind": 4
+            "severe_hail": 18
           }
         },
         "1": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 2,
-            "severe_wind": 5,
-            "severe_hail": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
         }
       }
     },
     {
       "datetime_utc": "2017-04-16T15:00Z",
       "source_file": "OUN_2017_16_1500.txt",
-      "similarity": 0.985619068145752,
+      "similarity": 0.9853351712226868,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -488,18 +480,18 @@
   ],
   "signal": {
     "level": "LOW",
-    "severe_fraction": 0.88,
-    "mean_similarity": 0.9827679520845414,
+    "severe_fraction": 0.87,
+    "mean_similarity": 0.9824740135669708,
     "base_rate": 0.6717192236772197,
-    "signal_value": 0.2082807763227803,
-    "percentile": 64,
+    "signal_value": 0.1982807763227803,
+    "percentile": 62,
     "office_lift": 0.09240077632278032,
     "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 88,
+    "n_severe_signal": 87,
     "n_total_signal": 100,
-    "product_id": "202607020949-KOUN-FXUS64-AFDOUN",
-    "afd_time": "2026-07-02T09:49:00Z",
-    "updated": "2026-07-02T12:23:18.315842+00:00"
+    "product_id": "202607021744-KOUN-FXUS64-AFDOUN",
+    "afd_time": "2026-07-02T17:44:00Z",
+    "updated": "2026-07-02T18:04:06.269985+00:00"
   }
 }
