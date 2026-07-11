@@ -1,15 +1,15 @@
 {
   "office": "MKX",
-  "product_id": "202607110555-KMKX-FXUS63-AFDMKX",
-  "afd_time": "2026-07-11T05:55:00Z",
+  "product_id": "202607111007-KMKX-FXUS63-AFDMKX-AAA",
+  "afd_time": "2026-07-11T10:07:00Z",
   "section_type": "long_term",
-  "updated": "2026-07-11T06:28:53.321713+00:00",
+  "updated": "2026-07-11T10:36:51.960836+00:00",
   "query_preview": "..\nIssued 1256 AM CDT Sat Jul 11 2026\n\nSunday night through Friday:\n\nAs high pressure slides into the Ohio Valley, southerly return\nflow develops across southern Wisconsin, bringing back in high\ntemperatures in the upper 80s to low 90s for the first part of the\nweek. With west-southwesterly winds remaining light on Monday, a \nlake breeze may develop and cool lakeshore counties somewhat.\nHowever, for Tuesday and Wednesday expect southwesterly winds to \nbecome steady and bring temperatures near 90 degrees all the way \nto the lakeshore. Even with these high temperatures potentially\nlocally pushing 95 degrees given 925 mb mixing temperatures of 26\nto 28 degrees C, not anticipating heat index values to exceed 100\ndegrees due to a relatively dry airmass in place (dewpoints in \nthe 60s).\n\nLow pressure deepens in the lee of the Rockies Wednesday night\ninto Thursday, bringing a zone of frontogenesis to the Upper\nMidwest along the northern edges of the 250 mb ridging. With this\nridge riding setup in place, potential for shortwaves riding\nthrough the frontogenesis/upper level ridging develops by Friday\nand into Saturday. Periods of thunderstorms therefore become\npossible (20-30% chances Thursday night through Saturday night due\nto model discrepancies in timing of individual shortwaves).\n\nMH",
   "analogs": [
     {
       "datetime_utc": "2024-07-12T21:06Z",
       "source_file": "MKX_2024_12_2106.txt",
-      "similarity": 0.9907593727111816,
+      "similarity": 0.9907592535018921,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -64,7 +64,7 @@
     {
       "datetime_utc": "2024-07-13T02:31Z",
       "source_file": "MKX_2024_13_0231.txt",
-      "similarity": 0.9907593727111816,
+      "similarity": 0.9907592535018921,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -212,7 +212,7 @@
     {
       "datetime_utc": "2024-06-17T09:08Z",
       "source_file": "MKX_2024_17_0908.txt",
-      "similarity": 0.98921138048172,
+      "similarity": 0.9892114400863647,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -265,7 +265,7 @@
     {
       "datetime_utc": "2024-07-11T20:05Z",
       "source_file": "MKX_2024_11_2005.txt",
-      "similarity": 0.9889318943023682,
+      "similarity": 0.9889319539070129,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -426,9 +426,9 @@
       }
     },
     {
-      "datetime_utc": "2024-06-22T15:09Z",
-      "source_file": "MKX_2024_22_1509.txt",
-      "similarity": 0.9880562424659729,
+      "datetime_utc": "2024-06-22T10:00Z",
+      "source_file": "MKX_2024_22_1000.txt",
+      "similarity": 0.9880561232566833,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -477,37 +477,31 @@
       }
     },
     {
-      "datetime_utc": "2024-06-18T20:25Z",
-      "source_file": "MKX_2024_18_2025.txt",
-      "similarity": 0.9879615306854248,
+      "datetime_utc": "2024-06-19T03:16Z",
+      "source_file": "MKX_2024_19_0316.txt",
+      "similarity": 0.9879614114761353,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
             "severe_wind": 2,
             "flood": 1
           }
         },
-        "2": {
+        "1": {
           "label": "quiet",
           "counts": {}
         },
-        "3": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3,
             "flood": 1
           }
         },
-        "4": {
+        "3": {
           "label": "tornado",
           "counts": {
             "severe_wind": 60,
@@ -516,16 +510,25 @@
             "severe_hail": 10
           }
         },
-        "5": {
+        "4": {
           "label": "quiet",
           "counts": {}
         },
-        "6": {
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 22,
             "severe_wind": 31,
             "flood": 2
+          }
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 3,
+            "severe_wind": 12,
+            "severe_hail": 10,
+            "flood": 1
           }
         }
       }
@@ -534,7 +537,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9845202153921128,
+    "mean_similarity": 0.9845202070474625,
     "base_rate": 0.524006908462867,
     "signal_value": 0.45599309153713297,
     "percentile": 93,
@@ -543,8 +546,8 @@
     "n_total": 10,
     "n_severe_signal": 98,
     "n_total_signal": 100,
-    "product_id": "202607110555-KMKX-FXUS63-AFDMKX",
-    "afd_time": "2026-07-11T05:55:00Z",
-    "updated": "2026-07-11T06:28:53.321713+00:00"
+    "product_id": "202607111007-KMKX-FXUS63-AFDMKX-AAA",
+    "afd_time": "2026-07-11T10:07:00Z",
+    "updated": "2026-07-11T10:36:51.960836+00:00"
   }
 }

@@ -1,15 +1,15 @@
 {
   "office": "DDC",
-  "product_id": "202607110455-KDDC-FXUS63-AFDDDC",
-  "afd_time": "2026-07-11T04:55:00Z",
+  "product_id": "202607111017-KDDC-FXUS63-AFDDDC",
+  "afd_time": "2026-07-11T10:17:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-11T06:28:53.321713+00:00",
+  "updated": "2026-07-11T10:36:51.960836+00:00",
   "query_preview": "..\nIssued at 1045 PM CDT Fri Jul 10 2026\n\nRadar observations late Friday evening show a broken line of sub-\nsevere thunderstorms has crossed into western KS ahead of a subtle \nupper level disturbance over the central Rockies. Latest SPC \nmesoanalysis indicates deep-layer shear decreases to less than 25 \nkts with eastward extent. This coupled with an increasingly stable \nboundary layer suggests a weakening trend is likely over the next \nfew hours. This thinking is supported by recent HREF members which \nforecast all convection to dissipate by 09Z, if not before. The rest \nof the overnight period will be quiet with Saturday morning lows in \nthe 60s to low 70s.\n\nDaytime Saturday, short range ensembles are in agreement and build \nan upper level ridge over the Desert Southwest northward to near the \ncentral Rockies. Despite the increase in large-scale subsidence over \nthe central plains, models only show 1-2 degrees C of warming at 850-\nmb. With lingering convective outflow and east-southeast surface \nwinds, the end result will be afternoon temperatures near average \nwith highs in the upper 80s to low 90s.\n\nSunday through the end of the period, ensembles remain consistent in \nbuilding the upper ridge further north and becoming fixed in place \natop the northern plains through much of the business week. While \nthe good news is this synoptic pattern will keep afternoon highs \neach day in the low to mid 90s, the bad news is probability of \nprecipitation will be very low (<10%). And this trend persists \nbeyond the long term period as both the GEFS and ENS depict ridging \nout west through at least July 24, so southwest KS is staring down a \nprolonged dry stretch which will exacerbate the ongoing drought \nconditions.",
   "analogs": [
     {
       "datetime_utc": "2016-10-08T08:15Z",
       "source_file": "DDC_2016_08_0815.txt",
-      "similarity": 0.9857944250106812,
+      "similarity": 0.9857945442199707,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -48,9 +48,62 @@
       }
     },
     {
+      "datetime_utc": "2018-08-17T05:00Z",
+      "source_file": "DDC_2018_17_0500.txt",
+      "similarity": 0.98499596118927,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 11,
+            "tornado": 2,
+            "severe_wind": 6,
+            "flood": 10
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 2,
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2018-08-16T20:39Z",
       "source_file": "DDC_2018_16_2039.txt",
-      "similarity": 0.9849960803985596,
+      "similarity": 0.98499596118927,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -104,62 +157,9 @@
       }
     },
     {
-      "datetime_utc": "2018-08-17T04:10Z",
-      "source_file": "DDC_2018_17_0410.txt",
-      "similarity": 0.9849960803985596,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 11,
-            "tornado": 2,
-            "severe_wind": 6,
-            "flood": 10
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 2,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2004-06-23T06:22Z",
       "source_file": "DDC_2004_23_0622.txt",
-      "similarity": 0.9848204851150513,
+      "similarity": 0.984820544719696,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -200,9 +200,51 @@
       }
     },
     {
-      "datetime_utc": "2016-09-17T20:42Z",
-      "source_file": "DDC_2016_17_2042.txt",
-      "similarity": 0.984458327293396,
+      "datetime_utc": "2016-09-18T05:00Z",
+      "source_file": "DDC_2016_18_0500_2.txt",
+      "similarity": 0.9844583868980408,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "flood": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2016-09-17T23:12Z",
+      "source_file": "DDC_2016_17_2312.txt",
+      "similarity": 0.9844583868980408,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -243,51 +285,9 @@
       }
     },
     {
-      "datetime_utc": "2016-09-18T05:20Z",
-      "source_file": "DDC_2016_18_0520.txt",
-      "similarity": 0.984458327293396,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3,
-            "flood": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2013-08-27T12:30Z",
-      "source_file": "DDC_2013_27_1230.txt",
-      "similarity": 0.9842442274093628,
+      "datetime_utc": "2013-08-27T08:57Z",
+      "source_file": "DDC_2013_27_0857.txt",
+      "similarity": 0.9842442870140076,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -324,9 +324,9 @@
       }
     },
     {
-      "datetime_utc": "2016-08-14T22:51Z",
-      "source_file": "DDC_2016_14_2251.txt",
-      "similarity": 0.9842125773429871,
+      "datetime_utc": "2016-08-15T05:35Z",
+      "source_file": "DDC_2016_15_0535.txt",
+      "similarity": 0.9842126369476318,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -347,16 +347,16 @@
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 3,
             "severe_wind": 9,
             "flood": 12
           }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -365,9 +365,9 @@
       }
     },
     {
-      "datetime_utc": "2016-08-15T03:20Z",
-      "source_file": "DDC_2016_15_0320.txt",
-      "similarity": 0.9842125773429871,
+      "datetime_utc": "2016-08-14T19:09Z",
+      "source_file": "DDC_2016_14_1909.txt",
+      "similarity": 0.9842126369476318,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -388,16 +388,16 @@
           "counts": {}
         },
         "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 3,
             "severe_wind": 9,
             "flood": 12
           }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -408,7 +408,7 @@
     {
       "datetime_utc": "2020-07-18T09:45Z",
       "source_file": "DDC_2020_18_0945.txt",
-      "similarity": 0.9841423630714417,
+      "similarity": 0.9841423034667969,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -456,7 +456,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.97,
-    "mean_similarity": 0.9802353525161743,
+    "mean_similarity": 0.9802353686094284,
     "base_rate": 0.5799332302659587,
     "signal_value": 0.3900667697340413,
     "percentile": 75,
@@ -465,8 +465,8 @@
     "n_total": 10,
     "n_severe_signal": 97,
     "n_total_signal": 100,
-    "product_id": "202607110455-KDDC-FXUS63-AFDDDC",
-    "afd_time": "2026-07-11T04:55:00Z",
-    "updated": "2026-07-11T06:28:53.321713+00:00"
+    "product_id": "202607111017-KDDC-FXUS63-AFDDDC",
+    "afd_time": "2026-07-11T10:17:00Z",
+    "updated": "2026-07-11T10:36:51.960836+00:00"
   }
 }
