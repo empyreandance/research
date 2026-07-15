@@ -1,15 +1,15 @@
 {
   "office": "EAX",
-  "product_id": "202607150619-KEAX-FXUS63-AFDEAX",
-  "afd_time": "2026-07-15T06:19:00Z",
+  "product_id": "202607151052-KEAX-FXUS63-AFDEAX",
+  "afd_time": "2026-07-15T10:52:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-15T06:30:13.384285+00:00",
+  "updated": "2026-07-15T11:51:21.187943+00:00",
   "query_preview": "..\nIssued at 117 AM CDT Wed Jul 15 2026\n\nMostly clear skies tonight with temperatures mostly in the 70s \nas of 11pm. Northeast Kansas and northwest Missouri remain \nunder the influence of a broad ridge and surface High across \nmuch of the central CONUS leading to the clear skies, light \nwinds, and quiet weather. Some patchy fog, locally dense at\ntimes, is expected near and north of a line from STJ to MBY. \n\nToday we start to see a shift in the upper-level pattern as the\ntrough over the southeastern US pinches off from the upper- \nlevel flow and migrates westward undercutting the ridge over the\nCentral US. This will start to advect more moisture back into \nsouthern Missouri on through the day. Some of our southern \ncounties will see this boost in humidity with dew points \nhovering near 70 through the afternoon, leading to heat indices \nrising in to the upper 90s. While storm activity should stay to \nour south, we will see increasing cloud cover especially over \nthese southern counties through the afternoon and evening as \nwell. \n\nThursday the moisture plume lifts north bringing the richer dew\npoints north into more of our area. This will also bring storm\nchances (40-60%) to most of our area, generally areas south of\nHighway 36 Thursday afternoon. Increased instability from this \nadditional moisture will allow diurnal heating to pop-off \nscattered showers and storms through the afternoon despite \nlittle-to-no upper-level forcing. Forecast soundings show very \nweak deep- layer shear suggesting storms will struggle to \norganize into anything longer-lived. The main hazards will be \nfrom locally heavy rainfall and isolated damaging winds from \ncollapsing storms (wet microbursts). The bigger hazard will be \nlocally heavy rainfall due to weak steering flow and PWAT values\napproaching/exceeding 2\" (90th percentile climo for mid-July). \nLocalized flash flooding appears very possible with storms \nThursday afternoon and evening. Good news is that the diurnal \nnature of these storms should lend to the activity shutting down\ntoward dark Thursday evening, with below-mentionable PoPs after\nsunset. \n\nLater in the week, the subtropical ridge builds up out of the\nSoutheast. This will ramp up the low-level jet over central \nTexas on Friday and pushing it back into western Missouri Friday\nnight into early Saturday. Additional moisture advection from\nthe Gulf will only lead to an even greater increase in dew\npoints and moisture across our area. Nocturnal amplification of\nthe low-level jet could potentially lead to nocturnal storm\nchances starting Friday night through the weekend. Ensemble\nguidance continues to downplay this potential, keeping PoPs\naround 15% or less, likely due to uncertainty in the placement\nof any potential nocturnal MCS development, but deterministic\nguidance continues to show potential for these storms through\nthe weekend.\n\nMonday looks to see the peak of the heat and humidity as ridging\nbriefly expands eastward into the forecast area. This will \nbring high temperatures in the upper 90s, possibly touching 100 \nin urbanized areas, and peak heat index values near or just \nabove Heat Advisory criteria of 105. By Tuesday, the ridge will \nretreat to the southwest as troughing increases over the eastern\nCONUS, leading to temperatures cooling to more typical late \nJuly values with comfortable humidity values.",
   "analogs": [
     {
       "datetime_utc": "2019-08-16T09:08Z",
       "source_file": "EAX_2019_16_0908.txt",
-      "similarity": 0.9859523773193359,
+      "similarity": 0.9859524965286255,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -62,9 +62,9 @@
       }
     },
     {
-      "datetime_utc": "2016-08-29T21:10Z",
-      "source_file": "EAX_2016_29_2110.txt",
-      "similarity": 0.9854006171226501,
+      "datetime_utc": "2016-08-29T23:37Z",
+      "source_file": "EAX_2016_29_2337_1.txt",
+      "similarity": 0.9854007959365845,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -107,7 +107,7 @@
     {
       "datetime_utc": "2016-08-30T04:28Z",
       "source_file": "EAX_2016_30_0428.txt",
-      "similarity": 0.9854006171226501,
+      "similarity": 0.9854007959365845,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -146,9 +146,56 @@
       }
     },
     {
+      "datetime_utc": "2017-07-09T19:57Z",
+      "source_file": "EAX_2017_09_1957.txt",
+      "similarity": 0.9847668409347534,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 5,
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "flood": 12
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "flood": 4
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2017-07-10T05:01Z",
       "source_file": "EAX_2017_10_0501.txt",
-      "similarity": 0.9847667813301086,
+      "similarity": 0.9847668409347534,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -195,56 +242,9 @@
       }
     },
     {
-      "datetime_utc": "2017-07-09T23:12Z",
-      "source_file": "EAX_2017_09_2312.txt",
-      "similarity": 0.9847667813301086,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 5,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3,
-            "flood": 12
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3,
-            "flood": 4
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-07-15T11:22Z",
-      "source_file": "EAX_2025_15_1122.txt",
-      "similarity": 0.984669029712677,
+      "datetime_utc": "2025-07-15T08:09Z",
+      "source_file": "EAX_2025_15_0809.txt",
+      "similarity": 0.9846687912940979,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -296,9 +296,9 @@
       }
     },
     {
-      "datetime_utc": "2015-07-26T08:36Z",
-      "source_file": "EAX_2015_26_0836.txt",
-      "similarity": 0.9845442175865173,
+      "datetime_utc": "2015-07-26T11:09Z",
+      "source_file": "EAX_2015_26_1109_1.txt",
+      "similarity": 0.984544038772583,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -352,7 +352,7 @@
     {
       "datetime_utc": "2004-07-10T07:55Z",
       "source_file": "EAX_2004_10_0755.txt",
-      "similarity": 0.9844553470611572,
+      "similarity": 0.984455406665802,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -405,9 +405,50 @@
       }
     },
     {
+      "datetime_utc": "2008-09-13T05:36Z",
+      "source_file": "EAX_2008_13_0536.txt",
+      "similarity": 0.9842978119850159,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 60
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 15
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2008-09-12T20:44Z",
       "source_file": "EAX_2008_12_2044.txt",
-      "similarity": 0.9842978715896606,
+      "similarity": 0.9842978119850159,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -447,53 +488,12 @@
           "counts": {}
         }
       }
-    },
-    {
-      "datetime_utc": "2008-09-13T05:36Z",
-      "source_file": "EAX_2008_13_0536.txt",
-      "similarity": 0.9842978715896606,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 60
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 15
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
     }
   ],
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.87,
-    "mean_similarity": 0.9817537957429886,
+    "mean_similarity": 0.9817537230253219,
     "base_rate": 0.5984615033440617,
     "signal_value": 0.2715384966559383,
     "percentile": 62,
@@ -502,8 +502,8 @@
     "n_total": 10,
     "n_severe_signal": 87,
     "n_total_signal": 100,
-    "product_id": "202607150619-KEAX-FXUS63-AFDEAX",
-    "afd_time": "2026-07-15T06:19:00Z",
-    "updated": "2026-07-15T06:30:13.384285+00:00"
+    "product_id": "202607151052-KEAX-FXUS63-AFDEAX",
+    "afd_time": "2026-07-15T10:52:00Z",
+    "updated": "2026-07-15T11:51:21.187943+00:00"
   }
 }
