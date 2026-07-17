@@ -1,9 +1,9 @@
 {
   "office": "MFL",
-  "product_id": "202607171214-KMFL-FXUS62-AFDMFL",
-  "afd_time": "2026-07-17T12:14:00Z",
+  "product_id": "202607171837-KMFL-FXUS62-AFDMFL",
+  "afd_time": "2026-07-17T18:37:00Z",
   "section_type": "long_term",
-  "updated": "2026-07-17T14:05:31.756470+00:00",
+  "updated": "2026-07-17T19:35:39.121711+00:00",
   "query_preview": "..\n(Saturday night through Thursday)\nIssued at 412 AM EDT Fri Jul 17 2026\n\nLatest long range model solutions keep rain chances in place through \nearly next week with overall model consensus showing a trough and \npotential associated low lingering around the eastern Gulf and \nnorthern Florida. But the air mass across SoFlo seems to begin to \nrebound from the wet conditions with a gradual decrease in shower \nactivity. Max POPs/Wx coverage on latest NBM are now coming in the \n30-40% through much of the work week, with Tuesday as the driest \nday. \n\nSea breezes and outflow boundary collisions will remain as the focal \npoints for deeper convection to develop. Therefore, there will be \ncontinued good support for stronger, taller storms especially with \nsea breezes and boundary collisions. Main hazards will be damaging \nwind gusts, hail, lightning strikes and localized flooding.  \n\nDespite the spike in rain and thunderstorms, there should be enough \nsunshine for keeping max temps in the 90s each day. Heat advisory \npotential will be explored each day. Limit strenuous outdoor \nactivities and take action when you see symptoms of heat exhaustion \nand heat stroke. For more on what you can do to prepare for and \nmitigate heat illness, visit ready.gov/heat.",
   "analogs": [
     {
@@ -54,7 +54,7 @@
     {
       "datetime_utc": "2024-05-10T17:29Z",
       "source_file": "MFL_2024_10_1729.txt",
-      "similarity": 0.9874035120010376,
+      "similarity": 0.9874035716056824,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -141,9 +141,54 @@
       }
     },
     {
+      "datetime_utc": "2018-05-16T05:50Z",
+      "source_file": "MFL_2018_16_0550.txt",
+      "similarity": 0.986365795135498,
+      "label": "severe_hail",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2018-05-15T19:59Z",
       "source_file": "MFL_2018_15_1959.txt",
-      "similarity": 0.9863659143447876,
+      "similarity": 0.986365795135498,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -188,39 +233,35 @@
       }
     },
     {
-      "datetime_utc": "2018-05-16T05:50Z",
-      "source_file": "MFL_2018_16_0550.txt",
-      "similarity": 0.9863659143447876,
-      "label": "severe_hail",
+      "datetime_utc": "2015-09-26T19:59Z",
+      "source_file": "MFL_2015_26_1959.txt",
+      "similarity": 0.9862892627716064,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "flood",
+          "label": "tornado",
           "counts": {
-            "flood": 2
+            "tornado": 1,
+            "severe_wind": 2,
+            "flood": 6
           }
         },
         "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -258,47 +299,6 @@
         "3": {
           "label": "quiet",
           "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2015-09-26T23:50Z",
-      "source_file": "MFL_2015_26_2350.txt",
-      "similarity": 0.9862892627716064,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1,
-            "severe_wind": 2,
-            "flood": 6
-          }
         },
         "4": {
           "label": "quiet",
@@ -366,9 +366,9 @@
       }
     },
     {
-      "datetime_utc": "2009-07-20T22:53Z",
-      "source_file": "MFL_2009_20_2253.txt",
-      "similarity": 0.9860568046569824,
+      "datetime_utc": "2009-07-20T18:57Z",
+      "source_file": "MFL_2009_20_1857.txt",
+      "similarity": 0.986056923866272,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -414,9 +414,9 @@
       }
     },
     {
-      "datetime_utc": "2009-07-21T05:40Z",
-      "source_file": "MFL_2009_21_0540.txt",
-      "similarity": 0.9860568046569824,
+      "datetime_utc": "2009-07-21T00:13Z",
+      "source_file": "MFL_2009_21_0013.txt",
+      "similarity": 0.986056923866272,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -462,7 +462,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.79,
-    "mean_similarity": 0.9843779718875885,
+    "mean_similarity": 0.9843779861927032,
     "base_rate": 0.5635268995788599,
     "signal_value": 0.2264731004211401,
     "percentile": 76,
@@ -471,8 +471,8 @@
     "n_total": 10,
     "n_severe_signal": 79,
     "n_total_signal": 100,
-    "product_id": "202607171214-KMFL-FXUS62-AFDMFL",
-    "afd_time": "2026-07-17T12:14:00Z",
-    "updated": "2026-07-17T14:05:31.756470+00:00"
+    "product_id": "202607171837-KMFL-FXUS62-AFDMFL",
+    "afd_time": "2026-07-17T18:37:00Z",
+    "updated": "2026-07-17T19:35:39.121711+00:00"
   }
 }
