@@ -1,15 +1,59 @@
 {
   "office": "CTP",
-  "product_id": "202607191232-KCTP-FXUS61-AFDCTP",
-  "afd_time": "2026-07-19T12:32:00Z",
+  "product_id": "202607191751-KCTP-FXUS61-AFDCTP",
+  "afd_time": "2026-07-19T17:51:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-19T13:56:00.388444+00:00",
-  "query_preview": "..\nKEY MESSAGE 1: Today and Monday dry, but potential for storms\nwith heavy rian and damaging winds on Tuesday.\n\nStill areas of low clouds and fog, along with some smoke still\nthis morning, but at least should remain dry for a change today.\n\nTuesday looks similar to what we had yesterday (Saturday) with\nhigh PW values, and strong dynamics, as an abnormally deep low\ntracks just north of the Lower Great Lakes. Already had 2 such\ndeep systems this summer, this would be the thired one. Main \nthreat from this will likely be strong storms with the potential\nfor damaging winds. Also heavy rain, but like Saturday, speed \nof storms would likely limit the risk of widespread hydro \nproblems. Main concern with hydro is having the activity in the \nsame locations as where the rain was on Saturday. Some areas \nyesterday had 1 to 2 plus inches of rain, while some spots \nacross the north and south had next to nothing. Some areas too \nwet so far this July, while others are still too dry from the \nlack of rain in June.\n\nAfter mid week, temperatures will trend near to a bit below \nnormal, as we head into the end of July.",
+  "updated": "2026-07-19T19:34:41.385958+00:00",
+  "query_preview": "..\nKEY MESSAGE 1: Today and Monday dry, but potential for storms\nwith heavy rain and damaging winds on Tuesday.\n\nStill areas of low clouds and fog, along with some smoke still\nthis morning, but at least should remain dry for a change today.\n\nTuesday looks similar to what we had yesterday (Saturday) with\nhigh PW values, and strong dynamics, as an abnormally deep low\ntracks just north of the Lower Great Lakes. Already had 2 such\ndeep systems this summer, this would be the third one. Main \nthreat from this will likely be strong storms with the potential\nfor damaging winds. Also heavy rain, but like Saturday, speed \nof storms would likely limit the risk of widespread hydro \nproblems. Main concern with hydro is having the activity in the \nsame locations as where the rain was on Saturday. Some areas \nyesterday had 1 to 2 plus inches of rain, while some spots \nacross the north and south had next to nothing. Some areas too \nwet so far this July, while others are still too dry from the \nlack of rain in June.\n\nAfter mid week, temperatures will trend near to a bit below \nnormal, as we head into the end of July.",
   "analogs": [
+    {
+      "datetime_utc": "2004-08-06T14:01Z",
+      "source_file": "CTP_2004_06_1401.txt",
+      "similarity": 0.9294730424880981,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 2
+          }
+        },
+        "6": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        }
+      }
+    },
     {
       "datetime_utc": "2007-08-22T05:45Z",
       "source_file": "CTP_2007_22_0545.txt",
-      "similarity": 0.9315530061721802,
+      "similarity": 0.9293878078460693,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -58,9 +102,9 @@
       }
     },
     {
-      "datetime_utc": "2005-09-29T15:17Z",
-      "source_file": "CTP_2005_29_1517.txt",
-      "similarity": 0.9262715578079224,
+      "datetime_utc": "2005-09-29T06:01Z",
+      "source_file": "CTP_2005_29_0601.txt",
+      "similarity": 0.9255827069282532,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -98,19 +142,23 @@
       }
     },
     {
-      "datetime_utc": "2004-08-06T07:21Z",
-      "source_file": "CTP_2004_06_0721.txt",
-      "similarity": 0.9249687194824219,
-      "label": "severe_wind",
+      "datetime_utc": "2019-07-07T20:25Z",
+      "source_file": "CTP_2019_07_2025.txt",
+      "similarity": 0.9205710887908936,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 53
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 49
+          }
         },
         "2": {
           "label": "quiet",
@@ -121,30 +169,27 @@
           "counts": {}
         },
         "4": {
-          "label": "severe_hail",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 1
+            "flood": 135,
+            "severe_wind": 35,
+            "tornado": 1
           }
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2008-07-11T17:41Z",
-      "source_file": "CTP_2008_11_1741.txt",
-      "similarity": 0.9236490726470947,
+      "datetime_utc": "2008-07-11T07:29Z",
+      "source_file": "CTP_2008_11_0729.txt",
+      "similarity": 0.9201905131340027,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -188,54 +233,9 @@
       }
     },
     {
-      "datetime_utc": "2019-07-07T20:25Z",
-      "source_file": "CTP_2019_07_2025.txt",
-      "similarity": 0.9228317737579346,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 53
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 49
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "flood": 135,
-            "severe_wind": 35,
-            "tornado": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2005-05-14T08:14Z",
-      "source_file": "CTP_2005_14_0814.txt",
-      "similarity": 0.9177497625350952,
+      "datetime_utc": "2004-09-24T06:15Z",
+      "source_file": "CTP_2004_24_0615.txt",
+      "similarity": 0.9115322828292847,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -270,49 +270,10 @@
       }
     },
     {
-      "datetime_utc": "2011-04-07T00:17Z",
-      "source_file": "CTP_2011_07_0017_1.txt",
-      "similarity": 0.9168726205825806,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 7
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2011-04-06T23:42Z",
-      "source_file": "CTP_2011_06_2342.txt",
-      "similarity": 0.9168726205825806,
-      "label": "flood",
+      "datetime_utc": "2005-09-07T15:24Z",
+      "source_file": "CTP_2005_07_1524.txt",
+      "similarity": 0.9112687110900879,
+      "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
@@ -340,17 +301,55 @@
           "counts": {}
         },
         "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 7
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2025-05-23T19:39Z",
-      "source_file": "CTP_2025_23_1939.txt",
-      "similarity": 0.9162759780883789,
+      "datetime_utc": "2004-07-02T18:33Z",
+      "source_file": "CTP_2004_02_1833.txt",
+      "similarity": 0.9109967947006226,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 5
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-05-23T23:32Z",
+      "source_file": "CTP_2025_23_2332.txt",
+      "similarity": 0.9104974269866943,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -387,9 +386,9 @@
       }
     },
     {
-      "datetime_utc": "2021-05-12T00:46Z",
-      "source_file": "CTP_2021_12_0046.txt",
-      "similarity": 0.914271354675293,
+      "datetime_utc": "2005-05-14T08:14Z",
+      "source_file": "CTP_2005_14_0814.txt",
+      "similarity": 0.9091491103172302,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -426,18 +425,18 @@
   ],
   "signal": {
     "level": "LOW",
-    "severe_fraction": 0.85,
-    "mean_similarity": 0.9040381991863251,
+    "severe_fraction": 0.83,
+    "mean_similarity": 0.9006501066684723,
     "base_rate": 0.5775495304987035,
-    "signal_value": 0.2724504695012965,
-    "percentile": 65,
+    "signal_value": 0.25245046950129646,
+    "percentile": 63,
     "office_lift": 0.11237046950129659,
-    "n_severe": 5,
+    "n_severe": 6,
     "n_total": 10,
-    "n_severe_signal": 85,
+    "n_severe_signal": 83,
     "n_total_signal": 100,
-    "product_id": "202607191232-KCTP-FXUS61-AFDCTP",
-    "afd_time": "2026-07-19T12:32:00Z",
-    "updated": "2026-07-19T13:56:00.388444+00:00"
+    "product_id": "202607191751-KCTP-FXUS61-AFDCTP",
+    "afd_time": "2026-07-19T17:51:00Z",
+    "updated": "2026-07-19T19:34:41.385958+00:00"
   }
 }
