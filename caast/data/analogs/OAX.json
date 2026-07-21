@@ -1,9 +1,9 @@
 {
   "office": "OAX",
-  "product_id": "202607211705-KOAX-FXUS63-AFDOAX",
-  "afd_time": "2026-07-21T17:05:00Z",
+  "product_id": "202607212312-KOAX-FXUS63-AFDOAX",
+  "afd_time": "2026-07-21T23:12:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-21T18:42:38.973856+00:00",
+  "updated": "2026-07-21T23:15:33.174008+00:00",
   "query_preview": "..\nIssued at 1200 PM CDT Tue Jul 21 2026\n\nToday and Tonight...\n\nA few sub-severe storms dotted the sky across southeast Nebraska this \nmorning, producing some beneficial rainfall and a bit of small hail. \nThe weak storms gradually dissipated as they moved south, making way \nfor a slightly cooler and quiet day. Skies remained hazy as smoke \nfrom Canadian wildfires rode in on the northerly winds. By noon \ntemperatures had reached the upper 70s and low 80s. Temperatures are \nexpected to top out in the mid to upper 80s this afternoon, with \nheat indices about 20 degrees cooler than they were yesterday.\n\nWednesday through Friday...\n\nA reinforcing shot of cooler air arrives Wednesday, along with some \nmuch needed rainfall. Showers and a few thunderstorms will move in \nfrom the west Wednesday morning, become fairly widespread by noon, \nand taper off from north to south through the early afternoon hours. \nThe day likely won't be a complete washout, with breaks in the rain \nallowing folks to get out and enjoy afternoon highs in the mid to \nupper 70s.   \n\nAdditional bursts of shortwave energy will ripple through the region \nWednesday night through Friday morning. This will not only bring \nadditional shower and thunderstorm chances, but also keep \ntemperatures well below normal for a couple more days. Highs on \nThursday will stay in the mid to upper 70s, with upper 70s and low \n80s expected Friday. Periods of heavy rain may be possible, \nespecially over far southeast Nebraska, where probabilities for 1\" or \nmore of rain are around 50-60%.\n\nSaturday and Beyond...\n\nUnfortunately, our cool down looks to be short-lived, as the ridge \naxis shifts back to the east this weekend. Temperatures will push \nback into the 90s on Saturday, with heat indices flirting with Heat \nAdvisory criteria again on Sunday.  \n\nA few shortwaves may ripple around the outer perimeter of the ridge, \nbringing off and on chances for rain. But, this far out, the details \naren't certain. Overall, CPC outlooks remain warm and machine \nlearning outlooks keep us locked into a 5-15% chance for severe \nstorms through early August.",
   "analogs": [
     {
@@ -60,7 +60,7 @@
     {
       "datetime_utc": "2006-07-01T15:07Z",
       "source_file": "OAX_2006_01_1507.txt",
-      "similarity": 0.9811710715293884,
+      "similarity": 0.9811708331108093,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -107,7 +107,7 @@
     {
       "datetime_utc": "2025-05-19T05:13Z",
       "source_file": "OAX_2025_19_0513.txt",
-      "similarity": 0.9802030324935913,
+      "similarity": 0.9802031517028809,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -298,48 +298,9 @@
       }
     },
     {
-      "datetime_utc": "2021-05-27T05:10Z",
-      "source_file": "OAX_2021_27_0510.txt",
-      "similarity": 0.9775935411453247,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2021-05-26T23:48Z",
       "source_file": "OAX_2021_26_2348.txt",
-      "similarity": 0.9775935411453247,
+      "similarity": 0.9775934815406799,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -379,8 +340,47 @@
       }
     },
     {
-      "datetime_utc": "2023-07-10T09:06Z",
-      "source_file": "OAX_2023_10_0906.txt",
+      "datetime_utc": "2021-05-27T05:10Z",
+      "source_file": "OAX_2021_27_0510.txt",
+      "similarity": 0.9775934815406799,
+      "label": "severe_hail",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-07-10T17:28Z",
+      "source_file": "OAX_2023_10_1728.txt",
       "similarity": 0.9767971634864807,
       "label": "tornado",
       "is_severe": true,
@@ -482,7 +482,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.974113535284996,
+    "mean_similarity": 0.9741135323047638,
     "base_rate": 0.5290490280120566,
     "signal_value": 0.3909509719879435,
     "percentile": 69,
@@ -491,8 +491,8 @@
     "n_total": 10,
     "n_severe_signal": 92,
     "n_total_signal": 100,
-    "product_id": "202607211705-KOAX-FXUS63-AFDOAX",
-    "afd_time": "2026-07-21T17:05:00Z",
-    "updated": "2026-07-21T18:42:38.973856+00:00"
+    "product_id": "202607212312-KOAX-FXUS63-AFDOAX",
+    "afd_time": "2026-07-21T23:12:00Z",
+    "updated": "2026-07-21T23:15:33.174008+00:00"
   }
 }

@@ -1,11 +1,58 @@
 {
   "office": "BIS",
-  "product_id": "202607211849-KBIS-FXUS63-AFDBIS",
-  "afd_time": "2026-07-21T18:49:00Z",
+  "product_id": "202607212254-KBIS-FXUS63-AFDBIS",
+  "afd_time": "2026-07-21T22:54:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-21T20:38:39.417009+00:00",
+  "updated": "2026-07-21T23:15:33.174008+00:00",
   "query_preview": "..\nIssued at 149 PM CDT Tue Jul 21 2026\n\nOverall quiet weather is expected the next few days. There are some \nreturns in southwestern North Dakota that have produced\noccasional light rain. However, showers have been dissipating\nover the past hour or so and should continue to do so. Smoke is\npresent across much of the forecast area, though visibility \nreductions are limited and mainly in the north. Neither the HRRR\nnor Rap smoke models suggest high concentrations at the \nsurface, so believe visibility should remain greater than 6\nmiles most areas, most of the time.\n\nBeyond today, a warming trend is on tap through the remainder of the \nweek as a west CONUS ridge amplifies and gradually slides eastward. \nHigh temperatures could exceed 100 degrees across parts of the \nstate Friday through Sunday, with the warmest overall day \nfavored to be Saturday. Mostly dry conditions are also expected \nthrough Thursday, after which periodic shortwaves could lead to\noccasional showers and thunderstorms Friday through this \nweekend. Severe weather is not out of the question with CSU \nmachine learning putting low severe probs into the forecast \nFriday through this weekend. \n\nOf note, models do not favor consistent direct Gulf moisture through \nthis weekend. Therefore, despite similarly hot ambient \ntemperatures, dewpoints will often remain lower than during the \npast period of hot weather. As such, heat indices will likely \nbe less than the ambient temperature as well. Still, at least \nadvisory level conditions likely if trends continue as-is. While\nthe lack of consistent Gulf moisture doesn't preclude the \naforementioned severe weather potential, it will likely limit \nthe duration (number of days) and areal coverage overall. Will \ncontinue to monitor the latest trends over the next couple days\nto see how this all evolves.",
   "analogs": [
+    {
+      "datetime_utc": "2023-07-20T19:55Z",
+      "source_file": "BIS_2023_20_1955.txt",
+      "similarity": 0.9837617874145508,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 2
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 6
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 8
+          }
+        }
+      }
+    },
     {
       "datetime_utc": "2023-07-21T06:15Z",
       "source_file": "BIS_2023_21_0615.txt",
@@ -56,9 +103,9 @@
       }
     },
     {
-      "datetime_utc": "2023-07-20T19:55Z",
-      "source_file": "BIS_2023_20_1955.txt",
-      "similarity": 0.9837617874145508,
+      "datetime_utc": "2014-06-22T05:56Z",
+      "source_file": "BIS_2014_22_0556.txt",
+      "similarity": 0.9790630340576172,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -71,33 +118,33 @@
           "counts": {}
         },
         "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 2,
-            "severe_wind": 2
+            "severe_wind": 1
           }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
         },
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
+            "severe_wind": 2
           }
         },
         "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 6
+            "severe_wind": 2,
+            "flood": 3
           }
         },
         "6": {
-          "label": "severe_wind",
+          "label": "flood",
           "counts": {
-            "severe_hail": 5,
-            "severe_wind": 8
+            "flood": 2
           }
         }
       }
@@ -105,7 +152,7 @@
     {
       "datetime_utc": "2014-06-21T21:31Z",
       "source_file": "BIS_2014_21_2131.txt",
-      "similarity": 0.9790629148483276,
+      "similarity": 0.9790630340576172,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -152,56 +199,9 @@
       }
     },
     {
-      "datetime_utc": "2014-06-22T00:15Z",
-      "source_file": "BIS_2014_22_0015.txt",
-      "similarity": 0.9790629148483276,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "flood": 3
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2012-06-08T15:50Z",
       "source_file": "BIS_2012_08_1550.txt",
-      "similarity": 0.9789069294929504,
+      "similarity": 0.9789068102836609,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -246,59 +246,9 @@
       }
     },
     {
-      "datetime_utc": "2018-06-06T05:00Z",
-      "source_file": "BIS_2018_06_0500.txt",
-      "similarity": 0.9781626462936401,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 16,
-            "severe_wind": 9,
-            "flood": 2
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 9,
-            "severe_hail": 7,
-            "tornado": 10
-          }
-        },
-        "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 19,
-            "severe_wind": 7
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2018-06-05T23:42Z",
-      "source_file": "BIS_2018_05_2342.txt",
-      "similarity": 0.9781626462936401,
+      "datetime_utc": "2018-06-05T20:31Z",
+      "source_file": "BIS_2018_05_2031.txt",
+      "similarity": 0.9781627655029297,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -341,6 +291,56 @@
             "severe_hail": 19,
             "severe_wind": 7
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2018-06-06T05:00Z",
+      "source_file": "BIS_2018_06_0500.txt",
+      "similarity": 0.9781627655029297,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 16,
+            "severe_wind": 9,
+            "flood": 2
+          }
+        },
+        "2": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 9,
+            "severe_hail": 7,
+            "tornado": 10
+          }
+        },
+        "3": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 19,
+            "severe_wind": 7
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "quiet",
@@ -394,7 +394,7 @@
     {
       "datetime_utc": "2012-07-04T03:16Z",
       "source_file": "BIS_2012_04_0316.txt",
-      "similarity": 0.977820873260498,
+      "similarity": 0.9778207540512085,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -431,9 +431,9 @@
       }
     },
     {
-      "datetime_utc": "2025-07-28T19:48Z",
-      "source_file": "BIS_2025_28_1948.txt",
-      "similarity": 0.9773606657981873,
+      "datetime_utc": "2025-07-28T20:59Z",
+      "source_file": "BIS_2025_28_2059.txt",
+      "similarity": 0.977360725402832,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -482,7 +482,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.98,
-    "mean_similarity": 0.9735201370716094,
+    "mean_similarity": 0.9735201334953308,
     "base_rate": 0.4111681812195443,
     "signal_value": 0.5688318187804557,
     "percentile": 82,
@@ -491,8 +491,8 @@
     "n_total": 10,
     "n_severe_signal": 98,
     "n_total_signal": 100,
-    "product_id": "202607211849-KBIS-FXUS63-AFDBIS",
-    "afd_time": "2026-07-21T18:49:00Z",
-    "updated": "2026-07-21T20:38:39.417009+00:00"
+    "product_id": "202607212254-KBIS-FXUS63-AFDBIS",
+    "afd_time": "2026-07-21T22:54:00Z",
+    "updated": "2026-07-21T23:15:33.174008+00:00"
   }
 }
