@@ -1,15 +1,15 @@
 {
   "office": "DDC",
-  "product_id": "202607220646-KDDC-FXUS63-AFDDDC",
-  "afd_time": "2026-07-22T06:46:00Z",
+  "product_id": "202607221030-KDDC-FXUS63-AFDDDC",
+  "afd_time": "2026-07-22T10:30:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-22T09:41:08.638950+00:00",
+  "updated": "2026-07-22T12:05:19.445042+00:00",
   "query_preview": "..\nIssued at 1258 AM CDT Wed Jul 22 2026\n\nThe southern edge of the mid to high level westerlies will be\nlocated across the central plains through Friday. A nearly\nstationary front will persist across western Kansas. Along and\njust on the cooler side of the front the low level moisture \nwill collect, leading to marginal instability with daytime \nheating. Very warm temperatures at 500mb (-3C), along with the \nabsence of vertical wind shear, will preclude any substantial \nsevere weather. Isolated t-storms are expected across far \nwestern Kansas this afternoon and evening; but most locations\nshould remain dry (measurable rain chances 5 to 20% in places \nsuch as Syracuse and Lakin). Given the positioning of the front\nacross western Kansas, expect the hottest temperatures across \nfar southwest Kansas, with cooler readings in Hays. Temperatures\nat Elkhart, Ulysses and Hugoton will likely reach 100 or higher\ntoday and Thursday.\n\nA weak upper level disturbance over western Nevada this morning\nis predicted to rotate around the upper level ridge and \napproach the high plains Thursday night. Given the persistent \nfrontal zone and associated thermal and moisture gradients, \nt-storms are again a possibility. The national blend of models \ngives 50-70% t-storm chances across western Kansas and along \nI-70 for Thursday night. The various ensemble means indicate \nmodest rain amounts, with central Kansas around Hays being \nfavored over locations along the OK/KS state line. Therefore, \nchances for meaningful rain are mainly confined to west central\nKansas and along I-70. By Friday the front is expected to sag \nsouthward, with western Kansas located on the north side of the \nboundary. Thus, any t-storms ought to be south of the KS/OK \nstate line. \n\nThe upper level ridge is advertised to expand northward by \nSunday and Monday, with any mid level westerly flow across the \nRockies well north of Kansas. With extremely warm 700mb \ntemperatures (16-19C), expect extremely hot readings of 105 \ndegrees by Sunday and perhaps 106-108 by Monday and Tuesday. \nGiven the very deep boundary layer up through the 600mb level, \nany lingering low level moisture will become diluted in the \nvertical and \"mix out\", resulting in deep inverted-v thermal \nprofiles and minimal CAPE (especially by Monday). Thus, t-storm \nchances are near 0%. This extremely hot and dry weather will \npersist through at least Wednesday and possibly into Thursday \ngiven the strong upper level ridging. \n\nThe ensemble means indicate the upper level ridge shifting \nwestward by later next week, possibly allowing a weak cold front\nto pass through Kansas. This would result in a cool down of 5 to\n10 degrees.",
   "analogs": [
     {
-      "datetime_utc": "2025-07-23T23:15Z",
-      "source_file": "DDC_2025_23_2315.txt",
-      "similarity": 0.9865599274635315,
+      "datetime_utc": "2025-07-23T20:39Z",
+      "source_file": "DDC_2025_23_2039.txt",
+      "similarity": 0.986560046672821,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -56,7 +56,7 @@
     {
       "datetime_utc": "2025-07-24T05:22Z",
       "source_file": "DDC_2025_24_0522.txt",
-      "similarity": 0.9865599274635315,
+      "similarity": 0.986560046672821,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -97,6 +97,52 @@
           "counts": {
             "severe_wind": 2
           }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2019-07-24T21:40Z",
+      "source_file": "DDC_2019_24_2140.txt",
+      "similarity": 0.9864346385002136,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "flood": 1,
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 6,
+            "severe_wind": 1,
+            "flood": 5
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
@@ -151,10 +197,10 @@
       }
     },
     {
-      "datetime_utc": "2019-07-24T18:38Z",
-      "source_file": "DDC_2019_24_1838.txt",
-      "similarity": 0.9864346385002136,
-      "label": "severe_wind",
+      "datetime_utc": "2022-07-19T20:52Z",
+      "source_file": "DDC_2022_19_2052.txt",
+      "similarity": 0.9861246347427368,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
@@ -162,44 +208,50 @@
           "counts": {}
         },
         "1": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "flood": 1,
-            "severe_hail": 1
+            "severe_wind": 1
           }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "tornado": 10,
+            "severe_wind": 25,
+            "severe_hail": 7
+          }
         },
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 2
+            "severe_wind": 9
           }
         },
         "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 6,
-            "severe_wind": 1,
-            "flood": 5
+            "severe_wind": 5,
+            "severe_hail": 1
           }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
         }
       }
     },
     {
       "datetime_utc": "2022-07-20T05:30Z",
       "source_file": "DDC_2022_20_0530.txt",
-      "similarity": 0.9861244559288025,
+      "similarity": 0.9861246347427368,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -252,61 +304,9 @@
       }
     },
     {
-      "datetime_utc": "2022-07-19T22:20Z",
-      "source_file": "DDC_2022_19_2220.txt",
-      "similarity": 0.9861244559288025,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 10,
-            "severe_wind": 25,
-            "severe_hail": 7
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 9
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 5,
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2015-07-17T19:35Z",
       "source_file": "DDC_2015_17_1935.txt",
-      "similarity": 0.9859009981155396,
+      "similarity": 0.9859011173248291,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -363,9 +363,9 @@
       }
     },
     {
-      "datetime_utc": "2025-07-25T16:00Z",
-      "source_file": "DDC_2025_25_1600_2.txt",
-      "similarity": 0.985809862613678,
+      "datetime_utc": "2025-07-25T10:18Z",
+      "source_file": "DDC_2025_25_1018.txt",
+      "similarity": 0.9858098030090332,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -406,9 +406,9 @@
       }
     },
     {
-      "datetime_utc": "2018-08-15T08:08Z",
-      "source_file": "DDC_2018_15_0808.txt",
-      "similarity": 0.9852887392044067,
+      "datetime_utc": "2018-08-15T17:35Z",
+      "source_file": "DDC_2018_15_1735_1.txt",
+      "similarity": 0.9852887988090515,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -460,8 +460,8 @@
       }
     },
     {
-      "datetime_utc": "2023-07-23T05:22Z",
-      "source_file": "DDC_2023_23_0522.txt",
+      "datetime_utc": "2023-07-22T18:43Z",
+      "source_file": "DDC_2023_22_1843.txt",
       "similarity": 0.985271692276001,
       "label": "severe_wind",
       "is_severe": true,
@@ -469,40 +469,42 @@
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 2
+            "severe_hail": 27,
+            "severe_wind": 17,
+            "flood": 2
           }
         },
         "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "2": {
           "label": "quiet",
           "counts": {}
         },
-        "2": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 9
           }
         },
-        "3": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3
           }
         },
-        "4": {
+        "5": {
           "label": "quiet",
           "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 10,
-            "severe_hail": 2
-          }
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1
+            "severe_wind": 10,
+            "severe_hail": 2
           }
         }
       }
@@ -511,7 +513,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.983531254529953,
+    "mean_similarity": 0.9835313332080841,
     "base_rate": 0.5799332302659587,
     "signal_value": 0.4100667697340413,
     "percentile": 85,
@@ -520,8 +522,8 @@
     "n_total": 10,
     "n_severe_signal": 99,
     "n_total_signal": 100,
-    "product_id": "202607220646-KDDC-FXUS63-AFDDDC",
-    "afd_time": "2026-07-22T06:46:00Z",
-    "updated": "2026-07-22T09:41:08.638950+00:00"
+    "product_id": "202607221030-KDDC-FXUS63-AFDDDC",
+    "afd_time": "2026-07-22T10:30:00Z",
+    "updated": "2026-07-22T12:05:19.445042+00:00"
   }
 }
