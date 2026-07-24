@@ -1,15 +1,15 @@
 {
   "office": "FGF",
-  "product_id": "202607232355-KFGF-FXUS63-AFDFGF",
-  "afd_time": "2026-07-23T23:55:00Z",
+  "product_id": "202607240243-KFGF-FXUS63-AFDFGF",
+  "afd_time": "2026-07-24T02:43:00Z",
   "section_type": "discussion",
-  "updated": "2026-07-24T00:15:39.209410+00:00",
+  "updated": "2026-07-24T03:50:25.523915+00:00",
   "query_preview": "..\nIssued at 234 PM CDT Thu Jul 23 2026\n\n...Synopsis...\n\nNorthwesterly flow aloft continues through the end of the work\nweek, with a fairly vigorous shortwave moving over the top of\nthe ridge from Manitoba tonight to Ontario and northern MN\ntomorrow. While the main upper forcing looks like it will remain\nnorthwest, it will help push a frontal boundary down into\nthe Red River Valley tomorrow afternoon. Not much cooling behind\nthe front as ridging quickly builds back over the Plains this\nweekend. The ridge will not move too much during the next few\ndays, remaining over the Rockies and western Plains. Our\nforecast area could see a few weak shortwaves move through\nSunday and into next week on the front side of the upper ridge,\nbut no outstanding wet signal from the ensembles, only heat. \n\n...Slight risk of severe tomorrow afternoon and evening...\n\nThe surface trough axis/frontal boundary will begin to push into\nour northwestern counties by mid-day tomorrow, slowing to near\nthe Devils Lake Basin and Red River Valley by afternoon. Many of\nthe models have very unstable air pooling right ahead of the\nfront with over 3000 J/kg possible, and 45 to 50 kts of deep\nlayer shear. Machine learning is quite bullish on severe chances\ntomorrow afternoon, with a few showing above 30 percent \nprobability of severe impacts across our north and central\ncounties. On the other hand, many model soundings show a fairly\nstout cap that could inhibit convection. There is also a thick\nlayer of elevated smoke that could prevent temperatures rising a\nfew more degrees and getting convection going. If any convection\ndoes develop, it will be severe, but the main question is if the\ncap can be broken. HREF has a 30 percent chance for strong\nupdraft helicity values, and with the surface boundary nearby\ncan't rule out any isolated tornadoes if we can get some surface\nbased convection going. Main threat though looks to be golf ball\nhail and winds to 70 mph, so will continue messaging along those\nlines. The front should push southeastward later in the\nevening, moving south and east of our counties shortly after\nsunset. \n\n...Heat this weekend...\n\nRidging and ensembles all point to a return to heat impacts\nSaturday and especially Sunday. Dew points will be in the 60s,\nbringing heat index values into the 90s for Saturday and above\n100 for Sunday. While heat index values will be meeting criteria\nfor advisory mainly Sunday, there are other indicators of high\nheat impacts. Wet bulb globe temperatures on Saturday will be \nwell into the 80s, and mid 80s by Sunday. Heat risk should be \nwell into the major category over the weekend, and there is a 30\nto 50 percent probability of extreme heat risk for the southern\nRed River Valley on Sunday. Not quite ready for headlines, but\nwill have to watch this weekend closely.",
   "analogs": [
     {
       "datetime_utc": "2024-07-10T14:44Z",
       "source_file": "FGF_2024_10_1444.txt",
-      "similarity": 0.9889811873435974,
+      "similarity": 0.9889811277389526,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -61,7 +61,7 @@
     {
       "datetime_utc": "2025-07-12T09:59Z",
       "source_file": "FGF_2025_12_0959.txt",
-      "similarity": 0.9887466430664062,
+      "similarity": 0.9887465238571167,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -108,9 +108,51 @@
       }
     },
     {
+      "datetime_utc": "2024-07-23T19:50Z",
+      "source_file": "FGF_2024_23_1950.txt",
+      "similarity": 0.9871159791946411,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5,
+            "severe_hail": 6
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2024-07-24T03:16Z",
       "source_file": "FGF_2024_24_0316.txt",
-      "similarity": 0.9871159195899963,
+      "similarity": 0.9871159791946411,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -152,28 +194,41 @@
       }
     },
     {
-      "datetime_utc": "2024-07-23T23:09Z",
-      "source_file": "FGF_2024_23_2309.txt",
-      "similarity": 0.9871159195899963,
-      "label": "severe_wind",
+      "datetime_utc": "2024-07-12T03:39Z",
+      "source_file": "FGF_2024_12_0339.txt",
+      "similarity": 0.9868597984313965,
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 3,
+            "severe_wind": 1
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 14,
+            "severe_wind": 14,
+            "flood": 1,
+            "tornado": 2
+          }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 14,
+            "severe_hail": 21,
+            "flood": 1
+          }
         },
         "3": {
-          "label": "flood",
+          "label": "severe_wind",
           "counts": {
-            "flood": 1
+            "severe_hail": 1,
+            "severe_wind": 3
           }
         },
         "4": {
@@ -185,18 +240,15 @@
           "counts": {}
         },
         "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 5,
-            "severe_hail": 6
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2024-07-11T23:24Z",
       "source_file": "FGF_2024_11_2324_1.txt",
-      "similarity": 0.9868598580360413,
+      "similarity": 0.9868597984313965,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -234,58 +286,6 @@
             "severe_hail": 1,
             "severe_wind": 3
           }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-07-12T03:39Z",
-      "source_file": "FGF_2024_12_0339.txt",
-      "similarity": 0.9868598580360413,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 14,
-            "severe_wind": 14,
-            "flood": 1,
-            "tornado": 2
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 14,
-            "severe_hail": 21,
-            "flood": 1
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 1,
-            "severe_wind": 3
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -300,7 +300,7 @@
     {
       "datetime_utc": "2010-08-23T02:29Z",
       "source_file": "FGF_2010_23_0229.txt",
-      "similarity": 0.986821174621582,
+      "similarity": 0.9868210554122925,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -337,9 +337,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-30T20:24Z",
-      "source_file": "FGF_2024_30_2024.txt",
-      "similarity": 0.9866099953651428,
+      "datetime_utc": "2024-07-30T23:34Z",
+      "source_file": "FGF_2024_30_2334.txt",
+      "similarity": 0.9866100549697876,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -383,9 +383,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-31T00:03Z",
-      "source_file": "FGF_2024_31_0003.txt",
-      "similarity": 0.9866099953651428,
+      "datetime_utc": "2024-07-31T04:20Z",
+      "source_file": "FGF_2024_31_0420.txt",
+      "similarity": 0.9866100549697876,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -430,8 +430,8 @@
       }
     },
     {
-      "datetime_utc": "2023-06-17T19:52Z",
-      "source_file": "FGF_2023_17_1952.txt",
+      "datetime_utc": "2023-06-17T23:26Z",
+      "source_file": "FGF_2023_17_2326_1.txt",
       "similarity": 0.985503077507019,
       "label": "severe_wind",
       "is_severe": true,
@@ -480,7 +480,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.9814945310354233,
+    "mean_similarity": 0.9814944845438004,
     "base_rate": 0.38744994994994997,
     "signal_value": 0.60255005005005,
     "percentile": 90,
@@ -489,8 +489,8 @@
     "n_total": 10,
     "n_severe_signal": 99,
     "n_total_signal": 100,
-    "product_id": "202607232355-KFGF-FXUS63-AFDFGF",
-    "afd_time": "2026-07-23T23:55:00Z",
-    "updated": "2026-07-24T00:15:39.209410+00:00"
+    "product_id": "202607240243-KFGF-FXUS63-AFDFGF",
+    "afd_time": "2026-07-24T02:43:00Z",
+    "updated": "2026-07-24T03:50:25.523915+00:00"
   }
 }
