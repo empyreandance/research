@@ -1,14 +1,14 @@
 {
   "office": "OUN",
-  "product_id": "202607240134-KOUN-FXUS64-AFDOUN",
-  "afd_time": "2026-07-24T01:34:00Z",
+  "product_id": "202607240411-KOUN-FXUS64-AFDOUN",
+  "afd_time": "2026-07-24T04:11:00Z",
   "section_type": "long_term",
-  "updated": "2026-07-24T03:50:25.523915+00:00",
+  "updated": "2026-07-24T06:41:39.354654+00:00",
   "query_preview": "..\n(Sunday through Wednesday)\nIssued at 132 AM CDT Thu Jul 23 2026\n\nRidging is forecast to expand over the southern Plains Sunday into \nthe middle of next week, keeping hot temperatures and mainly dry \nconditions in the forecast for the foreseeable future. Highs are \nforecast to be generally in the lower to mid 100s across the area \nwith heat indices 105+ each day through at least the middle of next \nweek. \n\nWare",
   "analogs": [
     {
-      "datetime_utc": "2025-06-15T17:30Z",
-      "source_file": "OUN_2025_15_1730.txt",
+      "datetime_utc": "2025-06-15T11:38Z",
+      "source_file": "OUN_2025_15_1138.txt",
       "similarity": 0.9917093515396118,
       "label": "tornado",
       "is_severe": true,
@@ -108,7 +108,7 @@
     {
       "datetime_utc": "2018-08-06T14:22Z",
       "source_file": "OUN_2018_06_1422.txt",
-      "similarity": 0.9917041063308716,
+      "similarity": 0.9917040467262268,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -158,8 +158,51 @@
       }
     },
     {
-      "datetime_utc": "2022-10-23T21:55Z",
-      "source_file": "OUN_2022_23_2155.txt",
+      "datetime_utc": "2022-10-24T04:09Z",
+      "source_file": "OUN_2022_24_0409.txt",
+      "similarity": 0.9913043975830078,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 8,
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-10-23T23:49Z",
+      "source_file": "OUN_2022_23_2349.txt",
       "similarity": 0.9913043975830078,
       "label": "severe_wind",
       "is_severe": true,
@@ -201,33 +244,32 @@
       }
     },
     {
-      "datetime_utc": "2022-10-24T04:09Z",
-      "source_file": "OUN_2022_24_0409.txt",
-      "similarity": 0.9913043975830078,
+      "datetime_utc": "2024-07-22T23:34Z",
+      "source_file": "OUN_2024_22_2334.txt",
+      "similarity": 0.9912881851196289,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 8,
-            "severe_hail": 1
+            "severe_hail": 2,
+            "severe_wind": 1
           }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -283,51 +325,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-22T19:16Z",
-      "source_file": "OUN_2024_22_1916.txt",
-      "similarity": 0.9912881851196289,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2009-11-09T16:59Z",
       "source_file": "OUN_2009_09_1659.txt",
-      "similarity": 0.9912534952163696,
+      "similarity": 0.9912535548210144,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -469,7 +469,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.84,
-    "mean_similarity": 0.9889623373746872,
+    "mean_similarity": 0.9889623427391052,
     "base_rate": 0.6717192236772197,
     "signal_value": 0.16828077632278027,
     "percentile": 58,
@@ -478,8 +478,8 @@
     "n_total": 10,
     "n_severe_signal": 84,
     "n_total_signal": 100,
-    "product_id": "202607240134-KOUN-FXUS64-AFDOUN",
-    "afd_time": "2026-07-24T01:34:00Z",
-    "updated": "2026-07-24T03:50:25.523915+00:00"
+    "product_id": "202607240411-KOUN-FXUS64-AFDOUN",
+    "afd_time": "2026-07-24T04:11:00Z",
+    "updated": "2026-07-24T06:41:39.354654+00:00"
   }
 }
