@@ -1,9 +1,9 @@
 {
   "office": "TSA",
-  "product_id": "202608011123-KTSA-FXUS64-AFDTSA",
-  "afd_time": "2026-08-01T11:23:00Z",
+  "product_id": "202608011332-KTSA-FXUS64-AFDTSA",
+  "afd_time": "2026-08-01T13:32:00Z",
   "section_type": "long_term",
-  "updated": "2026-08-01T11:36:39.850013+00:00",
+  "updated": "2026-08-01T13:57:29.846040+00:00",
   "query_preview": "..\n(Saturday Night through Friday)\nIssued at 1144 PM CDT Fri Jul 31 2026\n\nSurface high pressure will be present over the region through \nSunday with light north winds persisting. This provides another \npleasant August day with highs generally within a few degrees of \n90. Troughing over the E CONUS will gradually weaken/shift east \nearly next week as broad upper level ridging expands back into the\nsouthern plains. Temperatures will tick up again with southerly \nlow level flow returning to the region and highs approaching 100 \ndegrees are forecast by Tuesday. A shortwave and associated cold \nfront may impinge on northern parts of the area mid to late week \nand provide some low rain/storm chances...but otherwise dry \nconditions are favored through the end of the forecast period. How\nthis evolves will likely influence dangerous heat potential, but \nanother period of heat indices near or greater than 105 degrees \nare possible by mid to late week for parts of the FA.",
   "analogs": [
     {
@@ -52,8 +52,8 @@
       }
     },
     {
-      "datetime_utc": "2025-07-27T23:20Z",
-      "source_file": "TSA_2025_27_2320.txt",
+      "datetime_utc": "2025-07-27T17:26Z",
+      "source_file": "TSA_2025_27_1726.txt",
       "similarity": 0.9828108549118042,
       "label": "severe_wind",
       "is_severe": true,
@@ -101,7 +101,7 @@
     {
       "datetime_utc": "2011-06-01T21:30Z",
       "source_file": "TSA_2011_01_2130.txt",
-      "similarity": 0.9823472499847412,
+      "similarity": 0.9823473691940308,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -197,7 +197,7 @@
     {
       "datetime_utc": "2025-07-11T23:25Z",
       "source_file": "TSA_2025_11_2325.txt",
-      "similarity": 0.981979250907898,
+      "similarity": 0.9819793105125427,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -251,7 +251,7 @@
     {
       "datetime_utc": "2011-07-11T08:27Z",
       "source_file": "TSA_2011_11_0827.txt",
-      "similarity": 0.9818493127822876,
+      "similarity": 0.9818494319915771,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -295,7 +295,7 @@
     {
       "datetime_utc": "2014-09-04T01:44Z",
       "source_file": "TSA_2014_04_0144.txt",
-      "similarity": 0.9816441535949707,
+      "similarity": 0.9816442728042603,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -379,9 +379,55 @@
       }
     },
     {
+      "datetime_utc": "2022-07-25T01:36Z",
+      "source_file": "TSA_2022_25_0136.txt",
+      "similarity": 0.981411337852478,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 16,
+            "severe_hail": 2
+          }
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 11,
+            "severe_hail": 1,
+            "tornado": 1
+          }
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2022-07-24T23:25Z",
       "source_file": "TSA_2022_24_2325.txt",
-      "similarity": 0.9814112782478333,
+      "similarity": 0.981411337852478,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -425,58 +471,12 @@
           "counts": {}
         }
       }
-    },
-    {
-      "datetime_utc": "2022-07-25T01:36Z",
-      "source_file": "TSA_2022_25_0136.txt",
-      "similarity": 0.9814112782478333,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 16,
-            "severe_hail": 2
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 11,
-            "severe_hail": 1,
-            "tornado": 1
-          }
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
     }
   ],
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.8,
-    "mean_similarity": 0.9797713369131088,
+    "mean_similarity": 0.9797713899612427,
     "base_rate": 0.6678787549862961,
     "signal_value": 0.13212124501370393,
     "percentile": 55,
@@ -485,8 +485,8 @@
     "n_total": 10,
     "n_severe_signal": 80,
     "n_total_signal": 100,
-    "product_id": "202608011123-KTSA-FXUS64-AFDTSA",
-    "afd_time": "2026-08-01T11:23:00Z",
-    "updated": "2026-08-01T11:36:39.850013+00:00"
+    "product_id": "202608011332-KTSA-FXUS64-AFDTSA",
+    "afd_time": "2026-08-01T13:32:00Z",
+    "updated": "2026-08-01T13:57:29.846040+00:00"
   }
 }
