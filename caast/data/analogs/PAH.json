@@ -1,15 +1,15 @@
 {
   "office": "PAH",
-  "product_id": "202608030649-KPAH-FXUS63-AFDPAH",
-  "afd_time": "2026-08-03T06:49:00Z",
+  "product_id": "202608031111-KPAH-FXUS63-AFDPAH",
+  "afd_time": "2026-08-03T11:11:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-03T07:48:27.270574+00:00",
-  "query_preview": "..\nIssued at 147 AM CDT Mon Aug 3 2026\n\nThere is troughing aloft over the east while ridging shift to the \nUpper Midwest. With just a few remaining clouds over the far \nsoutheast portions of the area and light winds, expect the \ndevelopment of some fog this morning across portions of the \narea. Thanks to high pressure we should stay dry through \nWednesday with the main activity to our east and southeast. \nGiven the mainly clear skies for today, expect temperatures to \ncome back up to the mid 80s. Expect this trend to continue \ntomorrow and Wednesday with highs in the mid-upper 80s and even \na few 90s possible on Wednesday (40-60% in southern IL, 50-70% \nin SEMO). \n\nOn Wednesday general troughiness sets up over the Northern Plains \nand Upper Midwest while sfc winds turn back to the south. A few \nripples through the trof bring back mainly afternoon precip \nchances Thursday through the weekend. Temperatures stabilize \naround normal through the weekend as well. However, with the \nreturn of mid 70s dew points, the heat indices will climb back \ninto the 100-105 degree range on Sunday and kick off our next \nheat wave into next week. In the NBM the chances of hitting 90 \non Sunday are 40-60% and 50-70% on Monday. In the LREF chances \nof heat indices greater than or equal to 100 are 40-50% on \nMonday. &&",
+  "updated": "2026-08-03T11:46:01.908318+00:00",
+  "query_preview": "..\nIssued at 147 AM CDT Mon Aug 3 2026\n\nThere is troughing aloft over the east while ridging shift to the \nUpper Midwest. With just a few remaining clouds over the far \nsoutheast portions of the area and light winds, expect the \ndevelopment of some fog this morning across portions of the \narea. Thanks to high pressure we should stay dry through \nWednesday with the main activity to our east and southeast. \nGiven the mainly clear skies for today, expect temperatures to \ncome back up to the mid 80s. Expect this trend to continue \ntomorrow and Wednesday with highs in the mid-upper 80s and even \na few 90s possible on Wednesday (40-60% in southern IL, 50-70% \nin SEMO). \n\nOn Wednesday general troughiness sets up over the Northern Plains \nand Upper Midwest while sfc winds turn back to the south. A few \nripples through the trof bring back mainly afternoon precip \nchances Thursday through the weekend. Temperatures stabilize \naround normal through the weekend as well. However, with the \nreturn of mid 70s dew points, the heat indices will climb back \ninto the 100-105 degree range on Sunday and kick off our next \nheat wave into next week. In the NBM the chances of hitting 90 \non Sunday are 40-60% and 50-70% on Monday. In the LREF chances \nof heat indices greater than or equal to 100 are 40-50% on \nMonday.",
   "analogs": [
     {
       "datetime_utc": "2011-07-14T04:29Z",
       "source_file": "PAH_2011_14_0429.txt",
-      "similarity": 0.988486647605896,
+      "similarity": 0.9884077310562134,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -51,7 +51,7 @@
     {
       "datetime_utc": "2011-07-13T20:06Z",
       "source_file": "PAH_2011_13_2006.txt",
-      "similarity": 0.988486647605896,
+      "similarity": 0.9884077310562134,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -88,21 +88,23 @@
       }
     },
     {
-      "datetime_utc": "2021-07-17T04:52Z",
-      "source_file": "PAH_2021_17_0452.txt",
-      "similarity": 0.9844532012939453,
-      "label": "flood",
-      "is_severe": false,
+      "datetime_utc": "2017-06-23T20:03Z",
+      "source_file": "PAH_2017_23_2003.txt",
+      "similarity": 0.9858020544052124,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 16,
+            "flood": 14,
+            "tornado": 1
+          }
         },
         "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 6
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -127,9 +129,53 @@
       }
     },
     {
+      "datetime_utc": "2022-07-18T07:53Z",
+      "source_file": "PAH_2022_18_0753.txt",
+      "similarity": 0.9849117398262024,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 7,
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 10,
+            "flood": 9
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2021-07-16T23:19Z",
       "source_file": "PAH_2021_16_2319.txt",
-      "similarity": 0.9844532012939453,
+      "similarity": 0.9848818778991699,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -169,23 +215,21 @@
       }
     },
     {
-      "datetime_utc": "2017-06-23T23:28Z",
-      "source_file": "PAH_2017_23_2328.txt",
-      "similarity": 0.9841969013214111,
-      "label": "tornado",
-      "is_severe": true,
+      "datetime_utc": "2021-07-17T04:52Z",
+      "source_file": "PAH_2021_17_0452.txt",
+      "similarity": 0.9848818778991699,
+      "label": "flood",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 16,
-            "flood": 14,
-            "tornado": 1
-          }
-        },
-        "1": {
           "label": "quiet",
           "counts": {}
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 6
+          }
         },
         "2": {
           "label": "quiet",
@@ -210,9 +254,157 @@
       }
     },
     {
+      "datetime_utc": "2010-07-28T17:42Z",
+      "source_file": "PAH_2010_28_1742.txt",
+      "similarity": 0.9842991828918457,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 3
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-06-25T11:28Z",
+      "source_file": "PAH_2024_25_1128.txt",
+      "similarity": 0.984110951423645,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 35,
+            "severe_hail": 5,
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 21,
+            "flood": 2
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "flood": 8
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2016-08-13T20:03Z",
+      "source_file": "PAH_2016_13_2003.txt",
+      "similarity": 0.9839315414428711,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 16
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 23,
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "flood",
+          "counts": {
+            "flood": 24
+          }
+        },
+        "3": {
+          "label": "flood",
+          "counts": {
+            "flood": 6,
+            "winter": 1
+          }
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 10
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
+        "6": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2016-08-14T08:51Z",
       "source_file": "PAH_2016_14_0851.txt",
-      "similarity": 0.9835816621780396,
+      "similarity": 0.9839315414428711,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -262,207 +454,12 @@
           }
         }
       }
-    },
-    {
-      "datetime_utc": "2016-08-13T20:03Z",
-      "source_file": "PAH_2016_13_2003.txt",
-      "similarity": 0.9835816621780396,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 16
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 23,
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 24
-          }
-        },
-        "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 6,
-            "winter": 1
-          }
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 10
-          }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-06-21T17:38Z",
-      "source_file": "PAH_2023_21_1738.txt",
-      "similarity": 0.9834052920341492,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 72,
-            "severe_hail": 79,
-            "tornado": 8,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-02-12T11:15Z",
-      "source_file": "PAH_2025_12_1115.txt",
-      "similarity": 0.9833572506904602,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 3
-          }
-        },
-        "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 4
-          }
-        },
-        "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "flood": 173,
-            "winter": 4,
-            "severe_wind": 11,
-            "severe_hail": 16,
-            "tornado": 2
-          }
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "winter": 52,
-            "flood": 16
-          }
-        },
-        "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 189
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-07-18T17:37Z",
-      "source_file": "PAH_2022_18_1737.txt",
-      "similarity": 0.9825094938278198,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 7,
-            "flood": 1
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 10,
-            "flood": 9
-          }
-        }
-      }
     }
   ],
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9791017007827759,
+    "mean_similarity": 0.9811335754394531,
     "base_rate": 0.6371019688016355,
     "signal_value": 0.32289803119836447,
     "percentile": 83,
@@ -471,8 +468,8 @@
     "n_total": 10,
     "n_severe_signal": 96,
     "n_total_signal": 100,
-    "product_id": "202608030649-KPAH-FXUS63-AFDPAH",
-    "afd_time": "2026-08-03T06:49:00Z",
-    "updated": "2026-08-03T07:48:27.270574+00:00"
+    "product_id": "202608031111-KPAH-FXUS63-AFDPAH",
+    "afd_time": "2026-08-03T11:11:00Z",
+    "updated": "2026-08-03T11:46:01.908318+00:00"
   }
 }
