@@ -1,15 +1,15 @@
 {
   "office": "MPX",
-  "product_id": "202608032346-KMPX-FXUS63-AFDMPX",
-  "afd_time": "2026-08-03T23:46:00Z",
+  "product_id": "202608040553-KMPX-FXUS63-AFDMPX",
+  "afd_time": "2026-08-04T05:53:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-04T03:40:18.299831+00:00",
+  "updated": "2026-08-04T06:43:13.434591+00:00",
   "query_preview": "..\nIssued at 203 PM CDT Mon Aug 3 2026\n\nCurrent satellite showing mid to high-level clouds across much of \nthe northern half of Minnesota. This being out ahead of a surface \ncold front that is expected to move SE across MN/WI later today \nthrough tonight. For the rest of this afternoon, folks can expect \ntemperatures to be a bit warmer than they were this past weekend. \nMost sites will warm in to the mid-80s this afternoon. It will feel \na bit sticky though as dew points creep near 70 degrees, especially \nacross western MN. Wind speeds will be elevated with gusts reaching \n25-35mph. Clouds will gradually increase from north to south for \nthe remainder of the day as the aforementioned cold front \napproaches. Given the warmer and stickier air to our west, the \nbetter chance for the strongest precip looks to be focused across \nNW'rn Minnesota late this evening. The Storm Prediction Center has \na slight risk (level 2 of 5) for severe thunderstorms that mainly \nwill be capable of producing large hail and damaging wind gusts. \nHowever, given better shear profiles across NW'rn MN into the \nDakotas, a tornado cannot be ruled out for areas NW of Little Falls \ndown to Morris. Through time, forcing and instability wanes and \nstorms that congeal into broken segments across central MN are \nexpected to scatter out into eastern MN/western WI by early tomorrow \nmorning. Heavy rain, especially in the early onset of this system \nwill be likely as PWAT values are elevated near 1.8 to 2.0\". As for \nrainfall accumulation, The bullseye will remain well of to our north \nnear Grand Forks and the Int'l border. Most of us across central and \nsouthern MN could see perhaps a few hundredths of an inch whereas \nareas west could squeeze out a closer to a quarter inch. As always, \nlocally higher amounts could occur with any thunderstorms. \n\nBy mid-Tuesday morning, most precip should have diminished as the \nboundary stalls over eastern MN and western WI. Troughing aloft \ngradually guides this boundary further eastward Tuesday \nafternoon but this in turn will create another opportunity for \nCI to occur across southern MN down to the MN/IA border. Nothing\nwidespread is expected but do have 20-30 PoP mentions for the \npotential for scattered pulse-like summertime convection. At \nthis time, no severe weather is expected. Temperatures post- \nfropa will be noticeably cooler with highs ranging in the 70s \nboth days with dew points mainly in the 50s. \n\nTemperatures do make a comeback later in the week, upper-level flow \nbecomes more zonal with warmer h85 temps being trapped just south of \nthe Canadian Border. Highs will reach the lower 80s by Thursday and \nthen reaching the upper 80s by this weekend. The next fair shot at \nprecip wouldn't arrive until Saturday night into Sunday.",
   "analogs": [
     {
       "datetime_utc": "2019-09-06T17:04Z",
       "source_file": "MPX_2019_06_1704.txt",
-      "similarity": 0.9614921808242798,
+      "similarity": 0.9614923596382141,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -59,9 +59,55 @@
       }
     },
     {
+      "datetime_utc": "2023-08-09T23:31Z",
+      "source_file": "MPX_2023_09_2331.txt",
+      "similarity": 0.9608282446861267,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 24,
+            "severe_hail": 8,
+            "tornado": 5
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 133,
+            "severe_wind": 65
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2023-08-10T05:17Z",
       "source_file": "MPX_2023_10_0517.txt",
-      "similarity": 0.9608285427093506,
+      "similarity": 0.9608282446861267,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -108,9 +154,9 @@
       }
     },
     {
-      "datetime_utc": "2023-08-09T23:31Z",
-      "source_file": "MPX_2023_09_2331.txt",
-      "similarity": 0.9608285427093506,
+      "datetime_utc": "2019-07-07T23:45Z",
+      "source_file": "MPX_2019_07_2345.txt",
+      "similarity": 0.960811972618103,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -119,18 +165,16 @@
           "counts": {}
         },
         "1": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "severe_wind": 24,
-            "severe_hail": 8,
-            "tornado": 5
+            "severe_wind": 9
           }
         },
         "2": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_hail": 133,
-            "severe_wind": 65
+            "severe_wind": 4,
+            "tornado": 9
           }
         },
         "3": {
@@ -138,25 +182,28 @@
           "counts": {}
         },
         "4": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 19,
+            "severe_hail": 1
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
         }
       }
     },
     {
       "datetime_utc": "2019-07-08T04:38Z",
       "source_file": "MPX_2019_08_0438.txt",
-      "similarity": 0.9608120918273926,
+      "similarity": 0.960811972618103,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -205,56 +252,9 @@
       }
     },
     {
-      "datetime_utc": "2019-07-07T23:45Z",
-      "source_file": "MPX_2019_07_2345.txt",
-      "similarity": 0.9608120918273926,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 9
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 4,
-            "tornado": 9
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 19,
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2007-07-16T06:11Z",
       "source_file": "MPX_2007_16_0611.txt",
-      "similarity": 0.9596512317657471,
+      "similarity": 0.9596511125564575,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -298,7 +298,7 @@
     {
       "datetime_utc": "2006-05-18T08:06Z",
       "source_file": "MPX_2006_18_0806.txt",
-      "similarity": 0.9595968127250671,
+      "similarity": 0.9595963954925537,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -339,9 +339,9 @@
       }
     },
     {
-      "datetime_utc": "2008-06-12T23:03Z",
-      "source_file": "MPX_2008_12_2303.txt",
-      "similarity": 0.9595863819122314,
+      "datetime_utc": "2008-06-12T20:42Z",
+      "source_file": "MPX_2008_12_2042.txt",
+      "similarity": 0.959586501121521,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -389,7 +389,7 @@
     {
       "datetime_utc": "2020-05-20T18:06Z",
       "source_file": "MPX_2020_20_1806.txt",
-      "similarity": 0.9588626027107239,
+      "similarity": 0.9588623642921448,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -431,9 +431,9 @@
       }
     },
     {
-      "datetime_utc": "2016-07-29T10:08Z",
-      "source_file": "MPX_2016_29_1008.txt",
-      "similarity": 0.9587794542312622,
+      "datetime_utc": "2016-07-29T17:15Z",
+      "source_file": "MPX_2016_29_1715.txt",
+      "similarity": 0.9587793350219727,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -481,7 +481,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.96,
-    "mean_similarity": 0.9537685829401016,
+    "mean_similarity": 0.9537685459852219,
     "base_rate": 0.5022588428564094,
     "signal_value": 0.45774115714359054,
     "percentile": 75,
@@ -490,8 +490,8 @@
     "n_total": 10,
     "n_severe_signal": 96,
     "n_total_signal": 100,
-    "product_id": "202608032346-KMPX-FXUS63-AFDMPX",
-    "afd_time": "2026-08-03T23:46:00Z",
-    "updated": "2026-08-04T03:40:18.299831+00:00"
+    "product_id": "202608040553-KMPX-FXUS63-AFDMPX",
+    "afd_time": "2026-08-04T05:53:00Z",
+    "updated": "2026-08-04T06:43:13.434591+00:00"
   }
 }
