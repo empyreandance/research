@@ -1,15 +1,15 @@
 {
   "office": "GRB",
-  "product_id": "202608071130-KGRB-FXUS63-AFDGRB",
-  "afd_time": "2026-08-07T11:30:00Z",
+  "product_id": "202608071729-KGRB-FXUS63-AFDGRB",
+  "afd_time": "2026-08-07T17:29:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-07T11:59:54.833397+00:00",
+  "updated": "2026-08-07T18:04:21.747688+00:00",
   "query_preview": "..\nIssued at 1224 AM CDT Fri Aug 7 2026\n\nFog... Dewpoint depressions continue to drop to near or at zero\nalong the lakeshore overnight as winds attempt to decouple. As\nsuch, expect patchy fog to develop over the next couple of hours.\nConfidence decreases into the Fox Valley where dewpoints remain\nrelatively mixed out. Will continue to monitor for advisory\npotential, though CAMs don't show near as strong of a signal as\nyesterday morning.\n\nRain/storm chances... Marginal risk for severe weather holds \nsteady this afternoon as compact shortwave and weak cold front\ntraverse the upper Mississippi Valley. CAM consensus continues to\nshow a broken line of convection developing over northwest \nWisconsin along the front during peak heating (1,500 to 2,000 J/kg\nMLCAPE), progressing over the Northwoods through the evening.\nHowever, biggest question will be whether or not the brunt of the\nsevere action splits us to the north, where better deep-layer \nshear resides closer to the shortwave, and to the southwest where \nbetter moisture return is. NCAR ML guidance shows higher probs\nover these areas as an artifact of previous CAM runs. Regardless,\ngusty winds would be a threat with any storms that do develop due\nto stout inverted-V profiles tapping into 30+ knot winds at the \ntop of the dry layer. Severe threat diminishes further east.\n\nNot many changes to speak of beyond Friday as several embedded\nshortwaves riding the 500 mb wave train bring multiple rounds of\nshowers and storms Saturday night through early next week. Most \nof the moisture/instability look to remain holed up to our \nsouthwest under western ridge; as such, better chances for more \norganized convection remain where better thermodynamics are. \nHowever, period to keep an eye on will be Sunday into Monday as \nsurface low spins up over the Plains and signal for better \ninstability exists over the western Great Lakes. ML guidance \ncurrently shows 15 to 30% prob severe into portions of central \nWisconsin during this time. Likewise, heavy rain threat remains\nconditional and will likely hinge on training storms where the\nboundary stalls out. As it appears now, axis of heaviest precip\nSunday into Monday looks to target southern Wisconsin, with more\nof a glancing blow to our southern tier of counties. WPC carries\nMarginal ERO on days 4 and 5. \n\nTemperatures/smoke... Temperatures to read near seasonal norms in\nthe low 80s through the better part of next week. Elevated smoke\nplume works into northeast Wisconsin preceding cold FROPA today,\nthough no significant impacts to visibility or air quality are\nexpected. Elevated smoke to return late Saturday into Sunday.",
   "analogs": [
     {
       "datetime_utc": "2025-07-28T09:08Z",
       "source_file": "GRB_2025_28_0908.txt",
-      "similarity": 0.9854414463043213,
+      "similarity": 0.9854413270950317,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -46,9 +46,51 @@
       }
     },
     {
+      "datetime_utc": "2019-08-06T22:23Z",
+      "source_file": "GRB_2019_06_2223.txt",
+      "similarity": 0.9845024943351746,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 30,
+            "severe_wind": 42,
+            "tornado": 1,
+            "flood": 4
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2019-08-07T03:38Z",
       "source_file": "GRB_2019_07_0338.txt",
-      "similarity": 0.9845024347305298,
+      "similarity": 0.9845024943351746,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -88,50 +130,8 @@
       }
     },
     {
-      "datetime_utc": "2019-08-06T20:17Z",
-      "source_file": "GRB_2019_06_2017.txt",
-      "similarity": 0.9845024347305298,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 30,
-            "severe_wind": 42,
-            "tornado": 1,
-            "flood": 4
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-07-06T17:47Z",
-      "source_file": "GRB_2022_06_1747.txt",
+      "datetime_utc": "2022-07-06T11:42Z",
+      "source_file": "GRB_2022_06_1142.txt",
       "similarity": 0.9840707182884216,
       "label": "severe_wind",
       "is_severe": true,
@@ -173,9 +173,9 @@
       }
     },
     {
-      "datetime_utc": "2014-07-15T09:02Z",
-      "source_file": "GRB_2014_15_0902.txt",
-      "similarity": 0.9833561778068542,
+      "datetime_utc": "2014-07-15T17:35Z",
+      "source_file": "GRB_2014_15_1735.txt",
+      "similarity": 0.9833561182022095,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -259,9 +259,9 @@
       }
     },
     {
-      "datetime_utc": "2020-07-02T11:05Z",
-      "source_file": "GRB_2020_02_1105.txt",
-      "similarity": 0.9822174906730652,
+      "datetime_utc": "2020-07-02T08:37Z",
+      "source_file": "GRB_2020_02_0837.txt",
+      "similarity": 0.98221755027771,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -351,7 +351,7 @@
     {
       "datetime_utc": "2007-07-08T09:53Z",
       "source_file": "GRB_2007_08_0953.txt",
-      "similarity": 0.9817712903022766,
+      "similarity": 0.9817713499069214,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -445,7 +445,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9790824240446091,
+    "mean_similarity": 0.9790824282169343,
     "base_rate": 0.46778572547381614,
     "signal_value": 0.4622142745261839,
     "percentile": 77,
@@ -454,8 +454,8 @@
     "n_total": 10,
     "n_severe_signal": 93,
     "n_total_signal": 100,
-    "product_id": "202608071130-KGRB-FXUS63-AFDGRB",
-    "afd_time": "2026-08-07T11:30:00Z",
-    "updated": "2026-08-07T11:59:54.833397+00:00"
+    "product_id": "202608071729-KGRB-FXUS63-AFDGRB",
+    "afd_time": "2026-08-07T17:29:00Z",
+    "updated": "2026-08-07T18:04:21.747688+00:00"
   }
 }
