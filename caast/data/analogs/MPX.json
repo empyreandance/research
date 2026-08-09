@@ -1,9 +1,9 @@
 {
   "office": "MPX",
-  "product_id": "202608081921-KMPX-FXUS63-AFDMPX",
-  "afd_time": "2026-08-08T19:21:00Z",
+  "product_id": "202608090148-KMPX-FXUS63-AFDMPX",
+  "afd_time": "2026-08-09T01:48:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-08T19:46:52.201469+00:00",
+  "updated": "2026-08-09T02:31:06.581191+00:00",
   "query_preview": "..\nIssued at 217 PM CDT Sat Aug 8 2026\n\nOverall, not a lot of changes in the forecast from previous forecast \npackages. A somewhat active weather pattern with daily chances of \nshowers and storms across the region through the period. \nTemperatures through the weekend and into next week will hover right \naround the seasonal average, becoming slightly below average by the \nend of next work week and weekend.",
   "analogs": [
     {
@@ -56,9 +56,9 @@
       }
     },
     {
-      "datetime_utc": "2020-08-01T18:00Z",
-      "source_file": "MPX_2020_01_1800.txt",
-      "similarity": 0.9466487765312195,
+      "datetime_utc": "2020-08-01T11:43Z",
+      "source_file": "MPX_2020_01_1143.txt",
+      "similarity": 0.9466488361358643,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -100,7 +100,7 @@
     {
       "datetime_utc": "2011-07-26T19:00Z",
       "source_file": "MPX_2011_26_1900.txt",
-      "similarity": 0.9459455013275146,
+      "similarity": 0.9459453821182251,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -157,7 +157,7 @@
     {
       "datetime_utc": "2012-09-05T08:30Z",
       "source_file": "MPX_2012_05_0830.txt",
-      "similarity": 0.9430602788925171,
+      "similarity": 0.9430603384971619,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -194,21 +194,25 @@
       }
     },
     {
-      "datetime_utc": "2021-08-29T05:43Z",
-      "source_file": "MPX_2021_29_0543.txt",
-      "similarity": 0.9299820065498352,
-      "label": "flood",
-      "is_severe": false,
+      "datetime_utc": "2021-08-28T21:17Z",
+      "source_file": "MPX_2021_28_2117.txt",
+      "similarity": 0.9299821257591248,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 10,
+            "severe_wind": 52,
+            "severe_hail": 28
+          }
+        },
+        "1": {
           "label": "flood",
           "counts": {
             "flood": 1
           }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -233,25 +237,21 @@
       }
     },
     {
-      "datetime_utc": "2021-08-28T21:17Z",
-      "source_file": "MPX_2021_28_2117.txt",
-      "similarity": 0.9299820065498352,
-      "label": "severe_wind",
-      "is_severe": true,
+      "datetime_utc": "2021-08-29T05:43Z",
+      "source_file": "MPX_2021_29_0543.txt",
+      "similarity": 0.9299821257591248,
+      "label": "flood",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 10,
-            "severe_wind": 52,
-            "severe_hail": 28
-          }
-        },
-        "1": {
           "label": "flood",
           "counts": {
             "flood": 1
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -336,7 +336,7 @@
     {
       "datetime_utc": "2017-07-26T18:13Z",
       "source_file": "MPX_2017_26_1813.txt",
-      "similarity": 0.929455578327179,
+      "similarity": 0.9294555187225342,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -376,7 +376,7 @@
     {
       "datetime_utc": "2015-06-15T04:54Z",
       "source_file": "MPX_2015_15_0454.txt",
-      "similarity": 0.9261952042579651,
+      "similarity": 0.9261953830718994,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -428,7 +428,7 @@
     {
       "datetime_utc": "2015-06-14T21:04Z",
       "source_file": "MPX_2015_14_2104.txt",
-      "similarity": 0.9261952042579651,
+      "similarity": 0.9261953830718994,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -480,7 +480,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.78,
-    "mean_similarity": 0.881894303560257,
+    "mean_similarity": 0.8818943411111831,
     "base_rate": 0.5022588428564094,
     "signal_value": 0.2777411571435906,
     "percentile": 49,
@@ -489,8 +489,8 @@
     "n_total": 10,
     "n_severe_signal": 78,
     "n_total_signal": 100,
-    "product_id": "202608081921-KMPX-FXUS63-AFDMPX",
-    "afd_time": "2026-08-08T19:21:00Z",
-    "updated": "2026-08-08T19:46:52.201469+00:00"
+    "product_id": "202608090148-KMPX-FXUS63-AFDMPX",
+    "afd_time": "2026-08-09T01:48:00Z",
+    "updated": "2026-08-09T02:31:06.581191+00:00"
   }
 }
