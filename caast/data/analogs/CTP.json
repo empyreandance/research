@@ -1,15 +1,15 @@
 {
   "office": "CTP",
-  "product_id": "202608100818-KCTP-FXUS61-AFDCTP",
-  "afd_time": "2026-08-10T08:18:00Z",
+  "product_id": "202608101035-KCTP-FXUS61-AFDCTP",
+  "afd_time": "2026-08-10T10:35:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-10T08:53:25.343073+00:00",
+  "updated": "2026-08-10T10:38:27.360804+00:00",
   "query_preview": "..\nKEY MESSAGE 1: Thunderstorms with severe wind gusts and locally\nheavy rain will be possible this afternoon and evening\n\nSmall clusters of sub-severe storms over the NW quad of PA at \n0730Z have been weakening as they track to the east per radar \nand IR satellite trends. This activity appears to be associated \nwith subtle vortmax feature near the OH/PA line. We adjusted \nPOPs higher near/north of I80 to account for this as the storms\ncontinue to track eastward through daybreak. \n\nThe question remains what the convective evolution will be from\naround midday through the afternoon and evening. HREF/REFS \nmodel data favors intensification of t-storm clusters reaching \nthe northwest PA vicinity by midday and tracking east-southeast \nthrough the afternoon. If this scenario plays out, storms will \nlikely pose a risk for damaging wind gusts within a humid and \nmoderately unstable airmass. SPC expanded the level 2/5 SLGT \nrisk eastward and now includes all of the Lower Susquehanna \nValley. \n\n-----------------------------------------------------------\n\nKEY MESSAGE 2: Humid with rounds of heavy showers and strong \nthunderstorms focused over southwest Pennsylvania through \nmidweek\n\nModel trends are focusing primary risk for severe storms and\nheavy rain across southwest PA on Tuesday. This area lies\nclosest to the equatorward edge of the westerlies within very\nmoist instability gradient. SPC and WPC have outlooked this \narea (sw PA) with a a level 2/5 severe storm risk and 2/4 \nexcessive rain risk. \n\nRounds of showers and storms remain possible through midweek. \nMultiple shortwave disturbances will traverse the northern tier\nand interact with a slow moving frontal zone. The combination \nof rich low level moisture, instability and repeated forcing \nalong the boundary will support some potential for periodic \nclusters of storms with locally heavy rainfall. WPC excessive \nrain outlooks (EROs) have shifted farther to the south/west and \nonly clip the far southwest portion of the CWA on days 3-5 or \nWed-Fri. \n\nThe end of the week into the start of the weekend looks less\nhumid (more refreshing) as push of relatively cooler and drier\nair accompanies seasonably strong/Canadian high pressure \nbuilding southeast from the Upper Midwest.",
   "analogs": [
     {
       "datetime_utc": "2024-07-17T00:26Z",
       "source_file": "CTP_2024_17_0026.txt",
-      "similarity": 0.9621514678001404,
+      "similarity": 0.9621516466140747,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -56,9 +56,9 @@
       }
     },
     {
-      "datetime_utc": "2024-06-23T10:57Z",
-      "source_file": "CTP_2024_23_1057.txt",
-      "similarity": 0.9570885896682739,
+      "datetime_utc": "2024-06-23T09:07Z",
+      "source_file": "CTP_2024_23_0907.txt",
+      "similarity": 0.957088828086853,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -106,9 +106,46 @@
       }
     },
     {
+      "datetime_utc": "2025-08-26T07:54Z",
+      "source_file": "CTP_2025_26_0754.txt",
+      "similarity": 0.9554357528686523,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-08-27T05:37Z",
       "source_file": "CTP_2025_27_0537.txt",
-      "similarity": 0.9554352760314941,
+      "similarity": 0.9554357528686523,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -143,31 +180,48 @@
       }
     },
     {
-      "datetime_utc": "2025-08-26T19:35Z",
-      "source_file": "CTP_2025_26_1935_1.txt",
-      "similarity": 0.9554352760314941,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2013-07-19T01:31Z",
+      "source_file": "CTP_2013_19_0131.txt",
+      "similarity": 0.9552316069602966,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 27
+          }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 13,
+            "severe_hail": 1
+          }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "flood": 8,
+            "severe_wind": 1
+          }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "flood": 21,
+            "severe_hail": 1,
+            "severe_wind": 6,
+            "tornado": 1
+          }
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "flood": 1,
+            "severe_wind": 12
+          }
         },
         "5": {
           "label": "quiet",
@@ -180,9 +234,9 @@
       }
     },
     {
-      "datetime_utc": "2013-07-18T21:57Z",
-      "source_file": "CTP_2013_18_2157.txt",
-      "similarity": 0.9552310705184937,
+      "datetime_utc": "2013-07-18T19:10Z",
+      "source_file": "CTP_2013_18_1910.txt",
+      "similarity": 0.9552316069602966,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -238,63 +292,9 @@
       }
     },
     {
-      "datetime_utc": "2013-07-19T06:29Z",
-      "source_file": "CTP_2013_19_0629.txt",
-      "similarity": 0.9552310705184937,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 27
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 13,
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 8,
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "flood": 21,
-            "severe_hail": 1,
-            "severe_wind": 6,
-            "tornado": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 1,
-            "severe_wind": 12
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-06-29T10:31Z",
-      "source_file": "CTP_2023_29_1031.txt",
-      "similarity": 0.9551019072532654,
+      "datetime_utc": "2023-06-29T18:59Z",
+      "source_file": "CTP_2023_29_1859.txt",
+      "similarity": 0.9551019668579102,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -348,9 +348,9 @@
       }
     },
     {
-      "datetime_utc": "2017-07-02T18:58Z",
-      "source_file": "CTP_2017_02_1858_1.txt",
-      "similarity": 0.9538201093673706,
+      "datetime_utc": "2017-07-02T14:30Z",
+      "source_file": "CTP_2017_02_1430.txt",
+      "similarity": 0.9538204669952393,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -400,7 +400,7 @@
     {
       "datetime_utc": "2024-07-16T03:19Z",
       "source_file": "CTP_2024_16_0319_1.txt",
-      "similarity": 0.9534928798675537,
+      "similarity": 0.9534929990768433,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -450,9 +450,9 @@
       }
     },
     {
-      "datetime_utc": "2006-07-13T15:10Z",
-      "source_file": "CTP_2006_13_1510.txt",
-      "similarity": 0.9522804021835327,
+      "datetime_utc": "2006-07-13T07:39Z",
+      "source_file": "CTP_2006_13_0739.txt",
+      "similarity": 0.9522808194160461,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -498,7 +498,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.83,
-    "mean_similarity": 0.9453409290313721,
+    "mean_similarity": 0.9453412055969238,
     "base_rate": 0.5775495304987035,
     "signal_value": 0.25245046950129646,
     "percentile": 63,
@@ -507,8 +507,8 @@
     "n_total": 10,
     "n_severe_signal": 83,
     "n_total_signal": 100,
-    "product_id": "202608100818-KCTP-FXUS61-AFDCTP",
-    "afd_time": "2026-08-10T08:18:00Z",
-    "updated": "2026-08-10T08:53:25.343073+00:00"
+    "product_id": "202608101035-KCTP-FXUS61-AFDCTP",
+    "afd_time": "2026-08-10T10:35:00Z",
+    "updated": "2026-08-10T10:38:27.360804+00:00"
   }
 }
