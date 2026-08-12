@@ -1,15 +1,62 @@
 {
   "office": "BGM",
-  "product_id": "202608121616-KBGM-FXUS61-AFDBGM",
-  "afd_time": "2026-08-12T16:16:00Z",
+  "product_id": "202608121803-KBGM-FXUS61-AFDBGM",
+  "afd_time": "2026-08-12T18:03:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-12T17:17:39.334919+00:00",
+  "updated": "2026-08-12T18:11:44.654332+00:00",
   "query_preview": "..\nKEY MESSAGE 1...\n\nWe're beginning to see some convective initiation in western NY,\nwhich will be the set-up for storms moving into Central NY in\nthe next few hours. MLCAPE values over 1000 J/kg and mid-level\nlapse rates of 6-6.5 C/km could allow for storms to grow severe,\nwith the main threats being strong to damaging winds, as well as\npotential for hail above 1 inch in diameter. With any storm,\nthey could produce heavy downpours that may result in localized\nflash flooding from excessive rainfall. There appears to be two\ndifferent waves of storms, with the first developing this\nafternoon and sweeping mainly NW to SE across Central NY and NE\nPA. Later this evening, around sunset and going into the\novernight hours, CAMs show a secondary wave of storms, however\nare likely to be non-severe as ingredients needed would likely\nbe hindered after the sun sets. \n\n\n\nKEY MESSAGE 2...\n\nHigh pressure from Canada starts to build in tomorrow, and \nmainly precipitation-free conditions, and drier and cooler air.\nTemperatures are expected to be in the upper 70s to low 80s \nwith dewpoints in the upper 50s to mid 60s, making it a\nbeautiful end to the overall week. The one exception would be\nFriday night into early Saturday, as a small shortwave will \npass to the north, and may bring small chances for precipitation\nto northern Central NY, but confidence is low and guidance has \nbeen trending more north. The high will propagate eastward \nSaturday night into Sunday as a low pressures system approaches\nthe Great Lakes from the north central US. Scattered rain \nshowers and storms are expected Sunday. If the track of the low \nis to our north, we will be in the warm sector and could see a \nribbon of high instability build into the area from the SW \nbefore the low drags a cold front through the area. 0-6km bulk \nshear from the low and stronger mid to upper level winds from \nthe jet overhead could provide storm organization and, combined \nwith the instability, produce severe storms. Confidence in this \nis low at the moment given the track of the low is still \nuncertain and severe weather will be dependent on the low taking\na particular track. Either way, we will be monitoring how this \nsystem develops.\n\nBehind the low, a strong high pressure system will build in from the \nwest. This will bring NNW flow that will push Canadian air into the \nregion and keep temperatures slightly below normal and keep us dry \ninto mid-week.",
   "analogs": [
     {
-      "datetime_utc": "2022-05-27T22:31Z",
-      "source_file": "BGM_2022_27_2231.txt",
-      "similarity": 0.9598265290260315,
+      "datetime_utc": "2022-05-28T04:39Z",
+      "source_file": "BGM_2022_28_0439.txt",
+      "similarity": 0.9598264694213867,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 4,
+            "severe_hail": 1,
+            "flood": 4
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 5,
+            "severe_wind": 24,
+            "severe_hail": 16
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 6
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-05-27T18:50Z",
+      "source_file": "BGM_2022_27_1850.txt",
+      "similarity": 0.9598264694213867,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -57,56 +104,9 @@
       }
     },
     {
-      "datetime_utc": "2022-05-28T01:21Z",
-      "source_file": "BGM_2022_28_0121.txt",
-      "similarity": 0.9598265290260315,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "severe_hail": 1,
-            "flood": 4
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 5,
-            "severe_wind": 24,
-            "severe_hail": 16
-          }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 6
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2016-08-02T14:26Z",
       "source_file": "BGM_2016_02_1426.txt",
-      "similarity": 0.9552299380302429,
+      "similarity": 0.9552299976348877,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -131,45 +131,6 @@
           "counts": {
             "severe_hail": 1
           }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2015-06-01T23:43Z",
-      "source_file": "BGM_2015_01_2343.txt",
-      "similarity": 0.9551024436950684,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -224,9 +185,48 @@
       }
     },
     {
-      "datetime_utc": "2021-08-19T08:38Z",
-      "source_file": "BGM_2021_19_0838.txt",
-      "similarity": 0.9546429514884949,
+      "datetime_utc": "2015-06-01T23:43Z",
+      "source_file": "BGM_2015_01_2343.txt",
+      "similarity": 0.9551024436950684,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2021-08-19T06:21Z",
+      "source_file": "BGM_2021_19_0621.txt",
+      "similarity": 0.9546430110931396,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -271,9 +271,9 @@
       }
     },
     {
-      "datetime_utc": "2015-07-12T23:37Z",
-      "source_file": "BGM_2015_12_2337.txt",
-      "similarity": 0.9543370008468628,
+      "datetime_utc": "2015-07-12T18:12Z",
+      "source_file": "BGM_2015_12_1812.txt",
+      "similarity": 0.9543371200561523,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -317,9 +317,9 @@
       }
     },
     {
-      "datetime_utc": "2015-07-13T05:38Z",
-      "source_file": "BGM_2015_13_0538.txt",
-      "similarity": 0.9543370008468628,
+      "datetime_utc": "2015-07-13T02:33Z",
+      "source_file": "BGM_2015_13_0233.txt",
+      "similarity": 0.9543371200561523,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -367,8 +367,8 @@
       }
     },
     {
-      "datetime_utc": "2016-07-02T14:25Z",
-      "source_file": "BGM_2016_02_1425.txt",
+      "datetime_utc": "2016-07-02T08:22Z",
+      "source_file": "BGM_2016_02_0822.txt",
       "similarity": 0.9535427093505859,
       "label": "severe_wind",
       "is_severe": true,
@@ -452,7 +452,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.95,
-    "mean_similarity": 0.9498106271028519,
+    "mean_similarity": 0.9498106771707535,
     "base_rate": 0.5056064682664336,
     "signal_value": 0.4443935317335663,
     "percentile": 88,
@@ -461,8 +461,8 @@
     "n_total": 10,
     "n_severe_signal": 95,
     "n_total_signal": 100,
-    "product_id": "202608121616-KBGM-FXUS61-AFDBGM",
-    "afd_time": "2026-08-12T16:16:00Z",
-    "updated": "2026-08-12T17:17:39.334919+00:00"
+    "product_id": "202608121803-KBGM-FXUS61-AFDBGM",
+    "afd_time": "2026-08-12T18:03:00Z",
+    "updated": "2026-08-12T18:11:44.654332+00:00"
   }
 }
