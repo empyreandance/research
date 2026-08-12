@@ -1,15 +1,15 @@
 {
   "office": "MAF",
-  "product_id": "202608121004-KMAF-FXUS64-AFDMAF",
-  "afd_time": "2026-08-12T10:04:00Z",
+  "product_id": "202608121724-KMAF-FXUS64-AFDMAF",
+  "afd_time": "2026-08-12T17:24:00Z",
   "section_type": "long_term",
-  "updated": "2026-08-12T10:28:29.819926+00:00",
+  "updated": "2026-08-12T17:17:39.334919+00:00",
   "query_preview": "..\n(Thursday night through Tuesday)\nIssued at 206 AM CDT Wed Aug 12 2026\n\nThe upper-level ridge will slowly build/retrograde westward over the \nsouthern CONUS late this week through early next week. Deep layer \nmoisture over western portions of our forecast area will support at \nleast scattered afternoon and evening showers and thunderstorms, \nespecially over the Guadalupe/Davis Mountains, Van Horn Corridor, \nand Marfa Plateau on Friday. Daily isolated to scattered storms will \ncontinue over these western zones through the weekend before \nmoisture gradually shifts more to our west by early next week as the \nridge strengthens over our region. Hot temperatures otherwise \npersist through the extended forecast period.",
   "analogs": [
     {
       "datetime_utc": "2023-07-08T17:42Z",
       "source_file": "MAF_2023_08_1742.txt",
-      "similarity": 0.9930508732795715,
+      "similarity": 0.9930506944656372,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -53,9 +53,9 @@
       }
     },
     {
-      "datetime_utc": "2008-02-24T11:37Z",
-      "source_file": "MAF_2008_24_1137.txt",
-      "similarity": 0.9905509352684021,
+      "datetime_utc": "2008-02-24T10:52Z",
+      "source_file": "MAF_2008_24_1052.txt",
+      "similarity": 0.9905509948730469,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -92,7 +92,7 @@
     {
       "datetime_utc": "2009-08-09T23:43Z",
       "source_file": "MAF_2009_09_2343.txt",
-      "similarity": 0.9905434846878052,
+      "similarity": 0.9905433654785156,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -183,51 +183,9 @@
       }
     },
     {
-      "datetime_utc": "2022-07-14T23:56Z",
-      "source_file": "MAF_2022_14_2356.txt",
-      "similarity": 0.989947497844696,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 1,
-            "severe_wind": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2022-07-15T05:19Z",
       "source_file": "MAF_2022_15_0519.txt",
-      "similarity": 0.989947497844696,
+      "similarity": 0.9899474382400513,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -268,21 +226,21 @@
       }
     },
     {
-      "datetime_utc": "2022-07-13T01:38Z",
-      "source_file": "MAF_2022_13_0138.txt",
-      "similarity": 0.9894962310791016,
+      "datetime_utc": "2022-07-14T23:56Z",
+      "source_file": "MAF_2022_14_2356.txt",
+      "similarity": 0.9899474382400513,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 3
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -301,8 +259,11 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "flood": 1,
+            "severe_wind": 1
+          }
         }
       }
     },
@@ -328,6 +289,45 @@
           "counts": {
             "severe_wind": 3
           }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-07-13T01:38Z",
+      "source_file": "MAF_2022_13_0138.txt",
+      "similarity": 0.9894962310791016,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -435,7 +435,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.69,
-    "mean_similarity": 0.98776946246624,
+    "mean_similarity": 0.9877694249153137,
     "base_rate": 0.5431329330394467,
     "signal_value": 0.1468670669605533,
     "percentile": 50,
@@ -444,8 +444,8 @@
     "n_total": 10,
     "n_severe_signal": 69,
     "n_total_signal": 100,
-    "product_id": "202608121004-KMAF-FXUS64-AFDMAF",
-    "afd_time": "2026-08-12T10:04:00Z",
-    "updated": "2026-08-12T10:28:29.819926+00:00"
+    "product_id": "202608121724-KMAF-FXUS64-AFDMAF",
+    "afd_time": "2026-08-12T17:24:00Z",
+    "updated": "2026-08-12T17:17:39.334919+00:00"
   }
 }
