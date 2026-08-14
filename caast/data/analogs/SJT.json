@@ -1,15 +1,15 @@
 {
   "office": "SJT",
-  "product_id": "202608132311-KSJT-FXUS64-AFDSJT",
-  "afd_time": "2026-08-13T23:11:00Z",
+  "product_id": "202608140455-KSJT-FXUS64-AFDSJT",
+  "afd_time": "2026-08-14T04:55:00Z",
   "section_type": "long_term",
-  "updated": "2026-08-14T00:01:19.970703+00:00",
-  "query_preview": "..\n(Friday night through next Thursday)\nIssued at 112 PM CDT Thu Aug 13 2026\n\nOur area will have a continuation of hot and dry conditions with \nmostly clear skies, with the prevailing influence from a large and \nexpansive upper level ridge. This ridge will be centered over the \nlower Mississippi Valley on Saturday, then shift west over North \nTexas Sunday night into Monday, and then over New Mexico Tuesday \nthrough midweek. While little change is expected with daily low \ntemperatures, there are some indications that the 850mb thermal \nridge may strengthen over our area in the early to middle parts of \nnext week. This suggests an uptick in the daily highs, with most of \nour area at or above 100 degrees, and a larger part of the Big \nCountry and some of the Concho Valley pushing Heat Advisory \ncriteria. South winds will continue each day, but wind speeds should \nbe a little lower Sunday through Tuesday as the surface pressure \ngradient weakens to some extent.",
+  "updated": "2026-08-14T05:05:01.529297+00:00",
+  "query_preview": "..\n(Saturday night through next Friday)\nIssued at 1155 PM CDT Thu Aug 13 2026\n\nHot and dry conditions this weekend are expected to persist \nthrough much of next week, as high pressure remains steadfast \nover the region through the long term forecast. There remains\nlittle to no change in the high and low temperatures expected\nthrough much of the long term forecast. Afternoon highs are\nexpected to reach into the mid 90s and up to around 104 degrees, \nand overnight lows in the 70s. The warmest temperatures are \nexpected across the Big Country and northern portions of the \nConcho Valley and Heartland. \n\nSouth winds will continue and remain breezy through Saturday \nevening, then decrease slightly over the remainder of the weekend \nand into mid next week as the surface pressure gradient weakens to\nsome extent. Breezy southerly winds are forecast to pick back up \nfor the second half of next week. Given the hot and drier \nconditions, along with some breezy southerly winds, there remains \nsome fire weather concerns over this weekend.",
   "analogs": [
     {
-      "datetime_utc": "2023-08-04T08:23Z",
-      "source_file": "SJT_2023_04_0823.txt",
-      "similarity": 0.9926115870475769,
+      "datetime_utc": "2025-07-23T05:35Z",
+      "source_file": "SJT_2025_23_0535.txt",
+      "similarity": 0.9951831102371216,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -18,17 +18,19 @@
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
         },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 2
+            "severe_wind": 1
           }
         },
         "4": {
@@ -36,24 +38,62 @@
           "counts": {}
         },
         "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-07-22T23:37Z",
+      "source_file": "SJT_2025_22_2337.txt",
+      "similarity": 0.9951831102371216,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2
           }
         },
-        "6": {
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 29,
-            "severe_hail": 1
+            "severe_wind": 2
           }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2025-07-30T05:08Z",
       "source_file": "SJT_2025_30_0508.txt",
-      "similarity": 0.992285966873169,
+      "similarity": 0.9951354265213013,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -100,9 +140,9 @@
       }
     },
     {
-      "datetime_utc": "2022-06-24T09:59Z",
-      "source_file": "SJT_2022_24_0959.txt",
-      "similarity": 0.9918233156204224,
+      "datetime_utc": "2023-08-06T22:46Z",
+      "source_file": "SJT_2023_06_2246.txt",
+      "similarity": 0.9944255352020264,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -111,116 +151,32 @@
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 3
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-06-23T19:31Z",
-      "source_file": "SJT_2022_23_1931_1.txt",
-      "similarity": 0.9918233156204224,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 3
-          }
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-08-05T11:39Z",
-      "source_file": "SJT_2023_05_1139.txt",
-      "similarity": 0.9917699694633484,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 2
           }
         },
-        "3": {
+        "2": {
           "label": "quiet",
           "counts": {}
         },
-        "4": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2
           }
         },
-        "5": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 29,
             "severe_hail": 1
           }
         },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
         "6": {
           "label": "quiet",
           "counts": {}
@@ -228,22 +184,63 @@
       }
     },
     {
-      "datetime_utc": "2023-09-18T18:58Z",
-      "source_file": "SJT_2023_18_1858.txt",
-      "similarity": 0.9917023181915283,
+      "datetime_utc": "2023-08-07T07:41Z",
+      "source_file": "SJT_2023_07_0741.txt",
+      "similarity": 0.9944255352020264,
       "label": "severe_wind",
       "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 29,
+            "severe_hail": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-06-26T11:16Z",
+      "source_file": "SJT_2024_26_1116.txt",
+      "similarity": 0.9943805932998657,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
         },
         "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "severe_hail": 9
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -262,27 +259,23 @@
           "counts": {}
         },
         "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 129,
-            "severe_wind": 13,
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2023-09-19T09:02Z",
-      "source_file": "SJT_2023_19_0902.txt",
-      "similarity": 0.9917023181915283,
+      "datetime_utc": "2024-08-04T05:26Z",
+      "source_file": "SJT_2024_04_0526.txt",
+      "similarity": 0.9943011999130249,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 4,
-            "severe_hail": 9
+            "severe_wind": 1,
+            "severe_hail": 1
           }
         },
         "1": {
@@ -304,10 +297,50 @@
         "5": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 129,
-            "severe_wind": 13,
-            "flood": 1
+            "severe_wind": 1
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-08-03T18:43Z",
+      "source_file": "SJT_2024_03_1843.txt",
+      "similarity": 0.9943011999130249,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "severe_wind",
@@ -318,96 +351,9 @@
       }
     },
     {
-      "datetime_utc": "2023-08-01T10:54Z",
-      "source_file": "SJT_2023_01_1054.txt",
-      "similarity": 0.991253674030304,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2022-08-29T17:35Z",
-      "source_file": "SJT_2022_29_1735.txt",
-      "similarity": 0.9911561012268066,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 7
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 9
-          }
-        },
-        "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 9
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-08-01T07:41Z",
-      "source_file": "SJT_2024_01_0741.txt",
-      "similarity": 0.9910678267478943,
+      "datetime_utc": "2025-07-17T04:43Z",
+      "source_file": "SJT_2025_17_0443.txt",
+      "similarity": 0.9941561818122864,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -420,47 +366,87 @@
           "counts": {}
         },
         "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1,
-            "severe_hail": 1
+            "severe_wind": 1
           }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-07-16T18:51Z",
+      "source_file": "SJT_2025_16_1851.txt",
+      "similarity": 0.9940568208694458,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
         }
       }
     }
   ],
   "signal": {
-    "level": "MODERATE",
-    "severe_fraction": 0.87,
-    "mean_similarity": 0.9889835214614868,
+    "level": "LOW",
+    "severe_fraction": 0.73,
+    "mean_similarity": 0.9920697641372681,
     "base_rate": 0.5617998314456618,
-    "signal_value": 0.3082001685543382,
-    "percentile": 81,
+    "signal_value": 0.16820016855433817,
+    "percentile": 57,
     "office_lift": 0.0823201685543381,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 87,
+    "n_severe_signal": 73,
     "n_total_signal": 100,
-    "product_id": "202608132311-KSJT-FXUS64-AFDSJT",
-    "afd_time": "2026-08-13T23:11:00Z",
-    "updated": "2026-08-14T00:01:19.970703+00:00"
+    "product_id": "202608140455-KSJT-FXUS64-AFDSJT",
+    "afd_time": "2026-08-14T04:55:00Z",
+    "updated": "2026-08-14T05:05:01.529297+00:00"
   }
 }
