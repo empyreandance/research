@@ -1,15 +1,107 @@
 {
   "office": "FGF",
-  "product_id": "202608151735-KFGF-FXUS63-AFDFGF",
-  "afd_time": "2026-08-15T17:35:00Z",
+  "product_id": "202608152016-KFGF-FXUS63-AFDFGF",
+  "afd_time": "2026-08-15T20:16:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-15T17:36:59.942212+00:00",
-  "query_preview": "..\nIssued at 209 PM CDT Fri Aug 14 2026\n\n...Synopsis... \n\nLow pressure across the western Dakotas will slowly propagate \neast/northeast over the next day or so, along with showers ahead of \nthis system. As the system evolves the upper ridge will flatten \nbecoming more zonal and eventually northwest flow aloft through the \nperiod. Confidence is relatively high for this large scale pattern \nto evolve given general agreement among ensemble \nmembers/systems. Temperatures through the period will be near or\neven slightly below normal. \n\n..Showers/Storms into Saturday... \n\nThe strongest forcing and heaviest (most widespread) rainfall will \nbe along and north of the surface low track. Generally speaking, the \ntrack will be west to east along the International border. Although \nscenarios are not too widespread, there still remains minor \ndifferences from ensemble member to ensemble member regarding the \ntrack of the surface low, and a bit further south track would \nbring an inch or two of rainfall to the northern parts of our \nregion. Instability very weak to nill, and do not expect much \nfor impacts other than whatever impacts a wetting rain may \nbring. To the south of the surface low track coverage will be \nmore spotty. \n\n...Severe Potential Early Next Week...\n\nAs another stronger wave propagates through Canada greater \ninstability will advect into the region, ahead of a cold front. \nMultiple scenarios exist regarding how this will evolve, including \nstrength and timing differences, which will ultimately decide on \nstorm coverage and intensity - severe potential. ML/AI guidance \nindicate a signal for severe storms Monday-Tuesday.",
+  "updated": "2026-08-15T20:41:31.679600+00:00",
+  "query_preview": "..\nIssued at 316 PM CDT Sat Aug 15 2026\n\n...Synopsis...\n\nThe large scale pattern features broad ridging across the\nsouthern CONUS, which has flattened in response to a trough \nmoving over Saskatchewan and Manitoba. Surface low pressure and \na cold front are moving over our region currently with scattered\nshowers over northwest MN. There is a narrow corridor of \nelevated instability that could support a few strong storms, \nhowever marginal shear and skinny/elevated CAPE profiles will \nlimit the strength of updrafts. Another mid level trough moves \nacross Canada Monday into Tuesday, and eventually deepens near \nthe Hudson Bay region, resulting in a shift to more northwest \nflow and cooler temperatures (70s for highs). By late next week \nridging is shown by ensembles to begin to build back into the \nNorthern plains though the strongest height rises remain south. \nThis should bring above average temperatures back to the region \nand on the backside of the ridge either a west or southwesterly \nflow aloft. That could support additional progressive waves and \nrebuilding instability towards our region, though there remains \nhigher spread in details. \n\n...Severe Thunderstorm Risk Monday...\n\nThe strongest part of the upper trough remains north of our\nregion, and there is still quite a bit of spread regarding the \ntiming of PVA/forcing along the base of the upper low in Canada.\nThere is at leas a signal for showers and thunderstorms with \n40-60% probabilities for wetting rain (0.1\"+). However, the \npotential for severe thunderstorm impacts will depend on the \ntiming of both the larger scale forcing and surface \nfeatures/mesoscale details which are still carrying lower \npredictability/higher spread with multiple scenarios on \nlocation, timing, coverage of severe coverage. Machine learning \nand AI based systems still highlight a 5%+ potential for severe \nstorms Monday afternoon into Monday night in southeast ND \ntowards parts of west central and northwest MN.",
   "analogs": [
     {
-      "datetime_utc": "2017-07-13T19:43Z",
-      "source_file": "FGF_2017_13_1943.txt",
-      "similarity": 0.9800097346305847,
+      "datetime_utc": "2025-07-13T14:59Z",
+      "source_file": "FGF_2025_13_1459.txt",
+      "similarity": 0.9846437573432922,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 18,
+            "severe_wind": 5,
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3,
+            "severe_hail": 2,
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-07-14T08:50Z",
+      "source_file": "FGF_2023_14_0850.txt",
+      "similarity": 0.9803776741027832,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_hail": 18,
+            "severe_wind": 6
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-07-27T17:48Z",
+      "source_file": "FGF_2024_27_1748_1.txt",
+      "similarity": 0.9797917008399963,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -18,14 +110,15 @@
           "counts": {}
         },
         "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 3
-          }
-        },
-        "2": {
           "label": "quiet",
           "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5,
+            "severe_hail": 6
+          }
         },
         "3": {
           "label": "severe_wind",
@@ -36,8 +129,8 @@
         "4": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 27,
-            "severe_hail": 17
+            "severe_wind": 71,
+            "severe_hail": 29
           }
         },
         "5": {
@@ -45,64 +138,68 @@
           "counts": {}
         },
         "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2024-07-03T03:07Z",
-      "source_file": "FGF_2024_03_0307.txt",
-      "similarity": 0.9799563884735107,
+      "datetime_utc": "2020-07-15T00:12Z",
+      "source_file": "FGF_2020_15_0012.txt",
+      "similarity": 0.9786045551300049,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 1
+          }
         },
         "1": {
-          "label": "tornado",
+          "label": "severe_wind",
           "counts": {
-            "flood": 5,
-            "tornado": 1
+            "severe_hail": 1,
+            "severe_wind": 2
           }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
+          "label": "tornado",
           "counts": {
-            "severe_wind": 3,
-            "severe_hail": 3
+            "severe_wind": 134,
+            "tornado": 5,
+            "severe_hail": 23,
+            "flood": 1
           }
         },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 2,
-            "severe_hail": 1
+            "severe_hail": 4
           }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2024-07-02T19:44Z",
-      "source_file": "FGF_2024_02_1944.txt",
-      "similarity": 0.9799563884735107,
+      "datetime_utc": "2020-07-14T20:41Z",
+      "source_file": "FGF_2020_14_2041.txt",
+      "similarity": 0.9786045551300049,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -111,26 +208,75 @@
           "counts": {}
         },
         "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 2
+          }
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 134,
+            "tornado": 5,
+            "severe_hail": 23,
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 4
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-07-29T04:47Z",
+      "source_file": "FGF_2025_29_0447.txt",
+      "similarity": 0.9785853624343872,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "tornado",
-          "counts": {
-            "flood": 5,
-            "tornado": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
           "counts": {}
         },
         "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3,
-            "severe_hail": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -143,38 +289,168 @@
       }
     },
     {
-      "datetime_utc": "2024-06-09T05:48Z",
-      "source_file": "FGF_2024_09_0548.txt",
-      "similarity": 0.9796749353408813,
-      "label": "tornado",
+      "datetime_utc": "2025-07-28T20:32Z",
+      "source_file": "FGF_2025_28_2032.txt",
+      "similarity": 0.9785853624343872,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 12,
+            "flood": 1
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "2": {
           "label": "quiet",
           "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-06-05T03:33Z",
+      "source_file": "FGF_2024_05_0333.txt",
+      "similarity": 0.9783809185028076,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 4,
+            "severe_wind": 7
+          }
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 3,
             "severe_wind": 1
           }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-06-04T23:32Z",
+      "source_file": "FGF_2024_04_2332.txt",
+      "similarity": 0.9783809185028076,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 4,
+            "severe_wind": 7
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 55,
-            "severe_wind": 23,
-            "tornado": 12
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2023-07-18T18:49Z",
+      "source_file": "FGF_2023_18_1849.txt",
+      "similarity": 0.9774113297462463,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_hail": 18,
+            "severe_wind": 6
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 8,
+            "severe_wind": 1
+          }
         },
         "5": {
           "label": "quiet",
@@ -185,318 +461,24 @@
           "counts": {
             "severe_wind": 2
           }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-06-08T23:42Z",
-      "source_file": "FGF_2024_08_2342.txt",
-      "similarity": 0.9796749353408813,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 3,
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 55,
-            "severe_wind": 23,
-            "tornado": 12
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-06-28T17:48Z",
-      "source_file": "FGF_2024_28_1748.txt",
-      "similarity": 0.9786685705184937,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 8,
-            "severe_wind": 7
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "tornado",
-          "counts": {
-            "flood": 5,
-            "tornado": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2016-06-16T20:22Z",
-      "source_file": "FGF_2016_16_2022.txt",
-      "similarity": 0.9762221574783325,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 9,
-            "severe_wind": 13
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 46,
-            "severe_hail": 42,
-            "flood": 2
-          }
-        },
-        "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 15
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 44,
-            "tornado": 3,
-            "severe_wind": 5
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 11,
-            "severe_hail": 2
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2016-06-17T03:00Z",
-      "source_file": "FGF_2016_17_0300_1.txt",
-      "similarity": 0.9762221574783325,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 46,
-            "severe_hail": 42,
-            "flood": 2
-          }
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 15
-          }
-        },
-        "2": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 44,
-            "tornado": 3,
-            "severe_wind": 5
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 11,
-            "severe_hail": 2
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2019-07-13T23:49Z",
-      "source_file": "FGF_2019_13_2349.txt",
-      "similarity": 0.9754796624183655,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 20,
-            "severe_wind": 21,
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 17,
-            "severe_hail": 4
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 9,
-            "tornado": 3,
-            "severe_hail": 6,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 32,
-            "severe_wind": 7
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2019-07-14T04:33Z",
-      "source_file": "FGF_2019_14_0433.txt",
-      "similarity": 0.9754796624183655,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 20,
-            "severe_wind": 21,
-            "flood": 1
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 17,
-            "severe_hail": 4
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 9,
-            "tornado": 3,
-            "severe_hail": 6,
-            "flood": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 32,
-            "severe_wind": 7
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
   ],
   "signal": {
-    "level": "LOW",
-    "severe_fraction": 0.91,
-    "mean_similarity": 0.9711893922090531,
+    "level": "HIGH",
+    "severe_fraction": 0.99,
+    "mean_similarity": 0.9739236432313919,
     "base_rate": 0.38744994994994997,
-    "signal_value": 0.5225500500500501,
-    "percentile": 69,
+    "signal_value": 0.60255005005005,
+    "percentile": 90,
     "office_lift": 0.35661005005005,
-    "n_severe": 10,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 91,
+    "n_severe_signal": 99,
     "n_total_signal": 100,
-    "product_id": "202608151735-KFGF-FXUS63-AFDFGF",
-    "afd_time": "2026-08-15T17:35:00Z",
-    "updated": "2026-08-15T17:36:59.942212+00:00"
+    "product_id": "202608152016-KFGF-FXUS63-AFDFGF",
+    "afd_time": "2026-08-15T20:16:00Z",
+    "updated": "2026-08-15T20:41:31.679600+00:00"
   }
 }
