@@ -1,15 +1,15 @@
 {
   "office": "UNR",
-  "product_id": "202608170406-KUNR-FXUS63-AFDUNR",
-  "afd_time": "2026-08-17T04:06:00Z",
+  "product_id": "202608170442-KUNR-FXUS63-AFDUNR",
+  "afd_time": "2026-08-17T04:42:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-17T04:07:35.919193+00:00",
+  "updated": "2026-08-17T05:00:16.395345+00:00",
   "query_preview": "..(This Afternoon Through Saturday)\nIssued at 1129 AM MDT Sun Aug 16 2026\n\nUpper level analysis shows zonal flow across the Northern Plains \nthis morning with subtle embedded shortwaves upstream. Upper ridge\nis building over the SW US with weak height rises over the area \nand generally limited upper level ascent. Diffuse surface high \npressure is centered over central SD/ND with southeasterly surface\nflow across the area.\n\nIsolated to scattered thunderstorms are expected this afternoon \nacross the area despite the weak upper level forcing. Forecast \nMLCAPE 500-1500 J/kg will be in place, although effective bulk \nshear will be marginal (25-35 knots). Best potential for \nthunderstorm coverage is expected across the Black Hills given\norographic lift where transient supercellular structures/severe \nweather is possible with the strongest convection through the\nevening hours.\n\nActive northwest flow is forecast Monday with additional showers and \nthunderstorms. The best chance for severe weather will be along the \ntheta-e axis focused across southern SD into south-central SD.\n\nDaily chances of showers and thunderstorms persists through Wednesday.\nA robust upper level ridge will overspread the region by the end \nof the week into the weekend with much warmer temperatures expected.\nCurrent guidance has us on the northeastern periphery of the \nridge axis with fairly active northwest flow across the region, \nresulting in continued chances of storms.",
   "analogs": [
     {
-      "datetime_utc": "2022-08-07T17:27Z",
-      "source_file": "UNR_2022_07_1727.txt",
-      "similarity": 0.9892020225524902,
+      "datetime_utc": "2022-08-07T07:21Z",
+      "source_file": "UNR_2022_07_0721.txt",
+      "similarity": 0.9892021417617798,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -42,13 +42,65 @@
           "counts": {
             "severe_wind": 3
           }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-08-16T20:05Z",
+      "source_file": "UNR_2024_16_2005.txt",
+      "similarity": 0.9890413284301758,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 14,
+            "severe_wind": 11,
+            "flood": 2
+          }
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 12,
+            "severe_wind": 25,
+            "flood": 3
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2024-08-17T04:04Z",
       "source_file": "UNR_2024_17_0404.txt",
-      "similarity": 0.9890416860580444,
+      "similarity": 0.9890413284301758,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -88,58 +140,6 @@
         "5": {
           "label": "quiet",
           "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-08-16T23:13Z",
-      "source_file": "UNR_2024_16_2313.txt",
-      "similarity": 0.9890416860580444,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 14,
-            "severe_wind": 11,
-            "flood": 2
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 12,
-            "severe_wind": 25,
-            "flood": 3
-          }
         },
         "6": {
           "label": "quiet",
@@ -150,7 +150,7 @@
     {
       "datetime_utc": "2024-07-18T18:10Z",
       "source_file": "UNR_2024_18_1810.txt",
-      "similarity": 0.9887088537216187,
+      "similarity": 0.9887087941169739,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -233,9 +233,9 @@
       }
     },
     {
-      "datetime_utc": "2018-08-09T14:29Z",
-      "source_file": "UNR_2018_09_1429.txt",
-      "similarity": 0.9886214733123779,
+      "datetime_utc": "2018-08-09T08:40Z",
+      "source_file": "UNR_2018_09_0840.txt",
+      "similarity": 0.9886215925216675,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -276,9 +276,9 @@
       }
     },
     {
-      "datetime_utc": "2025-08-30T07:47Z",
-      "source_file": "UNR_2025_30_0747.txt",
-      "similarity": 0.9875324964523315,
+      "datetime_utc": "2025-08-30T11:15Z",
+      "source_file": "UNR_2025_30_1115.txt",
+      "similarity": 0.9875326156616211,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -315,57 +315,9 @@
       }
     },
     {
-      "datetime_utc": "2018-07-30T05:16Z",
-      "source_file": "UNR_2018_30_0516.txt",
-      "similarity": 0.9873309135437012,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 45,
-            "severe_hail": 7
-          }
-        },
-        "5": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 2,
-            "tornado": 1
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2018-07-29T21:21Z",
       "source_file": "UNR_2018_29_2121.txt",
-      "similarity": 0.9873309135437012,
+      "similarity": 0.9873310327529907,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -412,34 +364,89 @@
       }
     },
     {
-      "datetime_utc": "2020-08-08T03:25Z",
-      "source_file": "UNR_2020_08_0325.txt",
-      "similarity": 0.9871149659156799,
+      "datetime_utc": "2018-07-30T05:16Z",
+      "source_file": "UNR_2018_30_0516.txt",
+      "similarity": 0.9873310327529907,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 45,
+            "severe_hail": 7
+          }
+        },
+        "5": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 2,
+            "tornado": 1
+          }
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2020-08-07T20:48Z",
+      "source_file": "UNR_2020_07_2048.txt",
+      "similarity": 0.987114667892456,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
+            "severe_hail": 7,
+            "severe_wind": 3
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
             "severe_hail": 16,
             "severe_wind": 49
           }
         },
-        "1": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 8,
             "severe_wind": 7
           }
         },
-        "2": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 1,
             "severe_wind": 1
           }
         },
-        "3": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "severe_hail": 15,
@@ -447,23 +454,19 @@
             "flood": 1
           }
         },
-        "4": {
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 4
           }
         },
-        "5": {
+        "6": {
           "label": "tornado",
           "counts": {
             "severe_wind": 20,
             "severe_hail": 5,
             "tornado": 1
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
@@ -471,7 +474,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.99,
-    "mean_similarity": 0.9848257565498352,
+    "mean_similarity": 0.9848258507251739,
     "base_rate": 0.46000706797031454,
     "signal_value": 0.5299929320296854,
     "percentile": 85,
@@ -480,8 +483,8 @@
     "n_total": 10,
     "n_severe_signal": 99,
     "n_total_signal": 100,
-    "product_id": "202608170406-KUNR-FXUS63-AFDUNR",
-    "afd_time": "2026-08-17T04:06:00Z",
-    "updated": "2026-08-17T04:07:35.919193+00:00"
+    "product_id": "202608170442-KUNR-FXUS63-AFDUNR",
+    "afd_time": "2026-08-17T04:42:00Z",
+    "updated": "2026-08-17T05:00:16.395345+00:00"
   }
 }
