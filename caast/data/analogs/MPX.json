@@ -1,15 +1,15 @@
 {
   "office": "MPX",
-  "product_id": "202608162309-KMPX-FXUS63-AFDMPX",
-  "afd_time": "2026-08-16T23:09:00Z",
+  "product_id": "202608170523-KMPX-FXUS63-AFDMPX",
+  "afd_time": "2026-08-17T05:23:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-16T23:35:40.695826+00:00",
+  "updated": "2026-08-17T05:52:36.335510+00:00",
   "query_preview": "..\nIssued at 231 PM CDT Sun Aug 16 2026\n\nCooler & drier air continues to filter into the region as \nCanadian high pressure follows this morning's cold front. Lows \nwill fall into the low to mid 50s outside of the twin Cities \nmetro, with patchy mist & fog possible during the early morning \nhours.\n\nMonday starts off with similar cooler & drier conditions, \nbut moisture advection will increase through the afternoon & \nevening ahead of an advancing cold front. Scattered showers & \nthunderstorms are expected to develop ahead of this front \nduring the late afternoon/early evening across the Dakotas & \nfar- western Minnesota, but it will be take until later in the \nnight for these showers & thunderstorms to spread across the \nrest of the area. A few stronger storms are possible during the\nevening across western Minnesota where 1000-1500 J/kg of \nsurface-based CAPE will be present along with ~40 kts of deep \nshear. The front continues to drop southwards through Minnesota \n& Wisconsin through the day Tuesday with another round of \nscattered thunderstorms expected to initiate during the \nafternoon & evening. Guidance has generally sped up the timing \nof the front by a few hours, meaning much of this activity \nlooks to be south of the area across Iowa. A few stronger \nthunderstorms are again possible, but this thereat looks \nlimited to far-southern Minnesota deepening on the timing of \nthe front.\n\nDry northwest flow returns Wednesday and persists into the\nlatter half of the week as upper high pressure shifts west. \nMost of Wednesday through the weekend looks dry, though a weak \ndisturbance could bring isolated showers or storms Thursday \nafternoon and evening. Temperatures remain steady near 80 \ndegrees through the period, keeping conditions close to seasonal\nmid-to-late August normals.",
   "analogs": [
     {
-      "datetime_utc": "2022-08-12T11:13Z",
-      "source_file": "MPX_2022_12_1113.txt",
-      "similarity": 0.9819903373718262,
+      "datetime_utc": "2022-08-12T07:57Z",
+      "source_file": "MPX_2022_12_0757.txt",
+      "similarity": 0.9819902181625366,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -127,21 +127,26 @@
       }
     },
     {
-      "datetime_utc": "2024-08-06T06:08Z",
-      "source_file": "MPX_2024_06_0608.txt",
+      "datetime_utc": "2024-08-05T19:53Z",
+      "source_file": "MPX_2024_05_1953.txt",
       "similarity": 0.9796383380889893,
-      "label": "severe_wind",
+      "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 19,
+            "severe_wind": 14,
+            "severe_hail": 1,
+            "flood": 5
+          }
+        },
+        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -166,26 +171,21 @@
       }
     },
     {
-      "datetime_utc": "2024-08-05T19:53Z",
-      "source_file": "MPX_2024_05_1953.txt",
+      "datetime_utc": "2024-08-06T01:12Z",
+      "source_file": "MPX_2024_06_0112.txt",
       "similarity": 0.9796383380889893,
-      "label": "tornado",
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 19,
-            "severe_wind": 14,
-            "severe_hail": 1,
-            "flood": 5
-          }
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
           "label": "quiet",
@@ -261,7 +261,7 @@
     {
       "datetime_utc": "2025-08-08T05:47Z",
       "source_file": "MPX_2025_08_0547.txt",
-      "similarity": 0.9791395664215088,
+      "similarity": 0.9791396260261536,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -312,7 +312,7 @@
     {
       "datetime_utc": "2025-08-07T23:45Z",
       "source_file": "MPX_2025_07_2345.txt",
-      "similarity": 0.9791395664215088,
+      "similarity": 0.9791396260261536,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -361,9 +361,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-31T18:19Z",
-      "source_file": "MPX_2024_31_1819.txt",
-      "similarity": 0.9790233969688416,
+      "datetime_utc": "2024-07-31T08:32Z",
+      "source_file": "MPX_2024_31_0832.txt",
+      "similarity": 0.9790234565734863,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -464,7 +464,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.88,
-    "mean_similarity": 0.9747708743810654,
+    "mean_similarity": 0.9747708314657211,
     "base_rate": 0.5022588428564094,
     "signal_value": 0.3777411571435906,
     "percentile": 60,
@@ -473,8 +473,8 @@
     "n_total": 10,
     "n_severe_signal": 88,
     "n_total_signal": 100,
-    "product_id": "202608162309-KMPX-FXUS63-AFDMPX",
-    "afd_time": "2026-08-16T23:09:00Z",
-    "updated": "2026-08-16T23:35:40.695826+00:00"
+    "product_id": "202608170523-KMPX-FXUS63-AFDMPX",
+    "afd_time": "2026-08-17T05:23:00Z",
+    "updated": "2026-08-17T05:52:36.335510+00:00"
   }
 }
