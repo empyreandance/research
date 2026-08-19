@@ -1,15 +1,15 @@
 {
   "office": "BGM",
-  "product_id": "202608190344-KBGM-FXUS61-AFDBGM",
-  "afd_time": "2026-08-19T03:44:00Z",
+  "product_id": "202608190545-KBGM-FXUS61-AFDBGM",
+  "afd_time": "2026-08-19T05:45:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-19T04:02:36.218190+00:00",
+  "updated": "2026-08-19T05:48:31.664358+00:00",
   "query_preview": "..\nKEY MESSAGE 1...\n\nQuiet weather expected overnight tonight with some patchy \nvalley fog and thin high clouds hanging around. Going into the \ndaytime, a weak frontal boundary is expected to move in from the\nnorthwest. By the time it makes it to our area, it will have \nweakened a bit, and should have enough energy to bring some \nlight rain showers, and perhaps a weak storm or two, mainly for\nCentral New York between 1pm and 6pm. Later tonight, valley fog\nwill likely develop again, otherwise quiet weather overnight. \nHeading into Thursday, another disturbance, off to the south \nthis time, will skate across Northeast Pennsylvania and the \nSouthern Tier, bringing rain showers and potentially a storm or \ntwo in the afternoon. Thursday is a little more uncertain, with \na few different deterministic models suggesting either a \nnorthern or southern track. Seeing this, we decided to stick \nwith the NBM solution for now, which has chances for \nprecipitation mainly for Northeast PA and Southern Tier, but \nincludes some chances for portions of Central NY, which aligns \nwith the uncertainty seen in current deterministic model runs. \n\n \nKEY MESSAGE 2...\n\nHigh pressure returns Friday and Saturday morning, bringing \nmore summer-like temperatures in the upper-70s to low-80s, with \ncomfortable dewpoints in the mid-50s Friday and low-60s\nSaturday. The next frontal system approaches from the west\nheading into late afternoon and early evening as an upper level\ntrough deepens over the Great Lakes region. Since this is almost\na week away, not a lot of details other than there will likely\nbe widespread rainfall, and likely some storms following the\nboundary as it crosses over the area. Timing is probably the\nmost uncertain, with some guidance having an earlier arrival\nwith precipitation, as early as Saturday afternoon, while others\nhave a later arrival of overnight Saturday into Sunday. As newer\nruns come out with time, we should see a better time line of\nevents for this system. With the trough lifting north and east\nSunday night, there could be some lingering showers for portions\nof Central NY on Monday, but the system's speed through the\ncoming days will determine if there's any precipitation at all\nfor Monday.",
   "analogs": [
     {
       "datetime_utc": "2013-08-25T10:29Z",
       "source_file": "BGM_2013_25_1029.txt",
-      "similarity": 0.9551968574523926,
+      "similarity": 0.9551970958709717,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -52,9 +52,9 @@
       }
     },
     {
-      "datetime_utc": "2013-08-24T08:03Z",
-      "source_file": "BGM_2013_24_0803.txt",
-      "similarity": 0.9541373252868652,
+      "datetime_utc": "2013-08-24T13:07Z",
+      "source_file": "BGM_2013_24_1307.txt",
+      "similarity": 0.9541375041007996,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -95,9 +95,9 @@
       }
     },
     {
-      "datetime_utc": "2006-09-04T02:20Z",
-      "source_file": "BGM_2006_04_0220.txt",
-      "similarity": 0.9531195163726807,
+      "datetime_utc": "2006-09-04T11:22Z",
+      "source_file": "BGM_2006_04_1122.txt",
+      "similarity": 0.9531198143959045,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -136,7 +136,7 @@
     {
       "datetime_utc": "2006-09-03T22:56Z",
       "source_file": "BGM_2006_03_2256.txt",
-      "similarity": 0.9531195163726807,
+      "similarity": 0.9531198143959045,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -173,9 +173,9 @@
       }
     },
     {
-      "datetime_utc": "2013-04-15T19:15Z",
-      "source_file": "BGM_2013_15_1915.txt",
-      "similarity": 0.9531011581420898,
+      "datetime_utc": "2013-04-15T15:19Z",
+      "source_file": "BGM_2013_15_1519_1.txt",
+      "similarity": 0.953101396560669,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -215,13 +215,17 @@
       }
     },
     {
-      "datetime_utc": "2018-07-02T07:59Z",
-      "source_file": "BGM_2018_02_0759.txt",
-      "similarity": 0.9529932141304016,
+      "datetime_utc": "2018-07-01T22:59Z",
+      "source_file": "BGM_2018_01_2259.txt",
+      "similarity": 0.9529935121536255,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 24,
@@ -229,7 +233,7 @@
             "flood": 1
           }
         },
-        "1": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 12,
@@ -237,23 +241,19 @@
             "severe_hail": 4
           }
         },
-        "2": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 9,
             "flood": 18
           }
         },
-        "3": {
+        "4": {
           "label": "severe_wind",
           "counts": {
             "flood": 8,
             "severe_wind": 1
           }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -266,17 +266,13 @@
       }
     },
     {
-      "datetime_utc": "2018-07-01T20:06Z",
-      "source_file": "BGM_2018_01_2006.txt",
-      "similarity": 0.9529932141304016,
+      "datetime_utc": "2018-07-02T02:34Z",
+      "source_file": "BGM_2018_02_0234.txt",
+      "similarity": 0.9529935121536255,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 24,
@@ -284,7 +280,7 @@
             "flood": 1
           }
         },
-        "2": {
+        "1": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 12,
@@ -292,19 +288,23 @@
             "severe_hail": 4
           }
         },
-        "3": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 9,
             "flood": 18
           }
         },
-        "4": {
+        "3": {
           "label": "severe_wind",
           "counts": {
             "flood": 8,
             "severe_wind": 1
           }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
@@ -319,7 +319,7 @@
     {
       "datetime_utc": "2019-08-04T19:29Z",
       "source_file": "BGM_2019_04_1929_1.txt",
-      "similarity": 0.9519322514533997,
+      "similarity": 0.9519323706626892,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -369,9 +369,9 @@
       }
     },
     {
-      "datetime_utc": "2010-04-28T23:21Z",
-      "source_file": "BGM_2010_28_2321.txt",
-      "similarity": 0.9517212510108948,
+      "datetime_utc": "2010-04-28T19:41Z",
+      "source_file": "BGM_2010_28_1941.txt",
+      "similarity": 0.9517213106155396,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -416,7 +416,7 @@
     {
       "datetime_utc": "2010-04-29T06:42Z",
       "source_file": "BGM_2010_29_0642.txt",
-      "similarity": 0.9517212510108948,
+      "similarity": 0.9517213106155396,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -462,7 +462,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.92,
-    "mean_similarity": 0.948595009446144,
+    "mean_similarity": 0.9485952270030975,
     "base_rate": 0.5056064682664336,
     "signal_value": 0.4143935317335664,
     "percentile": 83,
@@ -471,8 +471,8 @@
     "n_total": 10,
     "n_severe_signal": 92,
     "n_total_signal": 100,
-    "product_id": "202608190344-KBGM-FXUS61-AFDBGM",
-    "afd_time": "2026-08-19T03:44:00Z",
-    "updated": "2026-08-19T04:02:36.218190+00:00"
+    "product_id": "202608190545-KBGM-FXUS61-AFDBGM",
+    "afd_time": "2026-08-19T05:45:00Z",
+    "updated": "2026-08-19T05:48:31.664358+00:00"
   }
 }
