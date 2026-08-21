@@ -1,15 +1,15 @@
 {
   "office": "GRB",
-  "product_id": "202608211158-KGRB-FXUS63-AFDGRB",
-  "afd_time": "2026-08-21T11:58:00Z",
+  "product_id": "202608211714-KGRB-FXUS63-AFDGRB",
+  "afd_time": "2026-08-21T17:14:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-21T13:13:07.975524+00:00",
+  "updated": "2026-08-21T17:47:36.536371+00:00",
   "query_preview": "..\nIssued at 142 AM CDT Fri Aug 21 2026\n\nToday into Tonight...initial area of showers and isolated storms\nwas struggling last evening due to dry air, weak/little forcing \nand limited instability. An uptick in activity starting around \nmidnight as slightly better forcing, a LLJ and WAA arrived. This \narea of showers and embedded storms will move east across the area\nthrough the morning hours. Main threats will be lightning, small \nhail and brief heavy downpours, bringing some much needed rain to\nparts of the area. A break in the activity for most spots is \nexpected later this morning and into the early afternoon, which \nwill allow the atmosphere to recover and destabilize, with \nsouth/southwest winds ushering in mid 60 to around 70 dewpoints \ninto much of eastern WI. Highs are forecast to climb into the \nupper 70s to around 80, which would produce 1000 to 1500 J/kg of \nSBCAPE, with up to 2000 J/kg if a little more sunshine occurs. As \nthe front arrives during peak heating/instability, another round \nof showers and storms is expected to develop, mainly after 3pm. \nDeep layer shear is lacking slightly, but has ticked up to 20-30 \nkts, which would should be enough for some organized strong to \nsevere storms, mainly between 3-9pm across eastern WI. DCAPEs up \nto 1000 J/kg will create a threat for strong downbursts winds in \nthe strongest cells, with hail possible as well. If discrete \nsupercells can form, a small tornado risk would materialize. ML \nand Neural Network guidance has increased over the last couple of \ndays, now highlighting eastern WI for a threat for severe weather.\nSPC has added a Slight Risk (2 out of 5) for far east-central WI \nwith a Marginal Risk (1 out of 5) west to around Wautoma and north\nto near Marinette. Could also see a severe storm a little further\nnorth. Locally heavy rain will be possible in any storm. If this \nwere to occur in an urban area, could get some localized flooding.\n\nThis Weekend...Northwest, cyclonic flow will prevail across the \nGreat Lakes. A shortwave trough moving through this flow will \ncreate chances (20-60%) for showers and a few storms across north-\ncentral and northeast Wisconsin on Saturday, mainly during the \nafternoon and early evening. Weak deep-layer shear will prevent \nsignificant storm organization, keeping the severe weather risk \nlow; however, inverted-V soundings and steep low-level lapse rates\nwould promote some gustier winds and small hail in any stronger \nshower/storm. \n\nNext Week...another shortwave trough is forecast to move across \nthe region late Tuesday into Wednesday, bringing the next chance \nfor showers and thunderstorms. Instability appears modest with \nthis mid-week feature, keeping severe probabilities low. \n\nTemperatures into next week will stay fairly close to late- \nsummer norms, with daily highs mostly ranging from the 70s to \nlower 80s and overnight lows in the upper 40s to lower 60s, with a\ncouple nights with lows in the low-mid 40s across northern WI \nthis weekend.",
   "analogs": [
     {
-      "datetime_utc": "2022-08-12T20:22Z",
-      "source_file": "GRB_2022_12_2022.txt",
-      "similarity": 0.9724547863006592,
+      "datetime_utc": "2022-08-12T23:38Z",
+      "source_file": "GRB_2022_12_2338.txt",
+      "similarity": 0.9724549651145935,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -48,7 +48,7 @@
     {
       "datetime_utc": "2022-08-13T03:55Z",
       "source_file": "GRB_2022_13_0355.txt",
-      "similarity": 0.9724547863006592,
+      "similarity": 0.9724549651145935,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -85,9 +85,55 @@
       }
     },
     {
+      "datetime_utc": "2015-08-10T04:54Z",
+      "source_file": "GRB_2015_10_0454.txt",
+      "similarity": 0.9718250036239624,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 5,
+            "tornado": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 26,
+            "severe_wind": 30,
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2015-08-09T19:16Z",
       "source_file": "GRB_2015_09_1916.txt",
-      "similarity": 0.9718247652053833,
+      "similarity": 0.9718250036239624,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -127,52 +173,6 @@
         "6": {
           "label": "quiet",
           "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2015-08-10T04:54Z",
-      "source_file": "GRB_2015_10_0454.txt",
-      "similarity": 0.9718247652053833,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 5,
-            "tornado": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 26,
-            "severe_wind": 30,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
         }
       }
     },
@@ -218,7 +218,7 @@
     {
       "datetime_utc": "2006-04-19T08:01Z",
       "source_file": "GRB_2006_19_0801.txt",
-      "similarity": 0.9705923795700073,
+      "similarity": 0.9705925583839417,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -255,9 +255,9 @@
       }
     },
     {
-      "datetime_utc": "2025-05-03T18:15Z",
-      "source_file": "GRB_2025_03_1815.txt",
-      "similarity": 0.9700770378112793,
+      "datetime_utc": "2025-05-03T09:45Z",
+      "source_file": "GRB_2025_03_0945.txt",
+      "similarity": 0.9700772166252136,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -294,7 +294,7 @@
     {
       "datetime_utc": "2005-06-13T21:05Z",
       "source_file": "GRB_2005_13_2105.txt",
-      "similarity": 0.9696528911590576,
+      "similarity": 0.9696530103683472,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -335,7 +335,7 @@
     {
       "datetime_utc": "2010-09-25T19:45Z",
       "source_file": "GRB_2010_25_1945.txt",
-      "similarity": 0.9693735837936401,
+      "similarity": 0.9693737626075745,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -374,7 +374,7 @@
     {
       "datetime_utc": "2016-03-27T11:35Z",
       "source_file": "GRB_2016_27_1135.txt",
-      "similarity": 0.9691412448883057,
+      "similarity": 0.96914142370224,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -422,7 +422,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.81,
-    "mean_similarity": 0.9653954815864563,
+    "mean_similarity": 0.9653956329822541,
     "base_rate": 0.46778572547381614,
     "signal_value": 0.3422142745261839,
     "percentile": 59,
@@ -431,8 +431,8 @@
     "n_total": 10,
     "n_severe_signal": 81,
     "n_total_signal": 100,
-    "product_id": "202608211158-KGRB-FXUS63-AFDGRB",
-    "afd_time": "2026-08-21T11:58:00Z",
-    "updated": "2026-08-21T13:13:07.975524+00:00"
+    "product_id": "202608211714-KGRB-FXUS63-AFDGRB",
+    "afd_time": "2026-08-21T17:14:00Z",
+    "updated": "2026-08-21T17:47:36.536371+00:00"
   }
 }
