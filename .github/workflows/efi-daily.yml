@@ -61,7 +61,10 @@ jobs:
             pip install requests
           else
             sudo apt-get update && sudo apt-get install -y libeccodes-dev
-            pip install cfgrib xarray numpy geopandas shapely requests
+            # eccodeslib is pinned: 2.48.0 (PyPI 2026-07-17) cannot decode WPC's
+            # GRIB1 EFI file (KeyError: 'gridType'); the pip wheel ignores the
+            # apt libeccodes, so the pin is what actually controls the decoder.
+            pip install "eccodeslib<2.48" cfgrib xarray numpy geopandas shapely requests
           fi
 
       - name: Run EFI pipeline
