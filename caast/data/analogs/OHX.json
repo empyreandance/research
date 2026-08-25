@@ -1,11 +1,55 @@
 {
   "office": "OHX",
-  "product_id": "202608250521-KOHX-FXUS64-AFDOHX",
-  "afd_time": "2026-08-25T05:21:00Z",
+  "product_id": "202608251038-KOHX-FXUS64-AFDOHX",
+  "afd_time": "2026-08-25T10:38:00Z",
   "section_type": "long_term",
-  "updated": "2026-08-25T05:49:57.002781+00:00",
+  "updated": "2026-08-25T10:52:39.363313+00:00",
   "query_preview": "..\n(Thursday through next Tuesday)\nIssued at 1031 PM CDT Mon Aug 24 2026\n\nIt now appears that the best rain chances will hold off until\nThursday and then start to taper off Thursday night and Friday. It\nstill looks as though we've a rain-free weekend to look forward \nto. And even with multi-day rain chances, storm total QPF values \nremain unimpressive. Indeed, the bulk of the mid state can expect \nless than 1/4\" of rainfall spread across the next 7 days, although\na few spots -- mainly in areas near the TN/AL border and along \nthe Cumberland Plateau -- might see as much as 1/2\". Either way, \nwe can expect below normal rainfall for the next week. \nTemperatures, on the other hand, will continue to warm through the\nweekend, and much of the mid state might actually approach Heat \nAdvisory criteria by next Monday and Tuesday. Otherwise, severe \nstorm risk this week looks to be very low.",
   "analogs": [
+    {
+      "datetime_utc": "2023-08-22T18:40Z",
+      "source_file": "OHX_2023_22_1840.txt",
+      "similarity": 0.9893927574157715,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 15,
+            "flood": 5
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
     {
       "datetime_utc": "2023-08-23T02:31Z",
       "source_file": "OHX_2023_23_0231.txt",
@@ -43,50 +87,6 @@
         "5": {
           "label": "quiet",
           "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-08-22T23:59Z",
-      "source_file": "OHX_2023_22_2359.txt",
-      "similarity": 0.9893927574157715,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 15,
-            "flood": 5
-          }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
         },
         "6": {
           "label": "quiet",
@@ -150,7 +150,7 @@
     {
       "datetime_utc": "2024-08-13T06:59Z",
       "source_file": "OHX_2024_13_0659.txt",
-      "similarity": 0.985615611076355,
+      "similarity": 0.9856157302856445,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -194,7 +194,7 @@
     {
       "datetime_utc": "2017-03-07T06:50Z",
       "source_file": "OHX_2017_07_0650.txt",
-      "similarity": 0.985422670841217,
+      "similarity": 0.9854227304458618,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -242,8 +242,8 @@
       }
     },
     {
-      "datetime_utc": "2023-07-18T17:33Z",
-      "source_file": "OHX_2023_18_1733.txt",
+      "datetime_utc": "2023-07-18T08:36Z",
+      "source_file": "OHX_2023_18_0836.txt",
       "similarity": 0.9842586517333984,
       "label": "tornado",
       "is_severe": true,
@@ -301,7 +301,7 @@
     {
       "datetime_utc": "2004-10-24T01:04Z",
       "source_file": "OHX_2004_24_0104.txt",
-      "similarity": 0.9841514825820923,
+      "similarity": 0.9841516017913818,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -378,7 +378,7 @@
     {
       "datetime_utc": "2016-09-08T04:26Z",
       "source_file": "OHX_2016_08_0426.txt",
-      "similarity": 0.9840292930603027,
+      "similarity": 0.9840291738510132,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -419,7 +419,7 @@
     {
       "datetime_utc": "2021-07-25T15:38Z",
       "source_file": "OHX_2021_25_1538.txt",
-      "similarity": 0.983965277671814,
+      "similarity": 0.9839653372764587,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -470,7 +470,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.84,
-    "mean_similarity": 0.9816488748788834,
+    "mean_similarity": 0.9816488969326019,
     "base_rate": 0.6266581507320429,
     "signal_value": 0.21334184926795707,
     "percentile": 72,
@@ -479,8 +479,8 @@
     "n_total": 10,
     "n_severe_signal": 84,
     "n_total_signal": 100,
-    "product_id": "202608250521-KOHX-FXUS64-AFDOHX",
-    "afd_time": "2026-08-25T05:21:00Z",
-    "updated": "2026-08-25T05:49:57.002781+00:00"
+    "product_id": "202608251038-KOHX-FXUS64-AFDOHX",
+    "afd_time": "2026-08-25T10:38:00Z",
+    "updated": "2026-08-25T10:52:39.363313+00:00"
   }
 }
