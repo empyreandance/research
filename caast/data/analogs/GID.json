@@ -1,15 +1,15 @@
 {
   "office": "GID",
-  "product_id": "202608242026-KGID-FXUS63-AFDGID",
-  "afd_time": "2026-08-24T20:26:00Z",
+  "product_id": "202608242347-KGID-FXUS63-AFDGID",
+  "afd_time": "2026-08-24T23:47:00Z",
   "section_type": "discussion",
-  "updated": "2026-08-24T20:51:16.764916+00:00",
+  "updated": "2026-08-25T01:54:31.627210+00:00",
   "query_preview": "..\nIssued at 304 PM CDT Mon Aug 24 2026\n\nMostly sunny skies and seasonably temperatures were observed\nacross the local area this afternoon. With clear skies, \ninstability is building across the region, but with a strong \nCAP in place across the area, expect skies to remain mostly \nclear through the afternoon hours with storms firing up across \nthe high plains where conditions are more favorable. These \nstorms should eventually spread east through the evening hours, \nwith CAMS indicating they will rapidly diminish across our \nwestern most counties. That said, given the available \ninstability, could see a few strong/marginally severe storms as \nthey reach the local area around late evening, likely only \nimpacting areas west of Highway 183.\n\nThings become a bit more trick on Tuesday as most models are\nindicating some showers/thunderstorms around through the daytime\nhours, albeit the better shot should come with an upper level\ndisturbance forecast to cross the local are during the evening\nhours. As a result, have some pops in the forecast through the\nafternoon hours, but any severe weather potential should be in\nconcert with the approaching disturbance, with strong wind gusts\nand marginally severe hail being the primary concerns. The other\nconcern is the small potential for fog during the AM hours. SREF\nprobs indicate there is a good chance for some fog development\nacross the center of the area Tuesday morning, but with clouds\nand showers around, largely discounted this and chose not to\nintroduce fog into the forecast.\n\nBeyond Tuesday, west northwest flow aloft is anticipated to\ncontinue across the local area through the end of the week with\nthe axis of the upper level ridge transitioning east across the\nlocal area next weekend. This should result in intermittent\nchances for thunderstorms, with the EC/GFS keying in mainly on\nFriday night/Sunday night for better chances of storms, with \noff an on again storm chances lingering into at least next \nMonday. While storms will be around at times, it is possible \nsome areas will remain dry. In addition, with northwesterly flow\ncontinuing through Friday, temperatures should remain near to \nbelow normal each day, before warming up over the upcoming \nweekend as the axis of the ridge moves across the local area.\nSome guidance has mid to upper 90s returning for Saturday and\nSunday afternoons, but the official forecast remains about 4-7\ndegrees below this potential.",
   "analogs": [
     {
       "datetime_utc": "2014-07-19T09:34Z",
       "source_file": "GID_2014_19_0934.txt",
-      "similarity": 0.9774705171585083,
+      "similarity": 0.9774703979492188,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -49,9 +49,61 @@
       }
     },
     {
-      "datetime_utc": "2014-07-05T05:37Z",
-      "source_file": "GID_2014_05_0537.txt",
-      "similarity": 0.976958155632019,
+      "datetime_utc": "2014-07-04T20:59Z",
+      "source_file": "GID_2014_04_2059.txt",
+      "similarity": 0.9769580364227295,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 3
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 15,
+            "severe_hail": 35
+          }
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 104,
+            "severe_wind": 30,
+            "flood": 2
+          }
+        },
+        "6": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2014-07-05T01:31Z",
+      "source_file": "GID_2014_05_0131.txt",
+      "similarity": 0.9769580364227295,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -101,114 +153,9 @@
       }
     },
     {
-      "datetime_utc": "2014-07-04T23:19Z",
-      "source_file": "GID_2014_04_2319.txt",
-      "similarity": 0.976958155632019,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 3
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 15,
-            "severe_hail": 35
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 104,
-            "severe_wind": 30,
-            "flood": 2
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-07-24T05:34Z",
-      "source_file": "GID_2023_24_0534.txt",
-      "similarity": 0.9754548072814941,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 2
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 11,
-            "severe_hail": 4
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 75,
-            "severe_wind": 50,
-            "flood": 1,
-            "tornado": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 32,
-            "flood": 1
-          }
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 10,
-            "severe_wind": 7
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2023-07-23T23:55Z",
       "source_file": "GID_2023_23_2355.txt",
-      "similarity": 0.9754548072814941,
+      "similarity": 0.9754546880722046,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -259,9 +206,62 @@
       }
     },
     {
-      "datetime_utc": "2014-08-08T10:51Z",
-      "source_file": "GID_2014_08_1051.txt",
-      "similarity": 0.9752000570297241,
+      "datetime_utc": "2023-07-24T05:34Z",
+      "source_file": "GID_2023_24_0534.txt",
+      "similarity": 0.9754546880722046,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 2
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 11,
+            "severe_hail": 4
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 75,
+            "severe_wind": 50,
+            "flood": 1,
+            "tornado": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 32,
+            "flood": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "severe_wind": 7
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2014-08-08T18:00Z",
+      "source_file": "GID_2014_08_1800.txt",
+      "similarity": 0.9751999378204346,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -304,8 +304,8 @@
       }
     },
     {
-      "datetime_utc": "2025-07-06T10:21Z",
-      "source_file": "GID_2025_06_1021.txt",
+      "datetime_utc": "2025-07-06T11:36Z",
+      "source_file": "GID_2025_06_1136.txt",
       "similarity": 0.9739177227020264,
       "label": "severe_wind",
       "is_severe": true,
@@ -358,8 +358,8 @@
       }
     },
     {
-      "datetime_utc": "2021-10-13T11:43Z",
-      "source_file": "GID_2021_13_1143.txt",
+      "datetime_utc": "2021-10-13T17:23Z",
+      "source_file": "GID_2021_13_1723.txt",
       "similarity": 0.9730877876281738,
       "label": "severe_wind",
       "is_severe": true,
@@ -397,8 +397,8 @@
       }
     },
     {
-      "datetime_utc": "2023-08-04T11:43Z",
-      "source_file": "GID_2023_04_1143.txt",
+      "datetime_utc": "2023-08-04T17:11Z",
+      "source_file": "GID_2023_04_1711.txt",
       "similarity": 0.9728290438652039,
       "label": "tornado",
       "is_severe": true,
@@ -453,9 +453,9 @@
       }
     },
     {
-      "datetime_utc": "2014-08-07T17:47Z",
-      "source_file": "GID_2014_07_1747.txt",
-      "similarity": 0.9727917313575745,
+      "datetime_utc": "2014-08-07T10:55Z",
+      "source_file": "GID_2014_07_1055.txt",
+      "similarity": 0.9727916717529297,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -503,7 +503,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9678445470333099,
+    "mean_similarity": 0.9678444540500641,
     "base_rate": 0.5456683027051706,
     "signal_value": 0.3843316972948294,
     "percentile": 67,
@@ -512,8 +512,8 @@
     "n_total": 10,
     "n_severe_signal": 93,
     "n_total_signal": 100,
-    "product_id": "202608242026-KGID-FXUS63-AFDGID",
-    "afd_time": "2026-08-24T20:26:00Z",
-    "updated": "2026-08-24T20:51:16.764916+00:00"
+    "product_id": "202608242347-KGID-FXUS63-AFDGID",
+    "afd_time": "2026-08-24T23:47:00Z",
+    "updated": "2026-08-25T01:54:31.627210+00:00"
   }
 }
