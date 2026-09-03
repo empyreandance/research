@@ -254,8 +254,12 @@ def fetch_new_afds(since_dt):
     query_dates = {since_dt.strftime("%Y-%m-%d"),
                    datetime.now(timezone.utc).strftime("%Y-%m-%d")}
 
+    offices_ok = 0          # how many offices returned a usable listing
+    last_error = None
+
     for wfo in ALL_WFOS:
         pil = f"AFD{wfo}"
+        office_ok = False
         for qdate in sorted(query_dates):
             try:
                 r = requests.get(
@@ -264,8 +268,10 @@ def fetch_new_afds(since_dt):
                     timeout=30,
                 )
                 if r.status_code != 200:
+                    last_error = f"HTTP {r.status_code} for {wfo} on {qdate}"
                     log(f"  WARNING: IEM returned {r.status_code} for {wfo} on {qdate}")
                     continue
+                office_ok = True
                 products = r.json().get("data", [])
                 for p in products:
                     entered = p.get("entered", "")
@@ -277,10 +283,26 @@ def fetch_new_afds(since_dt):
                             "valid": entered,
                         })
             except Exception as e:
+                last_error = f"{wfo} on {qdate}: {e}"
                 log(f"  WARNING: IEM fetch failed for {wfo}: {e}")
                 continue
+        if office_ok:
+            offices_ok += 1
 
-    log(f"Found {len(new_afds)} new AFDs since {since_str}")
+    # Fail loudly when EVERY office fails to list. This is never a real-world
+    # condition; it means the upstream API contract moved. Without it a broken
+    # endpoint looks identical to a quiet hour: zero AFDs, watermark advanced,
+    # exit zero, green checkmark. A sibling copy of this script sat in exactly
+    # that state for four months after IEM dropped the `sdate` parameter.
+    # Purely additive: on any run where at least one office lists, behaviour
+    # is byte-for-byte what it was before. (3 Sep 2026)
+    if offices_ok == 0:
+        raise RuntimeError(
+            f"IEM listing failed for ALL {len(ALL_WFOS)} offices; the API contract has "
+            f"likely changed. Last error: {last_error}"
+        )
+
+    log(f"Found {len(new_afds)} new AFDs since {since_str} ({offices_ok} offices listed)")
     return new_afds
 
 def fetch_afd_text(product_id):
