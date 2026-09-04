@@ -1,15 +1,15 @@
 {
   "office": "LKN",
-  "product_id": "202609031956-KLKN-FXUS65-AFDLKN",
-  "afd_time": "2026-09-03T19:56:00Z",
+  "product_id": "202609040736-KLKN-FXUS65-AFDLKN",
+  "afd_time": "2026-09-04T07:36:00Z",
   "section_type": "discussion",
-  "updated": "2026-09-03T21:24:40.685675+00:00",
-  "query_preview": "..\n(This evening through next Wednesday)\n\nWEATHER PATTERN OVERVIEW: An upper level low continues its \njourney around the PacNW, bringing cooler temperatures, strong \nwinds and precipitation potential. A strong pressure gradient is \ndeveloping across the area, resulting in strong winds across the \narea and temperatures ranging from the upper 60s in northern \nNevada to the low 80s in central Nevada. Strong winds are expected\nto continue through Sunday, particularly in White Pine, northeast\nNye and southeast Elko Counties. Moisture availability starting \nSunday has been trending downward the last several forecasts and \nprecipitation potential has noticeably decreased along with it. \nIsolated to scattered showers and thunderstorms continue to be \nforecast across much of the forecast area for Sunday but \naccumulation totals have dropped to 0.05 inches at best, with most\nof the area expecting a trace or less. Precipitation chances dry \nout by Monday morning, allowing a dry but cool day, with high \ntemperatures in the 70s. Unsettled weather is expected to continue\nfor mid week even as temperatures warm back into the 80s.\n\n\nFORECAST CONFIDENCE & DEVIATIONS: High confidence in cool\ntemperatures and strong winds through the weekend. Weekend storm\nconfidence continues to be moderate, with low confidence in storm\npotential next week. No changes from the NBM.",
+  "updated": "2026-09-04T11:21:54.470361+00:00",
+  "query_preview": "..\n(Today through next Friday)\n\nWEATHER PATTERN OVERVIEW: The forecast remains on track. An upper\nlevel low continues its journey around the PacNW, bringing cooler\ntemperatures, strong winds and precipitation potential. A strong \npressure gradient is developing across the area, resulting in \nstrong winds across the area and temperatures ranging from the \nupper 60s in northern Nevada to the low 80s in central Nevada. \nStrong winds are expected to continue through Sunday, particularly\nin White Pine, northeast Nye and southeast Elko Counties. \nMoisture availability starting Sunday has been trending downward \nthe last several forecasts and precipitation potential has \nnoticeably decreased along with it. Isolated to scattered showers \nand thunderstorms continue to be forecast across much of the \nforecast area for Sunday but accumulation totals have dropped to \n0.05 inches at best, with most of the area expecting a trace or \nless. Precipitation chances dry out by Monday morning, allowing a \ndry but cool day, with high temperatures in the 70s. Unsettled \nweather is expected to continue for mid week even as temperatures \nwarm back into the 80s.\n\n\nFORECAST CONFIDENCE & DEVIATIONS: High confidence in cool\ntemperatures and strong winds through the weekend. Weekend storm\nconfidence continues to be moderate, with low confidence in storm\npotential next week. No changes from the NBM.",
   "analogs": [
     {
       "datetime_utc": "2018-10-19T10:15Z",
       "source_file": "LKN_2018_19_1015.txt",
-      "similarity": 0.977106511592865,
+      "similarity": 0.9811769723892212,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -44,9 +44,53 @@
       }
     },
     {
+      "datetime_utc": "2021-06-21T10:47Z",
+      "source_file": "LKN_2021_21_1047.txt",
+      "similarity": 0.9783655405044556,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 7
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_wind": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-07-19T07:28Z",
       "source_file": "LKN_2025_19_0728_1.txt",
-      "similarity": 0.9740835428237915,
+      "similarity": 0.9783459901809692,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -85,19 +129,21 @@
       }
     },
     {
-      "datetime_utc": "2012-09-03T10:19Z",
-      "source_file": "LKN_2012_03_1019.txt",
-      "similarity": 0.9729567766189575,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2025-08-16T20:06Z",
+      "source_file": "LKN_2025_16_2006.txt",
+      "similarity": 0.9782291650772095,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
         },
         "2": {
           "label": "quiet",
@@ -116,15 +162,68 @@
           "counts": {}
         },
         "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-07-11T10:35Z",
+      "source_file": "LKN_2022_11_1035_1.txt",
+      "similarity": 0.9750735759735107,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
           "label": "quiet",
           "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 4
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 8
+          }
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_wind": 3,
+            "flood": 2
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5
+          }
         }
       }
     },
     {
       "datetime_utc": "2023-08-06T21:02Z",
       "source_file": "LKN_2023_06_2102.txt",
-      "similarity": 0.9718520641326904,
+      "similarity": 0.9749571681022644,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -165,50 +264,9 @@
       }
     },
     {
-      "datetime_utc": "2025-08-16T08:43Z",
-      "source_file": "LKN_2025_16_0843.txt",
-      "similarity": 0.9714963436126709,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2017-07-16T04:00Z",
       "source_file": "LKN_2017_16_0400.txt",
-      "similarity": 0.9712221026420593,
+      "similarity": 0.9748061299324036,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -251,7 +309,7 @@
     {
       "datetime_utc": "2017-07-15T22:15Z",
       "source_file": "LKN_2017_15_2215.txt",
-      "similarity": 0.9712221026420593,
+      "similarity": 0.9748061299324036,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -292,9 +350,9 @@
       }
     },
     {
-      "datetime_utc": "2011-08-27T09:57Z",
-      "source_file": "LKN_2011_27_0957.txt",
-      "similarity": 0.9710452556610107,
+      "datetime_utc": "2025-05-29T09:32Z",
+      "source_file": "LKN_2025_29_0932.txt",
+      "similarity": 0.9744198322296143,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -303,62 +361,18 @@
           "counts": {}
         },
         "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2021-06-21T10:47Z",
-      "source_file": "LKN_2021_21_1047.txt",
-      "similarity": 0.9709583520889282,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
         },
-        "1": {
+        "3": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 7
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1,
             "severe_wind": 1
           }
         },
@@ -379,7 +393,7 @@
     {
       "datetime_utc": "2019-07-29T09:51Z",
       "source_file": "LKN_2019_29_0951.txt",
-      "similarity": 0.9706645011901855,
+      "similarity": 0.9742687940597534,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -420,18 +434,18 @@
   ],
   "signal": {
     "level": "HIGH",
-    "severe_fraction": 0.83,
-    "mean_similarity": 0.9673947191238403,
+    "severe_fraction": 0.81,
+    "mean_similarity": 0.9711384153366089,
     "base_rate": 0.3487163656942944,
-    "signal_value": 0.4812836343057056,
-    "percentile": 93,
+    "signal_value": 0.4612836343057057,
+    "percentile": 91,
     "office_lift": 0.13134363430570561,
-    "n_severe": 8,
+    "n_severe": 9,
     "n_total": 10,
-    "n_severe_signal": 83,
+    "n_severe_signal": 81,
     "n_total_signal": 100,
-    "product_id": "202609031956-KLKN-FXUS65-AFDLKN",
-    "afd_time": "2026-09-03T19:56:00Z",
-    "updated": "2026-09-03T21:24:40.685675+00:00"
+    "product_id": "202609040736-KLKN-FXUS65-AFDLKN",
+    "afd_time": "2026-09-04T07:36:00Z",
+    "updated": "2026-09-04T11:21:54.470361+00:00"
   }
 }
