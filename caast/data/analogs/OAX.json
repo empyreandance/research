@@ -1,15 +1,15 @@
 {
   "office": "OAX",
-  "product_id": "202609061726-KOAX-FXUS63-AFDOAX",
-  "afd_time": "2026-09-06T17:26:00Z",
+  "product_id": "202609062237-KOAX-FXUS63-AFDOAX",
+  "afd_time": "2026-09-06T22:37:00Z",
   "section_type": "discussion",
-  "updated": "2026-09-06T19:14:31.285478+00:00",
+  "updated": "2026-09-06T23:57:36.187407+00:00",
   "query_preview": "..\nIssued at 1216 PM CDT Sun Sep 6 2026\n\nToday and Tonight...\n\nWater vapor imagery and largescale analysis revealed a cutoff low \nchurning over the Pacific Northwest, and a prominent ridge \nestablished over the center of the nation. A shortwave rippling \naround the upper ridge brought bubbling convection across the area \ntoday. Storms went up quickly, fueled by around 2000 J/kg of \ninstability, but struggled to maintain organization long enough to \nproduce severe wind or hail in a weakly sheared environment. By \nnoon, the persistent cloud cover and scattered precip maintained \ntemperatures in the 70s and 80s, which was pleasantly cooler than \nthe extreme heat of the previous several days.\n\nCAMs still indicate the potential for more organized cells to become \nestablished late this afternoon and evening, as marginally better \nshear overspreads the region. If deeper convection does develop, \nlarge hail, and damaging winds will be possible. However, the \nlingering morning showers and storms could inhibit this later \ndevelopment, keeping the best chance for a strong to severe storm \nmainly east of the Missouri River, in western Iowa. Additionally, \nhigh PWats, up to 2 inches, in conjunction with slow moving storms \ninitially could lead to areas of very heavy rainfall. CAM QPF \ndepicts several pockets of 1-3\" with potential for up to 5\"+ \namounts. Therefore, a Flash Flood Watch has been issued for parts of \nfar western Iowa, where heaviest rainfall is expected. \n\nMonday and Tuesday...\n\nSpotty showers and storms will linger into Labor Day, as the \nshortwave continues to traverse the upper ridge. The previously \nmentioned Pac. NW low will finally eject eastward on Monday, \ndragging a cold front toward the central CONUS. Temperatures on \nMonday will be similar to today, with cloud cover providing some \nrelief and the shortwave shunting the thermal ridge. Winds will \nincrease ahead of the approaching system Monday afternoon, with \ngusts up to 35 mph possible. \n\nThe cold front finally arrives Tuesday. While exact timing and \nspecifics remain a little uncertain at the moment, expect strong \nsouthwesterly flow ahead of the front to pull temperatures back into \nthe upper 90s across southeast Nebraska and southwest Iowa, with\nheat indices rising to 100-105. Showers and storms look likely \nwith the frontal passage, with at least a Marginal Risk (5% \nchance) for severe storms in the afternoon and evening. \n\nWednesday and Beyond...\n\nShowers and storms associated with the frontal passage clear the \narea Wednesday, with zonal flow aloft will returning by mid-week, \ndropping high temperatures back into the 80s. Periodic rain chances \nof 15-30% remain in place through the remainder of the week as a \nshortwave disturbance traverses the area. Good news for the fall-\nlovers, looking further ahead, most GEFS and EPS-AIFS members \ncontinue to bring a potent trough across the northern Plains next \nweekend. This system will bring a push of cooler air into the region \nand could knock highs into the 70s by the end of next weekend, \nthough details on timing and extent will still need to be ironed out.",
   "analogs": [
     {
       "datetime_utc": "2025-09-05T23:11Z",
       "source_file": "OAX_2025_05_2311.txt",
-      "similarity": 0.95615553855896,
+      "similarity": 0.9561555981636047,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -50,7 +50,7 @@
     {
       "datetime_utc": "2025-09-06T03:08Z",
       "source_file": "OAX_2025_06_0308.txt",
-      "similarity": 0.95615553855896,
+      "similarity": 0.9561555981636047,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -91,7 +91,7 @@
     {
       "datetime_utc": "2013-08-11T19:55Z",
       "source_file": "OAX_2013_11_1955.txt",
-      "similarity": 0.9522733688354492,
+      "similarity": 0.952273428440094,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -135,7 +135,7 @@
     {
       "datetime_utc": "2009-05-12T19:15Z",
       "source_file": "OAX_2009_12_1915.txt",
-      "similarity": 0.950827956199646,
+      "similarity": 0.9508280158042908,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -176,9 +176,53 @@
       }
     },
     {
+      "datetime_utc": "2017-08-23T04:32Z",
+      "source_file": "OAX_2017_23_0432.txt",
+      "similarity": 0.9501357078552246,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 1
+          }
+        },
+        "2": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 15
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2017-08-22T20:43Z",
       "source_file": "OAX_2017_22_2043.txt",
-      "similarity": 0.9501354694366455,
+      "similarity": 0.9501357078552246,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -214,93 +258,6 @@
         "5": {
           "label": "quiet",
           "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2017-08-23T04:32Z",
-      "source_file": "OAX_2017_23_0432.txt",
-      "similarity": 0.9501354694366455,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 15
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2020-08-01T23:21Z",
-      "source_file": "OAX_2020_01_2321.txt",
-      "similarity": 0.9496536254882812,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 4
-          }
-        },
-        "5": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
         },
         "6": {
           "label": "quiet",
@@ -352,9 +309,52 @@
       }
     },
     {
+      "datetime_utc": "2020-08-01T23:21Z",
+      "source_file": "OAX_2020_01_2321.txt",
+      "similarity": 0.9496536254882812,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 4
+          }
+        },
+        "5": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2009-09-10T19:30Z",
       "source_file": "OAX_2009_10_1930.txt",
-      "similarity": 0.9487606883049011,
+      "similarity": 0.9487608075141907,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -389,9 +389,9 @@
       }
     },
     {
-      "datetime_utc": "2024-07-24T08:20Z",
-      "source_file": "OAX_2024_24_0820.txt",
-      "similarity": 0.9479892253875732,
+      "datetime_utc": "2024-07-24T11:43Z",
+      "source_file": "OAX_2024_24_1143.txt",
+      "similarity": 0.9479891657829285,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -441,7 +441,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.6,
-    "mean_similarity": 0.9333745574951172,
+    "mean_similarity": 0.9333746325969696,
     "base_rate": 0.5290490280120566,
     "signal_value": 0.07095097198794342,
     "percentile": 42,
@@ -450,8 +450,8 @@
     "n_total": 10,
     "n_severe_signal": 60,
     "n_total_signal": 100,
-    "product_id": "202609061726-KOAX-FXUS63-AFDOAX",
-    "afd_time": "2026-09-06T17:26:00Z",
-    "updated": "2026-09-06T19:14:31.285478+00:00"
+    "product_id": "202609062237-KOAX-FXUS63-AFDOAX",
+    "afd_time": "2026-09-06T22:37:00Z",
+    "updated": "2026-09-06T23:57:36.187407+00:00"
   }
 }
