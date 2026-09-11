@@ -1,15 +1,15 @@
 {
   "office": "PBZ",
-  "product_id": "202609110741-KPBZ-FXUS61-AFDPBZ",
-  "afd_time": "2026-09-11T07:41:00Z",
+  "product_id": "202609111139-KPBZ-FXUS61-AFDPBZ",
+  "afd_time": "2026-09-11T11:39:00Z",
   "section_type": "discussion",
-  "updated": "2026-09-11T11:25:18.607782+00:00",
+  "updated": "2026-09-11T16:31:53.231995+00:00",
   "query_preview": "..\nKEY MESSAGE 1...\n\nA weak shortwave will exit the region early this morning,\nallowing drier and quieter conditions to develop after 9am. No\nhazardous weather is forecasted for today. \n\nA new disturbance, advancing from the south, will increase the \npotential for rain showers and thunderstorms Saturday morning \nand will likely continue into the evening hours. The primary \nthreat with this system heavy rainfall, which could lead to \nlocalized flooding concerns. High-resolution models currently \nsuggest the greatest flood potential will be south and/or \nsoutheast of Pittsburgh. High-resolution models indicate a \n30-50% probability that forecasted rainfall amounts will exceed \n6 hour flash flood guidance during Saturday evening. Swaths of 1\nto 2 inches of rainfall could occur. \n\nDeep ample moisture and weak shear, generally below 30kts, will\nreduce the risk for strong to severe thunderstorms Saturday. The\nlack of sufficient dry air will reduce the risk of damaging\ndowndrafts. Lightning will likely remain the secondary hazard\nduring the afternoon and evening hours. \n\nThe risk for moderate to heavy rainfall will decrease early \nSunday morning as the disturbance exits east and drier air aloft\nincreases. \n\nKEY MESSAGE 2...\n\nThere is the potential for strong to severe thunderstorms Sunday\nafternoon and evening as a trough and associated cold front\nquickly move across the Great Lakes. Machine-learning guidance\nindicates a 5-15% chance of severe weather for a portion of our\nregion. Long-range ensembles support 50-60% joint probabilities\nof effective shear above 30kts and CAPE values above 500J/kg \nduring the afternoon and evening hours, with highest \nprobabilities noted north of Pittsburgh where stronger vertical \nwind shear resides. \n\nIf the system continues to evolve favorably across the region,\nall severe weather threats, including damaging winds, hail, and\ntornadoes, will be possible.",
   "analogs": [
     {
-      "datetime_utc": "2017-08-31T01:06Z",
-      "source_file": "PBZ_2017_31_0106.txt",
-      "similarity": 0.9758356809616089,
+      "datetime_utc": "2017-08-30T18:51Z",
+      "source_file": "PBZ_2017_30_1851.txt",
+      "similarity": 0.9758355021476746,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -26,12 +26,16 @@
           "counts": {}
         },
         "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
           "label": "tornado",
           "counts": {
             "tornado": 1
           }
         },
-        "4": {
+        "5": {
           "label": "tornado",
           "counts": {
             "severe_wind": 35,
@@ -39,23 +43,19 @@
             "severe_hail": 1
           }
         },
-        "5": {
+        "6": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 10,
             "severe_hail": 2
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2017-08-30T23:31Z",
-      "source_file": "PBZ_2017_30_2331.txt",
-      "similarity": 0.9758356809616089,
+      "datetime_utc": "2017-08-31T01:06Z",
+      "source_file": "PBZ_2017_31_0106.txt",
+      "similarity": 0.9758355021476746,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -72,16 +72,12 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
           "label": "tornado",
           "counts": {
             "tornado": 1
           }
         },
-        "5": {
+        "4": {
           "label": "tornado",
           "counts": {
             "severe_wind": 35,
@@ -89,19 +85,23 @@
             "severe_hail": 1
           }
         },
-        "6": {
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 10,
             "severe_hail": 2
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2019-07-18T19:31Z",
       "source_file": "PBZ_2019_18_1931.txt",
-      "similarity": 0.9744843244552612,
+      "similarity": 0.9744842052459717,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -154,7 +154,7 @@
     {
       "datetime_utc": "2025-06-18T04:35Z",
       "source_file": "PBZ_2025_18_0435.txt",
-      "similarity": 0.974186897277832,
+      "similarity": 0.9741867780685425,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -197,62 +197,9 @@
       }
     },
     {
-      "datetime_utc": "2015-05-28T21:52Z",
-      "source_file": "PBZ_2015_28_2152.txt",
-      "similarity": 0.973310649394989,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 5,
-            "flood": 2,
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 22,
-            "severe_hail": 5,
-            "flood": 1
-          }
-        },
-        "3": {
-          "label": "tornado",
-          "counts": {
-            "severe_hail": 5,
-            "severe_wind": 17,
-            "flood": 4,
-            "tornado": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4,
-            "severe_hail": 11
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2015-05-29T05:36Z",
       "source_file": "PBZ_2015_29_0536.txt",
-      "similarity": 0.973310649394989,
+      "similarity": 0.9733105301856995,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -303,9 +250,62 @@
       }
     },
     {
-      "datetime_utc": "2022-05-20T09:36Z",
-      "source_file": "PBZ_2022_20_0936.txt",
-      "similarity": 0.9729989171028137,
+      "datetime_utc": "2015-05-28T21:52Z",
+      "source_file": "PBZ_2015_28_2152.txt",
+      "similarity": 0.9733105301856995,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5,
+            "flood": 2,
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 22,
+            "severe_hail": 5,
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 5,
+            "severe_wind": 17,
+            "flood": 4,
+            "tornado": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 4,
+            "severe_hail": 11
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-05-20T11:13Z",
+      "source_file": "PBZ_2022_20_1113.txt",
+      "similarity": 0.972998857498169,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -348,9 +348,9 @@
       }
     },
     {
-      "datetime_utc": "2023-05-31T05:35Z",
-      "source_file": "PBZ_2023_31_0535_1.txt",
-      "similarity": 0.9722399115562439,
+      "datetime_utc": "2023-05-31T04:49Z",
+      "source_file": "PBZ_2023_31_0449.txt",
+      "similarity": 0.9722397923469543,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -390,7 +390,7 @@
     {
       "datetime_utc": "2023-05-30T16:55Z",
       "source_file": "PBZ_2023_30_1655.txt",
-      "similarity": 0.9722399115562439,
+      "similarity": 0.9722397923469543,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -430,7 +430,7 @@
     {
       "datetime_utc": "2013-12-19T06:17Z",
       "source_file": "PBZ_2013_19_0617.txt",
-      "similarity": 0.9721965789794922,
+      "similarity": 0.9721964597702026,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -479,7 +479,7 @@
   "signal": {
     "level": "MODERATE",
     "severe_fraction": 0.88,
-    "mean_similarity": 0.9676654255390167,
+    "mean_similarity": 0.967665302157402,
     "base_rate": 0.544319694101329,
     "signal_value": 0.33568030589867104,
     "percentile": 82,
@@ -488,8 +488,8 @@
     "n_total": 10,
     "n_severe_signal": 88,
     "n_total_signal": 100,
-    "product_id": "202609110741-KPBZ-FXUS61-AFDPBZ",
-    "afd_time": "2026-09-11T07:41:00Z",
-    "updated": "2026-09-11T11:25:18.607782+00:00"
+    "product_id": "202609111139-KPBZ-FXUS61-AFDPBZ",
+    "afd_time": "2026-09-11T11:39:00Z",
+    "updated": "2026-09-11T16:31:53.231995+00:00"
   }
 }
