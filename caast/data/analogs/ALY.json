@@ -1,14 +1,14 @@
 {
   "office": "ALY",
-  "product_id": "202609151747-KALY-FXUS61-AFDALY",
-  "afd_time": "2026-09-15T17:47:00Z",
+  "product_id": "202609152345-KALY-FXUS61-AFDALY",
+  "afd_time": "2026-09-15T23:45:00Z",
   "section_type": "discussion",
-  "updated": "2026-09-15T18:17:54.307905+00:00",
+  "updated": "2026-09-16T00:24:38.630288+00:00",
   "query_preview": "..\nKEY MESSAGE 1...\n\nHigh pressure shifts east off the New England coast tonight, \nwith warmer air aloft moving in from the west. So temperatures \nwill be not as cold as last night. Also temperatures will warm \nback above normal on Wed, with a mix clouds and some sunshine. \nHighs expected to reach the upper 70s to around 80F in most \nvalleys. Other than a few showers across the Adirondacks tonight\nit should be mainly dry. A weakening cold front will approach \nfrom the NW on Wed, but limited forcing/moisture will likely \nonly result in a few sprinkles in some spots. The front washes \nout and becomes diffuse over the area Wed night, with dry, mild\nand slightly humid conditions.\n\nThe next appreciable chance of showers arrives on Thu, as a \nweak wave of low pressure is expected to track east along the \nold/diffuse front. Main time frame looks to be late Thu A.M. \ninto Thu P.M. Most numerous showers look to move across areas \nfrom around Albany north/west. Will only mention a slight chance\nof thunder west of Albany, as despite increasing moisture (PWAT\nanomalies of +1 to +3 STDEV) limited instability of < 500 J/Kg \nSBCAPE is forecast. Scattered showers may linger into Thu \nevening from around ALB south/east, then drying expected Thu \nnight with continued mild temperatures.\n\nKEY MESSAGE 2...\n\nUpper level troughing developing across SE Canada will send a \ncold front southward across our region Thu night, resulting in a\ncooler and drier air mass filtering in on Fri. Dry/cool \nconditions should persist into Sat, as high pressure tracks \neastward across southern Quebec. Temperatures expected to be \nbelow normal Fri night and Sat. The next chance of showers looks\nto arrive Sat night into Sun, as a wave of low pressure and \nfrontal system approach from the west. While at least some \nmeasurable rainfall appears likely across much of the area \nduring this time, there is low confidence in areal \ncoverage/duration of showers and QPF amounts.",
   "analogs": [
     {
-      "datetime_utc": "2010-05-12T06:24Z",
-      "source_file": "ALY_2010_12_0624.txt",
+      "datetime_utc": "2010-05-12T05:44Z",
+      "source_file": "ALY_2010_12_0544.txt",
       "similarity": 0.9716896414756775,
       "label": "quiet",
       "is_severe": false,
@@ -81,9 +81,50 @@
       }
     },
     {
+      "datetime_utc": "2019-08-27T20:19Z",
+      "source_file": "ALY_2019_27_2019.txt",
+      "similarity": 0.9698437452316284,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "flood": 4,
+            "severe_wind": 3,
+            "tornado": 1
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2019-08-28T04:41Z",
       "source_file": "ALY_2019_28_0441.txt",
-      "similarity": 0.9698436856269836,
+      "similarity": 0.9698437452316284,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -122,50 +163,59 @@
       }
     },
     {
-      "datetime_utc": "2019-08-27T20:19Z",
-      "source_file": "ALY_2019_27_2019.txt",
-      "similarity": 0.9698436856269836,
-      "label": "tornado",
+      "datetime_utc": "2008-06-05T01:08Z",
+      "source_file": "ALY_2008_05_0108.txt",
+      "similarity": 0.9696118235588074,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 1
+          }
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 4
+          }
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 35,
+            "severe_hail": 8
+          }
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 232,
+            "severe_hail": 53
+          }
         },
         "6": {
-          "label": "tornado",
-          "counts": {
-            "flood": 4,
-            "severe_wind": 3,
-            "tornado": 1
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2008-06-04T20:58Z",
       "source_file": "ALY_2008_04_2058.txt",
-      "similarity": 0.9696118831634521,
+      "similarity": 0.9696118235588074,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -213,59 +263,9 @@
       }
     },
     {
-      "datetime_utc": "2008-06-05T00:56Z",
-      "source_file": "ALY_2008_05_0056.txt",
-      "similarity": 0.9696118831634521,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 4
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 35,
-            "severe_hail": 8
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 232,
-            "severe_hail": 53
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2012-08-17T05:43Z",
-      "source_file": "ALY_2012_17_0543.txt",
-      "similarity": 0.9695000648498535,
+      "datetime_utc": "2012-08-17T01:48Z",
+      "source_file": "ALY_2012_17_0148.txt",
+      "similarity": 0.9695001244544983,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -302,9 +302,9 @@
       }
     },
     {
-      "datetime_utc": "2012-08-16T22:34Z",
-      "source_file": "ALY_2012_16_2234.txt",
-      "similarity": 0.9695000648498535,
+      "datetime_utc": "2012-08-16T23:48Z",
+      "source_file": "ALY_2012_16_2348.txt",
+      "similarity": 0.9695001244544983,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -343,7 +343,7 @@
     {
       "datetime_utc": "2010-07-13T15:30Z",
       "source_file": "ALY_2010_13_1530.txt",
-      "similarity": 0.9686918258666992,
+      "similarity": 0.968691885471344,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -392,8 +392,8 @@
       }
     },
     {
-      "datetime_utc": "2010-08-06T00:37Z",
-      "source_file": "ALY_2010_06_0037.txt",
+      "datetime_utc": "2010-08-06T02:37Z",
+      "source_file": "ALY_2010_06_0237.txt",
       "similarity": 0.9684963226318359,
       "label": "severe_wind",
       "is_severe": true,
@@ -435,7 +435,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.8,
-    "mean_similarity": 0.9662335860729218,
+    "mean_similarity": 0.966233561038971,
     "base_rate": 0.48228547210044637,
     "signal_value": 0.3177145278995537,
     "percentile": 64,
@@ -444,8 +444,8 @@
     "n_total": 10,
     "n_severe_signal": 80,
     "n_total_signal": 100,
-    "product_id": "202609151747-KALY-FXUS61-AFDALY",
-    "afd_time": "2026-09-15T17:47:00Z",
-    "updated": "2026-09-15T18:17:54.307905+00:00"
+    "product_id": "202609152345-KALY-FXUS61-AFDALY",
+    "afd_time": "2026-09-15T23:45:00Z",
+    "updated": "2026-09-16T00:24:38.630288+00:00"
   }
 }
