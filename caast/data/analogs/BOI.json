@@ -1,15 +1,15 @@
 {
   "office": "BOI",
-  "product_id": "202609190018-KBOI-FXUS65-AFDBOI",
-  "afd_time": "2026-09-19T00:18:00Z",
+  "product_id": "202609190526-KBOI-FXUS65-AFDBOI",
+  "afd_time": "2026-09-19T05:26:00Z",
   "section_type": "long_term",
-  "updated": "2026-09-19T01:13:15.941079+00:00",
+  "updated": "2026-09-19T05:58:38.287619+00:00",
   "query_preview": "/Monday through Friday/...\nIssued 217 PM MDT FRI SEP 18 2026\nAn upper level ridge over the Intermountain West and Rocky Mountains \nwill remain the dominate weather feature through the extended \nperiod. Early in the week on Monday and Tuesday, the region will sit \nunder a modest northwesterly flow. Dynamics will favor development \nof showers in Central and Eastern Idaho Monday and Tuesday \nafternoons. The chance of precipitation each afternoon is only 10%. \nOtherwise, that zonal flow to the north moderates temperatures, \nholding them steady at 5 degrees above normal for most of the long \nterm. Upper level ridge amplifies to the east as a strong Alaskan \nlow pressure system approaches the Pacific Northwest. This will \nbring well above normal temperatures for Thursday and Friday. \nTemperatures look to run at least 5 to 10 degrees above seasonal \nnormals. That would mean temperatures in the upper 80s to low 90s in \nthe lower valleys.",
   "analogs": [
     {
       "datetime_utc": "2009-07-01T15:50Z",
       "source_file": "BOI_2009_01_1550.txt",
-      "similarity": 0.914836585521698,
+      "similarity": 0.9148361682891846,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -58,9 +58,51 @@
       }
     },
     {
+      "datetime_utc": "2011-04-22T03:36Z",
+      "source_file": "BOI_2011_22_0336.txt",
+      "similarity": 0.9132833480834961,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 2
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2011-04-21T20:37Z",
       "source_file": "BOI_2011_21_2037_1.txt",
-      "similarity": 0.91328364610672,
+      "similarity": 0.9132833480834961,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -101,51 +143,9 @@
       }
     },
     {
-      "datetime_utc": "2011-04-22T03:36Z",
-      "source_file": "BOI_2011_22_0336.txt",
-      "similarity": 0.91328364610672,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 2
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        }
-      }
-    },
-    {
       "datetime_utc": "2024-07-02T16:00Z",
       "source_file": "BOI_2024_02_1600.txt",
-      "similarity": 0.9088810086250305,
+      "similarity": 0.9088806509971619,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -182,7 +182,7 @@
     {
       "datetime_utc": "2004-07-07T09:18Z",
       "source_file": "BOI_2004_07_0918.txt",
-      "similarity": 0.8933260440826416,
+      "similarity": 0.8933259844779968,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -219,7 +219,7 @@
     {
       "datetime_utc": "2013-11-21T04:05Z",
       "source_file": "BOI_2013_21_0405.txt",
-      "similarity": 0.8931891918182373,
+      "similarity": 0.8931888341903687,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -256,7 +256,7 @@
     {
       "datetime_utc": "2005-09-05T03:50Z",
       "source_file": "BOI_2005_05_0350.txt",
-      "similarity": 0.882009744644165,
+      "similarity": 0.8820096850395203,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -291,6 +291,43 @@
           "counts": {
             "severe_hail": 1
           }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2007-03-02T04:07Z",
+      "source_file": "BOI_2007_02_0407.txt",
+      "similarity": 0.8811937570571899,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
@@ -334,10 +371,10 @@
       }
     },
     {
-      "datetime_utc": "2007-03-02T04:07Z",
-      "source_file": "BOI_2007_02_0407.txt",
-      "similarity": 0.8811937570571899,
-      "label": "quiet",
+      "datetime_utc": "2025-08-20T02:44Z",
+      "source_file": "BOI_2025_20_0244.txt",
+      "similarity": 0.8784536123275757,
+      "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
@@ -365,45 +402,10 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-08-19T21:06Z",
-      "source_file": "BOI_2025_19_2106.txt",
-      "similarity": 0.8784540891647339,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 5
+          }
         }
       }
     }
@@ -411,7 +413,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.28,
-    "mean_similarity": 0.8415479516983032,
+    "mean_similarity": 0.84154760658741,
     "base_rate": 0.36275012827090813,
     "signal_value": -0.08275012827090811,
     "percentile": 33,
@@ -420,8 +422,8 @@
     "n_total": 10,
     "n_severe_signal": 28,
     "n_total_signal": 100,
-    "product_id": "202609190018-KBOI-FXUS65-AFDBOI",
-    "afd_time": "2026-09-19T00:18:00Z",
-    "updated": "2026-09-19T01:13:15.941079+00:00"
+    "product_id": "202609190526-KBOI-FXUS65-AFDBOI",
+    "afd_time": "2026-09-19T05:26:00Z",
+    "updated": "2026-09-19T05:58:38.287619+00:00"
   }
 }
