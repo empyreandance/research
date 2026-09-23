@@ -1,17 +1,17 @@
 {
   "office": "BOI",
-  "product_id": "202609222016-KBOI-FXUS65-AFDBOI",
-  "afd_time": "2026-09-22T20:16:00Z",
+  "product_id": "202609230031-KBOI-FXUS65-AFDBOI",
+  "afd_time": "2026-09-23T00:31:00Z",
   "section_type": "long_term",
-  "updated": "2026-09-22T22:12:44.429943+00:00",
-  "query_preview": "/Friday through Tuesday/...The well advertised cold \nfront is still on track to cross over the area come Friday \nafternoon into Friday night. This frontal passage will be \nmostly dry, with the wind being the main story. Southwesterly \nprefrontal winds will increase with gusts to 25-45 mph. The \nhigher end of that range will be felt generally south and west \nof the Snake Plain and across ridgetops. As the front moves \nthrough the area, winds will switch to be out of the northwest, \nwith post-frontal gusts remaining elevated at 25-40 mph. With \nthe associated trough swinging north of our area, the best \nprecipitation chances/totals remain on track to stay generally \nnorth of our area. For our area, the best chances of \nprecipitation (20-40%) will be in northern portions of Baker and\nValley Counties. The temperature effects of this front will be \nmost felt in eastern Oregon, where it will move through earlier \nin the afternoon, with a nearly 20 degrees temperature \ndifference between Thursday afternoon and Friday afternoon \nhighs. Above normal temperatures will persist friday across SW- \nIdaho, with max temps in lower elevations reaching the low to \nmid-80s. \n\nTemperatures will cool to 5-15 degrees below normal area-wide come \nSaturday. A trough digging off the west coast will pass-over the \narea late Sunday/early Sunday along with an associated cold front. \nWhile this trough and front will be weaker than that of Friday, it \nwill help keep cooler conditions and breezy west/northwest winds in \nplace into the start of the next week. Moisture availability is in \nquestion for this next system. With an active eastern Pacific, \ntropical moisture could work it's way back up to support \nprecipitation chances. However, return flow will be limited with the \nquick one-two punch of these systems. Right now, am leaning towards \nanother dry frontal passage with moisture remaining south and east \nof our area. Long-range guidance doesn't handle the energy transfer \nwith tropical systems the best, but things should become more clear \nin the days to come.",
+  "updated": "2026-09-23T00:37:52.209884+00:00",
+  "query_preview": "/Friday through Tuesday/...\nIssued 216 PM MDT TUE SEP 22 2026\nThe well advertised cold front is still on track to cross over \nthe area come Friday afternoon into Friday night. This frontal \npassage will be mostly dry, with the wind being the main story. \nSouthwesterly prefrontal winds will increase with gusts to 25-45\nmph. The higher end of that range will be felt generally south \nand west of the Snake Plain and across ridgetops. As the front \nmoves through the area, winds will switch to be out of the \nnorthwest, with post-frontal gusts remaining elevated at 25-40 \nmph. With the associated trough swinging north of our area, the \nbest precipitation chances/totals remain on track to stay \ngenerally north of our area. For our area, the best chances of \nprecipitation (20-40%) will be in northern portions of Baker and\nValley Counties. The temperature effects of this front will be \nmost felt in eastern Oregon, where it will move through earlier \nin the afternoon, with a nearly 20 degrees temperature \ndifference between Thursday afternoon and Friday afternoon \nhighs. Above normal temperatures will persist friday across SW- \nIdaho, with max temps in lower elevations reaching the low to \nmid-80s. \n\nTemperatures will cool to 5-15 degrees below normal area-wide come \nSaturday. A trough digging off the west coast will pass-over the \narea late Sunday/early Sunday along with an associated cold front. \nWhile this trough and front will be weaker than that of Friday, it \nwill help keep cooler conditions and breezy west/northwest winds in \nplace into the start of the next week. Moisture availability is in \nquestion for this next system. With an active eastern Pacific, \ntropical moisture could work it's way back up to support \nprecipitation chances. However, return flow will be limited with the \nquick one-two punch of these systems. Right now, am leaning towards \nanother dry frontal passage with moisture remaining south and east \nof our area. Long-range guidance doesn't handle the energy transfer \nwith tropical systems the best, but things should become more clear \nin the days to come.",
   "analogs": [
     {
-      "datetime_utc": "2004-02-13T04:07Z",
-      "source_file": "BOI_2004_13_0407.txt",
-      "similarity": 0.8938354253768921,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2011-04-22T03:36Z",
+      "source_file": "BOI_2011_22_0336.txt",
+      "similarity": 0.9118587970733643,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -26,8 +26,11 @@
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 2
+          }
         },
         "4": {
           "label": "quiet",
@@ -38,15 +41,17 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         }
       }
     },
     {
       "datetime_utc": "2011-04-21T20:37Z",
       "source_file": "BOI_2011_21_2037_1.txt",
-      "similarity": 0.8889891505241394,
+      "similarity": 0.9118587970733643,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -87,11 +92,11 @@
       }
     },
     {
-      "datetime_utc": "2011-04-22T03:36Z",
-      "source_file": "BOI_2011_22_0336.txt",
-      "similarity": 0.8889891505241394,
-      "label": "severe_wind",
-      "is_severe": true,
+      "datetime_utc": "2004-02-13T04:07Z",
+      "source_file": "BOI_2004_13_0407.txt",
+      "similarity": 0.9054031372070312,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -106,11 +111,8 @@
           "counts": {}
         },
         "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 2
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -121,17 +123,52 @@
           "counts": {}
         },
         "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2013-11-21T04:05Z",
+      "source_file": "BOI_2013_21_0405.txt",
+      "similarity": 0.8910097479820251,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2009-07-01T15:50Z",
       "source_file": "BOI_2009_01_1550.txt",
-      "similarity": 0.8841832876205444,
+      "similarity": 0.8809446096420288,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -180,15 +217,93 @@
       }
     },
     {
-      "datetime_utc": "2013-11-21T04:05Z",
-      "source_file": "BOI_2013_21_0405.txt",
-      "similarity": 0.845581591129303,
+      "datetime_utc": "2024-12-18T21:25Z",
+      "source_file": "BOI_2024_18_2125.txt",
+      "similarity": 0.8649903535842896,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-12-19T04:15Z",
+      "source_file": "BOI_2024_19_0415.txt",
+      "similarity": 0.8649903535842896,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2013-11-20T21:03Z",
+      "source_file": "BOI_2013_20_2103.txt",
+      "similarity": 0.8522003889083862,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
         },
         "1": {
           "label": "quiet",
@@ -219,7 +334,7 @@
     {
       "datetime_utc": "2024-07-02T16:00Z",
       "source_file": "BOI_2024_02_1600.txt",
-      "similarity": 0.8439559936523438,
+      "similarity": 0.8509111404418945,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -254,128 +369,9 @@
       }
     },
     {
-      "datetime_utc": "2005-09-05T03:50Z",
-      "source_file": "BOI_2005_05_0350.txt",
-      "similarity": 0.8404241800308228,
-      "label": "severe_hail",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2005-07-19T16:09Z",
-      "source_file": "BOI_2005_19_1609.txt",
-      "similarity": 0.8379549980163574,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-08-20T02:44Z",
-      "source_file": "BOI_2025_20_0244.txt",
-      "similarity": 0.8379192352294922,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 5
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-08-19T21:06Z",
-      "source_file": "BOI_2025_19_2106.txt",
-      "similarity": 0.8379192352294922,
+      "datetime_utc": "2014-09-09T19:12Z",
+      "source_file": "BOI_2014_09_1912.txt",
+      "similarity": 0.8427901268005371,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -412,18 +408,18 @@
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.29,
-    "mean_similarity": 0.7706787848472595,
+    "severe_fraction": 0.23,
+    "mean_similarity": 0.7906206351518631,
     "base_rate": 0.36275012827090813,
-    "signal_value": -0.07275012827090815,
-    "percentile": 34,
+    "signal_value": -0.13275012827090812,
+    "percentile": 26,
     "office_lift": 0.1224698717290919,
-    "n_severe": 5,
+    "n_severe": 3,
     "n_total": 10,
-    "n_severe_signal": 29,
+    "n_severe_signal": 23,
     "n_total_signal": 100,
-    "product_id": "202609222016-KBOI-FXUS65-AFDBOI",
-    "afd_time": "2026-09-22T20:16:00Z",
-    "updated": "2026-09-22T22:12:44.429943+00:00"
+    "product_id": "202609230031-KBOI-FXUS65-AFDBOI",
+    "afd_time": "2026-09-23T00:31:00Z",
+    "updated": "2026-09-23T00:37:52.209884+00:00"
   }
 }
