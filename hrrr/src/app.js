@@ -1614,22 +1614,32 @@ function consensusStripSVG(fhs, consensus, currentFH) {
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="ts-chart">${boxes}${labels}</svg>`;
 }
 
-// CARTO Positron: a clean, muted, free basemap (no account/token) — the light
-// gray makes the colored count overlay stand out. Swap "light_all" for
-// "dark_all" or another provider here if you ever want a different look.
+// Esri Light Gray Canvas: a clean, muted, free basemap (no account/token) — the
+// light gray makes the colored count overlay stand out. CARTO's tiles started
+// requiring an API key in Sep 2026, so the base and labels now come from Esri.
 function basemapStyle() {
-  const subs = ["a", "b", "c", "d"];
+  const esri = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas";
   return {
     version: 8,
     sources: {
-      carto: {
+      base: {
         type: "raster",
-        tiles: subs.map((s) => `https://${s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`),
+        tiles: [`${esri}/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}`],
         tileSize: 256,
-        attribution: "© OpenStreetMap contributors © CARTO",
+        maxzoom: 16,
+        attribution: "Esri, HERE, Garmin, © OpenStreetMap contributors",
+      },
+      labels: {
+        type: "raster",
+        tiles: [`${esri}/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}`],
+        tileSize: 256,
+        maxzoom: 16,
       },
     },
-    layers: [{ id: "carto", type: "raster", source: "carto" }],
+    layers: [
+      { id: "base", type: "raster", source: "base" },
+      { id: "labels", type: "raster", source: "labels" },
+    ],
   };
 }
 
