@@ -146,7 +146,7 @@ body{background:#0a0c10;color:#e0e4ec;font-family:'Outfit',sans-serif;overflow:h
 const CWA={south:34.99,north:36.68,west:-88.07,east:-84.66};
 const map=L.map('map',{center:[(CWA.south+CWA.north)/2,(CWA.west+CWA.east)/2],zoom:8,zoomControl:false,attributionControl:false,keyboard:false});
 L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:14,opacity:0.6}).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:14,opacity:0.6}).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:14,pane:'overlayPane'}).addTo(map);
 
 // Data source configuration
