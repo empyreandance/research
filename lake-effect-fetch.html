@@ -178,7 +178,7 @@
     </div>
     <div class="disclaimer">
       <div id="windCreatedBox" style="background:rgba(17,24,32,0.88); border:1px solid #1e2a3a; border-radius:5px; padding:6px 10px; margin-bottom:6px; font-style:normal; font-size:1.15em; font-weight:500; color:#c8d0da;">Forecast created: <span id="windCreatedTime">—</span></div>
-      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product. <span class="d-br"></span>Personal research project by Alex Cooke. <span class="d-br"></span>Wind: NWS API + ECCC HRDPS via GeoMet. <span class="d-br"></span>SST: JPL MUR satellite analysis (daily, 1 km). <span class="d-br"></span>850 mb: ECCC HRDPS · Basemap: CARTO. <span class="d-br"></span>Shoreline: Natural Earth 10m.</span>
+      <span class="disclaimer-text">Not an official NWS, NOAA, or ECCC product. <span class="d-br"></span>Personal research project by Alex Cooke. <span class="d-br"></span>Wind: NWS API + ECCC HRDPS via GeoMet. <span class="d-br"></span>SST: JPL MUR satellite analysis (daily, 1 km). <span class="d-br"></span>850 mb: ECCC HRDPS · Basemap: Esri, CARTO. <span class="d-br"></span>Shoreline: Natural Earth 10m.</span>
     </div>
     <div class="cursor-readout" id="cursorReadout">
       <div class="cursor-readout-title">Cursor Readout</div>
@@ -584,7 +584,7 @@
       map.createPane('shorelinePane').style.zIndex = 350;   // shoreline outlines
       map.createPane('labelsPane').style.zIndex = 650;      // city/road labels (above everything)
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {maxZoom:13, subdomains:'abcd', crossOrigin:'anonymous'}).addTo(map);
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom:13, crossOrigin:'anonymous'}).addTo(map);
     }
     function addLakeBaseFills() {
       // Dark base fills (hide basemap water color)
