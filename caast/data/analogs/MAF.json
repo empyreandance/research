@@ -1,15 +1,15 @@
 {
   "office": "MAF",
-  "product_id": "202609241209-KMAF-FXUS64-AFDMAF",
-  "afd_time": "2026-09-24T12:09:00Z",
+  "product_id": "202609241719-KMAF-FXUS64-AFDMAF",
+  "afd_time": "2026-09-24T17:19:00Z",
   "section_type": "long_term",
-  "updated": "2026-09-24T15:09:57.881279+00:00",
+  "updated": "2026-09-24T19:13:27.054900+00:00",
   "query_preview": "..\n(Friday night through Wednesday)\nIssued at 310 AM CDT Thu Sep 24 2026\n\nNo significant change to the extended forecast. See previous \ndiscussion below. \n\nShower/storm activity tapers down overnight Friday as a shortwave\nwithin the trough passes over the Rockies into the central \nPlains. The shortwave dampens the ridge and flow aloft becomes \nzonal by Saturday evening. Low to medium (10-50%) rain chances \nshift south of the Pecos River Saturday afternoon, with the best \nchances remaining in the vicinity of the Davis Mountains. Along \nwith decreasing rain chances, temperatures gradually increase over\nthe weekend. Highs Friday are forecast to reach the 80s at most \nlocations, then cool to the 60s and 70s overnight. Saturday's \nhighs top out in the 80s within the western portions of our \nregion, with 90s in our eastern portions.\n\nUpper ridging builds back over our region Sunday into Monday, ahead \nof another trough progged to approach the region Monday evening. \nRain chances decrease further over the higher terrain Sunday \nafternoon and highs generally reach the 90s (80s in/near the higher \nterrain). With the approach of our next storm system, rain chances \nincrease again Monday evening into Tuesday, again raising \nconcerns for heavy rainfall and flash flooding. Of course, details\nshall be ironed out over the coming days, so stay tuned!",
   "analogs": [
     {
       "datetime_utc": "2006-07-22T18:52Z",
       "source_file": "MAF_2006_22_1852.txt",
-      "similarity": 0.9762927293777466,
+      "similarity": 0.9762926697731018,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -50,9 +50,61 @@
       }
     },
     {
+      "datetime_utc": "2025-06-27T23:30Z",
+      "source_file": "MAF_2025_27_2330_1.txt",
+      "similarity": 0.9758669137954712,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 2,
+            "severe_wind": 1,
+            "severe_hail": 1
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "flood": 3
+          }
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 7
+          }
+        },
+        "6": {
+          "label": "flood",
+          "counts": {
+            "flood": 22
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-06-28T05:13Z",
       "source_file": "MAF_2025_28_0513.txt",
-      "similarity": 0.9758668541908264,
+      "similarity": 0.9758669137954712,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -99,58 +151,6 @@
           "label": "flood",
           "counts": {
             "flood": 2
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-06-27T23:30Z",
-      "source_file": "MAF_2025_27_2330_1.txt",
-      "similarity": 0.9758668541908264,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 2,
-            "severe_wind": 1,
-            "severe_hail": 1
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1,
-            "flood": 3
-          }
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 7
-          }
-        },
-        "6": {
-          "label": "flood",
-          "counts": {
-            "flood": 22
           }
         }
       }
@@ -264,7 +264,7 @@
     {
       "datetime_utc": "2025-06-24T10:42Z",
       "source_file": "MAF_2025_24_1042.txt",
-      "similarity": 0.9751540422439575,
+      "similarity": 0.9751541614532471,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -315,9 +315,54 @@
       }
     },
     {
+      "datetime_utc": "2025-08-13T18:58Z",
+      "source_file": "MAF_2025_13_1858.txt",
+      "similarity": 0.9750561714172363,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "flood": 6,
+            "severe_wind": 8
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2
+          }
+        },
+        "6": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 1,
+            "severe_wind": 6
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2025-08-14T05:16Z",
       "source_file": "MAF_2025_14_0516.txt",
-      "similarity": 0.9750562310218811,
+      "similarity": 0.9750561714172363,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -360,54 +405,9 @@
       }
     },
     {
-      "datetime_utc": "2025-08-13T22:40Z",
-      "source_file": "MAF_2025_13_2240.txt",
-      "similarity": 0.9750562310218811,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 6,
-            "severe_wind": 8
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2
-          }
-        },
-        "6": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 1,
-            "severe_wind": 6
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-06-26T07:49Z",
-      "source_file": "MAF_2024_26_0749.txt",
-      "similarity": 0.9748035669326782,
+      "datetime_utc": "2024-06-26T10:42Z",
+      "source_file": "MAF_2024_26_1042.txt",
+      "similarity": 0.974803626537323,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -450,7 +450,7 @@
     {
       "datetime_utc": "2019-08-07T19:57Z",
       "source_file": "MAF_2019_07_1957.txt",
-      "similarity": 0.9741196632385254,
+      "similarity": 0.9741195440292358,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -498,7 +498,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.93,
-    "mean_similarity": 0.9719118684530258,
+    "mean_similarity": 0.9719118982553482,
     "base_rate": 0.5431329330394467,
     "signal_value": 0.3868670669605534,
     "percentile": 94,
@@ -507,8 +507,8 @@
     "n_total": 10,
     "n_severe_signal": 93,
     "n_total_signal": 100,
-    "product_id": "202609241209-KMAF-FXUS64-AFDMAF",
-    "afd_time": "2026-09-24T12:09:00Z",
-    "updated": "2026-09-24T15:09:57.881279+00:00"
+    "product_id": "202609241719-KMAF-FXUS64-AFDMAF",
+    "afd_time": "2026-09-24T17:19:00Z",
+    "updated": "2026-09-24T19:13:27.054900+00:00"
   }
 }
