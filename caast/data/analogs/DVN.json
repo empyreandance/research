@@ -1,15 +1,15 @@
 {
   "office": "DVN",
-  "product_id": "202609251843-KDVN-FXUS63-AFDDVN",
-  "afd_time": "2026-09-25T18:43:00Z",
+  "product_id": "202609252335-KDVN-FXUS63-AFDDVN",
+  "afd_time": "2026-09-25T23:35:00Z",
   "section_type": "long_term",
-  "updated": "2026-09-25T22:24:13.149345+00:00",
-  "query_preview": "/SUNDAY THROUGH THURSDAY/...\nIssued at 142 PM CDT Fri Sep 25 2026\n\nOutside of some lingering showers in the morning over our western \nCWA, the aforementioned high pressure system will strengthen over \nthe region. Partly to mostly sunny skies and southeasterly flow \nMonday should result in the return of upper 60s to lower 70s for \nhigh temperatures.\n\nThis period of dryness will come to an end mid-week as a larger \nsystem builds in sometime around late Tuesday/Wednesday. A longer \nwave trough, with models showing a strong tropical connection to the \nsystems from the eastern Pacific and the Gulf, should translate \nthrough the area, although the exact onset/ending time of associated \nprecipitation remains uncertain. This is pretty clearly shown from \nthe LREF ensemble cluster analysis, which shows various depictions \nof the longer wave trough aloft. Some shows a large progressive \ntrough sweeping across the central CONUS, while some show a slower \ncut-off low with multiple rounds of rains mid to late week. However, \nthere remains a strong signal for abundant moisture with this system \ngiven the tropical connection, with Pwat values progged around 1.6 \nto 2 inches, which is quite high for late September. In fact, these \nvalues would be in excess of the 99th percentile for Pwats per the \nNAEFS climatological percentiles. NBM exceedance probabilities for \none inch or more of rain for Tuesday night and Wednesday are around \n50-70%, which is actually a pretty decent signal given we're talking \nseveral days out. Despite the uncertainty on the exact duration and \nmagnitude of rainfall amounts, this signal appears supportive of \nheavy rainfall and perhaps a flash flooding threat, given wet \nantecedent conditions, so this mid-week system bears watching. With \nthis, WPC does have much of our area in a Day 5 Slight Risk \n(level 2 of 4) in their latest excessive rainfall outlooks.",
+  "updated": "2026-09-26T01:37:28.133949+00:00",
+  "query_preview": "/SUNDAY THROUGH FRIDAY/...\nIssued at 142 PM CDT Fri Sep 25 2026\n\nOutside of some lingering showers in the morning over our western \nCWA, the aforementioned high pressure system will strengthen over \nthe region. Partly to mostly sunny skies and southeasterly flow \nMonday should result in the return of upper 60s to lower 70s for \nhigh temperatures.\n\nThis period of dryness will come to an end mid-week as a larger \nsystem builds in sometime around late Tuesday/Wednesday. A longer \nwave trough, with models showing a strong tropical connection to the \nsystems from the eastern Pacific and the Gulf, should translate \nthrough the area, although the exact onset/ending time of associated \nprecipitation remains uncertain. This is pretty clearly shown from \nthe LREF ensemble cluster analysis, which shows various depictions \nof the longer wave trough aloft. Some shows a large progressive \ntrough sweeping across the central CONUS, while some show a slower \ncut-off low with multiple rounds of rains mid to late week. However, \nthere remains a strong signal for abundant moisture with this system \ngiven the tropical connection, with Pwat values progged around 1.6 \nto 2 inches, which is quite high for late September. In fact, these \nvalues would be in excess of the 99th percentile for Pwats per the \nNAEFS climatological percentiles. NBM exceedance probabilities for \none inch or more of rain for Tuesday night and Wednesday are around \n50-70%, which is actually a pretty decent signal given we're talking \nseveral days out. Despite the uncertainty on the exact duration and \nmagnitude of rainfall amounts, this signal appears supportive of \nheavy rainfall and perhaps a flash flooding threat, given wet \nantecedent conditions, so this mid-week system bears watching. With \nthis, WPC does have much of our area in a Day 5 Slight Risk \n(level 2 of 4) in their latest excessive rainfall outlooks.",
   "analogs": [
     {
       "datetime_utc": "2013-01-11T05:49Z",
       "source_file": "DVN_2013_11_0549.txt",
-      "similarity": 0.9078218936920166,
+      "similarity": 0.9157902002334595,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -50,7 +50,7 @@
     {
       "datetime_utc": "2005-10-03T08:55Z",
       "source_file": "DVN_2005_03_0855.txt",
-      "similarity": 0.8968862295150757,
+      "similarity": 0.8737599849700928,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -87,9 +87,95 @@
       }
     },
     {
+      "datetime_utc": "2006-05-20T19:49Z",
+      "source_file": "DVN_2006_20_1949.txt",
+      "similarity": 0.8313645124435425,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 36,
+            "severe_wind": 63,
+            "tornado": 3
+          }
+        },
+        "5": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "6": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2014-03-04T17:49Z",
+      "source_file": "DVN_2014_04_1749.txt",
+      "similarity": 0.8091859817504883,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "winter",
+          "counts": {
+            "winter": 41
+          }
+        },
+        "1": {
+          "label": "winter",
+          "counts": {
+            "winter": 133
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2012-12-19T05:50Z",
       "source_file": "DVN_2012_19_0550.txt",
-      "similarity": 0.8505505919456482,
+      "similarity": 0.7813764810562134,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -134,7 +220,7 @@
     {
       "datetime_utc": "2012-12-18T23:59Z",
       "source_file": "DVN_2012_18_2359.txt",
-      "similarity": 0.8505505919456482,
+      "similarity": 0.7813764810562134,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -179,9 +265,55 @@
       }
     },
     {
-      "datetime_utc": "2006-05-20T19:49Z",
-      "source_file": "DVN_2006_20_1949.txt",
-      "similarity": 0.792745053768158,
+      "datetime_utc": "2006-07-07T02:18Z",
+      "source_file": "DVN_2006_07_0218.txt",
+      "similarity": 0.7808696031570435,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 8,
+            "severe_wind": 3
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 8,
+            "severe_wind": 16,
+            "flood": 2
+          }
+        }
+      }
+    },
+    {
+      "datetime_utc": "2004-07-11T13:47Z",
+      "source_file": "DVN_2004_11_1347.txt",
+      "similarity": 0.7642682194709778,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -194,53 +326,12 @@
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
           "label": "tornado",
           "counts": {
-            "severe_hail": 36,
-            "severe_wind": 63,
-            "tornado": 3
+            "severe_hail": 37,
+            "severe_wind": 7,
+            "tornado": 8
           }
-        },
-        "5": {
-          "label": "flood",
-          "counts": {
-            "flood": 2
-          }
-        },
-        "6": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2004-09-22T02:42Z",
-      "source_file": "DVN_2004_22_0242.txt",
-      "similarity": 0.7753493785858154,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -261,101 +352,19 @@
       }
     },
     {
-      "datetime_utc": "2004-09-21T20:18Z",
-      "source_file": "DVN_2004_21_2018.txt",
-      "similarity": 0.7753493785858154,
-      "label": "quiet",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2012-11-03T08:19Z",
-      "source_file": "DVN_2012_03_0819.txt",
-      "similarity": 0.7614256143569946,
+      "datetime_utc": "2006-02-09T03:27Z",
+      "source_file": "DVN_2006_09_0327.txt",
+      "similarity": 0.7615436911582947,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
           "label": "quiet",
           "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 2
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2014-03-04T09:20Z",
-      "source_file": "DVN_2014_04_0920.txt",
-      "similarity": 0.7590920925140381,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 41
-          }
-        },
-        "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 133
-          }
         },
         "2": {
           "label": "quiet",
@@ -374,27 +383,32 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 12
+          }
         }
       }
     },
     {
-      "datetime_utc": "2012-09-16T11:40Z",
-      "source_file": "DVN_2012_16_1140.txt",
-      "similarity": 0.7579594254493713,
+      "datetime_utc": "2006-09-11T00:13Z",
+      "source_file": "DVN_2006_11_0013.txt",
+      "similarity": 0.7513433694839478,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
           "label": "severe_wind",
           "counts": {
-            "severe_wind": 1,
-            "severe_hail": 5
+            "flood": 4,
+            "severe_hail": 4,
+            "severe_wind": 4
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 9
           }
         },
         "2": {
@@ -402,19 +416,19 @@
           "counts": {}
         },
         "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2
-          }
-        },
-        "4": {
           "label": "quiet",
           "counts": {}
         },
-        "5": {
-          "label": "severe_hail",
+        "4": {
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 11
+            "severe_wind": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 3
           }
         },
         "6": {
@@ -426,14 +440,14 @@
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.66,
-    "mean_similarity": 0.6672436267137527,
-    "n_severe": 66,
+    "severe_fraction": 0.62,
+    "mean_similarity": 0.6528539544343949,
+    "n_severe": 62,
     "n_total": 100,
-    "reason": "top-100 mean similarity 0.67 below confidence floor 0.7",
-    "product_id": "202609251843-KDVN-FXUS63-AFDDVN",
-    "afd_time": "2026-09-25T18:43:00Z",
-    "updated": "2026-09-25T22:24:13.149345+00:00",
+    "reason": "top-100 mean similarity 0.65 below confidence floor 0.7",
+    "product_id": "202609252335-KDVN-FXUS63-AFDDVN",
+    "afd_time": "2026-09-25T23:35:00Z",
+    "updated": "2026-09-26T01:37:28.133949+00:00",
     "office_lift": 0.1965279925557064,
     "base_rate": 0.5868920074442936
   }
