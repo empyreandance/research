@@ -1,15 +1,15 @@
 {
   "office": "TSA",
-  "product_id": "202609260534-KTSA-FXUS64-AFDTSA",
-  "afd_time": "2026-09-26T05:34:00Z",
+  "product_id": "202609261132-KTSA-FXUS64-AFDTSA",
+  "afd_time": "2026-09-26T11:32:00Z",
   "section_type": "long_term",
-  "updated": "2026-09-26T07:46:03.577804+00:00",
+  "updated": "2026-09-26T13:09:04.561076+00:00",
   "query_preview": "..\n(Saturday Night through Friday)\nIssued at 1159 PM CDT Fri Sep 25 2026\n\nAdditional rain and storm chances move back into northeast\nOklahoma Saturday evening, and then expands over eastern Oklahoma\nand northwest Arkansas Saturday night/Sunday as a weak shortwave \nmoves east/southeast across the region. At this time, rainfall\nlooks to be light for most locations through Sunday. Temps Sunday\nare forecast to warm into the 80s with low/mid 90s outside of the\nmain rain chances in southeast Oklahoma. \n\nA surface boundary is progged to set up over southeast Oklahoma\nSunday night and then near the Red River for Monday. A slight\nchance of showers and storms remain possible within the vicinity\nof this boundary through Monday afternoon. Thus will continue with\nslight chance PoPs for parts of southeast Oklahoma Sunday night\nand Monday. Severe weather this weekend into Monday is not\nexpected with the greater instability residing west of the CWA. \n\nBeyond Monday, uncertainties continue with a low pressure system\nmoving into the Desert Southwest Monday/Tuesday and merging with\nthe remnants of tropical system Polo Tuesday/Wednesday. Latest\nmodel solutions indicate the combination of these two features\nlifting into the Plains mid through late next week with the main\ndifferences being timing, strength and location of features.\nEither way, with low level moisture streaming into the Plains\nahead of the waves, the potential remains for a heavy rain threat\nas well as limited severe potentials Tuesday through the end of\nthe forecast period.",
   "analogs": [
     {
       "datetime_utc": "2015-12-22T09:08Z",
       "source_file": "TSA_2015_22_0908.txt",
-      "similarity": 0.9781572222709656,
+      "similarity": 0.9781571626663208,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -65,9 +65,50 @@
       }
     },
     {
+      "datetime_utc": "2023-12-21T23:03Z",
+      "source_file": "TSA_2023_21_2303.txt",
+      "similarity": 0.97774338722229,
+      "label": "winter",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "winter",
+          "counts": {
+            "winter": 1
+          }
+        },
+        "6": {
+          "label": "winter",
+          "counts": {
+            "winter": 3
+          }
+        }
+      }
+    },
+    {
       "datetime_utc": "2023-12-22T02:13Z",
       "source_file": "TSA_2023_22_0213.txt",
-      "similarity": 0.9777434468269348,
+      "similarity": 0.97774338722229,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -108,10 +149,10 @@
       }
     },
     {
-      "datetime_utc": "2023-12-21T23:03Z",
-      "source_file": "TSA_2023_21_2303.txt",
-      "similarity": 0.9777434468269348,
-      "label": "winter",
+      "datetime_utc": "2023-11-29T03:15Z",
+      "source_file": "TSA_2023_29_0315.txt",
+      "similarity": 0.9769775867462158,
+      "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
@@ -135,23 +176,19 @@
           "counts": {}
         },
         "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
-          "label": "winter",
-          "counts": {
-            "winter": 3
-          }
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
       "datetime_utc": "2023-11-28T23:14Z",
       "source_file": "TSA_2023_28_2314.txt",
-      "similarity": 0.9769776463508606,
+      "similarity": 0.9769775867462158,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -186,11 +223,11 @@
       }
     },
     {
-      "datetime_utc": "2023-11-29T04:36Z",
-      "source_file": "TSA_2023_29_0436.txt",
-      "similarity": 0.9769776463508606,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2022-10-13T02:46Z",
+      "source_file": "TSA_2022_13_0246.txt",
+      "similarity": 0.9767751693725586,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -201,8 +238,11 @@
           "counts": {}
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 23,
+            "severe_wind": 8
+          }
         },
         "3": {
           "label": "quiet",
@@ -225,7 +265,7 @@
     {
       "datetime_utc": "2022-10-12T23:40Z",
       "source_file": "TSA_2022_12_2340_1.txt",
-      "similarity": 0.9767751097679138,
+      "similarity": 0.9767751693725586,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -265,48 +305,8 @@
       }
     },
     {
-      "datetime_utc": "2022-10-13T02:46Z",
-      "source_file": "TSA_2022_13_0246.txt",
-      "similarity": 0.9767751097679138,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 23,
-            "severe_wind": 8
-          }
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-09-22T17:26Z",
-      "source_file": "TSA_2023_22_1726.txt",
+      "datetime_utc": "2023-09-22T11:28Z",
+      "source_file": "TSA_2023_22_1128.txt",
       "similarity": 0.976098895072937,
       "label": "severe_wind",
       "is_severe": true,
@@ -393,7 +393,7 @@
     {
       "datetime_utc": "2018-09-30T09:12Z",
       "source_file": "TSA_2018_30_0912.txt",
-      "similarity": 0.9759237170219421,
+      "similarity": 0.9759237766265869,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -433,7 +433,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.69,
-    "mean_similarity": 0.9735128718614579,
+    "mean_similarity": 0.9735128456354141,
     "base_rate": 0.6678787549862961,
     "signal_value": 0.022121245013703827,
     "percentile": 42,
@@ -442,8 +442,8 @@
     "n_total": 10,
     "n_severe_signal": 69,
     "n_total_signal": 100,
-    "product_id": "202609260534-KTSA-FXUS64-AFDTSA",
-    "afd_time": "2026-09-26T05:34:00Z",
-    "updated": "2026-09-26T07:46:03.577804+00:00"
+    "product_id": "202609261132-KTSA-FXUS64-AFDTSA",
+    "afd_time": "2026-09-26T11:32:00Z",
+    "updated": "2026-09-26T13:09:04.561076+00:00"
   }
 }
