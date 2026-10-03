@@ -1,11 +1,50 @@
 {
   "office": "MAF",
-  "product_id": "202610022253-KMAF-FXUS64-AFDMAF",
-  "afd_time": "2026-10-02T22:53:00Z",
+  "product_id": "202610030410-KMAF-FXUS64-AFDMAF",
+  "afd_time": "2026-10-03T04:10:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-02T23:00:07.848047+00:00",
+  "updated": "2026-10-03T08:09:50.059631+00:00",
   "query_preview": "..\n(Sunday through Thursday)\nIssued at 133 PM CDT Fri Oct 2 2026\n\nBy Sunday, upper-level ridging builds into the Four Corners region. \nDue to our relative proximity to this ridge, temperatures begin to \nwarm again across west Texas and southeast New Mexico, despite \npersistent northeasterly winds. Highs in the upper 70s and low 80s \nwill be commonplace, though these temperatures are still a couple of \ndegrees below normal. Generally low rain chances (10-40%) are \nmaintained for the Trans-Pecos and southeastern portions of the \nPermian Basin. As far as temperatures go, Monday looks similar to \nSunday, with low PoPs (10-25%) becoming more confined to the higher \nterrain and parts of the Upper Trans-Pecos. Surface winds become \nsoutheasterly again Monday night which, along with the nearby ridge, \nwill cause temperatures to warm again through at least the middle of \nnext week. Most locations top out in the low-to-mid 80s Tuesday, and \nby Wednesday and Thursday most of the area will see highs in the mid-\nto-upper 80s (which would be about 5-8 degrees above normal). While \nlow PoPs (10-20%) are maintained in the higher terrain south of the \nPecos through early next week (thanks to upslope flow), atmospheric \nmoisture will tend to decrease daily. As a result, by the latter \nhalf of the week rain chances fall below 10% areawide.\n\nSprang",
   "analogs": [
+    {
+      "datetime_utc": "2025-10-05T18:18Z",
+      "source_file": "MAF_2025_05_1818.txt",
+      "similarity": 0.973388671875,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
     {
       "datetime_utc": "2025-10-06T03:04Z",
       "source_file": "MAF_2025_06_0304.txt",
@@ -46,15 +85,17 @@
       }
     },
     {
-      "datetime_utc": "2025-10-05T22:51Z",
-      "source_file": "MAF_2025_05_2251.txt",
-      "similarity": 0.973388671875,
-      "label": "flood",
-      "is_severe": false,
+      "datetime_utc": "2025-09-07T18:26Z",
+      "source_file": "MAF_2025_07_1826.txt",
+      "similarity": 0.9731820225715637,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
         },
         "1": {
           "label": "quiet",
@@ -65,10 +106,8 @@
           "counts": {}
         },
         "3": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
@@ -79,15 +118,18 @@
           "counts": {}
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "flood": 7
+          }
         }
       }
     },
     {
       "datetime_utc": "2025-09-08T05:06Z",
       "source_file": "MAF_2025_08_0506.txt",
-      "similarity": 0.9731821417808533,
+      "similarity": 0.9731820225715637,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -125,51 +167,9 @@
       }
     },
     {
-      "datetime_utc": "2025-09-07T18:26Z",
-      "source_file": "MAF_2025_07_1826.txt",
-      "similarity": 0.9731821417808533,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "flood": 7
-          }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2024-10-10T23:17Z",
-      "source_file": "MAF_2024_10_2317.txt",
-      "similarity": 0.9726011753082275,
+      "datetime_utc": "2024-10-10T19:29Z",
+      "source_file": "MAF_2024_10_1929.txt",
+      "similarity": 0.9726012349128723,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -206,7 +206,7 @@
     {
       "datetime_utc": "2024-10-11T05:00Z",
       "source_file": "MAF_2024_11_0500.txt",
-      "similarity": 0.9726011753082275,
+      "similarity": 0.9726012349128723,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -221,45 +221,6 @@
         "2": {
           "label": "quiet",
           "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-09-05T05:00Z",
-      "source_file": "MAF_2025_05_0500.txt",
-      "similarity": 0.972360372543335,
-      "label": "flood",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "flood",
-          "counts": {
-            "flood": 1
-          }
         },
         "3": {
           "label": "quiet",
@@ -319,6 +280,45 @@
       }
     },
     {
+      "datetime_utc": "2025-09-05T05:00Z",
+      "source_file": "MAF_2025_05_0500.txt",
+      "similarity": 0.972360372543335,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2022-10-04T06:55Z",
       "source_file": "MAF_2022_04_0655.txt",
       "similarity": 0.9708155393600464,
@@ -360,9 +360,9 @@
       }
     },
     {
-      "datetime_utc": "2023-10-09T10:58Z",
-      "source_file": "MAF_2023_09_1058.txt",
-      "similarity": 0.9694957137107849,
+      "datetime_utc": "2023-10-09T07:39Z",
+      "source_file": "MAF_2023_09_0739.txt",
+      "similarity": 0.9694955348968506,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -400,7 +400,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.4,
-    "mean_similarity": 0.96217660009861,
+    "mean_similarity": 0.9621765142679215,
     "base_rate": 0.5431329330394467,
     "signal_value": -0.14313293303944663,
     "percentile": 24,
@@ -409,8 +409,8 @@
     "n_total": 10,
     "n_severe_signal": 40,
     "n_total_signal": 100,
-    "product_id": "202610022253-KMAF-FXUS64-AFDMAF",
-    "afd_time": "2026-10-02T22:53:00Z",
-    "updated": "2026-10-02T23:00:07.848047+00:00"
+    "product_id": "202610030410-KMAF-FXUS64-AFDMAF",
+    "afd_time": "2026-10-03T04:10:00Z",
+    "updated": "2026-10-03T08:09:50.059631+00:00"
   }
 }
