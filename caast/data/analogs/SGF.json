@@ -1,15 +1,15 @@
 {
   "office": "SGF",
-  "product_id": "202610042326-KSGF-FXUS63-AFDSGF",
-  "afd_time": "2026-10-04T23:26:00Z",
+  "product_id": "202610050445-KSGF-FXUS63-AFDSGF",
+  "afd_time": "2026-10-05T04:45:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-05T00:59:06.443000+00:00",
+  "updated": "2026-10-05T07:06:23.299464+00:00",
   "query_preview": "/MONDAY THROUGH SUNDAY/...\nIssued at 1246 PM CDT Sun Oct 4 2026\n\nRainfall: The only rain in the forecast over the next 7 days is\na 20% chance over the far eastern CWA late next weekend, but\nthat is dependent on a tropic system developing and moving east\nof the area, which is a very low confidence event. Ensembles \ncontinue to show negative precipitation anomalies through early\nnext week. In fact, ECMWF ensemble probabilities for < 0.10 \ninches of total QPF through October 12th is generally 80-90%.\n\nTemperatures/Humidity: Look for highs in the mid 70s to mid 80s\nthrough Tuesday, then low to upper 80s through next weekend. \nLook for afternoon minimum RH values generally at 25-35% \nthrough next weekend, with areas along/west of I-49 being \nslightly higher and areas along/east of Highway 65 being lower \nwith several days below 25% and perhaps some days below 20%. \n\nFire weather threat next weekend into the following week: \nStill early to be confident in details, but models are starting\nto show a period of gustier winds and minimal to no rainfall\nnext weekend into at least the early part of the following week.\nThis may be concerning given significant portions of the area\nreceived less than an inch of recent rainfall on top of\nextensive drought conditions, little to no rainfall over the\nnext week, and persistent low humidity each day. Ensemble\n75th-90th percentile gusts (representing the reasonable higher\nend of model guidance) are generally of 20-30 mph Saturday and\n25-40 mph next Sunday and Monday. Ensembles are hinting at\nTuesday and Wednesday next week potentially being even gustier.\nWhile these winds are not the most likely scenario, they are a\nplausible outcome and worth keeping an eye on given expected\nfuel conditions.",
   "analogs": [
     {
       "datetime_utc": "2004-01-14T20:23Z",
       "source_file": "SGF_2004_14_2023.txt",
-      "similarity": 0.9257494807243347,
+      "similarity": 0.9257495403289795,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -36,6 +36,55 @@
         "5": {
           "label": "quiet",
           "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2011-02-27T06:13Z",
+      "source_file": "SGF_2011_27_0613.txt",
+      "similarity": 0.9257009029388428,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 43,
+            "severe_hail": 86,
+            "flood": 1,
+            "winter": 1,
+            "tornado": 1
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 50,
+            "severe_wind": 8,
+            "flood": 5
+          }
         },
         "6": {
           "label": "quiet",
@@ -95,58 +144,9 @@
       }
     },
     {
-      "datetime_utc": "2011-02-27T00:11Z",
-      "source_file": "SGF_2011_27_0011.txt",
-      "similarity": 0.9257009029388428,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "severe_wind": 43,
-            "severe_hail": 86,
-            "flood": 1,
-            "winter": 1,
-            "tornado": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 50,
-            "severe_wind": 8,
-            "flood": 5
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2006-12-30T05:05Z",
-      "source_file": "SGF_2006_30_0505.txt",
-      "similarity": 0.9232903718948364,
+      "datetime_utc": "2006-12-29T17:04Z",
+      "source_file": "SGF_2006_29_1704.txt",
+      "similarity": 0.9232906103134155,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -181,9 +181,9 @@
       }
     },
     {
-      "datetime_utc": "2006-12-29T23:36Z",
-      "source_file": "SGF_2006_29_2336.txt",
-      "similarity": 0.9232903718948364,
+      "datetime_utc": "2006-12-30T05:05Z",
+      "source_file": "SGF_2006_30_0505.txt",
+      "similarity": 0.9232906103134155,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -220,7 +220,7 @@
     {
       "datetime_utc": "2005-12-22T20:58Z",
       "source_file": "SGF_2005_22_2058.txt",
-      "similarity": 0.9106396436691284,
+      "similarity": 0.9106395244598389,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -261,7 +261,7 @@
     {
       "datetime_utc": "2004-12-28T04:03Z",
       "source_file": "SGF_2004_28_0403.txt",
-      "similarity": 0.904316782951355,
+      "similarity": 0.9043169021606445,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -300,7 +300,7 @@
     {
       "datetime_utc": "2004-02-18T12:16Z",
       "source_file": "SGF_2004_18_1216.txt",
-      "similarity": 0.9027894735336304,
+      "similarity": 0.9027893543243408,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -337,7 +337,7 @@
     {
       "datetime_utc": "2005-03-13T17:20Z",
       "source_file": "SGF_2005_13_1720.txt",
-      "similarity": 0.9007487297058105,
+      "similarity": 0.9007489681243896,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -374,7 +374,7 @@
     {
       "datetime_utc": "2004-09-10T05:57Z",
       "source_file": "SGF_2004_10_0557.txt",
-      "similarity": 0.8982634544372559,
+      "similarity": 0.8982635736465454,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -412,7 +412,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.46,
-    "mean_similarity": 0.8563194608688355,
+    "mean_similarity": 0.8563196378946304,
     "base_rate": 0.6294339304886007,
     "signal_value": -0.16943393048860073,
     "percentile": 28,
@@ -421,8 +421,8 @@
     "n_total": 10,
     "n_severe_signal": 46,
     "n_total_signal": 100,
-    "product_id": "202610042326-KSGF-FXUS63-AFDSGF",
-    "afd_time": "2026-10-04T23:26:00Z",
-    "updated": "2026-10-05T00:59:06.443000+00:00"
+    "product_id": "202610050445-KSGF-FXUS63-AFDSGF",
+    "afd_time": "2026-10-05T04:45:00Z",
+    "updated": "2026-10-05T07:06:23.299464+00:00"
   }
 }
