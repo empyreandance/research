@@ -1,15 +1,15 @@
 {
   "office": "TSA",
-  "product_id": "202610201745-KTSA-FXUS64-AFDTSA",
-  "afd_time": "2026-10-20T17:45:00Z",
+  "product_id": "202610202311-KTSA-FXUS64-AFDTSA",
+  "afd_time": "2026-10-20T23:11:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-20T20:38:36.939238+00:00",
+  "updated": "2026-10-20T23:55:27.433310+00:00",
   "query_preview": "..\n(Tomorrow through Tuesday)\nIssued at 1245 PM CDT Tue Oct 20 2026\n\nSprinkles or localized light rain may continue into Wednesday,\nspreading eastward through the day, with a likelihood of it\nshifting east of the area by the evening hours. Upper level\nridging will build fully into the region for the latter part of\nthe week and into the weekend, with above normal temperatures and\ndry conditions likely to prevail. Fire weather conditions may\nuptick a tad on Friday for areas northwest of I-44 as southerly\nwinds increase in the afternoon. This area has seen rain recently,\nthough, which may offset some of this somewhat. There continues to\nbe a storm system that approaches the area late in the weekend\ninto early next week, which brings low rain chances to the area.\nHowever, this system continues to have poor consistency in when or\nhow much impact it will have on our area. If it moves through,\nexpect a decrease in temperatures, probably early to middle part\nof next week, with the aforementioned low rain chances.",
   "analogs": [
     {
       "datetime_utc": "2016-01-29T16:50Z",
       "source_file": "TSA_2016_29_1650.txt",
-      "similarity": 0.9861636161804199,
+      "similarity": 0.9861637353897095,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -145,7 +145,7 @@
     {
       "datetime_utc": "2020-10-27T02:51Z",
       "source_file": "TSA_2020_27_0251.txt",
-      "similarity": 0.9828648567199707,
+      "similarity": 0.9828649759292603,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -187,8 +187,54 @@
       }
     },
     {
-      "datetime_utc": "2024-11-03T23:58Z",
-      "source_file": "TSA_2024_03_2358.txt",
+      "datetime_utc": "2024-11-04T05:12Z",
+      "source_file": "TSA_2024_04_0512.txt",
+      "similarity": 0.9828095436096191,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "tornado",
+          "counts": {
+            "tornado": 13,
+            "flood": 13,
+            "severe_wind": 14,
+            "severe_hail": 2
+          }
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 3
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 4
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2024-11-03T19:14Z",
+      "source_file": "TSA_2024_03_1914.txt",
       "similarity": 0.9828095436096191,
       "label": "tornado",
       "is_severe": true,
@@ -238,52 +284,6 @@
       }
     },
     {
-      "datetime_utc": "2024-11-04T04:10Z",
-      "source_file": "TSA_2024_04_0410.txt",
-      "similarity": 0.9828095436096191,
-      "label": "tornado",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "tornado",
-          "counts": {
-            "tornado": 13,
-            "flood": 13,
-            "severe_wind": 14,
-            "severe_hail": 2
-          }
-        },
-        "1": {
-          "label": "flood",
-          "counts": {
-            "flood": 3
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "flood",
-          "counts": {
-            "flood": 4
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2015-01-14T03:38Z",
       "source_file": "TSA_2015_14_0338.txt",
       "similarity": 0.9822467565536499,
@@ -325,9 +325,9 @@
       }
     },
     {
-      "datetime_utc": "2023-09-11T15:58Z",
-      "source_file": "TSA_2023_11_1558.txt",
-      "similarity": 0.9819996356964111,
+      "datetime_utc": "2023-09-11T09:18Z",
+      "source_file": "TSA_2023_11_0918.txt",
+      "similarity": 0.9819997549057007,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -407,9 +407,9 @@
       }
     },
     {
-      "datetime_utc": "2022-11-05T17:35Z",
-      "source_file": "TSA_2022_05_1735.txt",
-      "similarity": 0.981078028678894,
+      "datetime_utc": "2022-11-05T15:22Z",
+      "source_file": "TSA_2022_05_1522.txt",
+      "similarity": 0.9810780882835388,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -451,7 +451,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.31,
-    "mean_similarity": 0.9778244864940643,
+    "mean_similarity": 0.977824524641037,
     "base_rate": 0.6678787549862961,
     "signal_value": -0.3578787549862961,
     "percentile": 15,
@@ -460,8 +460,8 @@
     "n_total": 10,
     "n_severe_signal": 31,
     "n_total_signal": 100,
-    "product_id": "202610201745-KTSA-FXUS64-AFDTSA",
-    "afd_time": "2026-10-20T17:45:00Z",
-    "updated": "2026-10-20T20:38:36.939238+00:00"
+    "product_id": "202610202311-KTSA-FXUS64-AFDTSA",
+    "afd_time": "2026-10-20T23:11:00Z",
+    "updated": "2026-10-20T23:55:27.433310+00:00"
   }
 }
