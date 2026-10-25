@@ -1,15 +1,56 @@
 {
   "office": "PIH",
-  "product_id": "202610242329-KPIH-FXUS65-AFDPIH",
-  "afd_time": "2026-10-24T23:29:00Z",
+  "product_id": "202610250350-KPIH-FXUS65-AFDPIH",
+  "afd_time": "2026-10-25T03:50:00Z",
   "section_type": "discussion",
-  "updated": "2026-10-25T01:13:01.133146+00:00",
+  "updated": "2026-10-25T06:12:13.638870+00:00",
   "query_preview": "..\nIssued at 134 PM MDT Sat Oct 24 2026\n\nHigh pressure is building back into the region behind departing\nrain-maker. We did see areas of low clouds develop across \nportions of East Idaho early this morning. Where skies remained \nclear, temperatures were able to drop to near or below freezing.\nDry and continued cool conditions will continue into Monday, \nthough a gradual warming trend is expected for daytime highs. \nThe next system is projected to arrive as early as Monday \nafternoon across portions of the central mountains, spreading \neast through the evening and overnight. The system speed is \nquick, which will limit precipitation amounts compared to the \nmost recent systems, but the forecast amounts have increased \nvery slightly from previous runs. This also translates to \nslightly increased snow potential above valley floors as \ntemperatures drop once again with the system. We are still \nlooking at 1-3\" above 6500-7000ft, but ridgetops could see \nslightly higher amounts.",
   "analogs": [
     {
-      "datetime_utc": "2025-10-21T10:05Z",
-      "source_file": "PIH_2025_21_1005.txt",
-      "similarity": 0.9850918054580688,
+      "datetime_utc": "2025-10-20T23:19Z",
+      "source_file": "PIH_2025_20_2319.txt",
+      "similarity": 0.9850918650627136,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 2,
+            "severe_hail": 1,
+            "winter": 2
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2025-10-21T07:04Z",
+      "source_file": "PIH_2025_21_0704.txt",
+      "similarity": 0.9850918650627136,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -47,47 +88,6 @@
             "winter": 12,
             "tornado": 1
           }
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-10-20T23:19Z",
-      "source_file": "PIH_2025_20_2319.txt",
-      "similarity": 0.9850918054580688,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 2,
-            "severe_hail": 1,
-            "winter": 2
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     },
@@ -131,7 +131,7 @@
     {
       "datetime_utc": "2017-04-05T19:00Z",
       "source_file": "PIH_2017_05_1900.txt",
-      "similarity": 0.9834272861480713,
+      "similarity": 0.9834274053573608,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -176,7 +176,7 @@
     {
       "datetime_utc": "2005-03-03T17:32Z",
       "source_file": "PIH_2005_03_1732.txt",
-      "similarity": 0.9829331636428833,
+      "similarity": 0.9829331040382385,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -213,7 +213,7 @@
     {
       "datetime_utc": "2016-09-12T20:25Z",
       "source_file": "PIH_2016_12_2025.txt",
-      "similarity": 0.982901394367218,
+      "similarity": 0.9829014539718628,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -256,7 +256,7 @@
     {
       "datetime_utc": "2007-05-19T21:23Z",
       "source_file": "PIH_2007_19_2123.txt",
-      "similarity": 0.9828602075576782,
+      "similarity": 0.9828603267669678,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -297,7 +297,7 @@
     {
       "datetime_utc": "2007-05-20T02:46Z",
       "source_file": "PIH_2007_20_0246.txt",
-      "similarity": 0.9828602075576782,
+      "similarity": 0.9828603267669678,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -338,7 +338,7 @@
     {
       "datetime_utc": "2007-09-19T09:43Z",
       "source_file": "PIH_2007_19_0943.txt",
-      "similarity": 0.9828024506568909,
+      "similarity": 0.9828025102615356,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -379,7 +379,7 @@
     {
       "datetime_utc": "2005-09-19T13:45Z",
       "source_file": "PIH_2005_19_1345.txt",
-      "similarity": 0.9827818274497986,
+      "similarity": 0.9827820062637329,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -419,7 +419,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.27,
-    "mean_similarity": 0.9816758662462235,
+    "mean_similarity": 0.9816759526729584,
     "base_rate": 0.419861180420088,
     "signal_value": -0.149861180420088,
     "percentile": 29,
@@ -428,8 +428,8 @@
     "n_total": 10,
     "n_severe_signal": 27,
     "n_total_signal": 100,
-    "product_id": "202610242329-KPIH-FXUS65-AFDPIH",
-    "afd_time": "2026-10-24T23:29:00Z",
-    "updated": "2026-10-25T01:13:01.133146+00:00"
+    "product_id": "202610250350-KPIH-FXUS65-AFDPIH",
+    "afd_time": "2026-10-25T03:50:00Z",
+    "updated": "2026-10-25T06:12:13.638870+00:00"
   }
 }
