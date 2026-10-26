@@ -1,15 +1,15 @@
 {
   "office": "ABQ",
-  "product_id": "202610261214-KABQ-FXUS65-AFDABQ-AAA",
-  "afd_time": "2026-10-26T12:14:00Z",
+  "product_id": "202610261821-KABQ-FXUS65-AFDABQ-AAB",
+  "afd_time": "2026-10-26T18:21:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-26T14:19:23.875019+00:00",
+  "updated": "2026-10-26T20:31:36.677815+00:00",
   "query_preview": "..\n(Tuesday night through Sunday)\nIssued at 103 AM MDT Mon Oct 26 2026\n\nDuring the latter half of the week, models continue to depict an \nupper level low pressure system stalling over the Pacific NW \ncoast. It will draw a rich return flow of Gulf moisture into the \nforecast area Wednesday night and Thursday. Showers and \nthunderstorms will then increase in coverage over southern areas \nThursday afternoon, and areawide Thursday night through Friday \nnight, as a couple of shortwave troughs cross NM in succession \nfrom the southwest. GEFS PWATs peak Friday and Friday night \naround 180-250 percent of normal, which is quite high. However, \nactual PWATs are only forecast to vary from 0.50-1.00\" from \nnorthwest to southeast across the forecast area. The main wave of\nprecip with the first shortwave trough will cross the southeast\nthird of the forecast area Friday morning when the instability \nisn't very strong, so the risk of locally heavy rainfall will be \nminimal. Similarly, the main wave of precip with the second \nshortwave trough looks to cross Friday night and Saturday morning,\nlimiting instability and the risk of locally heavy rainfall. \nTemperatures at 700 mb look to bottom out around +2 to +4 C Friday\nand Friday night, indicating the highest peaks over 10K feet will\nprobably accumulate a few inches of snow.\n\nThere are significant differences in track, depth, and timing, but\nmodels generally depict a stronger and colder storm system\ntracking southeastward over the forecast area early next week with\nprecip breaking out over western areas Saturday night, then\nbecoming widespread across the forecast area on Sunday.",
   "analogs": [
     {
       "datetime_utc": "2022-08-27T20:18Z",
       "source_file": "ABQ_2022_27_2018.txt",
-      "similarity": 0.9905213713645935,
+      "similarity": 0.9905214309692383,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -57,7 +57,7 @@
     {
       "datetime_utc": "2012-07-11T20:48Z",
       "source_file": "ABQ_2012_11_2048.txt",
-      "similarity": 0.9896687865257263,
+      "similarity": 0.9896688461303711,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -154,7 +154,7 @@
     {
       "datetime_utc": "2022-06-18T21:12Z",
       "source_file": "ABQ_2022_18_2112.txt",
-      "similarity": 0.9892312288284302,
+      "similarity": 0.989231288433075,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -266,7 +266,7 @@
     {
       "datetime_utc": "2023-08-14T21:27Z",
       "source_file": "ABQ_2023_14_2127.txt",
-      "similarity": 0.9888712167739868,
+      "similarity": 0.9888712763786316,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -354,7 +354,7 @@
     {
       "datetime_utc": "2021-09-05T20:38Z",
       "source_file": "ABQ_2021_05_2038.txt",
-      "similarity": 0.9882280230522156,
+      "similarity": 0.9882280826568604,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -397,7 +397,7 @@
     {
       "datetime_utc": "2015-08-28T09:33Z",
       "source_file": "ABQ_2015_28_0933.txt",
-      "similarity": 0.9881806969642639,
+      "similarity": 0.9881806373596191,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -434,41 +434,47 @@
       }
     },
     {
-      "datetime_utc": "2024-09-16T09:13Z",
-      "source_file": "ABQ_2024_16_0913.txt",
-      "similarity": 0.9880017042160034,
+      "datetime_utc": "2024-09-15T19:43Z",
+      "source_file": "ABQ_2024_15_1943.txt",
+      "similarity": 0.9880017638206482,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "severe_wind",
           "counts": {
+            "severe_wind": 2
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
             "severe_hail": 1,
             "severe_wind": 1
           }
         },
-        "1": {
+        "2": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 21,
             "severe_hail": 4
           }
         },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
         "3": {
           "label": "quiet",
           "counts": {}
         },
         "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
           "label": "severe_wind",
           "counts": {
             "severe_wind": 1
           }
         },
-        "5": {
+        "6": {
           "label": "tornado",
           "counts": {
             "severe_hail": 9,
@@ -476,10 +482,6 @@
             "flood": 4,
             "severe_wind": 4
           }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
         }
       }
     }
@@ -487,7 +489,7 @@
   "signal": {
     "level": "LOW",
     "severe_fraction": 0.85,
-    "mean_similarity": 0.9860975134372711,
+    "mean_similarity": 0.9860975176095963,
     "base_rate": 0.5379238933471395,
     "signal_value": 0.31207610665286045,
     "percentile": 63,
@@ -496,8 +498,8 @@
     "n_total": 10,
     "n_severe_signal": 85,
     "n_total_signal": 100,
-    "product_id": "202610261214-KABQ-FXUS65-AFDABQ-AAA",
-    "afd_time": "2026-10-26T12:14:00Z",
-    "updated": "2026-10-26T14:19:23.875019+00:00"
+    "product_id": "202610261821-KABQ-FXUS65-AFDABQ-AAB",
+    "afd_time": "2026-10-26T18:21:00Z",
+    "updated": "2026-10-26T20:31:36.677815+00:00"
   }
 }
