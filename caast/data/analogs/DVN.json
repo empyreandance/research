@@ -1,15 +1,15 @@
 {
   "office": "DVN",
-  "product_id": "202610282329-KDVN-FXUS63-AFDDVN",
-  "afd_time": "2026-10-28T23:29:00Z",
+  "product_id": "202610290601-KDVN-FXUS63-AFDDVN-CCA",
+  "afd_time": "2026-10-29T06:01:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-29T01:50:03.406009+00:00",
-  "query_preview": "/FRIDAY THROUGH WEDNESDAY/...\nIssued at 156 PM CDT Wed Oct 28 2026\n\nThursday night through Sunday night\nAssessment...medium (40-60%) confidence on rain occurring Friday\n\nThe first of two waves moves through the area Friday into Saturday. \nThis wave has respectable moisture associated with it and thus the \nrain chances during this time period look reasonably good. The model \nconsensus has 60-80% chances for rain which 'may' be on the high \nside.\n\nMoisture from the remnants of Vance move through the Midwest \nSaturday night into Sunday. Compared to yesterday, the bulk of the \nmoisture is now being shunted south of the area. This southward \nshift raises questions regarding the rain chances Saturday night \ninto Sunday. The model consensus has come down on the overall \nchances by 10 points and are now at 20-35%. If the southern shift on \nthis moisture plume holds, I would expect rain chances to further \ndecrease Saturday night into Sunday.\n\nMonday through Wednesday\nAssessment...medium (35-50%) confidence of a significant system\noccurring in the central CONUS\n\nIn the Monday through Wednesday time period, some models are \nadvertising a significant system while others are not. This \ndifference looks to be related to whether or not there is phasing \nbetween the northern and southern jets. IF phasing occurs, a more \nsignificant and slower system will be seen. IF no phasing occurs, \nthen a weaker and faster system would occur.\n\nThe model consensus has slowed down the system by 12 hours and is \nnow suggesting a Monday night into Tuesday night time frame for the \nbest rain chances. Given the two possible scenarios in play, the \nmodel consensus has a daily risk of rain from Monday through \nWednesday.",
+  "updated": "2026-10-29T08:33:00.300704+00:00",
+  "query_preview": "/SATURDAY THROUGH WEDNESDAY/...\nIssued at 1253 AM CDT Thu Oct 29 2026\n\nSaturday-Sunday...The warm front near the Highway 34 corridor \nfinally moves further north into the CWA, spawning a smaller \nround of isolated showers and storms (20-30% coverage) on \nSaturday. As the boundary becomes diffuse Saturday night, dry \nconditions return as southeasterly flow advects in more mild air\nfor Sunday. Attention turns west though as a longwave trough \npropagates eastward into the Rockies, setting the stage for a \npotentially active start to the work week. \n\nMonday-Wednesday...As the longwave trough shifts eastward into \nthe Plains, there are two potential scenarios:\n\nScenario 1 (70% chance per LREF cluster analysis): The troughs \nin the polar jet and subtropical jet become out of phase, \nleading to a slower, closed-heights center over the south- \ncentral Plains and a fast northern trough. This would support \ntwo low pressure centers: one over the Great Lakes and east- \ncentral Canada and another across the Southern Plains and Lower \nMississippi River Valley. With a split system, rainfall amounts \nare likely to be lower.\n\nScenario 2 (30% chance per LREF cluster analysis): The troughs \nstay in phase, deepening a singular mid-latitude cyclone over \nthe Central Plains that would move into the Mid-Mississippi \nRiver Valley. This solution would favor more rainfall and \nwindier conditions for our CWA.\n\nRegardless of scenario though, precipitation chances and winds \nare forecasted to increase heading into Monday night and stick \naround into Wednesday. With the background cyclonic flow aloft, \nthere could be multiple rounds of rainfall over this time \nperiod. Once the mid-latitude cyclone or an associated cold \nfront moves through or east of the CWA, northerly flow should \nset in and advect in some cooler, more seasonable air by the \nmiddle to end of next week.",
   "analogs": [
     {
       "datetime_utc": "2005-10-03T08:55Z",
       "source_file": "DVN_2005_03_0855.txt",
-      "similarity": 0.8940179944038391,
+      "similarity": 0.9080313444137573,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -48,7 +48,7 @@
     {
       "datetime_utc": "2013-01-11T05:49Z",
       "source_file": "DVN_2013_11_0549.txt",
-      "similarity": 0.8477067947387695,
+      "similarity": 0.8784975409507751,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -87,25 +87,31 @@
       }
     },
     {
-      "datetime_utc": "2005-07-26T12:29Z",
-      "source_file": "DVN_2005_26_1229.txt",
-      "similarity": 0.7987146973609924,
+      "datetime_utc": "2012-12-19T03:54Z",
+      "source_file": "DVN_2012_19_0354.txt",
+      "similarity": 0.8772437572479248,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_wind",
+          "label": "severe_hail",
           "counts": {
-            "severe_wind": 14
+            "winter": 103,
+            "severe_hail": 4
           }
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "winter": 334,
+            "severe_wind": 1
+          }
         },
         "2": {
-          "label": "quiet",
-          "counts": {}
+          "label": "winter",
+          "counts": {
+            "winter": 60
+          }
         },
         "3": {
           "label": "quiet",
@@ -128,7 +134,7 @@
     {
       "datetime_utc": "2012-12-18T23:59Z",
       "source_file": "DVN_2012_18_2359.txt",
-      "similarity": 0.7779829502105713,
+      "similarity": 0.87724369764328,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -173,31 +179,25 @@
       }
     },
     {
-      "datetime_utc": "2012-12-19T05:50Z",
-      "source_file": "DVN_2012_19_0550.txt",
-      "similarity": 0.7779829502105713,
+      "datetime_utc": "2005-07-26T12:29Z",
+      "source_file": "DVN_2005_26_1229.txt",
+      "similarity": 0.7679398655891418,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "winter": 103,
-            "severe_hail": 4
+            "severe_wind": 14
           }
         },
         "1": {
-          "label": "severe_wind",
-          "counts": {
-            "winter": 334,
-            "severe_wind": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 60
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -220,7 +220,7 @@
     {
       "datetime_utc": "2004-08-19T09:13Z",
       "source_file": "DVN_2004_19_0913.txt",
-      "similarity": 0.7753924131393433,
+      "similarity": 0.7651412487030029,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -261,7 +261,7 @@
     {
       "datetime_utc": "2006-09-07T20:04Z",
       "source_file": "DVN_2006_07_2004.txt",
-      "similarity": 0.7651740908622742,
+      "similarity": 0.7506235241889954,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -309,7 +309,7 @@
     {
       "datetime_utc": "2006-09-08T02:21Z",
       "source_file": "DVN_2006_08_0221.txt",
-      "similarity": 0.7651740908622742,
+      "similarity": 0.7506235241889954,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -355,35 +355,42 @@
       }
     },
     {
-      "datetime_utc": "2004-09-17T20:16Z",
-      "source_file": "DVN_2004_17_2016.txt",
-      "similarity": 0.7544050216674805,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2012-09-16T11:40Z",
+      "source_file": "DVN_2012_16_1140.txt",
+      "similarity": 0.7419488430023193,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 1,
+            "severe_hail": 5
+          }
         },
         "2": {
           "label": "quiet",
           "counts": {}
         },
         "3": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 11
+          }
         },
         "6": {
           "label": "quiet",
@@ -392,11 +399,11 @@
       }
     },
     {
-      "datetime_utc": "2004-09-18T02:44Z",
-      "source_file": "DVN_2004_18_0244.txt",
-      "similarity": 0.7544050216674805,
-      "label": "quiet",
-      "is_severe": false,
+      "datetime_utc": "2006-05-20T19:49Z",
+      "source_file": "DVN_2006_20_1949.txt",
+      "similarity": 0.7361739873886108,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -415,30 +422,38 @@
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_hail": 36,
+            "severe_wind": 63,
+            "tornado": 3
+          }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2
+          }
         }
       }
     }
   ],
   "signal": {
     "level": "INSUFFICIENT_MATCH",
-    "severe_fraction": 0.65,
-    "mean_similarity": 0.6700293666124344,
-    "n_severe": 65,
+    "severe_fraction": 0.69,
+    "mean_similarity": 0.6089883798360824,
+    "n_severe": 69,
     "n_total": 100,
-    "reason": "top-100 mean similarity 0.67 below confidence floor 0.7",
-    "product_id": "202610282329-KDVN-FXUS63-AFDDVN",
-    "afd_time": "2026-10-28T23:29:00Z",
-    "updated": "2026-10-29T01:50:03.406009+00:00",
+    "reason": "top-100 mean similarity 0.61 below confidence floor 0.7",
+    "product_id": "202610290601-KDVN-FXUS63-AFDDVN-CCA",
+    "afd_time": "2026-10-29T06:01:00Z",
+    "updated": "2026-10-29T08:33:00.300704+00:00",
     "office_lift": 0.1965279925557064,
     "base_rate": 0.5868920074442936
   }
