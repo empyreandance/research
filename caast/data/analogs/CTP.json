@@ -1,15 +1,15 @@
 {
   "office": "CTP",
-  "product_id": "202610300608-KCTP-FXUS61-AFDCTP",
-  "afd_time": "2026-10-30T06:08:00Z",
+  "product_id": "202610301810-KCTP-FXUS61-AFDCTP",
+  "afd_time": "2026-10-30T18:10:00Z",
   "section_type": "discussion",
-  "updated": "2026-10-30T07:10:35.296244+00:00",
-  "query_preview": "..\nKEY MESSAGE 1: Fire weather concerns Friday \n\nIt has been almost two weeks since measurable rainfall has been\nobserved across Central PA. A cold front will sweep through the\narea from northwest to southeast overnight into Friday morning.\nThere will be a few light rain showers downwind of Lake Erie in\nthe northwest Alleghenies, but dry conditions are expected to\ncontinue for most of the forecast area. Friday will be breezy \nin the wake of the cold front with marginally low afternoon RH \nvalues and max gusts forecast in the 20-30 mph range. These\nconditions will likely result in an elevated risk of wildfire \nspread Friday afternoon with PA Bureau of Forestry partners \nindicating fuels are sufficiently dry/cured. Although relative \nhumidity values will remain low through the weekend, lighter \nwinds should limit the risk of rapid wildfire spread. Even \nstill, individuals should limit activities that could start a \nfire. 99% of wildfires in Pennsylvania are caused by humans!\n\n-------------------------------------------------------------\n\nKEY MESSAGE 2: Dry and mild conditions to start November\n\nThe latest model guidance indicates the lengthy dry and mild \nspell will last through Halloween and into the first few days of\nNovember. There continues to be a building signal toward an \nappreciable rain and possible wind event during the second half \nof next week.",
+  "updated": "2026-10-30T19:27:35.084374+00:00",
+  "query_preview": "..\nKEY MESSAGE 1: Heightened wildfire spread risk this afternoon\n\nCoordinated special weather statement with PA\nDCNR and WFOs BGM/PHI was issued this morning for elevated \nwildfire spread risk. While minRH values remain somewhat \nmarginal, gusty NW winds 20-30 mph and excessively dry \nconditions over the past 2 weeks are driving the heightened \nwildfire threat for the remainder of the afternoon. \n------------------------------------------------------------\n\nKEY MESSAGE 2: Lengthy run of dry and mild weather continues \ninto early November before coming to an end by late next week \n\nAnother very pleasant and comfortable weekend to close out \nOctober (Halloween) and start November (ending daylight saving \ntime). \n\nThe latest model guidance continues to grow in agreement with \nthe progression of a CONUS-crossing upper trough eventually \nreaching the eastern U.S. by the second half of next week.\nHighest odds for rain are currently placed around Thursday \n11/5. There also continues to be some indications that rich \nGulf moisture will be pulled northward along a well defined \nnorth south oriented frontal zone accompanying the full \nlatitude upper trough which could result in moderate to heavy \nrainfall.",
   "analogs": [
     {
-      "datetime_utc": "2024-10-17T21:31Z",
-      "source_file": "CTP_2024_17_2131.txt",
-      "similarity": 0.9715069532394409,
+      "datetime_utc": "2005-05-16T01:20Z",
+      "source_file": "CTP_2005_16_0120.txt",
+      "similarity": 0.9660494327545166,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -44,9 +44,9 @@
       }
     },
     {
-      "datetime_utc": "2024-10-18T01:22Z",
-      "source_file": "CTP_2024_18_0122.txt",
-      "similarity": 0.9715069532394409,
+      "datetime_utc": "2005-05-15T18:44Z",
+      "source_file": "CTP_2005_15_1844.txt",
+      "similarity": 0.9660494327545166,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -81,10 +81,10 @@
       }
     },
     {
-      "datetime_utc": "2020-10-31T02:22Z",
-      "source_file": "CTP_2020_31_0222.txt",
-      "similarity": 0.969994843006134,
-      "label": "winter",
+      "datetime_utc": "2004-03-16T15:06Z",
+      "source_file": "CTP_2004_16_1506.txt",
+      "similarity": 0.9646822810173035,
+      "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
@@ -92,16 +92,12 @@
           "counts": {}
         },
         "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 10
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 57
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -122,27 +118,31 @@
       }
     },
     {
-      "datetime_utc": "2022-10-17T15:08Z",
-      "source_file": "CTP_2022_17_1508.txt",
-      "similarity": 0.9699358940124512,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2007-08-08T13:38Z",
+      "source_file": "CTP_2007_08_1338.txt",
+      "similarity": 0.9645959138870239,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 1,
+            "severe_wind": 9
+          }
         },
         "1": {
-          "label": "winter",
+          "label": "tornado",
           "counts": {
-            "winter": 6
+            "severe_wind": 44,
+            "flood": 17,
+            "tornado": 1,
+            "severe_hail": 5
           }
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 6
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
@@ -163,101 +163,111 @@
       }
     },
     {
-      "datetime_utc": "2013-03-26T01:46Z",
-      "source_file": "CTP_2013_26_0146.txt",
-      "similarity": 0.9697173833847046,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2014-07-03T19:51Z",
+      "source_file": "CTP_2014_03_1951.txt",
+      "similarity": 0.9641858339309692,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 27
+            "severe_wind": 95,
+            "severe_hail": 30,
+            "flood": 3
           }
         },
         "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 25
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 3
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
           "label": "quiet",
           "counts": {}
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 18
+          }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 255,
+            "tornado": 7,
+            "severe_hail": 25
+          }
         },
         "6": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 3
+            "severe_wind": 14,
+            "severe_hail": 7
           }
         }
       }
     },
     {
-      "datetime_utc": "2013-03-25T23:39Z",
-      "source_file": "CTP_2013_25_2339.txt",
-      "similarity": 0.9697173833847046,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2014-07-04T01:30Z",
+      "source_file": "CTP_2014_04_0130.txt",
+      "similarity": 0.9641858339309692,
+      "label": "tornado",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 152
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 27
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 25
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 3
+            "severe_wind": 18
           }
         },
         "4": {
-          "label": "quiet",
-          "counts": {}
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 255,
+            "tornado": 7,
+            "severe_hail": 25
+          }
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 14,
+            "severe_hail": 7
+          }
         },
         "6": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 2,
+            "severe_wind": 4,
+            "flood": 1
+          }
         }
       }
     },
     {
-      "datetime_utc": "2022-10-16T17:22Z",
-      "source_file": "CTP_2022_16_1722.txt",
-      "similarity": 0.969379723072052,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2005-09-20T14:52Z",
+      "source_file": "CTP_2005_20_1452.txt",
+      "similarity": 0.9631761312484741,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -268,58 +278,15 @@
           "counts": {}
         },
         "2": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 6
+            "severe_wind": 2
           }
         },
         "3": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 6
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2020-10-30T18:51Z",
-      "source_file": "CTP_2020_30_1851.txt",
-      "similarity": 0.9690325856208801,
-      "label": "winter",
-      "is_severe": false,
-      "daily_breakdown": {
-        "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 18
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 10
-          }
-        },
-        "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 57
+            "severe_wind": 1
           }
         },
         "4": {
@@ -337,97 +304,135 @@
       }
     },
     {
-      "datetime_utc": "2019-01-29T10:11Z",
-      "source_file": "CTP_2019_29_1011.txt",
-      "similarity": 0.9689012765884399,
-      "label": "flood",
+      "datetime_utc": "2006-09-21T15:04Z",
+      "source_file": "CTP_2006_21_1504.txt",
+      "similarity": 0.9630643725395203,
+      "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
         "0": {
-          "label": "winter",
-          "counts": {
-            "winter": 265
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "1": {
-          "label": "winter",
-          "counts": {
-            "winter": 20
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 39
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 418
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
-          "label": "winter",
-          "counts": {
-            "winter": 208
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "5": {
           "label": "quiet",
           "counts": {}
         },
         "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2006-08-25T07:01Z",
+      "source_file": "CTP_2006_25_0701.txt",
+      "similarity": 0.9610085487365723,
+      "label": "tornado",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 28,
+            "severe_wind": 16
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 5,
+            "severe_hail": 1
+          }
+        },
+        "2": {
           "label": "flood",
           "counts": {
-            "flood": 4
+            "flood": 8
           }
+        },
+        "3": {
+          "label": "flood",
+          "counts": {
+            "flood": 6
+          }
+        },
+        "4": {
+          "label": "tornado",
+          "counts": {
+            "severe_wind": 15,
+            "flood": 7,
+            "tornado": 2
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     },
     {
-      "datetime_utc": "2021-11-24T06:07Z",
-      "source_file": "CTP_2021_24_0607.txt",
-      "similarity": 0.9688864350318909,
-      "label": "winter",
-      "is_severe": false,
+      "datetime_utc": "2019-07-22T09:28Z",
+      "source_file": "CTP_2019_22_0928.txt",
+      "similarity": 0.9602816104888916,
+      "label": "severe_wind",
+      "is_severe": true,
       "daily_breakdown": {
         "0": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 175,
+            "severe_hail": 2,
+            "flood": 14
+          }
         },
         "1": {
           "label": "quiet",
           "counts": {}
         },
         "2": {
-          "label": "winter",
-          "counts": {
-            "winter": 23
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "3": {
-          "label": "winter",
-          "counts": {
-            "winter": 24
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 56
+            "severe_wind": 1
           }
         },
         "5": {
-          "label": "winter",
-          "counts": {
-            "winter": 22
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
-          "label": "winter",
+          "label": "severe_wind",
           "counts": {
-            "winter": 24
+            "severe_wind": 11,
+            "severe_hail": 1
           }
         }
       }
@@ -435,18 +440,18 @@
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.26,
-    "mean_similarity": 0.9663038092851639,
+    "severe_fraction": 0.5,
+    "mean_similarity": 0.9535441988706589,
     "base_rate": 0.5775495304987035,
-    "signal_value": -0.3175495304987035,
-    "percentile": 21,
+    "signal_value": -0.0775495304987035,
+    "percentile": 38,
     "office_lift": 0.11237046950129659,
-    "n_severe": 0,
+    "n_severe": 6,
     "n_total": 10,
-    "n_severe_signal": 26,
+    "n_severe_signal": 50,
     "n_total_signal": 100,
-    "product_id": "202610300608-KCTP-FXUS61-AFDCTP",
-    "afd_time": "2026-10-30T06:08:00Z",
-    "updated": "2026-10-30T07:10:35.296244+00:00"
+    "product_id": "202610301810-KCTP-FXUS61-AFDCTP",
+    "afd_time": "2026-10-30T18:10:00Z",
+    "updated": "2026-10-30T19:27:35.084374+00:00"
   }
 }

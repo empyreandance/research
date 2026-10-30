@@ -1,15 +1,15 @@
 {
   "office": "OUN",
-  "product_id": "202610300636-KOUN-FXUS64-AFDOUN",
-  "afd_time": "2026-10-30T06:36:00Z",
+  "product_id": "202610301846-KOUN-FXUS64-AFDOUN",
+  "afd_time": "2026-10-30T18:46:00Z",
   "section_type": "long_term",
-  "updated": "2026-10-30T07:10:35.296244+00:00",
+  "updated": "2026-10-30T19:27:35.084374+00:00",
   "query_preview": "..\n(Monday through Thursday)\nIssued at 131 AM CDT Fri Oct 30 2026\n\nMonday, our attention quickly turns to a more robust storm system \ntaking shape across the southwest as two storm systems, one in the \nsouthern branch and one in the northern branch approach from the \nwest. Although some timing issues remain, there looks to be \nsufficient moisture and temperature profiles(1000-1500 CAPE) and \nsomewhat favorable winds fields(better wrt both fields in the 12Z \nECMWF) that severe weather would be possible. Although the storm \nsystem moves quickly, there could be some heavy rainfall with this \nactivity as well. Currently the more widespread heavy rainfall looks \nto occur across eastern Oklahoma and from the Ozarks into northeast \nTexas Monday night and Tuesday.\n\nAs the wave moves by, an associated cold front will sweep south \nacross the area bringing gusty north winds and cooler temperatures \nfor Tuesday with some lingering showers possible. After highs in the \nupper 70s and lower 80s Monday, highs will be in the 60s and lower \n70s Tuesday.\n\nBy Tuesday night the system develops a closed low across the Ozarks \nregion and then slowly shifts east through Thursday. This will \nmaintain a northerly wind across Oklahoma and north Texas through \nWednesday and potentially into Thursday before shifting back to the \nsouth. This will keep temperatures from rebounding with highs \nremaining in the 60s and lower 70s through the end of the week.",
   "analogs": [
     {
-      "datetime_utc": "2020-06-18T09:01Z",
-      "source_file": "OUN_2020_18_0901.txt",
-      "similarity": 0.9858559370040894,
+      "datetime_utc": "2020-06-18T18:11Z",
+      "source_file": "OUN_2020_18_1811.txt",
+      "similarity": 0.9858558177947998,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -105,8 +105,8 @@
       }
     },
     {
-      "datetime_utc": "2020-03-31T17:36Z",
-      "source_file": "OUN_2020_31_1736.txt",
+      "datetime_utc": "2020-03-31T11:08Z",
+      "source_file": "OUN_2020_31_1108_1.txt",
       "similarity": 0.9841372966766357,
       "label": "severe_hail",
       "is_severe": true,
@@ -147,7 +147,7 @@
     {
       "datetime_utc": "2021-04-22T20:01Z",
       "source_file": "OUN_2021_22_2001.txt",
-      "similarity": 0.9837660789489746,
+      "similarity": 0.9837659597396851,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -253,7 +253,7 @@
     {
       "datetime_utc": "2005-07-01T19:44Z",
       "source_file": "OUN_2005_01_1944.txt",
-      "similarity": 0.9835367798805237,
+      "similarity": 0.9835366606712341,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -362,7 +362,7 @@
     {
       "datetime_utc": "2015-05-07T20:44Z",
       "source_file": "OUN_2015_07_2044.txt",
-      "similarity": 0.9830976724624634,
+      "similarity": 0.9830975532531738,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -423,7 +423,7 @@
     {
       "datetime_utc": "2019-03-20T20:45Z",
       "source_file": "OUN_2019_20_2045.txt",
-      "similarity": 0.9830149412155151,
+      "similarity": 0.9830148220062256,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -468,9 +468,9 @@
       }
     },
     {
-      "datetime_utc": "2021-10-20T23:15Z",
-      "source_file": "OUN_2021_20_2315_1.txt",
-      "similarity": 0.9828245639801025,
+      "datetime_utc": "2021-10-21T09:22Z",
+      "source_file": "OUN_2021_21_0922.txt",
+      "similarity": 0.982824444770813,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -479,8 +479,10 @@
           "counts": {}
         },
         "1": {
-          "label": "quiet",
-          "counts": {}
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
         },
         "2": {
           "label": "severe_hail",
@@ -489,26 +491,24 @@
           }
         },
         "3": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
           "label": "tornado",
           "counts": {
             "severe_hail": 4,
             "severe_wind": 16,
             "tornado": 2
           }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
         }
       }
     }
@@ -516,7 +516,7 @@
   "signal": {
     "level": "HIGH",
     "severe_fraction": 0.97,
-    "mean_similarity": 0.9809680563211441,
+    "mean_similarity": 0.9809679770469666,
     "base_rate": 0.6717192236772197,
     "signal_value": 0.29828077632278027,
     "percentile": 90,
@@ -525,8 +525,8 @@
     "n_total": 10,
     "n_severe_signal": 97,
     "n_total_signal": 100,
-    "product_id": "202610300636-KOUN-FXUS64-AFDOUN",
-    "afd_time": "2026-10-30T06:36:00Z",
-    "updated": "2026-10-30T07:10:35.296244+00:00"
+    "product_id": "202610301846-KOUN-FXUS64-AFDOUN",
+    "afd_time": "2026-10-30T18:46:00Z",
+    "updated": "2026-10-30T19:27:35.084374+00:00"
   }
 }
