@@ -1,16 +1,16 @@
 {
   "office": "CRP",
-  "product_id": "202610292308-KCRP-FXUS64-AFDCRP",
-  "afd_time": "2026-10-29T23:08:00Z",
+  "product_id": "202610300624-KCRP-FXUS64-AFDCRP",
+  "afd_time": "2026-10-30T06:24:00Z",
   "section_type": "discussion",
-  "updated": "2026-10-30T01:03:05.861340+00:00",
-  "query_preview": "..\nIssued at 117 PM CDT Thu Oct 29 2026\n\nMoisture from Tropical Storm Vance will continue advecting into the \nregion promoting isolated to scattered showers across the Brush \nCountry. Some showers could be heavy at times which could leading to \nponding of water or flash flooding. WPC currently has La Salle and \nWebb counties under a Marginal Risk of excessive rainfall. We'll dry \nout this weekend for a warm and humid Halloween before our next cool \ndown early next week. Models continue to trend the frontal passage \naround Tuesday. There is currently a low to medium chance for \nshowers and thunderstorms across the Coastal Bend and Victoria \nCrossroads with the best chances across the latter. \n\nCoastal flooding is expected to continue tonight into early tomorrow \nmorning with an elevated risk of rip currents. Water levels are \nexpected to remain below coastal flooding thresholds tomorrow, but \nwe will further evaluate it later tonight and tomorrow morning.",
+  "updated": "2026-10-30T07:10:35.296244+00:00",
+  "query_preview": "..\nIssued at 122 AM CDT Fri Oct 30 2026\n\nShowers and isolated thunderstorms will continue, mainly over the \nBrush Country, tonight. As moisture from Post Tropical Depression \nVance moves to the northeast, rain chances will once again shift \nover the Victoria Crossroads, where a Marginal (Level 1 of 4) Risk \nof Excessive Rainfall is in place for today and tonight. Rain \nchances will diminish later tonight as the moisture continues to \npull further away from South Texas. \n\nThe most important question for us all is: will I need to ruin my \nHalloween costume with a raincoat? Well, good news!!! While a 20% \nchance of showers will linger mainly northeast of the Victoria \nCrossroads, most locations will remain dry. Not only are we expected \nto be dry, but low temperatures will stay in the 70s/upper 60s with \nlight winds Halloween night for all you guys and ghouls out there. \nOur post Halloween crash will be warm and sunny through early next \nweek. \n\nModel guidance continues to show a cold front sweeping across South \nTexas sometime on Tuesday. This will bring another low to medium (20-\n60%) chance of showers and thunderstorms Tuesday. Temperatures in \nthe 50s may make an appearance late next week. \n\nGuidance continues to indicate tidal levels above 2.0 ft MSL through \nthe weekend, before finally dropping below criteria Monday. Have \ncontinued the Coastal Flood Advisory for minor coastal flooding \nduring periods of high tide through Saturday morning. It is possible \nthat we will need to extend this further, but we will continue to \nmonitor.",
   "analogs": [
     {
-      "datetime_utc": "2024-08-23T23:06Z",
-      "source_file": "CRP_2024_23_2306.txt",
-      "similarity": 0.9883826971054077,
-      "label": "severe_hail",
+      "datetime_utc": "2025-10-28T19:04Z",
+      "source_file": "CRP_2025_28_1904.txt",
+      "similarity": 0.9789230227470398,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
@@ -30,9 +30,10 @@
           "counts": {}
         },
         "4": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 1
+            "severe_hail": 30,
+            "severe_wind": 8
           }
         },
         "5": {
@@ -46,10 +47,10 @@
       }
     },
     {
-      "datetime_utc": "2024-08-24T05:32Z",
-      "source_file": "CRP_2024_24_0532.txt",
-      "similarity": 0.9883826971054077,
-      "label": "severe_hail",
+      "datetime_utc": "2025-10-29T00:32Z",
+      "source_file": "CRP_2025_29_0032.txt",
+      "similarity": 0.9789230227470398,
+      "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
         "0": {
@@ -65,9 +66,10 @@
           "counts": {}
         },
         "3": {
-          "label": "severe_hail",
+          "label": "severe_wind",
           "counts": {
-            "severe_hail": 1
+            "severe_hail": 30,
+            "severe_wind": 8
           }
         },
         "4": {
@@ -85,9 +87,52 @@
       }
     },
     {
-      "datetime_utc": "2025-07-23T11:37Z",
-      "source_file": "CRP_2025_23_1137.txt",
-      "similarity": 0.9882624745368958,
+      "datetime_utc": "2024-10-31T14:51Z",
+      "source_file": "CRP_2024_31_1451.txt",
+      "similarity": 0.9787173271179199,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "2": {
+          "label": "flood",
+          "counts": {
+            "flood": 1
+          }
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "flood",
+          "counts": {
+            "flood": 2
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-11-12T17:01Z",
+      "source_file": "CRP_2022_12_1701.txt",
+      "similarity": 0.9784786701202393,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -122,87 +167,9 @@
       }
     },
     {
-      "datetime_utc": "2023-06-21T05:15Z",
-      "source_file": "CRP_2023_21_0515.txt",
-      "similarity": 0.9880734086036682,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "1": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2023-06-20T20:58Z",
-      "source_file": "CRP_2023_20_2058.txt",
-      "similarity": 0.9880734086036682,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2020-12-26T20:55Z",
-      "source_file": "CRP_2020_26_2055.txt",
-      "similarity": 0.9877742528915405,
+      "datetime_utc": "2023-11-24T09:21Z",
+      "source_file": "CRP_2023_24_0921.txt",
+      "similarity": 0.9772598743438721,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -237,9 +204,9 @@
       }
     },
     {
-      "datetime_utc": "2020-12-27T04:44Z",
-      "source_file": "CRP_2020_27_0444.txt",
-      "similarity": 0.9877742528915405,
+      "datetime_utc": "2024-08-09T19:29Z",
+      "source_file": "CRP_2024_09_1929.txt",
+      "similarity": 0.9764538407325745,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -274,11 +241,11 @@
       }
     },
     {
-      "datetime_utc": "2025-07-30T18:40Z",
-      "source_file": "CRP_2025_30_1840.txt",
-      "similarity": 0.9874491691589355,
-      "label": "severe_wind",
-      "is_severe": true,
+      "datetime_utc": "2024-08-10T00:43Z",
+      "source_file": "CRP_2024_10_0043.txt",
+      "similarity": 0.9764538407325745,
+      "label": "quiet",
+      "is_severe": false,
       "daily_breakdown": {
         "0": {
           "label": "quiet",
@@ -287,49 +254,6 @@
         "1": {
           "label": "quiet",
           "counts": {}
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 2,
-            "severe_wind": 1
-          }
-        },
-        "4": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-08-01T11:21Z",
-      "source_file": "CRP_2025_01_1121.txt",
-      "similarity": 0.9870943427085876,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "flood": 2,
-            "severe_wind": 1
-          }
         },
         "2": {
           "label": "quiet",
@@ -354,9 +278,85 @@
       }
     },
     {
-      "datetime_utc": "2025-12-13T23:31Z",
-      "source_file": "CRP_2025_13_2331.txt",
-      "similarity": 0.9869011044502258,
+      "datetime_utc": "2024-01-24T21:58Z",
+      "source_file": "CRP_2024_24_2158.txt",
+      "similarity": 0.9759314060211182,
+      "label": "flood",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "flood",
+          "counts": {
+            "flood": 23
+          }
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-03-08T22:19Z",
+      "source_file": "CRP_2022_08_2219.txt",
+      "similarity": 0.975733757019043,
+      "label": "quiet",
+      "is_severe": false,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "4": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2022-03-09T04:36Z",
+      "source_file": "CRP_2022_09_0436.txt",
+      "similarity": 0.975733757019043,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -393,18 +393,18 @@
   ],
   "signal": {
     "level": "QUIET",
-    "severe_fraction": 0.38,
-    "mean_similarity": 0.9848414659500122,
+    "severe_fraction": 0.27,
+    "mean_similarity": 0.9730816304683685,
     "base_rate": 0.3948890615557282,
-    "signal_value": -0.014889061555728222,
-    "percentile": 42,
+    "signal_value": -0.12488906155572821,
+    "percentile": 23,
     "office_lift": 0.053370938444271765,
-    "n_severe": 6,
+    "n_severe": 2,
     "n_total": 10,
-    "n_severe_signal": 38,
+    "n_severe_signal": 27,
     "n_total_signal": 100,
-    "product_id": "202610292308-KCRP-FXUS64-AFDCRP",
-    "afd_time": "2026-10-29T23:08:00Z",
-    "updated": "2026-10-30T01:03:05.861340+00:00"
+    "product_id": "202610300624-KCRP-FXUS64-AFDCRP",
+    "afd_time": "2026-10-30T06:24:00Z",
+    "updated": "2026-10-30T07:10:35.296244+00:00"
   }
 }
