@@ -1,9 +1,9 @@
 {
   "office": "ICT",
-  "product_id": "202610301901-KICT-FXUS63-AFDICT",
-  "afd_time": "2026-10-30T19:01:00Z",
+  "product_id": "202610302343-KICT-FXUS63-AFDICT",
+  "afd_time": "2026-10-30T23:43:00Z",
   "section_type": "discussion",
-  "updated": "2026-10-30T19:27:35.084374+00:00",
+  "updated": "2026-10-30T23:51:21.318176+00:00",
   "query_preview": "..\nIssued at 158 PM CDT Fri Oct 30 2026\n\nPatchy fog lingers across the area early this afternoon while \nnumerous showers were lifting north out of Oklahoma as a shortwave \ntrough ejects from the Southern Plains. Water vapor imagery shows a \nlarge expansive moist plume extending downstream from this \napproaching shortwave trough over the Central Plains with PWATs \naround 1.4 inches which is above the 90th percentile for late Oct \nacross the area. Showers with some embedded thunderstorms this \nafternoon and early evening are expected to decrease in \ncoverage as we move through the overnight hours while some \nscattered activity may linger over the area in the day on \nSaturday before the trough axis lifts north and east of the area\nlate in the day. We could see some low ceilings and fog \nredevelop tonight if coverage of shower activity diminishes \ngiven a very moist pbl.\n\nShortwave ridging is still expected to arrive over the area on \nSunday providing a break in the action before another more robust \npositively tilted trough builds into the Rockies late in the day. \nThis next feature will begin to emerge across the area on Monday \nwith showers and thunderstorms expected to develop late Sunday night \nas the robust LLJ transports moisture northward. More widespread \nshower and storm activity early in the period on Mon could minimize \nthe threat for more organized activity later in the day, but \nconfidence in the details remains rather low at this time. If the \novernight/early morning activity is less robust, we could see a \nwindow for strong/severe storms during the day on Monday along a \nsoutheastward advancing cold front. Some post frontal precipitation \nmay linger across the area Monday night into Tuesday as the \nmid/upper trough translates slowly eastward across the area. By \nTuesday evening/Tuesday night, showers are expected to diminish from \nwest to east with increasing large-scale forcing for subsidence in \nthe wake of the system.\n\nA stable post-frontal regime is anticipated as we move into \nWed-Thu with seasonably mild temperatures expected to linger \nthrough the end of the week.",
   "analogs": [
     {
@@ -81,9 +81,55 @@
       }
     },
     {
+      "datetime_utc": "2016-09-12T20:00Z",
+      "source_file": "ICT_2016_12_2000.txt",
+      "similarity": 0.9571743011474609,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 1
+          }
+        },
+        "2": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 7,
+            "severe_wind": 2,
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "severe_hail",
+          "counts": {
+            "severe_hail": 2,
+            "flood": 1
+          }
+        },
+        "5": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
       "datetime_utc": "2016-09-13T04:45Z",
       "source_file": "ICT_2016_13_0445.txt",
-      "similarity": 0.9571743607521057,
+      "similarity": 0.9571743011474609,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -129,55 +175,9 @@
       }
     },
     {
-      "datetime_utc": "2016-09-12T20:00Z",
-      "source_file": "ICT_2016_12_2000.txt",
-      "similarity": 0.9571743607521057,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 1
-          }
-        },
-        "2": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 7,
-            "severe_wind": 2,
-            "flood": 1
-          }
-        },
-        "4": {
-          "label": "severe_hail",
-          "counts": {
-            "severe_hail": 2,
-            "flood": 1
-          }
-        },
-        "5": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
       "datetime_utc": "2017-03-06T09:07Z",
       "source_file": "ICT_2017_06_0907.txt",
-      "similarity": 0.9546065926551819,
+      "similarity": 0.9546066522598267,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -211,6 +211,61 @@
           "label": "winter",
           "counts": {
             "winter": 1
+          }
+        },
+        "6": {
+          "label": "quiet",
+          "counts": {}
+        }
+      }
+    },
+    {
+      "datetime_utc": "2017-06-12T02:16Z",
+      "source_file": "ICT_2017_12_0216.txt",
+      "similarity": 0.9520295858383179,
+      "label": "severe_wind",
+      "is_severe": true,
+      "daily_breakdown": {
+        "0": {
+          "label": "quiet",
+          "counts": {}
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 40,
+            "severe_wind": 17
+          }
+        },
+        "2": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 10,
+            "flood": 2,
+            "severe_wind": 1
+          }
+        },
+        "3": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 76,
+            "severe_wind": 110,
+            "flood": 1
+          }
+        },
+        "4": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_hail": 21,
+            "severe_wind": 24
+          }
+        },
+        "5": {
+          "label": "severe_wind",
+          "counts": {
+            "severe_wind": 35,
+            "severe_hail": 42,
+            "flood": 3
           }
         },
         "6": {
@@ -275,64 +330,9 @@
       }
     },
     {
-      "datetime_utc": "2017-06-12T02:16Z",
-      "source_file": "ICT_2017_12_0216.txt",
-      "similarity": 0.9520295858383179,
-      "label": "severe_wind",
-      "is_severe": true,
-      "daily_breakdown": {
-        "0": {
-          "label": "quiet",
-          "counts": {}
-        },
-        "1": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 40,
-            "severe_wind": 17
-          }
-        },
-        "2": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 10,
-            "flood": 2,
-            "severe_wind": 1
-          }
-        },
-        "3": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 76,
-            "severe_wind": 110,
-            "flood": 1
-          }
-        },
-        "4": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_hail": 21,
-            "severe_wind": 24
-          }
-        },
-        "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 35,
-            "severe_hail": 42,
-            "flood": 3
-          }
-        },
-        "6": {
-          "label": "quiet",
-          "counts": {}
-        }
-      }
-    },
-    {
-      "datetime_utc": "2025-08-15T17:24Z",
-      "source_file": "ICT_2025_15_1724.txt",
-      "similarity": 0.95151686668396,
+      "datetime_utc": "2025-08-15T06:56Z",
+      "source_file": "ICT_2025_15_0656.txt",
+      "similarity": 0.9515171051025391,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -378,7 +378,7 @@
     {
       "datetime_utc": "2017-07-05T17:33Z",
       "source_file": "ICT_2017_05_1733.txt",
-      "similarity": 0.9512017369270325,
+      "similarity": 0.9512015581130981,
       "label": "severe_hail",
       "is_severe": true,
       "daily_breakdown": {
@@ -417,7 +417,7 @@
     {
       "datetime_utc": "2023-09-08T17:32Z",
       "source_file": "ICT_2023_08_1732.txt",
-      "similarity": 0.9497812986373901,
+      "similarity": 0.9497811794281006,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -455,7 +455,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.77,
-    "mean_similarity": 0.9311192351579666,
+    "mean_similarity": 0.9311191099882126,
     "base_rate": 0.6102984201287303,
     "signal_value": 0.15970157987126976,
     "percentile": 48,
@@ -464,8 +464,8 @@
     "n_total": 10,
     "n_severe_signal": 77,
     "n_total_signal": 100,
-    "product_id": "202610301901-KICT-FXUS63-AFDICT",
-    "afd_time": "2026-10-30T19:01:00Z",
-    "updated": "2026-10-30T19:27:35.084374+00:00"
+    "product_id": "202610302343-KICT-FXUS63-AFDICT",
+    "afd_time": "2026-10-30T23:43:00Z",
+    "updated": "2026-10-30T23:51:21.318176+00:00"
   }
 }
