@@ -48,6 +48,11 @@ const SOURCE = (() => {
 })();
 const BUNDLES = SOURCE.kind === 'bundles';
 const BASE = SOURCE.base;
+// Cases mode (past storms; the CASES block near the end of this file): on only with ?case=<id> (or ?case= for the
+// first storm). Its files: <base>cases/index.json and cases/<id>/... (src/pilot/cases/pack.py). Live and bundle
+// modes never enter the Cases block.
+const CASES = params.has('case');
+const CASES_BASE = params.get('cases_base') || window.LAKEBAND_CASES || (BUNDLES ? BASE + 'cases/' : 'cases/');
 const LOCAL_TZ = params.get('tz') || 'America/New_York';   // local time where the bands are
 
 // ------------------------------------------------------------------ state
@@ -209,6 +214,7 @@ function loadImage(url) {
 
 // ------------------------------------------------------------------ run index
 async function loadIndex() {
+  if (CASES) return casesIndex();
   if (BUNDLES) {                               // the pointer lists the bundles kept (about a day) per lake
     const out = {};
     for (const [lake, b] of Object.entries((S.latest && S.latest.bundles) || {}))
@@ -257,6 +263,7 @@ function rebuildSteps() {
 
 // ------------------------------------------------------------------ scene loading
 async function lakeFixed(lake) {
+  if (CASES) { if (!S.fixed[lake]) S.fixed[lake] = Promise.resolve(casesFixed(lake)); return S.fixed[lake]; }
   if (!S.fixed[lake]) {
     S.fixed[lake] = (async () => {
       if (BUNDLES) {
@@ -284,6 +291,7 @@ async function loadScene() {
   await Promise.all(S.lakes.map(async lake => {
     const ix = S.index[lake] || {};
     const fixed = await lakeFixed(lake);
+    if (CASES) { out.lakes[lake] = await casesLake(lake, t, fixed); return; }
     if (BUNDLES) {                             // one file per scan: radar, far radar, bands, forecast, persistence
       const name = latestIn(ix.bands, t);
       const b = name ? await cached(`B/${lake}/${name}`, () => getBundle(`${BASE}${ix.folder}${name}${ix.suffix}`)).catch(() => null) : null;
@@ -836,6 +844,7 @@ function drawBands(sc) {
       }
     }
   }
+  if (CASES && S.lead) casesDrawActual(sc);      // past storms: where each band actually was at the valid time
   // 4. persistence beside the model (switch on): where each band is now, grey dotted, on top of the band now
   if (S.showPersist && S.lead) for (const f of forecastsAt(sc, S.lead, 'persistence')) {
     const p = f.properties;
@@ -1111,6 +1120,7 @@ function renderHeader() {
   modeEl.innerHTML = esc(live ? 'LIVE' : `REPLAY${st.event ? ' ' + st.event : ''}`) +
     (isFinite(shownT) ? `<span class="long"> · ${esc(fmtDate(shownT))} UTC</span>` : '');
   modeEl.className = 'mode' + (live ? ' live' : '');
+  if (CASES) casesModeText(modeEl, shownT);
   const banners = [];
   if (st.fixture) banners.push(['info', 'Fixture.', esc(st.fixture.note || 'Built from stored products, not pipeline output.'), 'Not pipeline output; see the report.']);
   if (!sc) { $('banners').innerHTML = bannerHtml(banners); return; }
@@ -1132,7 +1142,7 @@ function renderHeader() {
   const nowMs = live ? Date.now() : (S.step === S.steps.length - 1 && st.now ? tIso(st.now) : S.steps[S.step]);
   // a running replay can write a scan before status.json catches up: never show a negative age
   const age = Math.max(0, (nowMs - (isFinite(scanEnd) ? scanEnd : scanStart)) / 60000);
-  const atLatest = S.step === S.steps.length - 1;
+  const atLatest = S.step === S.steps.length - 1 && !CASES;
   const ageText = !isFinite(age) ? '' : live ? `${ago(age)} old` : atLatest ? `${ago(age)} before replay clock` : `scan ended ${fmtUTC(scanEnd, true)}`;
   const ageShort = !isFinite(age) ? '' : (live || atLatest) ? `${ago(age)} old` : `ended ${fmtUTC(scanEnd).replace(' UTC', 'Z')}`;
   const lakeTimes = perLake.length > 1 && new Set(perLake.map(x => fmtUTC(x[1]))).size > 1
@@ -1145,9 +1155,10 @@ function renderHeader() {
                `from the ${fmtUTC(fm.scan)} scan${kindText ? ', ' + kindText : ''}`, `from ${fmtUTC(fm.scan).replace(' UTC', 'Z')} scan`)
     : 'None yet in this run';
   const every = (st.issues && st.issues.every_scan) || st.source === 'bundles' || fm.kind === 'scan';
-  $('updates').hidden = !every;
+  $('updates').hidden = !every || CASES;
   $('t-model').innerHTML = fm.init != null && isFinite(fm.init) ? timeHtml(`${both(fm.init)} run`, esc(fm.model), esc(fm.model))
     : (isFinite(fm.iss) ? timeHtml('No weather-model run used', esc(fm.model || ''), esc(fm.model || '')) : '—');
+  if (CASES) $('t-model').innerHTML = casesModelTime();
   // a carried lead (rule (b)) keeps its own issue and valid times: the header shows those, not this issuance's
   const carried = S.lead ? forecastsAt(S.scene, S.lead).map(f => f.properties).find(carriedFrom) : null;
   $('t-valid').innerHTML = carried
@@ -1169,7 +1180,8 @@ function renderHeader() {
     banners.push(['bad', 'Pipeline errors.', `${st.errors.length} reported; first: ${esc(first.slice(0, 200))}`, `${st.errors.length} reported.`]);
   }
   const fx = forecasterOf(sc);
-  if (fx.model) {
+  if (CASES) banners.push(casesBanner());
+  else if (fx.model) {
     // which forecaster, its artifact, the weather-model run it read, and whether it is the frozen model
     const run = fx.inputs && fx.inputs.model_init ? `${fmtUTC(tIso(fx.inputs.model_init))} model run` : 'no weather-model run';
     const src = fx.inputs && fx.inputs.inputs ? ` (${esc(fx.inputs.inputs.kind)}${fx.inputs.inputs.event ? ' of ' + esc(fx.inputs.inputs.event) : ''})` : '';
@@ -1270,6 +1282,7 @@ function leadTable(sc, fx) {
 }
 // the running scorecard of the :00/:30 series (the official, scored forecasts), from status.json or the pointer
 function renderScorecard() {
+  if (CASES) return casesScorecard();
   const el = $('scorecard'), sc = (S.status || {}).scorecard;
   const leads = sc && sc.leads ? LEADS.filter(L => sc.leads[String(L)] && (sc.leads[String(L)].model || sc.leads[String(L)].persistence)) : [];
   if (!leads.length) { el.hidden = true; el.innerHTML = ''; return; }
@@ -1293,10 +1306,11 @@ function renderAll() {
   const who = fx.model ? `${esc(fx.label)} forecast` : 'forecast';
   $('leadnote').innerHTML = S.lead
     ? `Minutes after issuance. <span class="key solid"></span>band now <span class="key dashed"></span>${who}, most likely <span class="key hatch"></span>${esc(envName(S.scene).long)}.` +
-      (fx.comparison && S.showPersist ? ` <span class="key dotted"></span>persistence (lies on the band now).` : '')
+      (fx.comparison && S.showPersist ? ` <span class="key dotted"></span>persistence (lies on the band now).` : '') +
+      (CASES ? casesLeadKey() : '')
     : 'Showing radar and bands now. Choose a lead to see each band’s forecast.';
   $('persistwrap').hidden = !fx.comparison;
-  $('leadtable').innerHTML = leadTable(S.scene, fx);
+  $('leadtable').innerHTML = CASES ? casesLeadTable(S.scene, fx) : leadTable(S.scene, fx);
   $('steplabel').textContent = isFinite(t) ? `${fmtDate(t)} ${fmtUTC(t)} · ${S.step + 1} of ${S.steps.length}${S.follow ? ' · latest' : ''}` : '';
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
   $('zonekey').hidden = !hasFar(S.scene);
@@ -1472,7 +1486,7 @@ function bandReport() {
   }
   const col = p ? colourOf(p) : hashColour(S.band);
   const facts = p ? bandFacts(p, id) : `<p>This band is not in the radar scan shown; it was in the scan the forecast was made from.</p>`;
-  return `<div class="closebar"><h3><span class="swatch" style="background:${col}"></span>Band ${esc(labelOf(S.band))}</h3><button type="button" id="clear">Close</button></div>${facts}<h3>How it is forecast to move</h3>${forecastTable(S.band, p)}`;
+  return `<div class="closebar"><h3><span class="swatch" style="background:${col}"></span>Band ${esc(labelOf(S.band))}</h3><button type="button" id="clear">Close</button></div>${facts}<h3>How it is forecast to move</h3>${forecastTable(S.band, p)}${CASES ? casesBandVerify(S.band) : ''}`;
 }
 
 function farOnlyReport() {
@@ -1563,6 +1577,348 @@ function clickAt(x, y) {
   if (window.innerWidth <= 900) $('details').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// ================================================================== CASES MODE (past storms) — begin
+// A stored storm played with the same scrubber and drawing as live: cases/index.json, cases/<id>/case.json.gz and
+// cases/<id>/frames-NN.jsonl.gz (contract lakeband.cases/1, src/pilot/cases/pack.py). Each frame is one lake and one
+// radar scan: radar picture, bands now, the forecast at every lead, persistence, and for each lead where the band
+// actually was at the valid time (the band LakeBand's verification matched to it). The rest of the page reaches this
+// block only behind `if (CASES)`; outside Cases mode only casesUi() runs (it adds the Past storms button).
+const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') !== '0' };
+
+// geometry of the packs (src/pilot/cases/encode.py): outlines in whole cell-edge numbers of the lake grid, as
+// [first x, first y, step x, step y, ...] per ring; lines in 1e-4 degree, the same way
+function casesRings(polys, g) {
+  if (!polys) return null;
+  return { type: 'MultiPolygon', coordinates: polys.map(poly => poly.map(flat => {
+    let x = flat[0], y = flat[1];
+    const ring = [[g.lon0 + g.dlon * (x - 0.5), g.lat0 + g.dlat * (y - 0.5)]];
+    for (let k = 2; k < flat.length; k += 2) { x += flat[k]; y += flat[k + 1]; ring.push([g.lon0 + g.dlon * (x - 0.5), g.lat0 + g.dlat * (y - 0.5)]); }
+    ring.push(ring[0]);
+    return ring;
+  })) };
+}
+function casesLines(parts) {
+  if (!parts) return null;
+  return { type: 'MultiLineString', coordinates: parts.map(flat => {
+    let x = flat[0], y = flat[1];
+    const line = [[x / 1e4, y / 1e4]];
+    for (let k = 2; k < flat.length; k += 2) { x += flat[k]; y += flat[k + 1]; line.push([x / 1e4, y / 1e4]); }
+    return line;
+  }) };
+}
+async function casesText(url) {             // gzip text, decompressed here unless the host already did
+  const r = await fetch(url, { cache: 'no-cache' });
+  if (!r.ok) throw new Error(`${url}: ${r.status}`);
+  const buf = new Uint8Array(await r.arrayBuffer());
+  if (buf[0] === 0x1f && buf[1] === 0x8b) return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+  return new TextDecoder().decode(buf);
+}
+// a frames file: line 1 its header, then one frame per line; only the frames shown are parsed (at most 3 files kept)
+function casesChunk(k) {
+  const key = `${C.id}/${k}`;
+  if (C.chunks.has(key)) { const v = C.chunks.get(key); C.chunks.delete(key); C.chunks.set(key, v); return v; }
+  const p = casesText(`${CASES_BASE}${C.id}/${C.man.chunks[k].name}`).then(text => {
+    const lines = new Map();
+    let a = text.indexOf('\n') + 1;
+    while (a > 0 && a < text.length) {
+      let b = text.indexOf('\n', a); if (b < 0) b = text.length;
+      const m = /^\{"lake":"([a-z]+)","n":"(\d{8}T\d{6}Z)"/.exec(text.slice(a, a + 60));
+      if (m) lines.set(`${m[1]}/${m[2]}`, [a, b]);
+      a = b + 1;
+    }
+    return { text, lines };
+  }).catch(e => { C.chunks.delete(key); throw e; });
+  C.chunks.set(key, p);
+  while (C.chunks.size > 3) C.chunks.delete(C.chunks.keys().next().value);
+  return p;
+}
+function casesFrame(lake, name) {
+  const key = `${C.id}/${lake}/${name}`;
+  if (C.frames.has(key)) { const v = C.frames.get(key); C.frames.delete(key); C.frames.set(key, v); return v; }
+  const k = C.where[lake] && C.where[lake].get(name);
+  if (k == null) return Promise.resolve(null);
+  const p = casesChunk(k).then(ch => {
+    const ab = ch.lines.get(`${lake}/${name}`);
+    return ab ? casesDecode(JSON.parse(ch.text.slice(ab[0], ab[1])), lake) : null;
+  }).catch(e => { C.frames.delete(key); throw e; });
+  C.frames.set(key, p);
+  while (C.frames.size > 160) C.frames.delete(C.frames.keys().next().value);
+  return p;
+}
+const casesIso = ms => new Date(ms).toISOString().replace('.000Z', 'Z');
+// one packed frame -> the live bundle's shapes (band and forecast collections), so the page draws it unchanged
+function casesDecode(fr, lake) {
+  const g = C.man.lake[lake].grid, m = C.man.model;
+  const bands = fr.b.map(b => ({ type: 'Feature', geometry: casesRings(b.o, g), properties: {
+    band_id: `${lake}|T${b.tier}|${b.id}`, lake, tier: b.tier, track_id: b.id, radar_scan_time: fr.t0, radar_scan_end: fr.t1,
+    centerline: casesLines(b.c), peak_dbz: b.pk ?? null, mean_dbz: b.mn ?? null, flags: b.fl || [], split_from: b.sf || null,
+    merged_from: b.mf || [], coverage_gaps: b.gaps || 0, length_km: b.len ?? null, visible_length_km: b.vis ?? null,
+    frame: b.az != null ? { axis_azimuth_deg: b.az } : null, age_min: b.age ?? null,
+    stations: b.beam ? [{ beam_km: b.beam[0] }, { beam_km: b.beam[1] }] : [] } }));
+  const feats = [], pfeats = [];
+  const modelTag = { family: m.family, config: `${m.config}, cross-validation version ${m.fold + 1} of ${m.folds}` };
+  for (const f of fr.f) {
+    const id = `${lake}|T${f.tier}|${f.id}`;
+    const pc = casesLines(f.pc), po = casesRings(f.po, g);
+    for (const L of f.L) {
+      const common = { band_id: id, lake, tier: f.tier, track_id: f.id, lead_min: L.lead, radar_scan_time: fr.t0,
+        radar_scan_end: fr.t1, issuance_time: fr.iss, valid_time: casesIso(tIso(fr.iss) + L.lead * 60000) };
+      feats.push({ type: 'Feature', geometry: casesRings(L.o, g), properties: { ...common, centerline: casesLines(L.c),
+        corridor_80: casesRings(L.r, g), corridor_80_kind: 'model percentiles',
+        station_shift_km: { p10: [L.p10 ?? null], p50: [L.p50 ?? null], p90: [L.p90 ?? null] },
+        summary: { translation_km: L.tr ?? null }, end_advance_km: { lake: L.dA ?? null, inland: L.dB ?? null },
+        probability: { exists: L.pe ?? null }, probability_source: 'model', model: modelTag, forecaster: 'model',
+        shown_as: 'main', inputs_available: {}, degraded: false, degraded_reasons: [],
+        verify: { status: L.st || null, censor: L.cz || null, target: L.tg || null, model_km: L.em ?? null, persistence_km: L.ep ?? null } } });
+      pfeats.push({ type: 'Feature', geometry: po, properties: { ...common, centerline: pc, model: { family: 'persistence' },
+        forecaster: 'persistence', shown_as: 'comparison', probability_source: 'training base rate (not a forecast)', degraded_reasons: [] } });
+    }
+  }
+  const omitted = Object.fromEntries(Object.entries(fr.omit || {}).map(([L, why]) => [`lead${L}_omitted`, why]));
+  const coll = (features, extra) => ({ type: 'FeatureCollection', lake, issuance_time: fr.iss, issue_kind: 'scan', scored: false,
+    radar_scan_time: fr.t0, radar_scan_end: fr.t1, ...omitted, ...extra, features });
+  return { name: fr.n, iss: fr.iss, png: fr.png,
+    bands: { type: 'FeatureCollection', lake, radars_in_composite: fr.radars, features: bands },
+    forecast: fr.iss ? coll(feats, { forecaster: { family: m.family, config: m.config, role: 'cross_validation', label: m.label },
+      forecaster_used: `${m.family} ${m.config}`, shown_as: 'main' }) : null,
+    persistence: fr.iss && pfeats.length ? coll(pfeats, { forecaster_used: 'persistence', shown_as: 'comparison' }) : null };
+}
+// where each band actually was: the verification's matched band, drawn from the frame of the scan near the valid time
+async function casesAttachActual(lake, fr) {
+  if (fr.actualDone) return;
+  const names = new Set();
+  for (const f of fr.forecast.features) { const tg = f.properties.verify.target; if (tg) names.add(tg.n); }
+  const got = new Map(await Promise.all([...names].map(async n => [n, await casesFrame(lake, n).catch(() => null)])));
+  for (const f of fr.forecast.features) {
+    const v = f.properties.verify, tg = v.target;
+    if (!tg) continue;
+    const later = got.get(tg.n);
+    const b = later && later.bands.features.find(x => x.properties.tier === 1 && x.properties.track_id === tg.id);
+    if (b) v.actual = { geometry: b.geometry, centerline: b.properties.centerline, scan_time: b.properties.radar_scan_time, scan_end: tg.end, track_id: tg.id };
+  }
+  fr.actualDone = true;
+}
+function casesIndex() {
+  const out = {};
+  for (const lake of S.lakes) {
+    const fr = (C.man.lake[lake] || {}).frames || [];
+    out[lake] = { bands: fr.map(x => x[0]), radar: fr.map(x => x[0]), forecast: fr.filter(x => x[2]).map(x => x[0]) };
+  }
+  return out;
+}
+function casesFixed(lake) {
+  const L = C.man.lake[lake];
+  return { bounds: L.bounds, coverageFar: null,
+    coverage: { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: casesRings(L.coverage, L.grid), properties: { lake } }] } };
+}
+async function casesLake(lake, t, fixed) {
+  const name = latestIn((S.index[lake] || {}).bands, t);
+  const fr = name ? await casesFrame(lake, name).catch(() => null) : null;
+  const radar = fr ? await cached(`cR/${C.id}/${lake}/${name}`, () => loadImage('data:image/png;base64,' + fr.png)).catch(() => null) : null;
+  if (fr && fr.forecast) await casesAttachActual(lake, fr).catch(() => null);
+  return { ...fixed, bands: fr && fr.bands, radar, radarFar: null, forecast: fr && fr.forecast, persistence: fr && fr.persistence,
+    bundle: fr && { name, issuance_time: fr.iss, issue_kind: 'scan', forecast_from_scan: fr.bands.features.length ? fr.bands.features[0].properties.radar_scan_time : null },
+    stamps: { bs: name, rs: name, fs: name, ps: name } };
+}
+function casesDrawActual(sc) {
+  if (!C.showActual) return;
+  const fcs = forecastsAt(sc, S.lead);
+  for (const f of fcs) {
+    const a = f.properties.verify && f.properties.verify.actual;
+    if (!a) continue;
+    // outline: thin black dash-dot; centerline: a black line with a white core (neither is used for anything else)
+    ctx.beginPath(); pathPolys(a.geometry);
+    ctx.setLineDash([10, 4, 2, 4]); ctx.lineWidth = 2; ctx.strokeStyle = '#0f172a'; ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); pathLines(linesOf(a.centerline));
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 12; ctx.stroke();
+    ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 8; ctx.stroke();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+    sampleLines(linesOf(a.centerline));
+  }
+  const sel = S.band && fcs.find(f => f.properties.band_id === S.band && f.properties.verify && f.properties.verify.actual);
+  if (sel) S.deferred.push(() => {                  // a label for the selected band's actual position only
+    const main = longestLine(linesOf(sel.properties.verify.actual.centerline));
+    if (main) badge(`${labelOf(sel.properties.band_id)} actual +${S.lead}`, px(...pointAlong(main, 0.3)), '#0f172a', 'fc', coversLine);
+    flushBadges();
+  });
+}
+const casesKm = v => v == null ? '—' : `${v.toFixed(1)} km`;
+function casesWhy(v) {
+  if (v.model_km != null) return null;
+  if (v.censor === 'outside_event_window') return 'after the storm’s end';
+  if (v.censor) return 'radar could not tell';
+  if (v.status === 'absent') return 'band gone';
+  return 'not scored';
+}
+function casesLeadTable(sc, fx) {
+  if (!sc || !S.lead) return '';
+  const fcs = forecastsAt(sc, S.lead);
+  if (!fcs.length) { const why = leadOmitted(sc, S.lead); return `<p class="hint">${why ? `+${S.lead} min: not shown from this scan; ${esc(why)}.` : 'No band was forecast at this scan.'}</p>`; }
+  const bands = currentBands(sc);
+  const rows = fcs.map(f => {
+    const p = f.properties, v = p.verify || {}, now = bands.find(b => b.properties.band_id === p.band_id);
+    const az = now && now.properties.frame ? now.properties.frame.axis_azimuth_deg : null;
+    const m = p.summary ? p.summary.translation_km : null;
+    const dir = m == null ? 'unknown' : Math.abs(m) < 0.5 ? 'stays' : `${Math.abs(m).toFixed(0)} km ${az == null ? (m > 0 ? 'left' : 'right') : compass(m > 0 ? az - 90 : az + 90)}`;
+    const ex = p.probability && p.probability.exists;
+    const why = casesWhy(v);
+    const better = v.model_km != null && v.persistence_km != null ? (v.model_km < v.persistence_km ? ' class="better"' : '') : '';
+    return { ex: ex == null ? -1 : ex, html: `<tr><td><button type="button" class="linkish" data-band="${esc(p.band_id)}">${esc(labelOf(p.band_id, true))}</button></td>` +
+      `<td>${ex != null ? Math.round(ex * 100) + '%' : '—'}</td><td class="opt">${esc(dir)}</td>` +
+      (why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${better}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) + '</tr>' };
+  }).sort((a, b) => b.ex - a.ex);
+  const valids = [...new Set(fcs.map(f => fmtUTC(tIso(f.properties.valid_time))))].sort();   // each lake's own issuance
+  const valid = valids.length > 1 ? `${valids[0].replace(' UTC', '')}–${valids[valids.length - 1]}` : valids[0];
+  return `<table class="leads compact casestable"><caption>At +${S.lead} min · valid ${esc(valid)}</caption><thead><tr><th>Band</th><th>Still exists</th>` +
+    `<th class="opt">Model: centerline</th><th>Off by: model</th><th>Off by: persistence</th></tr></thead><tbody>${rows.map(r => r.html).join('')}</tbody></table>` +
+    casesOmittedNote(sc, fcs) +
+    `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a black line with a white core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`;
+}
+// the band report (Cases mode): for every lead, how far the model and persistence were from where the band actually was
+function casesBandVerify(bandId) {
+  const sc = S.scene, fcs = [];
+  for (const lake of S.lakes) { const fc = sc && sc.lakes[lake] && sc.lakes[lake].forecast; if (fc) for (const f of fc.features) if (f.properties.band_id === bandId) fcs.push(f.properties); }
+  if (!fcs.length) return '';
+  fcs.sort((a, b) => a.lead_min - b.lead_min);
+  const rows = fcs.map(p => {
+    const v = p.verify || {}, why = casesWhy(v);
+    const at = v.target ? `${fmtUTC(tIso(v.target.end))}${v.target.id !== p.track_id ? ' as ' + v.target.id : ''}` : '—';
+    return `<tr${p.lead_min === S.lead ? ' class="cur"' : ''}><td>+${p.lead_min}</td>` +
+      (why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${v.model_km < v.persistence_km ? ' class="better"' : ''}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) +
+      `<td class="opt">${esc(at)}</td></tr>`;
+  }).join('');
+  return `<h3>Where it actually went</h3><table class="leads casestable"><thead><tr><th>Lead</th><th>Off by: model</th><th>Off by: persistence</th><th class="opt">Found in the scan ending</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="hint">Centerline distance from the forecast to the band LakeBand’s verification matched to it in the radar scan nearest the valid time (“as B0xx” when that band carries another identifier, after a split or merge). Bold: the model was closer than persistence.</p>`;
+}
+// a lake whose scan does not show this lead (+180 at minutes 01-29, as live), while the other lake's does
+function casesOmittedNote(sc, fcs) {
+  const lakes = S.lakes.filter(l => { const fc = sc.lakes[l] && sc.lakes[l].forecast; return fc && fc[`lead${S.lead}_omitted`]; });
+  if (!lakes.length || !fcs.length) return '';
+  return `<p class="hint">+${S.lead} min is not shown for ${esc(lakes.map(lakeName).join(' and '))} from its newest scan: ${esc(leadOmitted(sc, S.lead))}.</p>`;
+}
+function casesLeadKey() {
+  return C.showActual ? ` <span class="key actual"></span>where it actually was (verification).` : '';
+}
+function casesScorecard() {
+  const el = $('scorecard'), m = C.man;
+  if (!m) { el.hidden = true; el.innerHTML = ''; return; }
+  const s = m.summary.leads;
+  const pct = v => v == null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(0)}%`;
+  const row = L => { const r = s[String(L)] || {};
+    return `<tr${L === S.lead ? ' class="cur"' : ''}><td>+${L / 60} h</td><td>${esc(casesKm(r.model_mean_km))}</td><td>${esc(casesKm(r.persistence_mean_km))}</td><td>${esc(pct(r.change_pct))}</td><td class="opt">${r.n_forecasts ?? '—'} / ${r.n_bands ?? '—'}</td></tr>`; };
+  const h1 = s['60'] || {};
+  el.hidden = false;
+  el.innerHTML = `<div class="blockhead"><h2>This storm</h2></div>
+    <p class="casestitle"><strong>${esc(m.title)}</strong><br><span class="hint">${esc(casesDates(m))} · ${esc(m.lakes.map(lakeName).join(' and '))}</span></p>
+    <p class="note">${esc(m.description)}</p>
+    <table class="leads compact"><thead><tr><th>Lead</th><th>Model</th><th>Persistence</th><th>Change</th><th class="opt">Forecasts / bands</th></tr></thead><tbody>${row(60)}${row(120)}</tbody></table>
+    <p class="hint">Mean position error of the band centerline over the whole storm: every forecast issued at a radar scan whose band was found again near the valid time, primary bands, both lakes. Persistence leaves the band where it was. Scored: ${esc(casesCounts(s))}. At +1 h the model was closer than persistence in ${h1.model_better_share != null ? Math.round(h1.model_better_share * 100) + '%' : '—'} of forecasts.</p>
+    <p class="hint">${esc(m.model.note)}</p>`;
+}
+function casesCounts(s) {
+  return [60, 120].map(L => { const r = s[String(L)] || {}; return `+${L / 60} h, ${r.n_forecasts ?? '—'} forecasts of ${r.n_bands ?? '—'} band identities`; }).join('; ');
+}
+function casesDates(m) {
+  const f = s => new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' }).format(new Date(tIso(s)));
+  return `${f(m.start_utc)} to ${f(m.end_utc)} UTC, ${new Date(tIso(m.start_utc)).getUTCFullYear()}`;
+}
+function casesModeText(modeEl, shownT) {
+  modeEl.innerHTML = esc('PAST STORM') + (C.man ? `<span class="long"> · ${esc(C.man.title)}</span>` : '') +
+    (isFinite(shownT) ? `<span class="long"> · ${esc(fmtDate(shownT))} UTC</span>` : '');
+  modeEl.className = 'mode cases';
+}
+function casesModelTime() {
+  const m = C.man && C.man.model;
+  if (!m) return '—';
+  return timeHtml('Cross-validation model', esc(`${m.family} ${m.config}, version ${m.fold + 1} of ${m.folds}, trained without this storm`), 'trained without this storm');
+}
+function casesBanner() {
+  const m = (C.man && C.man.model) || {};
+  return ['info', 'Past storm: cross-validation model.',
+    `Forecasts here come from ${esc(m.label || 'a cross-validation version of LakeBand trained without this storm')} ` +
+    `(${esc(m.family || '')} ${esc(m.config || '')}, version ${(m.fold ?? 0) + 1} of ${esc(m.folds ?? 5)}; this storm’s group ${esc(m.validation_group || '')} was left out of its training). ` +
+    `It is not the live model, which trained on every one of these storms. Each forecast can be checked against where the band actually went.`,
+    'Model trained without this storm.'];
+}
+async function casesLoad(id) {
+  const e = (C.index.cases || []).find(c => c.id === id) || (C.index.cases || [])[0];
+  if (!e) throw new Error('no storms in cases/index.json');
+  const switching = !!C.man;                     // a storm chosen from the list (not the first load with its URL)
+  C.id = e.id; C.chunks.clear(); C.frames.clear();
+  C.man = await getBundle(`${CASES_BASE}${e.id}/case.json.gz`);
+  C.where = {};
+  for (const [lake, L] of Object.entries(C.man.lake)) C.where[lake] = new Map(L.frames.map(x => [x[0], x[1]]));
+  S.status = { mode: 'case', event: C.man.title, source: 'cases' };
+  S.latest = null; S.latestLakes = {}; S.fixed = {}; S.cache.clear(); S.scene = null;
+  if (switching) { S.band = null; S.point = null; S.farOnly = null; }
+  S.lakes = [...C.man.lakes].sort();
+  S.index = casesIndex();
+  S.follow = false; S.step = -1;
+  rebuildSteps();
+  const sel = $('cases-select'); if (sel) sel.value = C.id;
+  const q = new URLSearchParams(location.search); q.set('case', C.id);
+  history.replaceState(null, '', `${location.pathname}?${q}`);
+  try { localStorage.setItem('lakeband.case', C.id); } catch (_) { /* private mode: nothing remembered */ }
+  const at = tIso(C.man.open_at_utc);
+  let k = 0; S.steps.forEach((s, i) => { if (s <= at) k = i; });
+  await setStep(k, false);
+}
+async function casesBoot() {
+  try {
+    C.index = await getJSON(`${CASES_BASE}index.json`, true);
+    const sel = $('cases-select');
+    if (sel) {
+      sel.innerHTML = C.index.cases.map(c => `<option value="${esc(c.id)}">${esc(c.title)}</option>`).join('');
+      sel.addEventListener('change', () => { stopPlay(); S.view = null; casesLoad(sel.value).catch(casesFail); });
+    }
+    let want = params.get('case');
+    if (!want) try { want = localStorage.getItem('lakeband.case'); } catch (_) { want = null; }
+    await casesLoad(want);
+  } catch (e) { casesFail(e); }
+}
+function casesFail(e) {
+  $('banners').innerHTML = `<p class="banner bad"><strong>Cannot read the past storms.</strong>${esc(e.message || e)}.</p>`;
+}
+function casesUi() {
+  const line = document.querySelector('#top .titleline'), mode = $('mode');
+  if (!line || !mode) return;
+  const box = document.createElement('span');
+  box.className = 'casesbar';
+  const go = q => { for (const k of ['t', 'band', 'pt', 'view', 'case']) q.delete(k); return q; };
+  if (!CASES) {
+    box.innerHTML = '<button type="button" id="cases-open" class="casesbtn">Past storms</button>';
+    line.insertBefore(box, mode.nextSibling);
+    $('cases-open').addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); q.set('case', ''); location.search = q.toString(); });
+    return;
+  }
+  box.classList.add('on');
+  box.innerHTML = '<label class="casessel"><span class="long">Storm</span> <select id="cases-select" aria-label="Past storm"></select></label>' +
+    '<button type="button" id="cases-live" class="casesbtn">Back to live</button>';
+  line.insertBefore(box, mode.nextSibling);
+  $('cases-live').addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); const s = q.toString(); location.search = s ? '?' + s : ''; if (!s) location.href = location.pathname; });
+  $('latest').textContent = 'End';
+  const pw = $('persistwrap');
+  if (pw) {
+    const lab = document.createElement('label');
+    lab.className = 'toggle'; lab.id = 'actualwrap';
+    lab.innerHTML = `<input type="checkbox" id="actual"${C.showActual ? ' checked' : ''}> Show where each band actually was
+      <span class="sub">The band LakeBand’s verification matched to it in the radar scan nearest the valid time: a black line with a white core.</span>`;
+    pw.after(lab);
+    $('actual').addEventListener('change', e => { C.showActual = e.target.checked; renderAll(); });
+  }
+}
+function casesShotInfo() {
+  const fcs = S.scene && S.lead ? forecastsAt(S.scene, S.lead) : [];
+  return { id: C.id, title: C.man && C.man.title, model: C.man && C.man.model.label, fold: C.man && C.man.model.fold,
+    steps: S.steps.length, actual_drawn: C.showActual ? fcs.filter(f => f.properties.verify && f.properties.verify.actual).length : 0,
+    forecasts: fcs.length, summary_rows: $('scorecard').hidden ? 0 : $('scorecard').querySelectorAll('tbody tr').length,
+    chunks_loaded: C.chunks.size, scroll_width: document.documentElement.scrollWidth,
+    wider_than_screen: [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > Math.min(window.innerWidth, screen.width) + 0.5)
+      .slice(0, 6).map(e => `${(e.closest('[id]') || {}).id || ''}>${e.tagName.toLowerCase()}${e.id ? '#' + e.id : ''}${e.className && typeof e.className === 'string' ? '.' + e.className.split(' ').join('.') : ''}`) };
+}
+// ================================================================== CASES MODE (past storms) — end
+
 // ------------------------------------------------------------------ polling and start
 async function poll() {
   try {
@@ -1627,14 +1983,15 @@ async function start() {
   const [basemap, sites] = await Promise.all([getJSON('data/basemap.json').catch(() => null), getJSON('data/radars.json').catch(() => null)]);
   S.basemap = basemap; S.sites = sites ? sites.sites : {};
   resize();
-  await poll();
+  casesUi();                                   // the Past storms button (live), or the storm list (Cases mode)
+  if (CASES) await casesBoot(); else await poll();
   const tp = params.get('t');
   if (tp) {
     const t = /^\d{8}T\d{4}Z$/.test(tp) ? parseStamp(tp) : Date.parse(tp);
     let k = 0; S.steps.forEach((s, i) => { if (s <= t) k = i; });
     await setStep(k, false);
   }
-  setInterval(poll, 30000);
+  if (!CASES) setInterval(poll, 30000);        // a past storm does not change: nothing to poll
   document.body.dataset.ready = '1';
 }
 // for the screenshot tool (app/tools/shoot.mjs): what is on the screen, from the page's own state
@@ -1651,5 +2008,6 @@ window.__shotInfo = () => ({
   persistence_shown: S.showPersist && !!S.lead && forecasterOf(S.scene).comparison,
   lead_rows: S.scene && S.lead ? forecastsAt(S.scene, S.lead).map(f => ({ id: f.properties.band_id,
     exists: f.properties.probability ? f.properties.probability.exists : null, source: f.properties.probability_source })) : [],
+  cases: CASES ? casesShotInfo() : null,
 });
 start();

@@ -113,6 +113,13 @@
       of each hour it comes from a scan up to 30 minutes older, shown with its true valid time. The scorecard on the
       page tracks the live forecasts against where the bands actually went.</p>
 
+    <h3>Past storms</h3>
+    <p>The Past storms button replays seven notable storms from the training winters, scan by scan, with each
+      forecast drawn beside where the band actually went. Their forecasts come from cross-validation versions of
+      LakeBand, each trained without that storm, so they show how the model does on weather it has not seen; the live
+      model trained on all of them. On these seven storms the forecast position error was 23&ndash;34% smaller than
+      persistence at 1 and 2 hours. They were picked for being notable, not as a test sample.</p>
+
     <h3>Reading the map</h3>
     <p>Outlines show the bands on the latest scan and where each is forecast to be at the lead you choose; Play steps
       through the leads. Persistence can be drawn beside them as a grey dotted line. The radar beam rises with
