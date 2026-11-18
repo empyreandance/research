@@ -60,8 +60,7 @@ const LOCAL_TZ = params.get('tz') || 'America/New_York';   // local time where t
 // ------------------------------------------------------------------ state
 const S = {
   status: null, latest: null, lakes: [], index: {}, steps: [], step: -1, follow: true,
-  lead: 0, playing: null, point: null, band: null, farOnly: null,
-  showFarOnly: params.get('faronly') === '1',            // objects seen only in the far zone: hidden by default
+  lead: 0, playing: null, point: null, band: null,
   showPersist: params.get('persist') === '1',            // persistence beside a model forecast: off by default
   showTrain: params.get('train') !== '0',                 // the training area's boundary: on by default
   showRange: params.get('range') !== '0',                 // the forecast's uncertainty (80% range hatching): on by default
@@ -116,7 +115,6 @@ const inGroup = p => (p.display_group_members || []).length > 1;
 const CASING = 'rgba(5,7,10,0.88)', TEXT_HALO = '#05070a';
 const MAP_INK = '#e5e7eb', MAP_MUTED = '#94a3b8';
 const OUTLINE = '#e2e8f0';                                // a band's outline now (its centerline has the band's colour)
-const FAR_ONLY_COLOUR = '#94a3b8';
 const MONO = '"JetBrains Mono", ui-monospace, Menlo, monospace';
 const mono = (size, weight = 700) => `${weight} ${size}px ${MONO}`;
 function parseBandId(id) {
@@ -126,9 +124,8 @@ function parseBandId(id) {
 // the uncertainty region of a forecast: the documented 80% corridor, else the pipeline's envelope
 const envOf = p => p.corridor_80 || p.envelope || null;
 function envName(sc) {
-  for (const lake of S.lakes) {
-    const fc = sc && sc.lakes[lake] && sc.lakes[lake].forecast;
-    if (fc) for (const f of fc.features) {
+  {
+    for (const f of forecastFeatures(sc)) {
       const p = f.properties;
       if (p.corridor_80) return { short: '80% range', map: '80% range, sideways position only', long: '80% range for sideways position; widths and ends in it are the median forecast' };
       if (p.envelope) {
@@ -145,7 +142,8 @@ function dupTracks(sc) {
   const seen = new Map();
   for (const lake of S.lakes) {
     const L = sc && sc.lakes[lake]; if (!L) continue;
-    for (const fc of [L.bands, L.forecast]) if (fc) for (const f of fc.features) {
+    const w = wideOf(L) || {};                                            // wide layer: W ids are numbered per lake too
+    for (const fc of [L.bands, L.forecast, w.bands, w.forecast]) if (fc) for (const f of fc.features) {
       const b = parseBandId(f.properties.band_id);
       if (!seen.has(b.track)) seen.set(b.track, new Set());
       seen.get(b.track).add(`${b.lake}|${b.tier}`);
@@ -279,11 +277,12 @@ async function lakeFixed(lake) {
     S.fixed[lake] = (async () => {
       if (BUNDLES) {
         const st = ((S.latest && S.latest.static) || {})[lake] || {};
-        // training_area.geojson: the lake's training-area outline, when the pointer names one (trainingAreaLines)
-        const [bounds, coverage, coverageFar, trainingArea] = await Promise.all(['bounds.json', 'coverage.geojson',
-          'coverage_far.geojson', 'training_area.geojson']
+        // training_area.geojson: the lake's training-area outline, when the pointer names one (trainingAreaLines);
+        // coverage_wide.geojson: the wide layer's grid (reports/R5-widen.md section 8), for the fit
+        const [bounds, coverage, coverageFar, trainingArea, coverageWide] = await Promise.all(['bounds.json', 'coverage.geojson',
+          'coverage_far.geojson', 'training_area.geojson', 'coverage_wide.geojson']
           .map(k => st[k] ? getJSON(BASE + st[k]).catch(() => null) : Promise.resolve(null)));
-        return { bounds, coverage, coverageFar, trainingArea };
+        return { bounds, coverage, coverageFar, trainingArea, coverageWide };
       }
       const v = (S.latestLakes || {})[lake] || {};
       const [bounds, coverage, coverageFar, trainingArea] = await Promise.all([
@@ -292,7 +291,8 @@ async function lakeFixed(lake) {
         // two-zone runs only: the 3 km limit and the far zone (older runs have no such file)
         v.coverage_far ? getJSON(BASE + v.coverage_far).catch(() => null) : Promise.resolve(null),
         v.training_area ? getJSON(BASE + v.training_area).catch(() => null) : Promise.resolve(null)]);
-      return { bounds, coverage, coverageFar, trainingArea };
+      const coverageWide = v.coverage_wide ? await getJSON(BASE + v.coverage_wide).catch(() => null) : null;
+      return { bounds, coverage, coverageFar, trainingArea, coverageWide };
     })();
   }
   return S.fixed[lake];
@@ -312,6 +312,7 @@ async function loadScene() {
       const [radar, radarFar] = b ? await Promise.all([b.radar_png ? cached(`rB/${lake}/${name}`, () => loadImage(b.radar_png)).catch(() => null) : null,
         b.radar_far_png ? cached(`rfB/${lake}/${name}`, () => loadImage(b.radar_far_png)).catch(() => null) : null]) : [null, null];
       out.lakes[lake] = { ...fixed, bands: b && b.bands, radar, radarFar, forecast: b && b.forecast, persistence: b && b.persistence,
+        wide: wideOfBundle(b),
         bundle: b && { name, issuance_time: b.issuance_time, issue_kind: b.issue_kind, forecast_from_scan: b.forecast_from_scan,
                        radar_scan_end: b.radar_scan_end },
         stamps: { bs: name, rs: name, fs: name, ps: name } };
@@ -330,7 +331,8 @@ async function loadScene() {
     // far-zone echo (presence only) of the same scan as the bands, when the run has the two-zone overlay
     const rf = bands && bands.radar_far_image;
     const radarFar = rf ? await cached(`rf/${lake}/${rf}`, () => loadImage(BASE + rf)).catch(() => null) : null;
-    out.lakes[lake] = { ...fixed, bands, radar, radarFar, forecast, persistence, stamps: { bs, rs, fs, ps } };
+    const wide = await wideOfRun(lake, bs, fs);                              // wide layer (runs from 18 Nov 2026)
+    out.lakes[lake] = { ...fixed, bands, radar, radarFar, forecast, persistence, wide, stamps: { bs, rs, fs, ps } };
   }));
   out.mosaic = await mosaicAt(t);
   return out;
@@ -499,6 +501,8 @@ function extentAll() {
     if (!b) continue;
     const [bw, be, bs, bn] = boundsBox(b);
     w = Math.min(w, bw); e = Math.max(e, be); s = Math.min(s, bs); n = Math.max(n, bn);
+    const g = wideGrid(S.scene.lakes[lake]);                             // wide layer: the wider box
+    if (g) { w = Math.min(w, g.west); e = Math.max(e, g.east); s = Math.min(s, g.south); n = Math.max(n, g.north); }
   }
   return w < e ? [w, e, s, n] : [-82.3, -75.0, 41.0, 44.5];
 }
@@ -803,13 +807,7 @@ function syncRadar(sc) {
 // ------------------------------------------------------------------ two zones (runs with the overlay only)
 const farFeatures = (L, zone) => (L && L.coverageFar ? L.coverageFar.features.filter(f => f.properties.zone === zone && f.geometry) : []);
 const hasFar = sc => !!sc && S.lakes.some(l => farFeatures(sc.lakes[l], 'far').length);
-function farOnlyObjects(sc) {
-  const out = [];
-  for (const lake of S.lakes) { const b = sc.lakes[lake] && sc.lakes[lake].bands; if (b && b.far_only_features) out.push(...b.far_only_features); }
-  return out;
-}
-// does this scene's band file carry the far-only objects at all (the FAR OBJECTS toggle is shown only then)
-const farOnlyKnown = sc => !!sc && S.lakes.some(l => sc.lakes[l] && sc.lakes[l].bands && Array.isArray(sc.lakes[l].bands.far_only_features));
+// (the band files' far_only_features are no longer drawn: the wide layer tracks and forecasts those objects as bands)
 function inFarZone(sc, lon, lat) {
   return S.lakes.some(l => farFeatures(sc.lakes[l], 'far').some(f => inGeom(f.geometry, lon, lat)));
 }
@@ -902,6 +900,7 @@ function drawSites(sc) {
     const L = sc.lakes[lake] || {};
     for (const r of (L.bounds || {}).radars || []) used.add(r);
     for (const r of (L.bands || {}).radars_in_composite || []) used.add(r);
+    for (const r of ((wideOf(L) || {}).bands || {}).radars_in_composite || []) used.add(r);     // wide layer (KDTX)
   }
   for (const [id, s] of Object.entries(S.sites)) {
     const [x, y] = px(s.lon, s.lat);
@@ -918,15 +917,19 @@ function drawSites(sc) {
   }
 }
 
+// every band on screen: the training layer's (unless a band mostly outside the training area replaces it) and the
+// wide layer's, drawn alike (WIDE LAYER block below)
 function currentBands(sc) {
   const out = [];
-  for (const lake of S.lakes) { const b = sc.lakes[lake] && sc.lakes[lake].bands; if (b) for (const f of b.features) out.push(f); }
+  for (const lake of S.lakes) {
+    const L = sc.lakes[lake], b = L && L.bands;
+    if (b) for (const f of b.features) if (trainingShown(L, f.properties.band_id)) out.push(f);
+    out.push(...wideBandFeatures(L));
+  }
   return out;
 }
 function forecastsAt(sc, lead, kind = 'forecast') {
-  const out = [];
-  for (const lake of S.lakes) { const fc = sc.lakes[lake] && sc.lakes[lake][kind]; if (fc) for (const f of fc.features) if (f.properties.lead_min === lead) out.push(f); }
-  return out;
+  return forecastFeatures(sc, kind).filter(f => f.properties.lead_min === lead);
 }
 // the forecaster of the forecasts on screen: from the forecast files' own metadata
 function forecasterOf(sc) {
@@ -934,7 +937,9 @@ function forecasterOf(sc) {
                 inputs: null, comparison: false, noModel: null };
   if (!sc) return out;
   for (const lake of S.lakes) {
-    const fc = sc.lakes[lake] && sc.lakes[lake].forecast; if (!fc) continue;
+    const L = sc.lakes[lake], w = wideOf(L);
+    // the training layer's forecast file; the wide layer's when the lake has bands only outside the training area
+    const fc = (L && L.forecast) || (w && w.forecast); if (!fc) continue;
     const m = fc.forecaster || {};
     out.meta = out.meta || m;
     if (!out.sample && fc.in_sample) out.sample = fc.in_sample;
@@ -949,7 +954,7 @@ function forecasterOf(sc) {
     if (fc.forecaster_used && !/^persistence/.test(fc.forecaster_used)) { out.model = true; out.used = fc.forecaster_used; }
     else if (!out.used) out.used = fc.forecaster_used || null;
     if (fc.model_inputs && !out.inputs) out.inputs = fc.model_inputs;
-    if (sc.lakes[lake].persistence) out.comparison = true;
+    if (L.persistence || (w && w.persistence)) out.comparison = true;
   }
   return out;
 }
@@ -988,23 +993,21 @@ function forecastMoved(f, bands) {
 }
 
 // ================================================================== BAND DRAWING — begin
-// Bands now, forecasts (outline, 80% range hatching, centerline), far-only objects, persistence, and their labels.
-// One style everywhere: a band's parts inside and beyond the training area are drawn the same (no styling by zone);
-// outline_far / centerline_far, where a band file has them, are drawn exactly as the outline and centerline.
+// Bands now, forecasts (outline, 80% range hatching, centerline), persistence, and their labels.
+// One style everywhere (owner, 17 Nov: "don't draw them lighter"): a band and its parts are drawn the same wherever
+// they are, inside the training area or outside it, beam under 2 km or 2-3 km; the dashed training-area line is the
+// only mark of where the model was trained. outline_far / centerline_far, where a band file has them, and the parts
+// of a band only the wide layer sees (extensions) are drawn exactly as the outline and centerline.
 const allCenterlines = p => linesOf(p.centerline).concat(linesOf(p.centerline_far));
 function drawBands(sc) {
   const bands = currentBands(sc);
-  const farOnly = S.showFarOnly ? farOnlyObjects(sc) : [];
   const fcs = S.lead ? forecastsAt(sc, S.lead) : [];
   const selG = selectedGroup(sc);
+  const ext = extensionsOf(sc, bands);                                    // wide layer: parts only it can see
+  const extOf = id => ext.filter(e => e.owner === id);
   for (const f of bands) sampleLines(allCenterlines(f.properties));
+  for (const e of ext) sampleLines(linesOf(e.properties.centerline));
   for (const f of fcs) sampleLines(linesOf(f.properties.centerline));
-  // 0. objects seen only in the far zone (only when switched on): grey, dotted outline, dashed centerline
-  for (const f of farOnly) {
-    const p = f.properties, sel = S.farOnly === p.band_id;
-    ctx.beginPath(); pathPolys(f.geometry); strokeHalo(sel ? 3 : 2, FAR_ONLY_COLOUR, [3, 5], 1.5);
-    ctx.beginPath(); pathLines(linesOf(p.centerline)); strokeHalo(sel ? 5 : 3.5, FAR_ONLY_COLOUR, [8, 7], 2);
-  }
   // 1. forecast 80% ranges (regions), 2. forecast outlines and centerlines, 3. bands now on top
   for (const f of fcs) {
     const p = f.properties, col = colourOf(p);
@@ -1023,9 +1026,10 @@ function drawBands(sc) {
   }
   for (const f of bands) {
     const p = f.properties, col = colourOf(p), sel = S.band === p.band_id || (selG && groupOf(p) === selG);
-    ctx.beginPath(); pathPolys(f.geometry); pathPolys(p.outline_far);
+    const parts = extOf(p.band_id);
+    ctx.beginPath(); pathPolys(f.geometry); pathPolys(p.outline_far); for (const e of parts) pathPolys(e.geometry);
     strokeHalo(sel ? 4 : 2, OUTLINE, p.tier === 2 ? [7, 5] : [], 2);
-    const cl = allCenterlines(p);
+    const cl = allCenterlines(p).concat(parts.flatMap(e => linesOf(e.properties.centerline)));
     ctx.beginPath(); pathLines(cl); strokeHalo(sel ? 4 : 2.75, col, [], 2);   // thinner (owner, 17 Nov): was 4.5 / 6 + 3
     // a dot every 15 km along the centerline, as in the panels
     if (S.ppd > 120) for (const l of cl) {
@@ -1199,12 +1203,19 @@ S.deferred = [];
 
 // ------------------------------------------------------------------ reading values
 function dbzAt(sc, lon, lat) {
-  // reflectivity bin of the radar image at a point, from the image's own colour scale
+  // reflectivity bin at a point from the picture on screen there, in its own colour scale, stacked as syncRadar stacks
+  // them: a lake's radar picture (what LakeBand read) where it has echo or the point is in its coverage, else the
+  // display mosaic (live; mosaic.py, the same colour scale) beneath it
   const steps = scaleSteps(sc);
+  const hexv = h => [1, 3, 5].map(q => parseInt(h.slice(q, q + 2), 16));
+  const binAt = (pix, k) => steps.find(x => hexv(x[2]).every((v, q) => Math.abs(v - pix.data[k + q]) < 6)) || null;
+  const mosaicOn = !!(sc.mosaic && sc.mosaic.pix && S.mosaicBounds);
+  let inBox = false;
   for (const lake of S.lakes) {
     const L = sc.lakes[lake]; if (!L || !L.radar || !L.bounds) continue;
     const [w, e, s, n] = boundsBox(L.bounds);
     if (lon < w || lon > e || lat < s || lat > n) continue;
+    inBox = true;
     const { pix } = L.radar;
     const i = Math.min(pix.width - 1, Math.floor((lon - w) / (e - w) * pix.width));
     const j = Math.min(pix.height - 1, Math.floor(rowOfLat(L.bounds, lat, pix.height)));
@@ -1212,12 +1223,24 @@ function dbzAt(sc, lon, lat) {
     const rgb = [pix.data[k], pix.data[k + 1], pix.data[k + 2]], a = pix.data[k + 3];
     const nd = L.bounds.no_data_in_coverage_rgba;
     if (nd && a > 0 && Math.abs(a - nd[3]) < 8 && rgb.every((v, q) => Math.abs(v - nd[q]) < 8)) return { bin: null, nodata: true };
-    if (a < 128) return { bin: null };
-    const hexv = h => [1, 3, 5].map(q => parseInt(h.slice(q, q + 2), 16));
-    const st = steps.find(x => hexv(x[2]).every((v, q) => Math.abs(v - rgb[q]) < 6));
-    return { bin: st || null };
+    if (a < 128) {
+      const covered = L.coverage && L.coverage.features.some(f => inGeom(f.geometry, lon, lat));
+      if (mosaicOn && !covered) continue;          // nothing of LakeBand's here: the mosaic shows through
+      return { bin: null };
+    }
+    return { bin: binAt(pix, k) };
   }
-  return { bin: null, outside: true };
+  if (mosaicOn) {
+    const mb = S.mosaicBounds, [w, e, s, n] = boundsBox(mb);
+    if (lon >= w && lon <= e && lat >= s && lat <= n) {
+      const { pix } = sc.mosaic;
+      const i = Math.min(pix.width - 1, Math.floor((lon - w) / (e - w) * pix.width));
+      const j = Math.min(pix.height - 1, Math.floor(rowOfLat(mb, lat, pix.height)));
+      const k = 4 * (j * pix.width + i);
+      return { bin: pix.data[k + 3] < 128 ? null : binAt(pix, k), mosaic: true };
+    }
+  }
+  return inBox ? { bin: null } : { bin: null, outside: true };
 }
 function inCoverage(sc, lon, lat) {
   for (const lake of S.lakes) { const c = sc.lakes[lake] && sc.lakes[lake].coverage; if (c && c.features.some(f => inGeom(f.geometry, lon, lat))) return true; }
@@ -1506,8 +1529,6 @@ function renderAll() {
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
   $('zonekey').hidden = !S.scene;
   $('mosaicnote').hidden = !(S.scene && S.scene.mosaic);
-  const farKnown = farOnlyKnown(S.scene) || S.showFarOnly;
-  $('tg-far').hidden = !farKnown; $('farnote').hidden = !farKnown;
   renderHeader();
   renderScorecard();
   renderDetails();
@@ -1538,15 +1559,16 @@ function pointReport() {
     hits.push(inOutline.length ? 2 : inRange.length ? 1 : 0);
   }
   const dz = dbzAt(sc, lon, lat), cov = inCoverage(sc, lon, lat);
-  const farZone = !cov && hasFar(sc) && inFarZone(sc, lon, lat);
+  const farZone = !cov && !dz.mosaic && hasFar(sc) && inFarZone(sc, lon, lat);   // the mosaic, when on screen, says more
   const farNow = currentBands(sc).filter(f => f.properties.outline_far && inGeom(f.properties.outline_far, lon, lat)).map(f => f.properties);
   let nowText;
-  if (farZone) nowText = farEchoAt(sc, lon, lat) ? 'echo beyond the training area (beam 2–3 km above ground; its strength is not shown)'
-    : 'no echo seen beyond the training area (the beam may pass over shallow snow here)';
+  const fromMosaic = dz.mosaic ? ' (NOAA MRMS mosaic)' : '';
+  if (farZone) nowText = farEchoAt(sc, lon, lat) ? 'echo, with the beam 2–3 km above ground (its strength is not shown)'
+    : 'no echo seen, with the beam 2–3 km above ground (it may pass over shallow snow here)';
   else if (dz.outside && !cov) nowText = 'outside the radar grid';
   else if (dz.nodata) nowText = 'no radar data here in this scan';
-  else if (dz.bin) nowText = `${dz.bin[0]}${dz.bin[1] != null ? '–' + dz.bin[1] : '+'} dBZ`;
-  else nowText = cov ? 'no echo above 5 dBZ' : 'no echo above 5 dBZ (outside radar coverage: low snow may be missed)';
+  else if (dz.bin) nowText = `${dz.bin[0]}${dz.bin[1] != null ? '–' + dz.bin[1] : '+'} dBZ${fromMosaic}`;
+  else nowText = cov || dz.mosaic ? `no echo above 5 dBZ${fromMosaic}` : 'no echo above 5 dBZ (outside radar coverage: low snow may be missed)';
   // one answer per band, as a range between leads, never a single minute
   const anyFc = rows.some(r => r.any);
   const per = new Map();               // track -> [state per lead]: 2 outline, 1 range only, 0 outside
@@ -1582,7 +1604,7 @@ function pointReport() {
   else if (!answers.length) answer = `No band’s forecast outline or ${EN.short} covers this point through +180 min.`;
   else answer = answers.map(a => a[1]).join('<br>');
   const nowBand = now.length ? `inside ${now.map(p => labelOf(p.band_id) + (p.tier === 2 ? ' (inland)' : '')).join(', ')}`
-    : farNow.length ? `inside ${farNow.map(p => groupLabel(p)).join(', ')}, beyond the training area (lower confidence)` : 'not inside a band';
+    : farNow.length ? `inside ${farNow.map(p => groupLabel(p)).join(', ')}` : 'not inside a band';
   return `
     <div class="closebar"><h3>At ${Math.abs(lat).toFixed(3)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(3)}°${lon < 0 ? 'W' : 'E'}</h3>
       <button type="button" id="clear">Clear</button></div>
@@ -1613,32 +1635,33 @@ function bandFacts(p, id) {
   if (p.merged_from && p.merged_from.length) lin.push(`absorbed ${p.merged_from.join(', ')}`);
   const flags = (p.flags || []).map(f => FLAGS[f] || f.replace(/_/g, ' '));
   const twoZone = p.intensity_zone === 'near_only';
-  const nz = twoZone ? ' (inside the training area)' : '';
-  const far = p.zone === 'near+far' && p.far_beam_agl_km
-    ? `yes: beam ${r1(p.far_beam_agl_km[0])}–${r1(p.far_beam_agl_km[1])} km above ground; lower confidence; its strength is not used`
+  const nz = twoZone ? ' (beam under 2 km)' : '';
+  const fb = p.far_beam_agl_km && p.far_beam_agl_km[0] != null ? p.far_beam_agl_km : null;
+  const far = (p.zone === 'near+far' || p.zone === 'far') && fb
+    ? `${p.zone === 'far' ? 'all of it' : 'yes'}: beam ${r1(fb[0])}–${r1(fb[1])} km above ground, where its strength is not shown`
     : 'none';
   return `<dl class="facts">
       <dt>Lake</dt><dd>${esc(lakeName(p.lake || id.lake))}</dd>
       <dt>Tier</dt><dd>${p.tier === 2 ? '2, inland addition (outline dashed)' : '1, primary band (outline solid)'}</dd>
-      <dt>Length</dt><dd>${esc(len)}${twoZone ? ' inside the training area' : ''}</dd>
+      <dt>Length</dt><dd>${esc(len)}</dd>
       <dt>Orientation</dt><dd>${esc(orient)}</dd>
       <dt>Peak${esc(nz)}</dt><dd>${peak != null ? `${r1(peak)} dBZ` : 'not available'}</dd>
       <dt>Mean${esc(nz)}</dt><dd>${mean != null ? `${r1(mean)} dBZ` : 'not available'}</dd>
       <dt>Beam height</dt><dd>${beams.length ? `${r1(Math.min(...beams))}–${r1(Math.max(...beams))} km above ground` : 'unknown'}</dd>
-      ${twoZone ? `<dt>Beyond the area</dt><dd>${esc(far)}</dd>` : ''}
+      ${twoZone ? `<dt>Beam 2–3 km</dt><dd>${esc(far)}</dd>` : ''}
       <dt>Age</dt><dd>${p.age_min != null ? `${ago(p.age_min)} since first detected` : 'unknown'}</dd>
       <dt>Lineage</dt><dd>${esc(lin.length ? lin.join('; ') : 'no split or merge recorded')}</dd>
       ${flags.length ? `<dt>Flags</dt><dd>${esc(flags.join('; '))}</dd>` : ''}
       ${p.coverage_gaps ? `<dt>Gaps</dt><dd>${p.coverage_gaps} coverage gap(s) inside the band</dd>` : ''}
     </dl>
-    <p class="hint">${twoZone ? 'Peak and mean are over the band’s part inside the training area only; beyond it the radar beam is above much of the snow, so those values are never used.'
+    <p class="hint">${twoZone ? 'Peak and mean are over the band’s part where the radar beam is under 2 km above the ground; higher up the beam is above much of the snow, so those values are never shown.'
       : whole ? 'Peak and mean are over the whole band outline.' : 'Peak and mean are over the band’s 7 measuring stations.'} Reflectivity is not a snowfall rate; it weakens with range as the beam rises above shallow snow.</p>`;
 }
 
 function forecastTable(bandId, p) {
   const sc = S.scene;
   const fcs = [];
-  for (const lake of S.lakes) { const fc = sc.lakes[lake] && sc.lakes[lake].forecast; if (fc) for (const f of fc.features) if (f.properties.band_id === bandId) fcs.push(f.properties); }
+  for (const f of forecastFeatures(sc)) if (f.properties.band_id === bandId) fcs.push(f.properties);
   fcs.sort((a, b) => a.lead_min - b.lead_min);
   if (!fcs.length) return '<p class="hint">No forecast for this band in the forecast shown. Forecasts are issued at :00 and :30 for the bands of the newest scan; band identifiers can change between scans.</p>';
   const az = p && p.frame ? p.frame.axis_azimuth_deg : null;
@@ -1674,7 +1697,7 @@ function bandReport() {
     const members = p.display_group_members.map(m => currentBands(sc).find(f => f.properties.band_id === m)).filter(Boolean);
     const col = colourOf(p);
     return `<div class="closebar"><h3><span class="swatch" style="background:${col}"></span>Band ${esc(groupLabel(p))}</h3><button type="button" id="clear">Close</button></div>
-      <p>One band, joined through the zone beyond the training area${p.display_group_join_held ? ' (join held from recent scans while the echo between the pieces is weak)' : ''}.
+      <p>One band, joined where the radar beam is 2–3 km above the ground${p.display_group_join_held ? ' (join held from recent scans while the echo between the pieces is weak)' : ''}.
       It is tracked as ${members.length} pieces, west to east; each piece keeps its own identifier and its own forecast.</p>
       ${members.map(f => `<h3 class="piece">Piece ${esc(labelOf(f.properties.band_id))}</h3>${bandFacts(f.properties, parseBandId(f.properties.band_id))}
         <h3 class="piece sub">How ${esc(labelOf(f.properties.band_id))} is forecast to move</h3>${forecastTable(f.properties.band_id, f.properties)}`).join('')}`;
@@ -1684,31 +1707,13 @@ function bandReport() {
   return `<div class="closebar"><h3><span class="swatch" style="background:${col}"></span>Band ${esc(labelOf(S.band))}</h3><button type="button" id="clear">Close</button></div>${facts}<h3>How it is forecast to move</h3>${forecastTable(S.band, p)}${CASES ? casesBandVerify(S.band) : ''}`;
 }
 
-function farOnlyReport() {
-  const f = farOnlyObjects(S.scene).find(x => x.properties.band_id === S.farOnly);
-  if (!f) return '<p class="hint">That object is not in the scan shown.</p><button type="button" id="clear">Close</button>';
-  const p = f.properties, b = p.far_beam_agl_km || [];
-  const az = p.orientation_deg;
-  return `<div class="closebar"><h3><span class="swatch" style="background:${FAR_ONLY_COLOUR}"></span>Seen only beyond the training area</h3><button type="button" id="clear">Close</button></div>
-    <dl class="facts">
-      <dt>Lake</dt><dd>${esc(lakeName(p.lake))}</dd>
-      <dt>Length</dt><dd>${p.length_km != null ? `${r1(p.length_km)} km` : 'unknown'}</dd>
-      ${az != null ? `<dt>Orientation</dt><dd>${Math.round(az)}° / ${Math.round((az + 180) % 360)}° (${compass(az)}–${compass(az + 180)})</dd>` : ''}
-      <dt>Beam height</dt><dd>${b[0] != null ? `${r1(b[0])}–${r1(b[1])} km above ground` : 'unknown'}</dd>
-      <dt>Strength</dt><dd>not available: the beam is above much of the snow here</dd>
-      <dt>Identity</dt><dd>none: not tracked and not forecast</dd>
-    </dl>
-    <p class="hint">${esc(p.review_note || '')} Shown only while FAR OBJECTS is on.</p>`;
-}
-
 function renderDetails() {
   const el = $('details');
   if (!S.scene) { el.innerHTML = '<p class="hint">Waiting for the run’s files.</p>'; return; }
   if (S.band) el.innerHTML = bandReport();
-  else if (S.farOnly && S.showFarOnly) el.innerHTML = farOnlyReport();
   else if (S.point) el.innerHTML = pointReport();
   else el.innerHTML = '<p class="hint">Tap the map at a place to see, for each lead, whether a band’s forecast covers it. Tap a band’s label or centerline for its details.</p>';
-  const c = $('clear'); if (c) c.addEventListener('click', () => { S.band = null; S.point = null; S.farOnly = null; renderAll(); });
+  const c = $('clear'); if (c) c.addEventListener('click', () => { S.band = null; S.point = null; renderAll(); });
 }
 
 // ------------------------------------------------------------------ map input: Leaflet pans and zooms (mouse, wheel,
@@ -1717,21 +1722,21 @@ function clickAt(x, y) {
   if (!S.scene) return;
   for (const h of S.hits || []) {
     const r = h.rect;
-    if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) { S.band = h.id; S.point = null; S.farOnly = null; renderAll(); showDetails(false); return; }
+    if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) { S.band = h.id; S.point = null; renderAll(); showDetails(false); return; }
   }
   let best = null, bd = 9;            // close to a centerline selects the band; anywhere else is a point query
-  for (const f of currentBands(S.scene)) {
+  const bands = currentBands(S.scene), ext = extensionsOf(S.scene, bands);
+  for (const f of bands) {
     const d = Math.min(distToLinesPx(linesOf(f.properties.centerline), x, y), distToLinesPx(linesOf(f.properties.centerline_far), x, y));
     if (d < bd) { bd = d; best = f.properties.band_id; }
   }
-  if (best) { S.band = best; S.point = null; S.farOnly = null; renderAll(); showDetails(false); return; }
-  if (S.showFarOnly) for (const f of farOnlyObjects(S.scene)) {
-    const d = distToLinesPx(linesOf(f.properties.centerline), x, y);
-    if (d < bd) { bd = d; best = f.properties.band_id; }
+  for (const e of ext) {              // a part only the wide layer sees selects the band it belongs to
+    const d = distToLinesPx(linesOf(e.properties.centerline), x, y);
+    if (d < bd) { bd = d; best = e.owner; }
   }
-  if (best) { S.farOnly = best; S.band = null; S.point = null; renderAll(); showDetails(false); return; }
+  if (best) { S.band = best; S.point = null; renderAll(); showDetails(false); return; }
   const [lon, lat] = unpx(x, y);
-  S.point = { lon, lat }; S.band = null; S.farOnly = null;
+  S.point = { lon, lat }; S.band = null;
   renderAll();
   showDetails(true);
 }
@@ -1741,6 +1746,66 @@ function showDetails(place) {
   if (window.innerWidth <= 760) { if (place) $('p-details').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   if (S.showPanels) $('p-details').scrollIntoView({ behavior: 'auto', block: 'nearest' });   // at once: labels are placed clear of the panels, so they should not chase a smooth scroll
 }
+
+// ================================================================== WIDE LAYER (reports/R5-widen.md) — begin
+// Bands over the whole of both lakes (src/pilot/rt/widen.py), beside the training-area pipeline's. A lake's scene has
+// `wide` = {bands, forecast, persistence} when the run has the wide layer: in bundles mode the bundle's wide_bands,
+// wide_forecast and wide_persistence; in run-folder mode <lake>/wide_bands/ and wide_forecast/ under the training
+// layer's file names. Every band, band part and forecast is drawn the same way wherever it is; the dashed
+// training-area line (static/<lake>/training_area.geojson) is the ONLY mark of where the model was trained. The
+// inside/outside flag is in the data, never in the drawing:
+//   wide.bands.features        bands OUTSIDE the training area (training_area: false), forecast by the same model
+//   wide.bands.training_bands  {training band_id: {shown, superseded_by}}: a training band that is part of a band
+//                              mostly outside the area is not drawn (that wide band is); it is still forecast and scored
+//   wide.bands.extensions      parts of INSIDE bands only the wide layer can see; drawn as part of those bands
+// Every item is optional: a run without the wide layer (and every past storm) has none of it.
+const wideOf = L => (L && L.wide) || null;
+function trainingShown(L, bandId) {
+  const w = wideOf(L), tb = w && w.bands && w.bands.training_bands;
+  return !(tb && tb[bandId] && tb[bandId].shown === false);
+}
+const wideBandFeatures = L => { const w = wideOf(L); return (w && w.bands && w.bands.features) || []; };
+// every forecast feature of the scene (any lead): the training layer's (unless its band is replaced) and the wide layer's
+function forecastFeatures(sc, kind = 'forecast') {
+  const out = [];
+  if (!sc) return out;
+  for (const lake of S.lakes) {
+    const L = sc.lakes[lake]; if (!L) continue;
+    const fc = L[kind];
+    if (fc) for (const f of fc.features) if (trainingShown(L, f.properties.band_id)) out.push(f);
+    const w = wideOf(L), wf = w && (kind === 'persistence' ? w.persistence : w.forecast);
+    if (wf && wf.features) out.push(...wf.features);
+  }
+  return out;
+}
+// the parts of INSIDE bands only the wide layer sees, each given to a training band now on screen (`owner`)
+function extensionsOf(sc, bands) {
+  const on = new Set(bands.map(f => f.properties.band_id)), out = [];
+  if (!sc) return out;
+  for (const lake of S.lakes) {
+    const w = wideOf(sc.lakes[lake]);
+    for (const e of (w && w.bands && w.bands.extensions) || []) {
+      const owner = (e.properties.extension_of || []).find(id => on.has(id));
+      if (owner && e.geometry) out.push({ ...e, owner });
+    }
+  }
+  return out;
+}
+const wideGrid = L => (L && L.coverageWide && L.coverageWide.grid) || null;
+function wideOfBundle(b) {
+  return b && b.wide_bands ? { bands: b.wide_bands, forecast: b.wide_forecast || null, persistence: b.wide_persistence || null } : null;
+}
+async function wideOfRun(lake, bs, fs) {
+  const v = (S.latestLakes || {})[lake] || {};
+  if (!v.wide_bands) return null;                     // a run without the wide layer
+  const get = (key, rel) => rel ? cached(`w/${key}`, () => getJSON(BASE + rel)).catch(() => null) : null;
+  const [bands, forecast] = await Promise.all([bs ? get(`b/${lake}/${bs}`, `${lake}/wide_bands/${bs}.geojson`) : null,
+    fs ? get(`f/${lake}/${fs}`, `${lake}/wide_forecast/${fs}.geojson`) : null]);
+  // persistence beside a model forecast: the file the forecast names (none when persistence is the forecast)
+  const persistence = forecast && forecast.comparison ? await get(`p/${lake}/${fs}`, forecast.comparison) : null;
+  return bands ? { bands, forecast, persistence } : null;
+}
+// ================================================================== WIDE LAYER — end
 
 // ================================================================== CASES MODE (past storms) — begin
 // A stored storm played with the same scrubber and drawing as live: cases/index.json, cases/<id>/case.json.gz and
@@ -2016,7 +2081,7 @@ async function casesLoad(id) {
   for (const [lake, L] of Object.entries(C.man.lake)) C.where[lake] = new Map(L.frames.map(x => [x[0], x[1]]));
   S.status = { mode: 'case', event: C.man.title, source: 'cases' };
   S.latest = null; S.latestLakes = {}; S.fixed = {}; S.cache.clear(); S.scene = null;
-  if (switching) { S.band = null; S.point = null; S.farOnly = null; }
+  if (switching) { S.band = null; S.point = null; }
   S.lakes = [...C.man.lakes].sort();
   S.index = casesIndex();
   S.follow = false; S.step = -1;
@@ -2133,12 +2198,11 @@ async function start() {
   $('persist').checked = S.showPersist;
   $('persist').addEventListener('change', e => { S.showPersist = e.target.checked; renderAll(); });
   $('leadtable').addEventListener('click', e => { const b = e.target.closest('[data-band]'); if (b) { S.band = b.dataset.band; S.point = null; renderAll(); showDetails(false); } });
-  const toggles = [['tg-radar', 'showRadar'], ['tg-train', 'showTrain'], ['tg-range', 'showRange'], ['tg-far', 'showFarOnly'], ['tg-panels', 'showPanels']];
+  const toggles = [['tg-radar', 'showRadar'], ['tg-train', 'showTrain'], ['tg-range', 'showRange'], ['tg-panels', 'showPanels']];
   for (const [id, key] of toggles) {
     setToggle(id, S[key]);
     $(id).addEventListener('click', () => {
       S[key] = !S[key]; setToggle(id, S[key]);
-      if (key === 'showFarOnly' && !S.showFarOnly) S.farOnly = null;
       if (key === 'showPanels') document.body.classList.toggle('nopanels', !S.showPanels);
       renderAll();
     });
@@ -2190,9 +2254,12 @@ async function start() {
 // for the screenshot tool (app/tools/shoot.mjs): what is on the screen, from the page's own state
 window.__shotInfo = () => ({
   step: isFinite(S.steps[S.step]) ? new Date(S.steps[S.step]).toISOString() : null, lead: S.lead,
-  two_zone: hasFar(S.scene), far_only_shown: S.showFarOnly, far_only_in_scan: S.scene ? farOnlyObjects(S.scene).length : 0,
+  two_zone: hasFar(S.scene),
   bands: S.scene ? currentBands(S.scene).map(f => ({ id: f.properties.band_id, group: f.properties.display_group || null,
-    zone: f.properties.zone || null, far_line: !!f.properties.centerline_far, peak_dbz: f.properties.peak_dbz })) : [],
+    zone: f.properties.zone || null, far_line: !!f.properties.centerline_far, peak_dbz: f.properties.peak_dbz,
+    layer: f.properties.layer || 'training', training_area: f.properties.training_area !== false })) : [],
+  training_area_file: S.scene ? S.lakes.some(l => S.scene.lakes[l] && !!S.scene.lakes[l].trainingArea) : false,
+  extensions: S.scene ? extensionsOf(S.scene, currentBands(S.scene)).length : 0,
   source: SOURCE.kind, issue_kind: S.scene ? forecastMeta(S.scene).kind : null,
   issued: S.scene && isFinite(forecastMeta(S.scene).iss) ? new Date(forecastMeta(S.scene).iss).toISOString() : null,
   updates_line: !$('updates').hidden, scorecard_rows: $('scorecard').hidden ? 0 : $('scorecard').querySelectorAll('tbody tr').length,

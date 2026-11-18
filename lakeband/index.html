@@ -57,11 +57,9 @@
     <div id="toggles" class="ctrl" role="group" aria-label="Map layers">
       <button type="button" class="cbtn on" id="tg-radar" aria-pressed="true" title="Show or hide the radar">RADAR</button>
       <button type="button" class="cbtn on" id="tg-train" aria-pressed="true"
-        title="The training area: LakeBand finds and forecasts bands only inside this dashed line">TRAINING AREA</button>
+        title="Show or hide the training area: the dashed line around where LakeBand was trained and graded">TRAINING AREA</button>
       <button type="button" class="cbtn on" id="tg-range" aria-pressed="true"
         title="Show or hide the forecast's uncertainty: the hatched 80% range of each band's sideways position">UNCERTAINTY</button>
-      <button type="button" class="cbtn" id="tg-far" aria-pressed="false" hidden
-        title="Objects seen only beyond the training area; about 1 in 3 is a real band (hand check of 48)">FAR OBJECTS</button>
       <button type="button" class="cbtn on" id="tg-panels" aria-pressed="true" title="Show or hide the side panels">PANELS</button>
     </div>
     <div id="legend" class="legend" aria-label="Map key">
@@ -70,7 +68,7 @@
         <div id="lg-bar" class="legend-bar"></div>
         <div id="lg-labels" class="legend-labels"></div>
         <p id="lg-src" class="lg-src"></p>
-        <p id="lg-far" class="lg-key" hidden><span class="sw far"></span><span><span class="long">beyond the training area: echo seen, strength not shown</span><span class="short">beyond the area: echo only</span></span></p>
+        <p id="lg-far" class="lg-key" hidden><span class="sw far"></span><span><span class="long">beam 2&ndash;3 km up: echo seen, strength not shown</span><span class="short">beam 2&ndash;3 km: echo only</span></span></p>
       </div>
       <p id="lg-train" class="lg-key" hidden><span class="sw train"></span>training area</p>
     </div>
@@ -103,11 +101,11 @@
 
     <section class="panel" id="zonekey" aria-label="Training area" hidden>
       <h2>Training area</h2>
-      <p class="note">LakeBand finds and forecasts bands only inside the dashed orange line: the area it was trained on,
-        where the lowest radar beam is under about 2 km.<span id="mosaicnote" hidden> Outside it, the radar is the NOAA
-        MRMS mosaic (each place seen by the lowest beam of the nearest radars), shown for context.</span> The TRAINING
-        AREA button hides or shows the line.<span id="farnote" hidden> FAR OBJECTS shows objects seen only beyond the
-        line; about 1 in 3 is a real band (hand check of 48).</span></p>
+      <p class="note">The dashed orange line marks the training area: where LakeBand was trained and graded, and where the
+        lowest radar beam is under about 2 km. LakeBand finds and forecasts bands over the whole of both lakes, inside
+        the line and beyond it; its scores were measured inside it only.<span id="mosaicnote" hidden> Beyond the line,
+        the radar shown is the NOAA MRMS mosaic (each place seen by the lowest beam of the nearest radars).</span> The
+        TRAINING AREA button hides or shows the line.</p>
     </section>
 
     <details class="panel verify" id="verifyblock">
@@ -139,8 +137,8 @@
       temperatures, and the radar&rsquo;s own wind profile.</p>
 
     <h3>How well it does</h3>
-    <p>LakeBand was graded once, on a winter it never saw during development (2019&ndash;20: 15 storms, 35,917
-      forecasts), against <em>persistence</em>: every band stays exactly where it is now. Persistence is hard to beat
+    <p>LakeBand was graded once, inside its training area, on a winter it never saw during development (2019&ndash;20:
+      15 storms, 35,917 forecasts), against <em>persistence</em>: every band stays exactly where it is now. Persistence is hard to beat
       in the first hours, because lake-effect bands often hold their position.</p>
     <table class="about-table">
       <tr><th>Lead</th><th>LakeBand</th><th>Persistence</th><th>Smaller error</th></tr>
@@ -157,28 +155,30 @@
       page tracks the live forecasts against where the bands actually went.</p>
 
     <h3>Past storms</h3>
-    <p>The Past storms button replays seven notable storms from the training winters, scan by scan, with each
-      forecast drawn beside where the band actually went. Their forecasts come from cross-validation versions of
-      LakeBand, each trained without that storm, so they show how the model does on weather it has not seen; the live
-      model trained on all of them. On these seven storms the forecast position error was 23&ndash;34% smaller than
+    <p>The Past storms button replays seven notable storms from the training winters, scan by scan, for the bands
+      inside the training area; under Verification you can draw each forecast beside where the band actually went.
+      Their forecasts come from cross-validation versions of LakeBand, each trained without that storm, so they show how
+      the model does on weather it has not seen; the live model trained on all of them. On these seven storms the forecast position error was 23&ndash;34% smaller than
       persistence at 1 and 2 hours. They were picked for being notable, not as a test sample.</p>
 
     <h3>Reading the map</h3>
     <p>Outlines show the bands on the latest scan and where each is forecast to be at the lead you choose; Play steps
-      through the leads. The dashed line is the training area: LakeBand finds and forecasts bands only inside it, where
-      the lowest radar beam is under about 2 km, and it can be switched off. Inside it you see the radar LakeBand read;
-      outside it, the NOAA MRMS mosaic (each place seen by the lowest beam of the nearest radars), for context.
-      Comparisons with persistence and the scorecard are under Verification.</p>
+      through the leads. Bands are found and forecast over the whole of both lakes and drawn the same everywhere. The
+      dashed line marks the training area, where the model was trained and graded and the lowest radar beam is under
+      about 2 km; it can be switched off. Inside it you see the radar LakeBand read; beyond it, the NOAA MRMS mosaic
+      (each place seen by the lowest beam of the nearest radars). Comparisons with persistence and the scorecard are
+      under Verification.</p>
 
     <h3>Important limitations</h3>
     <p>LakeBand forecasts where existing bands go. It does not forecast how much snow falls or where new bands will
       form, and radar reflectivity is not a snowfall rate. If a model input arrives late, the forecast falls back to
       persistence and says so on the page.</p>
-    <p>It only sees bands where a radar&rsquo;s lowest beam is under about 2 km, within roughly 120 km of the radar.
-      That leaves a gap over Erie, Pennsylvania, about 145 km from the Buffalo radar and 165 km from Cleveland&rsquo;s:
-      a band sitting there is outlined only where it reaches the covered shores, though the live map shows its echo from
-      the MRMS mosaic. The far western end of Lake Erie, where bands rarely form, is outside the area LakeBand
-      processes.</p>
+    <p>Its scores were measured inside the training area only; beyond it the same model runs on the same kind of radar
+      data, but how well it does there has not been measured. It sees bands where a radar&rsquo;s lowest beam is under
+      about 3 km above the ground, which covers nearly all of both lakes. Over Erie, Pennsylvania, about 145 km from the
+      Buffalo radar and 165 km from Cleveland&rsquo;s, the beam is 2 to 3 km up and passes over the top of shallow snow,
+      so a band there can look weaker or be missed. Objects seen only by a beam 2 to 3 km up are less certain: in a hand
+      check of 48 of them, about 1 in 3 was a real band.</p>
 
     <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS/NOAA product. Experimental;
       for research only. Data: NOAA NEXRAD Level II radar, NOAA/NSSL MRMS, NOAA HRRR, NOAA GLERL lake surface
