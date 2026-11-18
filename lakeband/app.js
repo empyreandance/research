@@ -1824,7 +1824,8 @@ async function wideOfRun(lake, bs, fs) {
 // actually was at the valid time (the band LakeBand's verification matched to it). The rest of the page reaches this
 // block only behind `if (CASES)`; outside Cases mode only casesUi() runs (it adds the Past storms button).
 const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') === '1',   // verification: off by default
-            mchunks: new Map(), mosaicWhere: new Map() };                // the storm's display mosaic (add_mosaic.py)
+            mchunks: new Map(), mosaicWhere: new Map(),                 // the storm's display mosaic (add_mosaic.py)
+            ver: () => '' };                                            // a file's ?v=<sha256> (casesLoad)
 
 // geometry of the packs (src/pilot/cases/encode.py): outlines in whole cell-edge numbers of the lake grid, as
 // [first x, first y, step x, step y, ...] per ring; lines in 1e-4 degree, the same way
@@ -1858,7 +1859,8 @@ async function casesText(url) {             // gzip text, decompressed here unle
 function casesChunk(k) {
   const key = `${C.id}/${k}`;
   if (C.chunks.has(key)) { const v = C.chunks.get(key); C.chunks.delete(key); C.chunks.set(key, v); return v; }
-  const p = casesText(`${CASES_BASE}${C.id}/${C.man.chunks[k].name}`).then(text => {
+  const nm = C.man.chunks[k].name;
+  const p = casesText(`${CASES_BASE}${C.id}/${nm}${C.ver(nm)}`).then(text => {
     const lines = new Map();
     let a = text.indexOf('\n') + 1;
     while (a > 0 && a < text.length) {
@@ -1878,7 +1880,8 @@ function casesChunk(k) {
 function casesMosaicChunk(k) {
   const key = `${C.id}/${k}`;
   if (C.mchunks.has(key)) { const v = C.mchunks.get(key); C.mchunks.delete(key); C.mchunks.set(key, v); return v; }
-  const p = casesText(`${CASES_BASE}${C.id}/${C.man.mosaic.chunks[k].name}`).then(text => {
+  const nm = C.man.mosaic.chunks[k].name;
+  const p = casesText(`${CASES_BASE}${C.id}/${nm}${C.ver(nm)}`).then(text => {
     const lines = new Map();
     let a = text.indexOf('\n') + 1;
     while (a > 0 && a < text.length) {
@@ -2114,7 +2117,11 @@ async function casesLoad(id) {
   if (!e) throw new Error('no storms in cases/index.json');
   const switching = !!C.man;                     // a storm chosen from the list (not the first load with its URL)
   C.id = e.id; C.chunks.clear(); C.frames.clear();
-  C.man = await getBundle(`${CASES_BASE}${e.id}/case.json.gz`);
+  // every file of a storm is asked for at ?v=<its sha256 in index.json> (index.json itself is never cached): the
+  // data domain's edge keeps these files for a day, and a re-packed file must never come back stale
+  const sha = new Map((e.files || []).filter(f => f.sha256).map(f => [f.name, f.sha256.slice(0, 16)]));
+  C.ver = name => (sha.has(name) ? `?v=${sha.get(name)}` : '');
+  C.man = await getBundle(`${CASES_BASE}${e.id}/case.json.gz${C.ver('case.json.gz')}`);
   C.where = {};
   for (const [lake, L] of Object.entries(C.man.lake)) C.where[lake] = new Map(L.frames.map(x => [x[0], x[1]]));
   // the display mosaic over the whole map, as live (packs from 18 Nov 2026; older packs have none)
