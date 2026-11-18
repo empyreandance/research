@@ -210,11 +210,18 @@ function loadImage(url) {
     // the mosaic comes from the data domain: ask with CORS so its pixels stay readable (getImageData below)
     if (!String(url).startsWith('data:')) im.crossOrigin = 'anonymous';
     im.onload = () => {
-      const c = document.createElement('canvas');
-      c.width = im.naturalWidth; c.height = im.naturalHeight;
-      const x = c.getContext('2d', { willReadFrequently: true });
-      x.drawImage(im, 0, 0);
-      res({ img: im, pix: x.getImageData(0, 0, c.width, c.height) });
+      // the pixels are read only when asked for (a tap on the map, dbzAt): a mosaic's copy is about 3 MB
+      let pix = null;
+      res({ img: im, get pix() {
+        if (!pix) {
+          const c = document.createElement('canvas');
+          c.width = im.naturalWidth; c.height = im.naturalHeight;
+          const x = c.getContext('2d', { willReadFrequently: true });
+          x.drawImage(im, 0, 0);
+          pix = x.getImageData(0, 0, c.width, c.height);
+        }
+        return pix;
+      } });
     };
     im.onerror = () => rej(new Error(url));
     im.src = url;
@@ -342,15 +349,17 @@ async function loadScene() {
 // minutes), at most 15 minutes away. MRMS runs nearer real time than the newest scan, which is why "nearest".
 async function mosaicAt(t) {
   const ix = S.mosaicIx;
-  if (CASES || !ix || !S.mosaicBounds || !isFinite(t)) return null;
+  if (!ix || !S.mosaicBounds || !isFinite(t)) return null;
   let name = null, best = 15 * 60000;
   for (const s of ix.names || []) {
     const d = Math.abs(parseStamp(s) - (t + 4 * 60000));
     if (d <= best) { best = d; name = s; }
   }
   if (!name) return null;
-  const m = await cached(`M/${name}`, () => loadImage(`${BASE}${ix.folder}${name}${ix.suffix || '.png'}`)).catch(() => null);
-  return m ? { ...m, name } : null;
+  // past storms keep their mosaic in a few chunk files (CASES block, casesMosaic); live reads one picture per file
+  const m = CASES ? await cached(`cM/${C.id}/${name}`, () => casesMosaic(name)).catch(() => null)
+    : await cached(`M/${name}`, () => loadImage(`${BASE}${ix.folder}${name}${ix.suffix || '.png'}`)).catch(() => null);
+  return m ? { img: m.img, get pix() { return m.pix; }, name } : null;     // pix stays lazy (loadImage)
 }
 
 // ------------------------------------------------------------------ the map (Leaflet), projection and view
@@ -1529,6 +1538,7 @@ function renderAll() {
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
   $('zonekey').hidden = !S.scene;
   $('mosaicnote').hidden = !(S.scene && S.scene.mosaic);
+  $('zk-live').hidden = CASES; $('zk-cases').hidden = !CASES;      // past storms: training-area bands only (CV runs)
   renderHeader();
   renderScorecard();
   renderDetails();
@@ -1813,7 +1823,8 @@ async function wideOfRun(lake, bs, fs) {
 // radar scan: radar picture, bands now, the forecast at every lead, persistence, and for each lead where the band
 // actually was at the valid time (the band LakeBand's verification matched to it). The rest of the page reaches this
 // block only behind `if (CASES)`; outside Cases mode only casesUi() runs (it adds the Past storms button).
-const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') === '1' };   // verification: off by default
+const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') === '1',   // verification: off by default
+            mchunks: new Map(), mosaicWhere: new Map() };                // the storm's display mosaic (add_mosaic.py)
 
 // geometry of the packs (src/pilot/cases/encode.py): outlines in whole cell-edge numbers of the lake grid, as
 // [first x, first y, step x, step y, ...] per ring; lines in 1e-4 degree, the same way
@@ -1861,6 +1872,33 @@ function casesChunk(k) {
   C.chunks.set(key, p);
   while (C.chunks.size > 3) C.chunks.delete(C.chunks.keys().next().value);
   return p;
+}
+// the storm's display mosaic (src/pilot/cases/add_mosaic.py): mosaic-<k>.jsonl.gz, a header line, then one picture
+// per line {"n": "<YYYYMMDDTHHMM>Z", "png": <base64>}; only the picture shown is decoded (at most 2 files kept)
+function casesMosaicChunk(k) {
+  const key = `${C.id}/${k}`;
+  if (C.mchunks.has(key)) { const v = C.mchunks.get(key); C.mchunks.delete(key); C.mchunks.set(key, v); return v; }
+  const p = casesText(`${CASES_BASE}${C.id}/${C.man.mosaic.chunks[k].name}`).then(text => {
+    const lines = new Map();
+    let a = text.indexOf('\n') + 1;
+    while (a > 0 && a < text.length) {
+      let b = text.indexOf('\n', a); if (b < 0) b = text.length;
+      const m = /^\{"n":"(\d{8}T\d{4}Z)"/.exec(text.slice(a, a + 30));
+      if (m) lines.set(m[1], [a, b]);
+      a = b + 1;
+    }
+    return { text, lines };
+  }).catch(e => { C.mchunks.delete(key); throw e; });
+  C.mchunks.set(key, p);
+  while (C.mchunks.size > 2) C.mchunks.delete(C.mchunks.keys().next().value);
+  return p;
+}
+async function casesMosaic(name) {
+  const k = C.mosaicWhere.get(name);
+  if (k == null) return null;
+  const ch = await casesMosaicChunk(k);
+  const ab = ch.lines.get(name);
+  return ab ? loadImage('data:image/png;base64,' + JSON.parse(ch.text.slice(ab[0], ab[1])).png) : null;
 }
 function casesFrame(lake, name) {
   const key = `${C.id}/${lake}/${name}`;
@@ -2079,6 +2117,12 @@ async function casesLoad(id) {
   C.man = await getBundle(`${CASES_BASE}${e.id}/case.json.gz`);
   C.where = {};
   for (const [lake, L] of Object.entries(C.man.lake)) C.where[lake] = new Map(L.frames.map(x => [x[0], x[1]]));
+  // the display mosaic over the whole map, as live (packs from 18 Nov 2026; older packs have none)
+  const mz = C.man.mosaic;
+  C.mchunks.clear(); C.mosaicWhere = new Map();
+  if (mz && mz.chunks && mz.names) mz.chunks.forEach((c, k) => { for (const n of mz.names) if (n >= c.first && n <= c.last) C.mosaicWhere.set(n, k); });
+  S.mosaicIx = mz && mz.names && mz.names.length ? { names: mz.names } : null;
+  S.mosaicBounds = S.mosaicIx ? mz.bounds : null;
   S.status = { mode: 'case', event: C.man.title, source: 'cases' };
   S.latest = null; S.latestLakes = {}; S.fixed = {}; S.cache.clear(); S.scene = null;
   if (switching) { S.band = null; S.point = null; }
