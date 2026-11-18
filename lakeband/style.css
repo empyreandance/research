@@ -193,3 +193,11 @@ table.casestable td.why { color: var(--ink2); font-style: italic; }
   table.casestable td, table.casestable th { padding: 4px 4px; }
 }
 /* ---------- end of Cases mode */
+
+/* ---------- Verification (closed by default: an operational view) */
+details.verify > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+details.verify > summary::-webkit-details-marker { display: none; }
+details.verify > summary::before { content: '\25B8'; font-size: 16px; color: var(--muted); }
+details.verify[open] > summary::before { content: '\25BE'; }
+details.verify > summary h2 { display: inline; }
+details.verify[open] > summary { margin-bottom: 8px; }

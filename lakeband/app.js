@@ -61,6 +61,8 @@ const S = {
   lead: 0, playing: null, view: null, point: null, band: null, farOnly: null,
   showFarOnly: params.get('faronly') === '1',            // objects seen only in the far zone: hidden by default
   showPersist: params.get('persist') === '1',            // persistence beside a model forecast: off by default
+  showTrain: params.get('train') !== '0',                 // the training area's boundary: on by default
+  mosaicIx: null, mosaicBounds: null,                     // the display mosaic (MRMS over the whole map; mosaic.py)
   fixed: {}, cache: new Map(), basemap: null, sites: {}, scene: null,
 };
 
@@ -318,7 +320,23 @@ async function loadScene() {
     const radarFar = rf ? await cached(`rf/${lake}/${rf}`, () => loadImage(BASE + rf)).catch(() => null) : null;
     out.lakes[lake] = { ...fixed, bands, radar, radarFar, forecast, persistence, stamps: { bs, rs, fs, ps } };
   }));
+  out.mosaic = await mosaicAt(t);
   return out;
+}
+
+// the display mosaic (MRMS over the whole map; mosaic.py): the one nearest the middle of the scan (scan start + 4
+// minutes), at most 15 minutes away. MRMS runs nearer real time than the newest scan, which is why "nearest".
+async function mosaicAt(t) {
+  const ix = S.mosaicIx;
+  if (CASES || !ix || !S.mosaicBounds || !isFinite(t)) return null;
+  let name = null, best = 15 * 60000;
+  for (const s of ix.names || []) {
+    const d = Math.abs(parseStamp(s) - (t + 4 * 60000));
+    if (d <= best) { best = d; name = s; }
+  }
+  if (!name) return null;
+  const m = await cached(`M/${name}`, () => loadImage(`${BASE}${ix.folder}${name}${ix.suffix || '.png'}`)).catch(() => null);
+  return m ? { ...m, name } : null;
 }
 
 // ------------------------------------------------------------------ projection and view
@@ -561,9 +579,18 @@ function draw() {
     ctx.fillStyle = '#f1f6fc'; ctx.fill('evenodd');      // light, so 5-10 dBZ snow (pale blues) shows over the water
   }
   const sc = S.scene;
-  // outside radar coverage: grey over the land and water, under the radar. With the two-zone overlay the
-  // grey starts at the 3 km limit and the far zone (beam 2-3 km above ground) gets a lighter grey.
-  if (sc) {
+  if (sc && sc.mosaic && S.mosaicBounds) {
+    // total coverage: the MRMS mosaic over the whole map, then, inside the training area, the radar LakeBand read
+    ctx.imageSmoothingEnabled = false;
+    drawRadarImage(sc.mosaic.img, S.mosaicBounds);
+    for (const lake of S.lakes) {
+      const L = sc.lakes[lake];
+      if (L && L.bounds && L.radar) drawRadarImage(L.radar.img, L.bounds);
+    }
+    ctx.imageSmoothingEnabled = true;
+  } else if (sc) {
+  // no mosaic (past storms for now): outside radar coverage, grey over the land and water, under the radar. With the
+  // two-zone overlay the grey starts at the 3 km limit and the far zone (beam 2-3 km above ground) gets a lighter grey.
     const off = document.createElement('canvas'); off.width = cv.width; off.height = cv.height;
     const o = off.getContext('2d'); o.setTransform(DPR, 0, 0, DPR, 0, 0);
     o.fillStyle = 'rgba(148,163,184,0.55)'; o.fillRect(0, 0, W, H);
@@ -609,17 +636,11 @@ function draw() {
     ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 1.8; ctx.stroke();
   }
   if (sc) {
-    if (hasFar(sc)) {
-      // two-zone runs: solid black at the 2 km beam limit (near zone), dashed brown at the 3 km limit (far zone),
-      // as in the P1e images given to the owner; neither colour is in the band palette
-      ctx.beginPath(); pathLines(limitEdges(sc, 'far'));
-      ctx.strokeStyle = LIMIT3; ctx.lineWidth = 2.5; ctx.setLineDash([9, 6]); ctx.stroke(); ctx.setLineDash([]);
-      ctx.beginPath(); pathLines(limitEdges(sc, 'near'));
-      ctx.strokeStyle = LIMIT2; ctx.lineWidth = 2.5; ctx.stroke();
-    } else {
-      // coverage edge, dashed as in the reviewed panels
-      ctx.beginPath(); pathLines(coverageEdges(sc));
-      ctx.strokeStyle = '#c2410c'; ctx.lineWidth = 2.5; ctx.setLineDash([9, 6]); ctx.stroke(); ctx.setLineDash([]);
+    if (S.showTrain) {
+      // the training area: where LakeBand finds and forecasts bands (each lake's box, inside the 2 km beam limit),
+      // dashed as the coverage edge of the reviewed panels; the colour is not in the band palette
+      ctx.beginPath(); pathLines(trainingEdges(sc));
+      ctx.strokeStyle = TRAIN_COLOUR; ctx.lineWidth = 2.5; ctx.setLineDash([9, 6]); ctx.stroke(); ctx.setLineDash([]);
     }
     drawSites(sc);
     drawBands(sc);
@@ -670,11 +691,14 @@ function farEchoAt(sc, lon, lat) {         // presence only: the far image has o
   return null;
 }
 const coverageEdges = sc => limitEdges(sc, 'near');
+// the training area's whole outline: the 2 km beam limit AND the lake boxes' own edges, merged across the lakes
+const trainingEdges = sc => limitEdges(sc, 'near', true);
+const TRAIN_COLOUR = '#c2410c';
 
-function limitEdges(sc, which) {
+function limitEdges(sc, which, withBox = false) {
   // which = 'near': the edge of coverage.geojson (beam 2 km); 'far': the edge of the 3 km area (coverage_far.geojson)
   const featsOf = L => which === 'near' ? (L && L.coverage ? L.coverage.features : []) : farFeatures(L, 'near+far');
-  const key = which + ':' + S.lakes.map(l => (featsOf(sc.lakes[l]).length ? l : '')).join('|');
+  const key = which + (withBox ? '+box' : '') + ':' + S.lakes.map(l => (featsOf(sc.lakes[l]).length ? l : '')).join('|');
   S.edgeCache = S.edgeCache || {};
   if (S.edgeCache[key]) return S.edgeCache[key];
   const lines = [];
@@ -695,7 +719,7 @@ function limitEdges(sc, which) {
       let cur = [];
       for (let i = 1; i < ring.length; i++) {
         const a = ring[i - 1], b = ring[i], mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        const keep = !onBorder(a, b) && !others.some(fs => fs.some(g => inGeom(g.geometry, mid[0], mid[1])));
+        const keep = (withBox || !onBorder(a, b)) && !others.some(fs => fs.some(g => inGeom(g.geometry, mid[0], mid[1])));
         if (keep) { if (!cur.length) cur.push(a); cur.push(b); }
         else if (cur.length) { lines.push(cur); cur = []; }
       }
@@ -948,9 +972,7 @@ function drawLabelsLast(sc) {
 }
 
 function labelCoverageEdge(sc) {
-  if (!hasFar(sc)) return labelLine(coverageEdges(sc), 'radar coverage edge', 0, '#9a3412');
-  labelLine(limitEdges(sc, 'near'), 'beam 2 km up', 0, LIMIT2);
-  labelLine(limitEdges(sc, 'far'), 'beam 3 km up', 0.5, LIMIT3);
+  if (S.showTrain) labelLine(trainingEdges(sc), 'training area', 0, '#9a3412');
 }
 function labelLine(rings, text, start, colour) {
   // one label on the line, where it overlaps nothing; start: where along the line to begin looking (0-1)
@@ -981,8 +1003,10 @@ function scaleSteps(sc) {
 }
 function drawColourBar(sc) {
   // the snow scale of the detection panels the owner reviewed: 2.5 dBZ steps from 5 to 35, 35-40, 40 and above
-  const steps = scaleSteps(sc), far = hasFar(sc), wide = W > 640;
-  const title = wide ? 'Snow reflectivity, dBZ (lowest sweep) · NOAA NEXRAD' : 'Snow dBZ · NOAA NEXRAD';
+  const mosaic = !!(sc && sc.mosaic), steps = scaleSteps(sc), far = hasFar(sc) && !mosaic, wide = W > 640;
+  const title = mosaic
+    ? (wide ? `Snow reflectivity, dBZ (lowest beam) · NOAA MRMS ${fmtUTC(parseStamp(sc.mosaic.name))}` : 'Snow dBZ · NOAA MRMS')
+    : (wide ? 'Snow reflectivity, dBZ (lowest sweep) · NOAA NEXRAD' : 'Snow dBZ · NOAA NEXRAD');
   ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
   const tw = ctx.measureText(title).width;
   const cw = Math.max(18, Math.min(30, (W - 200) / steps.length)), h = 16;
@@ -1313,7 +1337,8 @@ function renderAll() {
   $('leadtable').innerHTML = CASES ? casesLeadTable(S.scene, fx) : leadTable(S.scene, fx);
   $('steplabel').textContent = isFinite(t) ? `${fmtDate(t)} ${fmtUTC(t)} · ${S.step + 1} of ${S.steps.length}${S.follow ? ' · latest' : ''}` : '';
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
-  $('zonekey').hidden = !hasFar(S.scene);
+  $('zonekey').hidden = !S.scene;
+  $('mosaicnote').hidden = !(S.scene && S.scene.mosaic);
   renderHeader();
   renderScorecard();
   draw();
@@ -1583,7 +1608,7 @@ function clickAt(x, y) {
 // radar scan: radar picture, bands now, the forecast at every lead, persistence, and for each lead where the band
 // actually was at the valid time (the band LakeBand's verification matched to it). The rest of the page reaches this
 // block only behind `if (CASES)`; outside Cases mode only casesUi() runs (it adds the Past storms button).
-const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') !== '0' };
+const C = { index: null, id: null, man: null, chunks: new Map(), frames: new Map(), where: {}, showActual: params.get('actual') === '1' };   // verification: off by default
 
 // geometry of the packs (src/pilot/cases/encode.py): outlines in whole cell-edge numbers of the lake grid, as
 // [first x, first y, step x, step y, ...] per ring; lines in 1e-4 degree, the same way
@@ -1766,17 +1791,18 @@ function casesLeadTable(sc, fx) {
     const better = v.model_km != null && v.persistence_km != null ? (v.model_km < v.persistence_km ? ' class="better"' : '') : '';
     return { ex: ex == null ? -1 : ex, html: `<tr><td><button type="button" class="linkish" data-band="${esc(p.band_id)}">${esc(labelOf(p.band_id, true))}</button></td>` +
       `<td>${ex != null ? Math.round(ex * 100) + '%' : '—'}</td><td class="opt">${esc(dir)}</td>` +
-      (why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${better}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) + '</tr>' };
+      (!C.showActual ? '' : why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${better}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) + '</tr>' };
   }).sort((a, b) => b.ex - a.ex);
   const valids = [...new Set(fcs.map(f => fmtUTC(tIso(f.properties.valid_time))))].sort();   // each lake's own issuance
   const valid = valids.length > 1 ? `${valids[0].replace(' UTC', '')}–${valids[valids.length - 1]}` : valids[0];
   return `<table class="leads compact casestable"><caption>At +${S.lead} min · valid ${esc(valid)}</caption><thead><tr><th>Band</th><th>Still exists</th>` +
-    `<th class="opt">Model: centerline</th><th>Off by: model</th><th>Off by: persistence</th></tr></thead><tbody>${rows.map(r => r.html).join('')}</tbody></table>` +
+    `<th class="opt">Model: centerline</th>${C.showActual ? '<th>Off by: model</th><th>Off by: persistence</th>' : ''}</tr></thead><tbody>${rows.map(r => r.html).join('')}</tbody></table>` +
     casesOmittedNote(sc, fcs) +
-    `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a black line with a white core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`;
+    (!C.showActual ? '' : `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a black line with a white core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`);
 }
 // the band report (Cases mode): for every lead, how far the model and persistence were from where the band actually was
 function casesBandVerify(bandId) {
+  if (!C.showActual) return '';                       // verification is off by default (an operational view)
   const sc = S.scene, fcs = [];
   for (const lake of S.lakes) { const fc = sc && sc.lakes[lake] && sc.lakes[lake].forecast; if (fc) for (const f of fc.features) if (f.properties.band_id === bandId) fcs.push(f.properties); }
   if (!fcs.length) return '';
@@ -1934,6 +1960,10 @@ async function poll() {
     }
     const changed = JSON.stringify(BUNDLES ? latest.bundles : latest) !== JSON.stringify(BUNDLES ? (S.latest || {}).bundles : S.latest);
     S.status = status; S.latest = latest;
+    if (BUNDLES) {                             // the display mosaic named by the pointer (mosaic.py)
+      S.mosaicIx = latest.mosaic && latest.mosaic.names && latest.mosaic.names.length ? latest.mosaic : null;
+      if (S.mosaicIx && !S.mosaicBounds) S.mosaicBounds = await getJSON(BASE + S.mosaicIx.bounds).catch(() => null);
+    }
     if (changed || !S.steps.length) {
       S.latestLakes = latestLakes(latest);
       S.lakes = Object.keys(S.latestLakes).sort();
@@ -1970,6 +2000,8 @@ async function start() {
   $('persist').checked = S.showPersist;
   $('persist').addEventListener('change', e => { S.showPersist = e.target.checked; renderAll(); });
   $('leadtable').addEventListener('click', e => { const b = e.target.closest('[data-band]'); if (b) { S.band = b.dataset.band; S.point = null; renderAll(); } });
+  $('trainarea').checked = S.showTrain;
+  $('trainarea').addEventListener('change', e => { S.showTrain = e.target.checked; renderAll(); });
   $('faronly').checked = S.showFarOnly;
   $('faronly').addEventListener('change', e => { S.showFarOnly = e.target.checked; if (!S.showFarOnly) S.farOnly = null; renderAll(); });
   $('scrub').addEventListener('input', e => setStep(+e.target.value));
