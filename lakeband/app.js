@@ -202,6 +202,8 @@ function cached(key, make) {
 function loadImage(url) {
   return new Promise((res, rej) => {
     const im = new Image();
+    // the mosaic comes from the data domain: ask with CORS so its pixels stay readable (getImageData below)
+    if (!String(url).startsWith('data:')) im.crossOrigin = 'anonymous';
     im.onload = () => {
       const c = document.createElement('canvas');
       c.width = im.naturalWidth; c.height = im.naturalHeight;
