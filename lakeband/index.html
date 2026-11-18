@@ -130,6 +130,11 @@
     <p>LakeBand forecasts where existing bands go. It does not forecast how much snow falls or where new bands will
       form, and radar reflectivity is not a snowfall rate. If a model input arrives late, the forecast falls back to
       persistence and says so on the page.</p>
+    <p>It only sees bands where a radar&rsquo;s lowest beam is under about 2 km, within roughly 120 km of the radar.
+      That leaves a gap over Erie, Pennsylvania, about 145 km from the Buffalo radar and 165 km from Cleveland&rsquo;s:
+      a band sitting there is drawn only where it reaches the covered shores (the live map shows the gap&rsquo;s echo in
+      grey, from the Buffalo radar&rsquo;s higher beam). The far western end of Lake Erie, where bands rarely form, is
+      outside the area LakeBand processes.</p>
 
     <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS/NOAA product. Experimental;
       for research only. Data: NOAA NEXRAD Level II radar, NOAA HRRR, NOAA GLERL lake surface temperatures, and Iowa
