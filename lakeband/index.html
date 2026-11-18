@@ -5,91 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LakeBand</title>
 <link rel="icon" href="data:,">
+<!-- the fonts, map library and tiles of the site's QLCS viewer (tennqlcs/), for one look across the tools -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="config.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac745e4de4a442a9bc0d94056b67e871"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
-<header id="top">
-  <div class="titleline">
-    <strong class="product">LakeBand</strong>
-    <span id="mode" class="mode"></span>
-    <span id="updates" class="updates" hidden>Updates with every radar scan</span>
-    <strong class="experimental">Experimental. Not an official forecast.</strong>
-    <button type="button" id="about-open" class="about-open" aria-haspopup="dialog">About</button>
-  </div>
-  <div id="banners"></div>
-  <dl id="times" class="times">
-    <div><dt><span class="long">Radar scan</span><span class="short">Radar</span></dt><dd id="t-radar">loading</dd></div>
-    <div><dt><span class="long">Forecast issued</span><span class="short">Issued</span></dt><dd id="t-issued">loading</dd></div>
-    <div><dt><span class="long">Model input</span><span class="short">Model</span></dt><dd id="t-model">loading</dd></div>
-    <div><dt><span class="long">Valid</span><span class="short">Valid</span></dt><dd id="t-valid">loading</dd></div>
-  </dl>
-</header>
+<div id="chrome">
+  <header id="top" class="topbar">
+    <div class="tb-left">
+      <h1 class="title">LakeBand <span>Lake-Effect Band Nowcast</span></h1>
+      <button type="button" id="about-open" class="info-btn" aria-haspopup="dialog" aria-label="About LakeBand" title="About LakeBand">&#9432;</button>
+      <span id="mode" class="badge">LOADING</span>
+      <strong class="tb-exp">Experimental. Not an official forecast.</strong>
+    </div>
+    <div class="tb-right">
+      <span class="tb-time"><span class="k">Radar</span> <span id="tb-radar">loading</span></span>
+      <span class="tb-time tb-issued"><span class="k">Issued</span> <span id="tb-issued">loading</span></span>
+      <span id="tb-date" class="tb-date"></span>
+      <span id="clock" class="clock">--:--:-- UTC</span>
+    </div>
+  </header>
+  <nav id="controls" class="modebar" aria-label="Map controls">
+    <div class="mb-group mb-mode">
+      <button type="button" class="mbtn on" id="mode-live" aria-pressed="true">LIVE</button>
+      <button type="button" class="mbtn" id="mode-cases" aria-pressed="false">PAST STORMS</button>
+      <select class="dinp" id="cases-select" aria-label="Past storm" disabled><option value="">Select storm&hellip;</option></select>
+    </div>
+    <div class="mb-group mb-leads">
+      <button type="button" id="play" class="mbtn play" aria-pressed="false" title="Step through the leads">Play</button>
+      <div id="leads" class="leads" role="group" aria-label="Lead time, minutes after issuance"></div>
+    </div>
+    <div class="mb-group mb-time">
+      <button type="button" id="prev" class="pb" aria-label="Earlier scan" title="Earlier scan">&#9664;</button>
+      <input type="range" id="scrub" class="tl" min="0" max="0" value="0" aria-label="Scan time">
+      <button type="button" id="next" class="pb" aria-label="Later scan" title="Later scan">&#9654;</button>
+      <button type="button" id="latest" class="mbtn">Latest</button>
+      <span id="steplabel" class="tl-l"></span>
+    </div>
+  </nav>
+</div>
 
 <main id="layout">
   <section id="mapwrap" aria-label="Map">
-    <canvas id="map"></canvas>
-    <div class="mapbuttons">
-      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
-      <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
-      <button type="button" id="zoom-fit">Fit</button>
+    <div id="map"></div>
+    <div id="toggles" class="ctrl" role="group" aria-label="Map layers">
+      <button type="button" class="cbtn on" id="tg-radar" aria-pressed="true" title="Show or hide the radar">RADAR</button>
+      <button type="button" class="cbtn on" id="tg-train" aria-pressed="true"
+        title="The training area: LakeBand finds and forecasts bands only inside this dashed line">TRAINING AREA</button>
+      <button type="button" class="cbtn" id="tg-far" aria-pressed="false" hidden
+        title="Objects seen only beyond the training area; about 1 in 3 is a real band (hand check of 48)">FAR OBJECTS</button>
+      <button type="button" class="cbtn on" id="tg-panels" aria-pressed="true" title="Show or hide the side panels">PANELS</button>
+    </div>
+    <div id="legend" class="legend" aria-label="Map key">
+      <div id="lg-radar">
+        <h3>Snow reflectivity <span class="unit">(dBZ)</span></h3>
+        <div id="lg-bar" class="legend-bar"></div>
+        <div id="lg-labels" class="legend-labels"></div>
+        <p id="lg-src" class="lg-src"></p>
+        <p id="lg-far" class="lg-key" hidden><span class="sw far"></span><span><span class="long">beyond the training area: echo seen, strength not shown</span><span class="short">beyond the area: echo only</span></span></p>
+      </div>
+      <p id="lg-train" class="lg-key" hidden><span class="sw train"></span>training area</p>
     </div>
   </section>
 
-  <aside id="side">
-    <section class="block" aria-label="Forecast lead">
-      <div class="blockhead">
-        <h2>Forecast</h2>
-        <button type="button" id="play" class="wide">Play</button>
-      </div>
-      <div id="leads" class="segmented" role="group" aria-label="Lead time"></div>
+  <aside id="panels" aria-label="Forecast details">
+    <div id="alerts" class="bannerbox" role="alert"></div>
+    <div id="banners" class="bannerbox"></div>
+
+    <section class="panel" id="p-times" aria-label="Times">
+      <h2>Times<span id="updates" class="h2note" hidden> · updates with every radar scan</span></h2>
+      <dl id="times" class="times">
+        <div><dt>Radar</dt><dd id="t-radar">loading</dd></div>
+        <div><dt>Issued</dt><dd id="t-issued">loading</dd></div>
+        <div><dt>Model</dt><dd id="t-model">loading</dd></div>
+        <div><dt>Valid</dt><dd id="t-valid">loading</dd></div>
+      </dl>
+    </section>
+
+    <section class="panel" id="p-forecast" aria-label="Forecast lead">
+      <h2>Forecast</h2>
       <p id="leadnote" class="note"></p>
       <div id="leadtable"></div>
     </section>
 
-    <section class="block" id="zonekey" aria-label="Training area" hidden>
-      <div class="blockhead"><h2>Training area</h2></div>
-      <label class="toggle"><input type="checkbox" id="trainarea" checked> Show the training area
-        <span class="sub">LakeBand finds and forecasts bands only inside this dashed line: the area it was trained on,
-          where the lowest radar beam is under about 2 km. Band parts beyond it are drawn dashed and lighter.<span
-          id="mosaicnote" hidden> Outside it, the radar is the NOAA MRMS mosaic (each place seen by the lowest beam of the
-          nearest radars), shown for context.</span></span></label>
-      <label class="toggle"><input type="checkbox" id="faronly"> Show objects beyond the training area
-        <span class="sub">Seen only beyond the line; about 1 in 3 is a real band (hand check of 48).</span></label>
+    <section class="panel" id="p-details" aria-label="Details">
+      <h2>Details</h2>
+      <div id="details" aria-live="polite"></div>
     </section>
 
-    <section class="block" aria-label="Time">
-      <div class="blockhead">
-        <h2>Time</h2>
-        <span id="steplabel" class="steplabel"></span>
-      </div>
-      <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Scan time">
-      <div class="steprow">
-        <button type="button" id="prev">&lsaquo; Earlier</button>
-        <button type="button" id="next">Later &rsaquo;</button>
-        <button type="button" id="latest">Latest</button>
-      </div>
+    <section class="panel" id="zonekey" aria-label="Training area" hidden>
+      <h2>Training area</h2>
+      <p class="note">LakeBand finds and forecasts bands only inside the dashed orange line: the area it was trained on,
+        where the lowest radar beam is under about 2 km.<span id="mosaicnote" hidden> Outside it, the radar is the NOAA
+        MRMS mosaic (each place seen by the lowest beam of the nearest radars), shown for context.</span> The TRAINING
+        AREA button hides or shows the line.<span id="farnote" hidden> FAR OBJECTS shows objects seen only beyond the
+        line; about 1 in 3 is a real band (hand check of 48).</span></p>
     </section>
 
-    <section class="block" id="details" aria-live="polite"></section>
-
-    <details class="block verify" id="verifyblock">
+    <details class="panel verify" id="verifyblock">
       <summary><h2>Verification</h2></summary>
       <label class="toggle" id="persistwrap" hidden><input type="checkbox" id="persist"> Compare with persistence
         <span class="sub">Persistence: every band stays exactly where it is now. Drawn as a grey dotted line.</span></label>
+      <label class="toggle" id="actualwrap" hidden><input type="checkbox" id="actual"> Show where each band actually was
+        <span class="sub">The band LakeBand&rsquo;s verification matched to it in the radar scan nearest the valid time:
+          a white line with a dark core.</span></label>
       <section id="scorecard" aria-label="Scorecard" hidden></section>
     </details>
 
-    <footer class="block foot">
+    <footer class="panel foot">
       <p><strong>Experimental. Not an official forecast.</strong> Radar reflectivity is not a snowfall rate.</p>
-      <p>Radar data: NOAA NEXRAD Level II and NOAA/NSSL MRMS. Lakes and borders: Natural Earth. Counties: US Census Bureau.</p>
+      <p>Radar data: NOAA NEXRAD Level II and NOAA/NSSL MRMS. Basemap: Esri, HERE, Garmin, &copy; OpenStreetMap
+        contributors. Counties: US Census Bureau.</p>
     </footer>
   </aside>
 </main>
-<div id="about" class="about" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
+
+<div id="about" class="about-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
   <div class="about-box">
-    <button type="button" id="about-close" class="about-close" aria-label="Close">&times;</button>
+    <button type="button" id="about-close" class="close-btn" aria-label="Close">&times;</button>
     <h2 id="about-title">LakeBand</h2>
     <p>LakeBand forecasts where lake-effect snow bands off Lakes Erie and Ontario will move over the next three
       hours. Each time a radar finishes a scan, it outlines every band it can see, then forecasts each band&rsquo;s

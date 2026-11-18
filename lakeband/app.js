@@ -1,11 +1,13 @@
-/* LakeBand map page. Reads the run folder of design/realtime-design.md section 5.
-   Plain canvas, no libraries. Every number shown comes from the run's files. */
+/* LakeBand map page. Reads the run folder of design/realtime-design.md section 5, or the published bundles.
+   A Leaflet map on Esri's dark grey tiles (the look of the site's QLCS viewer): the radar pictures are image overlays,
+   and everything LakeBand draws (bands, forecasts, labels, sites, the training area) goes on a canvas kept in sync
+   with the map. Every number shown comes from the run's files. */
 'use strict';
 
 // ------------------------------------------------------------------ constants
 const LEADS = [15, 30, 45, 60, 90, 120, 180];
-const COS43 = Math.cos(43 * Math.PI / 180);
-const PALETTE = ['#d90429', '#6d28d9', '#0369a1', '#be185d', '#15803d', '#b45309'];   // the reviewed panels
+// the reviewed panels' six hues (red, violet, blue, pink, green, amber), lighter so they read on the dark map
+const PALETTE = ['#f87171', '#a78bfa', '#60a5fa', '#f472b6', '#a3e635', '#fbbf24'];
 const DEFAULT_SCALE = [                                                               // the reviewed panels
   [5, 7.5, '#bae6fd'], [7.5, 10, '#7dd3fc'], [10, 12.5, '#38bdf8'], [12.5, 15, '#0284c7'],
   [15, 17.5, '#4ade80'], [17.5, 20, '#16a34a'], [20, 22.5, '#15803d'], [22.5, 25, '#fde047'],
@@ -58,12 +60,15 @@ const LOCAL_TZ = params.get('tz') || 'America/New_York';   // local time where t
 // ------------------------------------------------------------------ state
 const S = {
   status: null, latest: null, lakes: [], index: {}, steps: [], step: -1, follow: true,
-  lead: 0, playing: null, view: null, point: null, band: null, farOnly: null,
+  lead: 0, playing: null, point: null, band: null, farOnly: null,
   showFarOnly: params.get('faronly') === '1',            // objects seen only in the far zone: hidden by default
   showPersist: params.get('persist') === '1',            // persistence beside a model forecast: off by default
   showTrain: params.get('train') !== '0',                 // the training area's boundary: on by default
+  showRadar: params.get('radar') !== '0',                 // the radar pictures: on by default
+  showPanels: params.get('panels') !== '0',               // the panel column (wide screens): on by default
   mosaicIx: null, mosaicBounds: null,                     // the display mosaic (MRMS over the whole map; mosaic.py)
   fixed: {}, cache: new Map(), basemap: null, sites: {}, scene: null,
+  blocked: [], ppd: 100,                                  // screen areas under floating panels; zoom (px per degree)
 };
 
 // ------------------------------------------------------------------ small helpers
@@ -106,12 +111,13 @@ function hashColour(id) {
 const colourOf = p => hashColour((p.display_group_members && p.display_group_members[0]) || p.band_id);
 const groupOf = p => p.display_group || p.band_id;
 const inGroup = p => (p.display_group_members || []).length > 1;
-function lighten(hex, f) {               // mix with white: far-zone parts are drawn visibly lighter
-  const v = [1, 3, 5].map(q => parseInt(hex.slice(q, q + 2), 16)).map(c => Math.round(c + (255 - c) * f));
-  return '#' + v.map(c => c.toString(16).padStart(2, '0')).join('');
-}
-const FAR_ONLY_COLOUR = '#475569';
-const LIMIT2 = '#111827', LIMIT3 = '#713f12';            // 2 km (solid) and 3 km (dashed) beam limits
+// colours on the dark map: lines get a dark casing so they read over the radar's colours too
+const CASING = 'rgba(5,7,10,0.88)', TEXT_HALO = '#05070a';
+const MAP_INK = '#e5e7eb', MAP_MUTED = '#94a3b8';
+const OUTLINE = '#e2e8f0';                                // a band's outline now (its centerline has the band's colour)
+const FAR_ONLY_COLOUR = '#94a3b8';
+const MONO = '"JetBrains Mono", ui-monospace, Menlo, monospace';
+const mono = (size, weight = 700) => `${weight} ${size}px ${MONO}`;
 function parseBandId(id) {
   const [lake, tier, track] = String(id).split('|');
   return { lake, tier: tier === 'T2' ? 2 : 1, track: track || id };
@@ -272,17 +278,20 @@ async function lakeFixed(lake) {
     S.fixed[lake] = (async () => {
       if (BUNDLES) {
         const st = ((S.latest && S.latest.static) || {})[lake] || {};
-        const [bounds, coverage, coverageFar] = await Promise.all(['bounds.json', 'coverage.geojson', 'coverage_far.geojson']
+        // training_area.geojson: the lake's training-area outline, when the pointer names one (trainingAreaLines)
+        const [bounds, coverage, coverageFar, trainingArea] = await Promise.all(['bounds.json', 'coverage.geojson',
+          'coverage_far.geojson', 'training_area.geojson']
           .map(k => st[k] ? getJSON(BASE + st[k]).catch(() => null) : Promise.resolve(null)));
-        return { bounds, coverage, coverageFar };
+        return { bounds, coverage, coverageFar, trainingArea };
       }
       const v = (S.latestLakes || {})[lake] || {};
-      const [bounds, coverage, coverageFar] = await Promise.all([
+      const [bounds, coverage, coverageFar, trainingArea] = await Promise.all([
         getJSON(`${BASE}${lake}/radar/bounds.json`).catch(() => v.radar_bounds ? getJSON(BASE + v.radar_bounds) : null).catch(() => null),
         getJSON(`${BASE}${lake}/coverage.geojson`).catch(() => v.coverage ? getJSON(BASE + v.coverage) : null).catch(() => null),
         // two-zone runs only: the 3 km limit and the far zone (older runs have no such file)
-        v.coverage_far ? getJSON(BASE + v.coverage_far).catch(() => null) : Promise.resolve(null)]);
-      return { bounds, coverage, coverageFar };
+        v.coverage_far ? getJSON(BASE + v.coverage_far).catch(() => null) : Promise.resolve(null),
+        v.training_area ? getJSON(BASE + v.training_area).catch(() => null) : Promise.resolve(null)]);
+      return { bounds, coverage, coverageFar, trainingArea };
     })();
   }
   return S.fixed[lake];
@@ -341,21 +350,147 @@ async function mosaicAt(t) {
   return m ? { ...m, name } : null;
 }
 
-// ------------------------------------------------------------------ projection and view
-const cv = $('map');
-const ctx = cv.getContext('2d');
+// ------------------------------------------------------------------ the map (Leaflet), projection and view
+let map = null, LAYERS = null;
+let ctx = null;                                  // the canvas being painted (paintUnder / paintOver set it)
 let W = 0, H = 0, DPR = 1;
-function resize() {
-  const head = $('top').getBoundingClientRect().height;
-  document.documentElement.style.setProperty('--head', `${Math.ceil(head)}px`);
-  const r = cv.getBoundingClientRect();
-  DPR = window.devicePixelRatio || 1;
-  W = r.width; H = r.height;
-  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-  draw();
+const PROJ = { s: 256, x0: 0, y0: 0 };           // Web Mercator at the current zoom; the map's top-left pixel
+const D2R = Math.PI / 180, MAXLAT = 85.0511287798;
+function syncProj() {
+  const size = map.getSize(), tl = map.getPixelBounds().min;
+  W = size.x; H = size.y; DPR = window.devicePixelRatio || 1;
+  PROJ.s = 256 * Math.pow(2, map.getZoom()); PROJ.x0 = tl.x; PROJ.y0 = tl.y;
+  S.ppd = ppdOf(map.getZoom(), map.getCenter().lat);
 }
-const px = (lon, lat) => [(lon - S.view.lon) * S.view.ppd * COS43 + W / 2, (S.view.lat - lat) * S.view.ppd + H / 2];
-const unpx = (x, y) => [S.view.lon + (x - W / 2) / (S.view.ppd * COS43), S.view.lat - (y - H / 2) / S.view.ppd];
+// map-container pixel of a place: Leaflet's own projection (EPSG:3857), unrounded, without its per-call objects
+function px(lon, lat) {
+  const sl = Math.sin(Math.max(-MAXLAT, Math.min(MAXLAT, lat)) * D2R);
+  return [PROJ.s * (lon / 360 + 0.5) - PROJ.x0, PROJ.s * (0.5 - Math.log((1 + sl) / (1 - sl)) / (4 * Math.PI)) - PROJ.y0];
+}
+function unpx(x, y) { const ll = map.containerPointToLatLng([x, y]); return [ll.lng, ll.lat]; }
+// the zoom as pixels per degree of latitude at the map centre (the old view's unit, kept for ?view= and the tools)
+const ppdOf = (zoom, lat) => 256 * Math.pow(2, zoom) / 360 / Math.cos(lat * D2R);
+const zoomOfPpd = (ppd, lat) => Math.log2(ppd * 360 * Math.cos(lat * D2R) / 256);
+// the view's centre is the middle of the part of the map not under the panels (freeArea), as the old map beside them
+function freeCentre() {
+  const f = freeArea(), size = map.getSize();
+  return [(f.x0 + f.x1) / 2 - size.x / 2, (f.y0 + f.y1) / 2 - size.y / 2];      // offset from the container's centre
+}
+function viewInfo() {
+  const [dx, dy] = freeCentre(), size = map.getSize(), z = map.getZoom();
+  const c = map.containerPointToLatLng([size.x / 2 + dx, size.y / 2 + dy]);
+  return { lon: c.lng, lat: c.lat, ppd: ppdOf(z, c.lat), zoom: z };
+}
+// S.view: {lon, lat, ppd} of the map once it is fitted to the data (null before); setting it moves the map
+let viewSet = false;
+Object.defineProperty(S, 'view', {
+  get: () => (viewSet && map ? viewInfo() : null),
+  set: v => {
+    if (!v) { viewSet = false; return; }
+    if (!map || ![v.lon, v.lat, v.ppd].every(isFinite)) return;
+    const [dx, dy] = freeCentre();
+    map.setView([v.lat, v.lon], zoomOfPpd(v.ppd, v.lat), { animate: false });
+    if (dx || dy) map.panBy([-dx, -dy], { animate: false });
+    viewSet = true;
+  },
+});
+
+// a canvas over the whole map, redrawn whenever the map moves; scaled with the map while a zoom animates
+const CanvasLayer = L.Layer.extend({
+  initialize(pane, paint) { this._paneName = pane; this._paint = paint; },
+  onAdd(m) {
+    this._c = L.DomUtil.create('canvas', 'lb-canvas leaflet-zoom-animated');
+    m.getPane(this._paneName).appendChild(this._c);
+    this.ctx = this._c.getContext('2d');
+    this._reset();
+  },
+  onRemove() { L.DomUtil.remove(this._c); },
+  getEvents() { return { move: this._reset, resize: this._reset, viewreset: this._reset, zoomanim: this._animate }; },
+  _animate(e) {
+    const m = this._map;
+    L.DomUtil.setTransform(this._c, m._latLngToNewLayerPoint(this._tl, e.zoom, e.center), m.getZoomScale(e.zoom, this._zoom));
+  },
+  _reset() {
+    const m = this._map, size = m.getSize(), dpr = window.devicePixelRatio || 1;
+    this._tl = m.containerPointToLatLng([0, 0]); this._zoom = m.getZoom();
+    L.DomUtil.setPosition(this._c, m.containerPointToLayerPoint([0, 0]));
+    const w = Math.round(size.x * dpr), h = Math.round(size.y * dpr);
+    if (this._c.width !== w || this._c.height !== h) {
+      this._c.width = w; this._c.height = h;
+      this._c.style.width = `${size.x}px`; this._c.style.height = `${size.y}px`;
+    }
+    this._paint(this);
+  },
+  redraw() { if (this._map) this._reset(); return this; },
+});
+
+// Esri's dark grey base (at 0.6, as the QLCS viewer) and its dark grey place labels above the radar; added once the
+// map has its first view, so no tiles are fetched for a view that is replaced at once
+function addTiles() {
+  const esri = n => `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/${n}/MapServer/tile/{z}/{y}/{x}`;
+  L.tileLayer(esri('World_Dark_Gray_Base'), { maxNativeZoom: 16, maxZoom: 13, opacity: 0.6 }).addTo(map);
+  L.tileLayer(esri('World_Dark_Gray_Reference'), { maxNativeZoom: 16, maxZoom: 13, pane: 'lbLabels' }).addTo(map);
+}
+function initMap() {
+  map = L.map('map', { zoomControl: false, attributionControl: false, keyboard: false, zoomSnap: 0.25, zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 80, minZoom: 5, maxZoom: 13, center: [42.75, -78.6], zoom: 7 });
+  // panes, bottom to top: tiles (200) < coverage mask < radar < place labels < LakeBand's drawing < Leaflet's controls
+  for (const [name, z] of [['lbUnder', 250], ['lbRadar', 300], ['lbLabels', 350], ['lbOver', 450]]) {
+    const p = map.createPane(name); p.style.zIndex = z; p.style.pointerEvents = 'none';
+  }
+  // bottom right: + and − above Fit (bottom corners stack the newest control on top)
+  const Fit = L.Control.extend({
+    options: { position: 'bottomright' },
+    onAdd() {
+      const box = L.DomUtil.create('div', 'leaflet-bar lb-fit');
+      box.innerHTML = '<button type="button" id="zoom-fit" title="Fit the map to the lakes" aria-label="Fit the map to the lakes">FIT</button>';
+      L.DomEvent.disableClickPropagation(box);
+      box.firstChild.addEventListener('click', () => fitView());
+      return box;
+    },
+  });
+  new Fit().addTo(map);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
+  L.control.scale({ position: 'bottomleft', metric: true, imperial: false, maxWidth: 140 }).addTo(map);
+  LAYERS = { under: new CanvasLayer('lbUnder', paintUnder).addTo(map), over: new CanvasLayer('lbOver', paintOver).addTo(map) };
+  map.on('click', e => clickAt(e.containerPoint.x, e.containerPoint.y));
+  map.getPane('lbRadar').style.display = S.showRadar ? '' : 'none';
+}
+
+// the floating parts of the page over the map (panels, toggles, legend, controls): labels keep clear of them, and
+// fitting keeps the lakes out from under them
+function updateLayout() {
+  const root = document.documentElement.style;
+  const hOf = id => { const e = $(id); return e ? e.getBoundingClientRect().height : 0; };
+  root.setProperty('--top-h', `${Math.ceil(hOf('top'))}px`);
+  root.setProperty('--chrome-h', `${Math.ceil(hOf('top') + hOf('controls'))}px`);
+  root.setProperty('--legend-h', `${Math.ceil(hOf('legend'))}px`);
+  if (!map) return;
+  const m = $('map').getBoundingClientRect();
+  const els = [$('top'), $('controls'), $('toggles'), $('legend'), ...$('panels').children,
+    ...document.querySelectorAll('#map .leaflet-control')];
+  S.blocked = [];
+  for (const e of els) {
+    if (!e || e.hidden) continue;
+    const r = e.getBoundingClientRect();
+    if (!r.width || !r.height || r.right <= m.left || r.left >= m.right || r.bottom <= m.top || r.top >= m.bottom) continue;
+    S.blocked.push({ x: r.left - m.left - 4, y: r.top - m.top - 4, w: r.width + 8, h: r.height + 8, el: e.id || e.className });
+  }
+}
+// the part of the map not under the top bars, the panel column or the toggles (wide screens), for fitting
+function freeArea() {
+  const m = $('map').getBoundingClientRect(), wide = window.innerWidth > 760;
+  let x0 = 0, y0 = 0, x1 = m.width, y1 = m.height;
+  for (const id of ['top', 'controls']) {
+    const r = $(id).getBoundingClientRect();
+    if (r.height && r.bottom > m.top && r.top <= m.top + 1) y0 = Math.max(y0, r.bottom - m.top);
+  }
+  const pn = $('panels').getBoundingClientRect();
+  if (wide && S.showPanels && pn.width && pn.right > m.left) x0 = Math.max(x0, pn.right - m.left);
+  const tg = $('toggles').getBoundingClientRect();
+  if (wide && tg.width) x1 = Math.min(x1, tg.left - m.left);
+  return { x0, y0, x1, y1 };
+}
 function extentAll() {
   let w = 180, e = -180, s = 90, n = -90;
   for (const lake of S.lakes) {
@@ -376,16 +511,12 @@ function bandsExtent() {
   return [cx - hw, cx + hw, cy - hh, cy + hh];
 }
 function fitView(toBands) {
+  if (!map) return;
   const [w, e, s, n] = (toBands && bandsExtent()) || extentAll();
-  const ppd = Math.min((W - 30) / ((e - w) * COS43), (H - 30) / (n - s));
-  S.view = { lon: (w + e) / 2, lat: (s + n) / 2, ppd };
-}
-function zoomAt(f, x, y) {
-  const [lon, lat] = unpx(x, y);
-  S.view.ppd = Math.max(40, Math.min(6000, S.view.ppd * f));
-  const [lon2, lat2] = unpx(x, y);
-  S.view.lon += lon - lon2; S.view.lat += lat - lat2;
-  draw();
+  const f = freeArea(), size = map.getSize();
+  map.fitBounds([[s, w], [n, e]], { paddingTopLeft: [f.x0 + 12, f.y0 + 12],
+    paddingBottomRight: [Math.max(12, size.x - f.x1 + 12), Math.max(12, size.y - f.y1 + 12)], animate: false });
+  viewSet = true;
 }
 function boundsBox(b) {
   if (b.west != null) return [b.west, b.east, b.south, b.north];
@@ -470,32 +601,39 @@ function distToLinesPx(lines, x, y) {
   return best;
 }
 
-// ------------------------------------------------------------------ drawing
+// ------------------------------------------------------------------ drawing: helpers
 const hatchCache = {};
 function hatch(colour) {
-  if (hatchCache[colour]) return hatchCache[colour];
+  const key = `${colour}@${DPR}`;
+  if (hatchCache[key]) return hatchCache[key];
   const c = document.createElement('canvas'); const n = Math.round(12 * DPR);
   c.width = c.height = n;
   const x = c.getContext('2d');
-  x.fillStyle = colour; x.globalAlpha = 0.13; x.fillRect(0, 0, n, n);
-  x.globalAlpha = 0.75; x.strokeStyle = colour; x.lineWidth = 2 * DPR;
+  x.fillStyle = colour; x.globalAlpha = 0.14; x.fillRect(0, 0, n, n);
+  x.globalAlpha = 0.8; x.strokeStyle = colour; x.lineWidth = 2 * DPR;
   x.beginPath(); x.moveTo(-1, n + 1); x.lineTo(n + 1, -1); x.moveTo(-1, 1); x.lineTo(1, -1); x.moveTo(n - 1, n + 1); x.lineTo(n + 1, n - 1); x.stroke();
-  return (hatchCache[colour] = ctx.createPattern(c, 'repeat'));
+  const pat = ctx.createPattern(c, 'repeat');
+  if (pat.setTransform) pat.setTransform(new DOMMatrix().scale(1 / DPR));      // one tile = 12 screen pixels
+  return (hatchCache[key] = pat);
 }
+// a line with a dark casing under it, so it reads on the dark map and over every radar colour
 function strokeHalo(width, colour, dash, halo = 3) {
   ctx.setLineDash([]); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = width + 2 * halo; ctx.stroke();
+  ctx.strokeStyle = CASING; ctx.lineWidth = width + 2 * halo; ctx.stroke();
   ctx.setLineDash(dash || []); ctx.strokeStyle = colour; ctx.lineWidth = width; ctx.stroke();
   ctx.setLineDash([]);
 }
 function textHalo(text, x, y, font, colour, align = 'center') {
   ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'middle';
-  ctx.lineWidth = 5; ctx.strokeStyle = '#ffffff'; ctx.lineJoin = 'round'; ctx.strokeText(text, x, y);
+  ctx.lineWidth = 4; ctx.strokeStyle = TEXT_HALO; ctx.lineJoin = 'round'; ctx.strokeText(text, x, y);
   ctx.fillStyle = colour; ctx.fillText(text, x, y);
 }
 
 let placed = [];
 const overlaps = r => placed.some(p => r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y);
+// a point on the map that is on screen and not under a floating panel or control
+const visibleAt = ([x, y]) => x >= 0 && y >= 0 && x <= W && y <= H &&
+  !S.blocked.some(r => x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h);
 function segHitsRect(ax, ay, bx, by, r) {
   for (let k = 0; k <= 12; k++) {
     const x = ax + (bx - ax) * k / 12, y = ay + (by - ay) * k / 12;
@@ -503,21 +641,22 @@ function segHitsRect(ax, ay, bx, by, r) {
   }
   return false;
 }
+const BADGE_FONT = mono(16);
 function badge(text, anchor, colour, style, avoid) {
-  // style: 'now' filled, 'inland' white with coloured border, 'fc' white with dashed coloured border.
+  // style: 'now' filled, 'inland' dark with coloured border, 'fc' dark with dashed coloured border.
   // Only the position is chosen here; flushBadges draws every leader first and every box after.
   ctx.font = BADGE_FONT;
-  const w = ctx.measureText(text).width + 18, h = 30;
+  const w = ctx.measureText(text).width + 16, h = 28;
   const [ax, ay] = anchor;
   const cands = [];
   for (const d of [44, 66, 92, 124, 160]) for (const [ox, oy] of [[0, -d], [0, d], [d, -d * 0.6], [-d, -d * 0.6], [d, d * 0.6], [-d, d * 0.6], [d * 1.4, 0], [-d * 1.4, 0]]) cands.push([ax + ox - w / 2, ay + oy - h / 2]);
   let pos = null;
-  // pass 1 keeps clear of band lines, pass 2 only of other labels; a forecast label that fits nowhere is left out
+  // pass 1 keeps clear of band lines, pass 2 only of other labels; a forecast label that fits nowhere is left out.
+  // `placed` starts with the floating panels and controls, so no label goes under them.
   for (const strict of [true, false]) {
     for (const [x, y] of cands) {
       const r = { x, y, w, h };
-      if (x < 4 || y < 4 || x + w > W - 4 || y + h > H - S.bottomReserve) continue;
-      if (x + w > W - 64 && y < 180) continue;          // the zoom buttons' column (top right)
+      if (x < 4 || y < 4 || x + w > W - 4 || y + h > H - 4) continue;
       if (overlaps(r) || (strict && avoid && avoid(r))) continue;
       const ex = Math.max(r.x, Math.min(ax, r.x + w)), ey = Math.max(r.y, Math.min(ay, r.y + h));
       if (placed.some(p => segHitsRect(ax, ay, ex, ey, p))) continue;
@@ -527,7 +666,7 @@ function badge(text, anchor, colour, style, avoid) {
   }
   if (!pos && style === 'fc') return null;
   if (!pos) {                         // no free spot: a compact label on the band itself
-    ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
+    ctx.font = mono(15);
     const cw = ctx.measureText(text).width + 6;
     pos = { x: ax - cw / 2, y: ay - 26, w: cw, h: 22 };
     placed.push(pos);
@@ -545,128 +684,123 @@ function flushBadges() {
     if (style === 'compact') continue;
     ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(Math.max(pos.x, Math.min(ax, pos.x + pos.w)), Math.max(pos.y, Math.min(ay, pos.y + pos.h)));
     strokeHalo(2, colour, style === 'fc' ? [5, 4] : [], 2);
-    ctx.beginPath(); ctx.arc(ax, ay, 4, 0, 2 * Math.PI); ctx.fillStyle = colour; ctx.fill();
+    ctx.beginPath(); ctx.arc(ax, ay, 4.5, 0, 2 * Math.PI); ctx.fillStyle = colour; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
   }
   ctx.font = BADGE_FONT;
   for (const b of S.badges) {
     const { pos, colour, style, text } = b;
-    if (style === 'compact') { textHalo(text, pos.x + pos.w / 2, pos.y + pos.h / 2, '700 17px -apple-system, Helvetica, Arial, sans-serif', '#0f172a'); ctx.font = BADGE_FONT; continue; }
+    if (style === 'compact') { textHalo(text, pos.x + pos.w / 2, pos.y + pos.h / 2, mono(15), MAP_INK); ctx.font = BADGE_FONT; continue; }
     ctx.beginPath(); ctx.roundRect(pos.x, pos.y, pos.w, pos.h, 4);
-    ctx.fillStyle = style === 'now' ? colour : '#ffffff'; ctx.fill();
+    ctx.fillStyle = style === 'now' ? colour : 'rgba(10,12,16,0.92)'; ctx.fill();
     ctx.setLineDash(style === 'fc' ? [6, 4] : []);
-    ctx.lineWidth = style === 'now' ? 2 : 3; ctx.strokeStyle = style === 'now' ? '#ffffff' : colour; ctx.stroke();
+    ctx.lineWidth = style === 'now' ? 1.5 : 2.5; ctx.strokeStyle = style === 'now' ? TEXT_HALO : colour; ctx.stroke();
     ctx.setLineDash([]);
-    if (style === 'now') { ctx.beginPath(); ctx.roundRect(pos.x - 1.5, pos.y - 1.5, pos.w + 3, pos.h + 3, 5); ctx.lineWidth = 1.5; ctx.strokeStyle = '#0f172a'; ctx.stroke(); }
-    ctx.fillStyle = style === 'now' ? '#ffffff' : '#0f172a';
+    ctx.fillStyle = style === 'now' ? '#0a0c10' : MAP_INK;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, pos.x + pos.w / 2, pos.y + pos.h / 2 + 1);
   }
   S.badges = [];
 }
-const BADGE_FONT = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 
+// ------------------------------------------------------------------ drawing: the layers
+// draw(): everything on the map for the scene shown. The radar pictures are Leaflet image overlays (rows evenly spaced
+// in Web Mercator, as the map); the rest is painted on two canvases: paintUnder (below the radar) and paintOver.
 function draw() {
-  if (!S.view || !W) return;
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H);
-  placed = [];
-  S.hits = [];
-  S.linePts = [];
-  S.badges = [];
-  // room kept free of labels for the colour-bar box (and, on narrow screens, the distance bar above it)
-  S.bottomReserve = W <= 640 ? 150 : S.scene && hasFar(S.scene) ? 112 : 84;
-  const B = S.basemap;
-  if (B) {
-    ctx.beginPath(); for (const l of B.lakes) pathPolys(l.geometry);
-    ctx.fillStyle = '#f1f6fc'; ctx.fill('evenodd');      // light, so 5-10 dBZ snow (pale blues) shows over the water
-  }
+  if (!map || !LAYERS) return;
+  syncRadar(S.scene);
+  LAYERS.under.redraw();
+  LAYERS.over.redraw();
+}
+function paintUnder(layer) {
+  ctx = layer.ctx; syncProj();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
   const sc = S.scene;
-  if (sc && sc.mosaic && S.mosaicBounds) {
-    // total coverage: the MRMS mosaic over the whole map, then, inside the training area, the radar LakeBand read
-    ctx.imageSmoothingEnabled = false;
-    drawRadarImage(sc.mosaic.img, S.mosaicBounds);
-    for (const lake of S.lakes) {
-      const L = sc.lakes[lake];
-      if (L && L.bounds && L.radar) drawRadarImage(L.radar.img, L.bounds);
-    }
-    ctx.imageSmoothingEnabled = true;
-  } else if (sc) {
-  // no mosaic (past storms for now): outside radar coverage, grey over the land and water, under the radar. With the
-  // two-zone overlay the grey starts at the 3 km limit and the far zone (beam 2-3 km above ground) gets a lighter grey.
-    const off = document.createElement('canvas'); off.width = cv.width; off.height = cv.height;
-    const o = off.getContext('2d'); o.setTransform(DPR, 0, 0, DPR, 0, 0);
-    o.fillStyle = 'rgba(148,163,184,0.55)'; o.fillRect(0, 0, W, H);
-    o.globalCompositeOperation = 'destination-out';
-    const cut = g => {
-      o.beginPath();
-      for (const poly of polysOf(g)) for (const ring of poly) {
-        ring.forEach(([lon, lat], i) => { const [x, y] = px(lon, lat); i ? o.lineTo(x, y) : o.moveTo(x, y); }); o.closePath();
-      }
-      o.fill('evenodd');
-    };
-    for (const lake of S.lakes) {
-      const L = sc.lakes[lake]; if (!L) continue;
-      if (L.coverage) for (const f of L.coverage.features) cut(f.geometry);
-      for (const f of farFeatures(L, 'near+far')) cut(f.geometry);
-    }
-    ctx.drawImage(off, 0, 0, W, H);
-    for (const lake of S.lakes) {
-      const L = sc.lakes[lake]; if (!L) continue;
-      for (const f of farFeatures(L, 'far')) { ctx.beginPath(); pathPolys(f.geometry); ctx.fillStyle = 'rgba(148,163,184,0.30)'; ctx.fill('evenodd'); }
-    }
-    // radar: reflectivity in the near zone; far-zone echo as presence only (one grey, never on the dBZ scale)
-    ctx.imageSmoothingEnabled = false;
-    for (const lake of S.lakes) {
-      const L = sc.lakes[lake];
-      if (!L || !L.bounds) continue;
-      if (L.radar) drawRadarImage(L.radar.img, L.bounds);
-      if (L.radarFar) { ctx.globalAlpha = 0.6; drawRadarImage(L.radarFar.img, L.bounds); ctx.globalAlpha = 1; }
-    }
-    ctx.imageSmoothingEnabled = true;
+  // with the mosaic the radar covers the whole map. Without it (past storms, run folders): the land and water outside
+  // radar coverage is darkened, and with the two-zone overlay the far zone (beam 2-3 km above ground) less so
+  if (!sc || !S.showRadar || (sc.mosaic && S.mosaicBounds)) return;
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'destination-out';
+  const cut = g => { ctx.beginPath(); pathPolys(g); ctx.fill('evenodd'); };
+  for (const lake of S.lakes) {
+    const L = sc.lakes[lake]; if (!L) continue;
+    if (L.coverage) for (const f of L.coverage.features) cut(f.geometry);
+    for (const f of farFeatures(L, 'near+far')) cut(f.geometry);
   }
-  if (B) {
-    const z = S.view.ppd;
-    if (z > 90) {
-      ctx.beginPath(); for (const c of B.counties) pathLines(linesOf(c.geometry));
-      ctx.strokeStyle = 'rgba(71,85,105,0.55)'; ctx.lineWidth = 1; ctx.stroke();
-    }
+  ctx.globalCompositeOperation = 'source-over';
+  for (const lake of S.lakes) {
+    for (const f of farFeatures(sc.lakes[lake], 'far')) { ctx.beginPath(); pathPolys(f.geometry); ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fill('evenodd'); }
+  }
+}
+function paintOver(layer) {
+  ctx = layer.ctx; syncProj();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
+  placed = S.blocked.map(r => ({ x: r.x, y: r.y, w: r.w, h: r.h }));
+  S.hits = []; S.linePts = []; S.badges = []; S.deferred = [];
+  const B = S.basemap, sc = S.scene;
+  if (B && S.ppd > 90) {                      // counties, faint, once zoomed in a little
+    ctx.beginPath(); for (const c of B.counties) pathLines(linesOf(c.geometry));
+    ctx.strokeStyle = 'rgba(148,163,184,0.28)'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  if (B) {                                    // state and national borders, dashed as before (lake shores: the tiles)
     ctx.beginPath(); for (const b of B.borders.filter(b => b.level === 'admin1')) pathLines(linesOf(b.geometry));
-    ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.8; ctx.setLineDash([2, 4]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = 'rgba(203,213,225,0.55)'; ctx.lineWidth = 1.5; ctx.setLineDash([2, 4]); ctx.stroke();
     ctx.beginPath(); for (const b of B.borders.filter(b => b.level === 'admin0')) pathLines(linesOf(b.geometry));
-    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.setLineDash([10, 4, 2, 4]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.beginPath(); for (const l of B.lakes) pathPolys(l.geometry);
-    ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 1.8; ctx.stroke();
+    ctx.lineWidth = 1.8; ctx.setLineDash([10, 4, 2, 4]); ctx.stroke(); ctx.setLineDash([]);
   }
   if (sc) {
     if (S.showTrain) {
-      // the training area: where LakeBand finds and forecasts bands (each lake's box, inside the 2 km beam limit),
-      // dashed as the coverage edge of the reviewed panels; the colour is not in the band palette
-      ctx.beginPath(); pathLines(trainingEdges(sc));
-      ctx.strokeStyle = TRAIN_COLOUR; ctx.lineWidth = 2.5; ctx.setLineDash([9, 6]); ctx.stroke(); ctx.setLineDash([]);
+      // the training area: where LakeBand finds and forecasts bands; dashed, in a colour not in the band palette
+      ctx.beginPath(); pathLines(trainingAreaLines(sc));
+      strokeHalo(2.5, TRAIN_COLOUR, [9, 6], 1.5);
     }
     drawSites(sc);
     drawBands(sc);
   }
   drawPoint();
   drawLabelsLast(sc);
-  drawScale();
 }
 
-function drawRadarImage(img, bounds) {
-  const [w, e, s, n] = boundsBox(bounds);
-  const ih = img.naturalHeight, iw = img.naturalWidth;
-  if (!isMerc(bounds)) {
-    const [x0, y0] = px(w, n), [x1, y1] = px(e, s);
-    ctx.drawImage(img, x0, y0, x1 - x0, y1 - y0);
-    return;
-  }
-  const x0 = px(w, n)[0], x1 = px(e, n)[0];
-  const dev = y => Math.round(y * DPR) / DPR;          // row edges on whole device pixels: rows meet, never overlap
+// the radar pictures as image overlays: the mosaic everywhere, then each lake's own radar (and, without the mosaic,
+// its far-zone echo) on top. An overlay is replaced only when its picture changes.
+const OVERLAYS = new Map();                      // role -> { layer, img }
+const mercCache = new WeakMap();
+// an image whose rows are evenly spaced in latitude, resampled to Web Mercator rows (the pictures made for this page
+// already are; this keeps an older run's pictures in place)
+function mercImage(img, b) {
+  if (isMerc(b)) return img;
+  if (mercCache.has(img)) return mercCache.get(img);
+  const [, , s, n] = boundsBox(b), iw = img.naturalWidth, ih = img.naturalHeight;
+  const c = document.createElement('canvas'); c.width = iw; c.height = ih;
+  const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
   for (let r = 0; r < ih; r++) {
-    const ya = dev(px(w, latOfRow(bounds, r, ih))[1]), yb = dev(px(w, latOfRow(bounds, r + 1, ih))[1]);
-    if (yb < 0 || ya > H || yb <= ya) continue;
-    ctx.drawImage(img, 0, r, iw, 1, x0, ya, x1 - x0, yb - ya);
+    const y = mercY(n) - (r + 0.5) / ih * (mercY(n) - mercY(s));
+    const lat = (2 * Math.atan(Math.exp(y)) - Math.PI / 2) / D2R;
+    const src = Math.min(ih - 1, Math.max(0, Math.floor((n - lat) / (n - s) * ih)));
+    x.drawImage(img, 0, src, iw, 1, 0, r, iw, 1);
   }
+  const out = new Image(); out.src = c.toDataURL();
+  mercCache.set(img, out);
+  return out;
+}
+function syncRadar(sc) {
+  const want = new Map();
+  const mosaic = sc && sc.mosaic && S.mosaicBounds ? sc.mosaic : null;
+  if (mosaic) want.set('mosaic', [mosaic.img, S.mosaicBounds, 1, 1]);
+  if (sc) for (const lake of S.lakes) {
+    const L = sc.lakes[lake];
+    if (!L || !L.bounds) continue;
+    if (L.radar) want.set(lake, [L.radar.img, L.bounds, 2, 1]);
+    if (L.radarFar && !mosaic) want.set(`${lake}:far`, [L.radarFar.img, L.bounds, 3, 0.6]);  // presence only, grey
+  }
+  for (const [role, o] of [...OVERLAYS]) if (!want.has(role) || want.get(role)[0] !== o.img) { o.layer.remove(); OVERLAYS.delete(role); }
+  for (const [role, [img, b, z, opacity]] of want) {
+    if (OVERLAYS.has(role)) continue;
+    const [w, e, s, n] = boundsBox(b);
+    const layer = L.imageOverlay(mercImage(img, b), [[s, w], [n, e]], { pane: 'lbRadar', zIndex: z, opacity, className: 'lb-radar', interactive: false });
+    layer.addTo(map);
+    OVERLAYS.set(role, { layer, img });
+  }
+  map.getPane('lbRadar').style.display = S.showRadar ? '' : 'none';
 }
 
 // ------------------------------------------------------------------ two zones (runs with the overlay only)
@@ -677,6 +811,8 @@ function farOnlyObjects(sc) {
   for (const lake of S.lakes) { const b = sc.lakes[lake] && sc.lakes[lake].bands; if (b && b.far_only_features) out.push(...b.far_only_features); }
   return out;
 }
+// does this scene's band file carry the far-only objects at all (the FAR OBJECTS toggle is shown only then)
+const farOnlyKnown = sc => !!sc && S.lakes.some(l => sc.lakes[l] && sc.lakes[l].bands && Array.isArray(sc.lakes[l].bands.far_only_features));
 function inFarZone(sc, lon, lat) {
   return S.lakes.some(l => farFeatures(sc.lakes[l], 'far').some(f => inGeom(f.geometry, lon, lat)));
 }
@@ -692,10 +828,19 @@ function farEchoAt(sc, lon, lat) {         // presence only: the far image has o
   }
   return null;
 }
-const coverageEdges = sc => limitEdges(sc, 'near');
-// the training area's whole outline: the 2 km beam limit AND the lake boxes' own edges, merged across the lakes
-const trainingEdges = sc => limitEdges(sc, 'near', true);
-const TRAIN_COLOUR = '#c2410c';
+
+// ------------------------------------------------------------------ THE TRAINING AREA (one function)
+// The training area's outline as lines of [lon, lat]: each lake's own training_area.geojson when the pointer (or the
+// run's latest.json) names one for every lake shown, else the outline worked out from the coverage files: the 2 km
+// beam limit AND the lake boxes' own edges, merged across the lakes. Drawn and labelled from here only.
+const TRAIN_COLOUR = '#fb923c', TRAIN_LABEL = '#fdba74';
+function trainingAreaLines(sc) {
+  const shown = S.lakes.filter(l => sc.lakes[l]);
+  if (shown.length && shown.every(l => sc.lakes[l].trainingArea && sc.lakes[l].trainingArea.features)) {
+    return shown.flatMap(l => sc.lakes[l].trainingArea.features.filter(f => f.geometry).flatMap(f => linesOf(f.geometry)));
+  }
+  return limitEdges(sc, 'near', true);
+}
 
 function limitEdges(sc, which, withBox = false) {
   // which = 'near': the edge of coverage.geojson (beam 2 km); 'far': the edge of the 3 km area (coverage_far.geojson)
@@ -744,12 +889,12 @@ function drawSites(sc) {
     if (x < -20 || y < -20 || x > W + 20 || y > H + 20) continue;
     const on = used.has(id);
     ctx.beginPath(); ctx.moveTo(x, y - 10); ctx.lineTo(x + 9, y + 7); ctx.lineTo(x - 9, y + 7); ctx.closePath();
-    ctx.fillStyle = on ? '#facc15' : '#cbd5e1'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#0f172a'; ctx.stroke();
+    ctx.fillStyle = on ? '#facc15' : '#64748b'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
     S.deferred.push(() => {
-      const under = x + 26 > W - 66 && y - 34 < 186;         // would sit under the zoom buttons: put it left of the site
-      const lx = under ? x - 40 : x, ly = under ? y - 2 : y - 22;
-      textHalo(id, lx, ly, '700 18px -apple-system, Helvetica, Arial, sans-serif', on ? '#0f172a' : '#475569');
-      placed.push({ x: lx - 26, y: ly - 12, w: 52, h: 24 });
+      const r = { x: x - 26, y: y - 34, w: 52, h: 24 };
+      if (overlaps(r)) return;                       // under a panel, or another label
+      textHalo(id, x, y - 22, mono(15), on ? MAP_INK : MAP_MUTED);
+      placed.push(r);
     });
   }
 }
@@ -798,7 +943,7 @@ const ROLE_TEXT = {
   candidate: 'The refit on all training events; the freeze file does not name it yet, so this is not the final model.',
   test: 'A test artifact, not the pilot’s model: its forecasts mean nothing.',
 };
-const PERSIST_COLOUR = '#334155';
+const PERSIST_COLOUR = '#cbd5e1';
 
 function sampleLines(lines) {
   for (const l of lines) for (let i = 1; i < l.length; i++) {
@@ -823,17 +968,22 @@ function forecastMoved(f, bands) {
   return distToLinesPx(linesOf(now.properties.centerline), ...px(...pointAlong(main, 0.5))) > 24;
 }
 
+// ================================================================== BAND DRAWING — begin
+// Bands now, forecasts (outline, 80% range hatching, centerline), far-only objects, persistence, and their labels.
+// One style everywhere: a band's parts inside and beyond the training area are drawn the same (no styling by zone);
+// outline_far / centerline_far, where a band file has them, are drawn exactly as the outline and centerline.
+const allCenterlines = p => linesOf(p.centerline).concat(linesOf(p.centerline_far));
 function drawBands(sc) {
   const bands = currentBands(sc);
   const farOnly = S.showFarOnly ? farOnlyObjects(sc) : [];
   const fcs = S.lead ? forecastsAt(sc, S.lead) : [];
   const selG = selectedGroup(sc);
-  for (const f of bands) { sampleLines(linesOf(f.properties.centerline)); sampleLines(linesOf(f.properties.centerline_far)); }
+  for (const f of bands) sampleLines(allCenterlines(f.properties));
   for (const f of fcs) sampleLines(linesOf(f.properties.centerline));
   // 0. objects seen only in the far zone (only when switched on): grey, dotted outline, dashed centerline
   for (const f of farOnly) {
     const p = f.properties, sel = S.farOnly === p.band_id;
-    ctx.beginPath(); pathPolys(f.geometry); strokeHalo(sel ? 3 : 2, '#94a3b8', [3, 5], 1.5);
+    ctx.beginPath(); pathPolys(f.geometry); strokeHalo(sel ? 3 : 2, FAR_ONLY_COLOUR, [3, 5], 1.5);
     ctx.beginPath(); pathLines(linesOf(p.centerline)); strokeHalo(sel ? 5 : 3.5, FAR_ONLY_COLOUR, [8, 7], 2);
   }
   // 1. forecast 80% ranges (regions), 2. forecast outlines and centerlines, 3. bands now on top
@@ -854,19 +1004,16 @@ function drawBands(sc) {
   }
   for (const f of bands) {
     const p = f.properties, col = colourOf(p), sel = S.band === p.band_id || (selG && groupOf(p) === selG);
-    // far-zone parts first, under the near parts: dashed and visibly lighter (lower confidence)
-    if (p.outline_far) { ctx.beginPath(); pathPolys(p.outline_far); strokeHalo(sel ? 3 : 2, '#64748b', [6, 5], 1.5); }
-    if (p.centerline_far) { ctx.beginPath(); pathLines(linesOf(p.centerline_far)); strokeHalo(sel ? 5 : 4, lighten(col, 0.5), [11, 7], 2.5); }
-    ctx.beginPath(); pathPolys(f.geometry);
-    strokeHalo(sel ? 4 : 2.5, '#111827', p.tier === 2 ? [7, 5] : [], 2);
-    const cl = linesOf(p.centerline);
+    ctx.beginPath(); pathPolys(f.geometry); pathPolys(p.outline_far);
+    strokeHalo(sel ? 4 : 2, OUTLINE, p.tier === 2 ? [7, 5] : [], 2);
+    const cl = allCenterlines(p);
     ctx.beginPath(); pathLines(cl); strokeHalo(sel ? 6 : 4.5, col, [], 3);
-    // a dot every 15 km along the centerline, as in the panels (near zone only)
-    if (S.view.ppd > 120) for (const l of cl) {
+    // a dot every 15 km along the centerline, as in the panels
+    if (S.ppd > 120) for (const l of cl) {
       const total = lineKm([l]);
       for (let d = 15; d < total; d += 15) {
         const [x, y] = px(...pointAlong(l, d / total));
-        ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = '#fff'; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
       }
     }
   }
@@ -874,11 +1021,11 @@ function drawBands(sc) {
   // 4. persistence beside the model (switch on): where each band is now, grey dotted, on top of the band now
   if (S.showPersist && S.lead) for (const f of forecastsAt(sc, S.lead, 'persistence')) {
     const p = f.properties;
-    // outline: fine grey dots, no halo; centerline: large round dots with a white rim (model forecasts are dashed)
+    // outline: fine light dots, no casing; centerline: large round dots with a dark rim (model forecasts are dashed)
     ctx.beginPath(); pathPolys(f.geometry);
     ctx.lineCap = 'round'; ctx.setLineDash([0.1, 6]); ctx.strokeStyle = PERSIST_COLOUR; ctx.lineWidth = 3; ctx.stroke();
     ctx.beginPath(); pathLines(linesOf(p.centerline));
-    ctx.setLineDash([0.1, 13]); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 10; ctx.stroke();
+    ctx.setLineDash([0.1, 13]); ctx.strokeStyle = TEXT_HALO; ctx.lineWidth = 10; ctx.stroke();
     ctx.strokeStyle = PERSIST_COLOUR; ctx.lineWidth = 6.5; ctx.stroke();
     ctx.setLineDash([]);
   }
@@ -896,7 +1043,7 @@ function drawBands(sc) {
       const main = longestLine(members.flatMap(b => linesOf(b.properties.centerline)));
       if (!main) continue;
       const anchor = px(...pointAlong(main, 0.5));
-      if (anchor[0] < 0 || anchor[1] < 0 || anchor[0] > W || anchor[1] > H) continue;
+      if (!visibleAt(anchor)) continue;
       let text = groupLabel(p, true);
       if (members.some(b => (b.properties.flags || []).includes('probably_not_lake_effect'))) text += ' ?';
       const r = badge(text, anchor, colourOf(p), p.tier === 2 ? 'inland' : 'now', coversLine);
@@ -908,7 +1055,7 @@ function drawBands(sc) {
       const main = longestLine(linesOf(p.centerline));
       if (!main) continue;
       const anchor = px(...pointAlong(main, 0.72));
-      if (anchor[0] < 0 || anchor[1] < 0 || anchor[0] > W || anchor[1] > H) continue;
+      if (!visibleAt(anchor)) continue;
       let text = `${labelOf(p.band_id)} +${p.lead_min}`;
       const ex = p.probability && p.probability.exists;
       if (ex != null && !/base rate/i.test(p.probability_source || '')) text += ` · ${Math.round(ex * 100)}%`;
@@ -930,65 +1077,73 @@ function labelCorridor(fcs) {
     const a = (maxx - minx) * (maxy - miny);
     if (a > area && minx > 0 && maxx < W) { area = a; best = { x: (minx + maxx) / 2, y: maxy + 18, col: hashColour(f.properties.band_id) }; }
   }
-  if (!best || best.y > H - S.bottomReserve + 4) return;
-  ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
+  if (!best || best.y > H - 16) return;
+  const font = mono(14, 600);
+  ctx.font = font;
   const text = `hatched: ${envName(S.scene).map}`;
   const w = ctx.measureText(text).width + 8;
   const r = { x: best.x - w / 2, y: best.y - 12, w, h: 24 };
   if (overlaps(r)) return;
   placed.push(r);
-  textHalo(text, best.x, best.y, '700 17px -apple-system, Helvetica, Arial, sans-serif', '#0f172a');
+  textHalo(text, best.x, best.y, font, MAP_INK);
 }
+// ================================================================== BAND DRAWING — end
 
 function drawPoint() {
   if (!S.point) return;
   const [x, y] = px(S.point.lon, S.point.lat);
-  ctx.beginPath(); ctx.arc(x, y, 11, 0, 2 * Math.PI); ctx.lineWidth = 6; ctx.strokeStyle = '#ffffff'; ctx.stroke();
-  ctx.lineWidth = 3; ctx.strokeStyle = '#0f172a'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, y, 11, 0, 2 * Math.PI); ctx.lineWidth = 6; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#f8fafc'; ctx.stroke();
   ctx.beginPath(); ctx.moveTo(x - 20, y); ctx.lineTo(x - 6, y); ctx.moveTo(x + 6, y); ctx.lineTo(x + 20, y);
   ctx.moveTo(x, y - 20); ctx.lineTo(x, y - 6); ctx.moveTo(x, y + 6); ctx.lineTo(x, y + 20);
-  ctx.lineWidth = 3; ctx.stroke();
+  strokeHalo(3, '#f8fafc', [], 1.5);
   placed.push({ x: x - 22, y: y - 22, w: 44, h: 44 });
 }
 
 function drawLabelsLast(sc) {
   for (const f of S.deferred) f();
   S.deferred = [];
-  // county names when zoomed in far enough for them to fit
+  // county names when zoomed in far enough for them to fit: small, upper case and spaced, as the tiles' state names,
+  // so they read apart from the tiles' place names
   const B = S.basemap;
-  if (B && S.view.ppd > 260) {
+  if (B && S.ppd > 300) {
+    const font = mono(12, 600);
+    ctx.save();
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '1.5px';
     for (const c of B.counties) {
       const [x, y] = px(...c.label);
-      if (x < 40 || y < 20 || x > W - 70 || y > H - S.bottomReserve + 4) continue;
-      if (c.area_deg2 * S.view.ppd * S.view.ppd * COS43 < 9000) continue;
-      ctx.font = '600 17px -apple-system, Helvetica, Arial, sans-serif';
-      const w = ctx.measureText(c.name).width;
-      const r = { x: x - w / 2 - 3, y: y - 12, w: w + 6, h: 24 };
-      if (overlaps(r) || coversLine(r)) continue;          // never over a band's line or another label
+      if (x < 40 || y < 20 || x > W - 40 || y > H - 20) continue;
+      if (c.area_deg2 * S.ppd * S.ppd * Math.cos(c.label[1] * D2R) < 9000) continue;
+      const name = c.name.toUpperCase();
+      ctx.font = font;
+      const w = ctx.measureText(name).width;
+      const r = { x: x - w / 2 - 3, y: y - 11, w: w + 6, h: 22 };
+      if (overlaps(r) || coversLine(r)) continue;          // never over a band's line, another label or a panel
       placed.push(r);
-      textHalo(c.name, x, y, '600 17px -apple-system, Helvetica, Arial, sans-serif', '#475569');
+      textHalo(name, x, y, font, 'rgba(148,163,184,0.8)');
     }
+    ctx.restore();
   }
   if (sc) labelCoverageEdge(sc);
-  drawColourBar(sc);
 }
 
 function labelCoverageEdge(sc) {
-  if (S.showTrain) labelLine(trainingEdges(sc), 'training area', 0, '#9a3412');
+  if (S.showTrain) labelLine(trainingAreaLines(sc), 'training area', 0, TRAIN_LABEL);
 }
 function labelLine(rings, text, start, colour) {
   // one label on the line, where it overlaps nothing; start: where along the line to begin looking (0-1)
-  ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
+  const font = mono(14);
+  ctx.font = font;
   const w = ctx.measureText(text).width + 10;
   const pts = rings.flat();
   const k0 = Math.floor(start * pts.length);
   for (let n = 0; n < pts.length; n += 5) {
     const [x, y] = px(...pts[(k0 + n) % pts.length]);
-    if (x < w || y < 60 || x > W - w - 70 || y > H - 110) continue;
+    if (x < w || y < 40 || x > W - w || y > H - 20) continue;
     const r = { x: x - w / 2, y: y - 30, w, h: 24 };
     if (overlaps(r) || coversLine(r)) continue;
     placed.push(r);
-    textHalo(text, x, y - 18, '700 17px -apple-system, Helvetica, Arial, sans-serif', colour);
+    textHalo(text, x, y - 18, font, colour);
     return;
   }
 }
@@ -1003,56 +1158,22 @@ function scaleSteps(sc) {
   }
   return DEFAULT_SCALE;
 }
-function drawColourBar(sc) {
-  // the snow scale of the detection panels the owner reviewed: 2.5 dBZ steps from 5 to 35, 35-40, 40 and above
-  const mosaic = !!(sc && sc.mosaic), steps = scaleSteps(sc), far = hasFar(sc) && !mosaic, wide = W > 640;
-  const title = mosaic
-    ? (wide ? `Snow reflectivity, dBZ (lowest beam) · NOAA MRMS ${fmtUTC(parseStamp(sc.mosaic.name))}` : 'Snow dBZ · NOAA MRMS')
-    : (wide ? 'Snow reflectivity, dBZ (lowest sweep) · NOAA NEXRAD' : 'Snow dBZ · NOAA NEXRAD');
-  ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
-  const tw = ctx.measureText(title).width;
-  const cw = Math.max(18, Math.min(30, (W - 200) / steps.length)), h = 16;
-  const farText = wide ? 'beyond the solid line: lower confidence, strength not shown' : 'beyond solid line: lower confidence';
-  ctx.font = '600 17px -apple-system, Helvetica, Arial, sans-serif';
-  const fw = far ? ctx.measureText(farText).width + 30 : 0;
-  ctx.font = '700 17px -apple-system, Helvetica, Arial, sans-serif';
-  const besides = far && wide && 18 + cw * steps.length + 22 + fw + 12 < W - 190;   // far key beside the bar, clear of the scale bar
-  const boxH = far && !besides ? 98 : 74;
-  const x0 = 18, y0 = H - 46 - (boxH - 74), bw = Math.max(cw * steps.length + 24 + (besides ? fw + 10 : 0), tw + 16, far && !besides ? fw + 16 : 0);
-  ctx.fillStyle = 'rgba(255,255,255,0.94)'; ctx.fillRect(x0 - 12, y0 - 30, bw, boxH);
-  ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 1; ctx.strokeRect(x0 - 12, y0 - 30, bw, boxH);
-  placed.push({ x: x0 - 12, y: y0 - 30, w: bw, h: boxH });
-  S.barBox = { x: x0 - 12, y: y0 - 30, w: bw, h: boxH };
-  ctx.fillStyle = '#0f172a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(title, x0 - 4, y0 - 15);
-  steps.forEach(([a, b, col], i) => { ctx.fillStyle = col; ctx.fillRect(x0 + i * cw, y0, cw, h); });
-  ctx.strokeStyle = '#0f172a'; ctx.strokeRect(x0, y0, cw * steps.length, h);
-  ctx.font = '600 17px -apple-system, Helvetica, Arial, sans-serif'; ctx.fillStyle = '#0f172a'; ctx.textBaseline = 'top';
-  const every = cw * 2 >= 26 ? 5 : 10;                  // label every 5 dBZ when there is room, else every 10
-  const lastX = x0 + (steps.length - 1) * cw;           // where the open-ended top step ("40+") is labelled
+// the legend (bottom right): the snow scale of the detection panels the owner reviewed (2.5 dBZ steps from 5 to 35,
+// 35-40, 40 and above), the radar's source, and the keys of the far-zone echo and the training-area line
+function renderLegend(sc) {
+  const mosaic = !!(sc && sc.mosaic && S.mosaicBounds), steps = scaleSteps(sc), far = hasFar(sc) && !mosaic, n = steps.length;
+  $('lg-bar').style.background = `linear-gradient(90deg, ${steps.map(([, , col], i) => `${col} ${(i / n * 100).toFixed(2)}% ${((i + 1) / n * 100).toFixed(2)}%`).join(', ')})`;
+  const labels = [];
   steps.forEach(([a, b], i) => {
-    if (b == null) { ctx.textAlign = 'left'; ctx.fillText(`${a}+`, lastX - 6, y0 + h + 2); return; }
-    if (a % every === 0 && lastX - (x0 + i * cw) >= 24) { ctx.textAlign = 'center'; ctx.fillText(String(a), x0 + i * cw, y0 + h + 2); }
+    if (b == null) labels.push(`<span class="last">${a}+</span>`);
+    else if (a % 5 === 0 && i < n - 1) labels.push(`<span${i === 0 ? ' class="first"' : ''} style="left:${(i / n * 100).toFixed(2)}%">${a}</span>`);
   });
-  if (far) {
-    const fx = besides ? x0 + cw * steps.length + 22 : x0, fy = besides ? y0 : y0 + h + 26;
-    ctx.fillStyle = 'rgba(148,163,184,0.30)'; ctx.fillRect(fx, fy, 18, h);
-    ctx.fillStyle = 'rgba(71,85,105,0.47)'; ctx.fillRect(fx, fy, 18, h);
-    ctx.strokeStyle = '#0f172a'; ctx.strokeRect(fx, fy, 18, h);
-    ctx.fillStyle = '#0f172a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.font = '600 17px -apple-system, Helvetica, Arial, sans-serif'; ctx.fillText(farText, fx + 26, fy + h / 2 + 1);
-  }
-}
-
-function drawScale() {
-  // a 50 km (or 20 / 100 km) bar, bottom right
-  const kmPerPx = 110.57 / S.view.ppd;
-  const km = [10, 20, 50, 100, 200].find(k => k / kmPerPx >= 90) || 200;
-  const len = km / kmPerPx, x1 = W - 16, x0 = x1 - len;
-  const bb = S.barBox, y = bb && bb.x + bb.w > x0 - 16 ? bb.y - 14 : H - 22;
-  ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.fillRect(x0 - 8, y - 30, len + 16, 40);
-  ctx.beginPath(); ctx.moveTo(x0, y - 8); ctx.lineTo(x0, y); ctx.lineTo(x1, y); ctx.lineTo(x1, y - 8);
-  ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 3; ctx.stroke();
-  textHalo(`${km} km`, (x0 + x1) / 2, y - 16, '700 17px -apple-system, Helvetica, Arial, sans-serif', '#0f172a');
+  $('lg-labels').innerHTML = labels.join('');
+  $('lg-src').textContent = mosaic ? `NOAA MRMS ${fmtUTC(parseStamp(sc.mosaic.name))} · lowest beam` : 'NOAA NEXRAD · lowest sweep';
+  $('lg-radar').hidden = !S.showRadar;
+  $('lg-far').hidden = !far;
+  $('lg-train').hidden = !(sc && S.showTrain);
+  $('legend').hidden = $('lg-radar').hidden && $('lg-train').hidden;      // nothing to key: no empty box
 }
 S.deferred = [];
 
@@ -1133,23 +1254,40 @@ const SHORT_REASONS = {
   model_profiles_late: 'model profiles late', lake_values_late: 'lake temperature late',
   vad_history_short: 'radar wind history short', lake_values_older: 'lake temperature a day older',
 };
-// banner: [kind, title, long html, short html]; the short text is shown on phones
-const bannerHtml = list => list.map(b => `<p class="banner ${b[0]}"><strong>${b[1]}</strong><span class="long">${b[2]}</span><span class="short">${b[3]}</span></p>`).join('');
+// banner: [kind, title, long html, short html]: the title and the short text, opening to the long text (a stale radar
+// or a pipeline fault opens by itself)
+const bannerHtml = list => list.map(b => `<details class="banner ${b[0]}"${b[0] === 'bad' ? ' open' : ''}><summary><strong>${b[1]}</strong>` +
+  `<span class="sum">${b[3]}</span></summary><p>${b[2]}</p></details>`).join('');
+// re-rendered with every view change: a banner the reader opened or closed stays so
+// Alerts (a stale radar, a pipeline fault) go in #alerts, above the map on a phone; the other notes in #banners.
+function setBanners(list) {
+  for (const [id, part] of [['alerts', list.filter(b => b[0] === 'bad')], ['banners', list.filter(b => b[0] !== 'bad')]]) {
+    const box = $(id), html = bannerHtml(part);
+    if (box.dataset.html === html) continue;
+    const was = new Map([...box.querySelectorAll('details')].map(d => [d.querySelector('strong').textContent, d.open]));
+    box.innerHTML = html; box.dataset.html = html;
+    for (const d of box.querySelectorAll('details')) { const t = d.querySelector('strong').textContent; if (was.has(t)) d.open = was.get(t); }
+  }
+}
+function setAlert(html) { $('alerts').dataset.html = '!'; $('alerts').innerHTML = html; }   // replaced by the next setBanners
 // a header time: main line always; detail lines on wide screens only; extra only on phones
 const timeHtml = (main, detail, extra) => `${main}${extra ? `<span class="short"> · ${extra}</span>` : ''}${detail ? `<span class="long"><br>${detail}</span>` : ''}`;
 
+// the pill beside the title: LIVE at the newest scan, REVIEW on an older one, an age when the newest is stale (as the
+// QLCS viewer's badge), REPLAY for a replay run, PAST STORM in Cases mode
+function setPill(text, kind) { const el = $('mode'); el.textContent = text; el.className = `badge ${kind}`; }
 function renderHeader() {
   const sc = S.scene, st = S.status || {};
   const live = st.mode === 'live';
-  const modeEl = $('mode');
   const shownT = S.steps[S.step];
-  modeEl.innerHTML = esc(live ? 'LIVE' : `REPLAY${st.event ? ' ' + st.event : ''}`) +
-    (isFinite(shownT) ? `<span class="long"> · ${esc(fmtDate(shownT))} UTC</span>` : '');
-  modeEl.className = 'mode' + (live ? ' live' : '');
-  if (CASES) casesModeText(modeEl, shownT);
+  const latestStep = S.step === S.steps.length - 1;
+  if (CASES) casesModeText(shownT);
+  else if (!live) setPill(`REPLAY${st.event ? ' ' + st.event : ''}`, 'hist');
+  else setPill(latestStep ? 'LIVE' : 'REVIEW', latestStep ? 'live' : 'hist');
+  $('tb-date').textContent = isFinite(shownT) ? `${fmtDate(shownT)}` : '';
   const banners = [];
   if (st.fixture) banners.push(['info', 'Fixture.', esc(st.fixture.note || 'Built from stored products, not pipeline output.'), 'Not pipeline output; see the report.']);
-  if (!sc) { $('banners').innerHTML = bannerHtml(banners); return; }
+  if (!sc) { setBanners(banners); $('tb-radar').textContent = '—'; $('tb-issued').textContent = '—'; return; }
   // the oldest scan of the lakes shown sets the age; each lake's own time is listed
   let scanStart = NaN, scanEnd = NaN;
   const perLake = [];
@@ -1174,7 +1312,10 @@ function renderHeader() {
   const lakeTimes = perLake.length > 1 && new Set(perLake.map(x => fmtUTC(x[1]))).size > 1
     ? perLake.map(([l, t]) => `${lakeName(l).replace('Lake ', '')} ${fmtUTC(t).replace(' UTC', '')}`).join(', ') + ' UTC<br>' : '';
   $('t-radar').innerHTML = timeHtml(both(scanStart), `${lakeTimes}${esc(ageText)}`, ageShort);
+  $('tb-radar').textContent = isFinite(scanStart) ? `${fmtUTC(scanStart)}${ageShort ? ' · ' + ageShort : ''}` : '—';
+  if (live && !CASES && latestStep && isFinite(age) && age > 15) setPill(`${ago(age).toUpperCase()} OLD`, 'stale');
   const fm = forecastMeta(sc);
+  $('tb-issued').textContent = isFinite(fm.iss) ? fmtUTC(fm.iss) : 'none yet';
   const kindText = fm.kind === 'scan' ? 'when that scan arrived' : fm.kind === 'half_hour' ? ':00/:30 issuance (scored)' : '';
   $('t-issued').innerHTML = isFinite(fm.iss)
     ? timeHtml(fm.kind === 'scan' ? `<span class="utc">${fmtUTC(fm.iss, true)}</span> · ${fmtLocal(fm.iss)}` : both(fm.iss),
@@ -1238,7 +1379,7 @@ function renderHeader() {
     const shorts = [...glob].map(([r, who]) => `${esc(SHORT_REASONS[r] || r.replace(/_/g, ' '))}${who.size ? ` (${who.size === 1 ? esc([...who][0]) : who.size + ' bands'})` : ''}`);
     banners.push(['warn', 'Degraded.', items.join('<br>'), shorts.join('; ') + '.']);
   }
-  $('banners').innerHTML = bannerHtml(banners);
+  setBanners(banners);
 }
 
 // ------------------------------------------------------------------ controls
@@ -1247,7 +1388,7 @@ function buildLeadButtons() {
   box.innerHTML = '';
   for (const lead of [0, ...LEADS]) {
     const b = document.createElement('button');
-    b.type = 'button'; b.textContent = lead ? String(lead) : 'Now';
+    b.type = 'button'; b.className = 'mbtn'; b.textContent = lead ? String(lead) : 'Now';
     b.setAttribute('aria-label', lead ? `${lead} minutes` : 'Now, no forecast');
     b.addEventListener('click', () => { stopPlay(); setLead(lead); });
     b.dataset.lead = lead;
@@ -1337,15 +1478,21 @@ function renderAll() {
     : 'Showing radar and bands now. Choose a lead to see each band’s forecast.';
   $('persistwrap').hidden = !fx.comparison;
   $('leadtable').innerHTML = CASES ? casesLeadTable(S.scene, fx) : leadTable(S.scene, fx);
-  $('steplabel').textContent = isFinite(t) ? `${fmtDate(t)} ${fmtUTC(t)} · ${S.step + 1} of ${S.steps.length}${S.follow ? ' · latest' : ''}` : '';
+  // the frame counter: the scan time and n/N (the date is in the top bar; the full text in the tooltip)
+  $('steplabel').innerHTML = isFinite(t) ? `<span class="long">${esc(fmtUTC(t))} · </span>${S.step + 1}/${S.steps.length}` : '';
+  $('steplabel').title = isFinite(t) ? `${fmtDate(t)} ${fmtUTC(t)} · ${S.step + 1} of ${S.steps.length}${S.follow ? ' · latest' : ''}` : '';
+  $('scrub').style.setProperty('--pct', `${S.steps.length > 1 ? (S.step / (S.steps.length - 1) * 100).toFixed(1) : 100}%`);
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
   $('zonekey').hidden = !S.scene;
   $('mosaicnote').hidden = !(S.scene && S.scene.mosaic);
+  const farKnown = farOnlyKnown(S.scene) || S.showFarOnly;
+  $('tg-far').hidden = !farKnown; $('farnote').hidden = !farKnown;
   renderHeader();
   renderScorecard();
-  draw();
   renderDetails();
-  requestAnimationFrame(() => { const h = $('top').getBoundingClientRect().height; document.documentElement.style.setProperty('--head', `${Math.ceil(h)}px`); });
+  renderLegend(S.scene);
+  updateLayout();                                // the panels' new sizes first: labels keep clear of them
+  draw();
 }
 
 // ------------------------------------------------------------------ details: point query
@@ -1373,8 +1520,8 @@ function pointReport() {
   const farZone = !cov && hasFar(sc) && inFarZone(sc, lon, lat);
   const farNow = currentBands(sc).filter(f => f.properties.outline_far && inGeom(f.properties.outline_far, lon, lat)).map(f => f.properties);
   let nowText;
-  if (farZone) nowText = farEchoAt(sc, lon, lat) ? 'echo beyond the solid line (beam 2–3 km above ground; its strength is not shown)'
-    : 'no echo seen beyond the solid line (the beam may pass over shallow snow here)';
+  if (farZone) nowText = farEchoAt(sc, lon, lat) ? 'echo beyond the training area (beam 2–3 km above ground; its strength is not shown)'
+    : 'no echo seen beyond the training area (the beam may pass over shallow snow here)';
   else if (dz.outside && !cov) nowText = 'outside the radar grid';
   else if (dz.nodata) nowText = 'no radar data here in this scan';
   else if (dz.bin) nowText = `${dz.bin[0]}${dz.bin[1] != null ? '–' + dz.bin[1] : '+'} dBZ`;
@@ -1414,7 +1561,7 @@ function pointReport() {
   else if (!answers.length) answer = `No band’s forecast outline or ${EN.short} covers this point through +180 min.`;
   else answer = answers.map(a => a[1]).join('<br>');
   const nowBand = now.length ? `inside ${now.map(p => labelOf(p.band_id) + (p.tier === 2 ? ' (inland)' : '')).join(', ')}`
-    : farNow.length ? `inside the dashed part of ${farNow.map(p => groupLabel(p)).join(', ')} beyond the solid line (lower confidence)` : 'not inside a band';
+    : farNow.length ? `inside ${farNow.map(p => groupLabel(p)).join(', ')}, beyond the training area (lower confidence)` : 'not inside a band';
   return `
     <div class="closebar"><h3>At ${Math.abs(lat).toFixed(3)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(3)}°${lon < 0 ? 'W' : 'E'}</h3>
       <button type="button" id="clear">Clear</button></div>
@@ -1445,25 +1592,25 @@ function bandFacts(p, id) {
   if (p.merged_from && p.merged_from.length) lin.push(`absorbed ${p.merged_from.join(', ')}`);
   const flags = (p.flags || []).map(f => FLAGS[f] || f.replace(/_/g, ' '));
   const twoZone = p.intensity_zone === 'near_only';
-  const nz = twoZone ? ' (inside the solid line)' : '';
+  const nz = twoZone ? ' (inside the training area)' : '';
   const far = p.zone === 'near+far' && p.far_beam_agl_km
-    ? `yes, dashed: beam ${r1(p.far_beam_agl_km[0])}–${r1(p.far_beam_agl_km[1])} km above ground; lower confidence; its strength is not used`
+    ? `yes: beam ${r1(p.far_beam_agl_km[0])}–${r1(p.far_beam_agl_km[1])} km above ground; lower confidence; its strength is not used`
     : 'none';
   return `<dl class="facts">
       <dt>Lake</dt><dd>${esc(lakeName(p.lake || id.lake))}</dd>
       <dt>Tier</dt><dd>${p.tier === 2 ? '2, inland addition (outline dashed)' : '1, primary band (outline solid)'}</dd>
-      <dt>Length</dt><dd>${esc(len)}${twoZone ? ' inside the solid line' : ''}</dd>
+      <dt>Length</dt><dd>${esc(len)}${twoZone ? ' inside the training area' : ''}</dd>
       <dt>Orientation</dt><dd>${esc(orient)}</dd>
       <dt>Peak${esc(nz)}</dt><dd>${peak != null ? `${r1(peak)} dBZ` : 'not available'}</dd>
       <dt>Mean${esc(nz)}</dt><dd>${mean != null ? `${r1(mean)} dBZ` : 'not available'}</dd>
       <dt>Beam height</dt><dd>${beams.length ? `${r1(Math.min(...beams))}–${r1(Math.max(...beams))} km above ground` : 'unknown'}</dd>
-      ${twoZone ? `<dt>Beyond the line</dt><dd>${esc(far)}</dd>` : ''}
+      ${twoZone ? `<dt>Beyond the area</dt><dd>${esc(far)}</dd>` : ''}
       <dt>Age</dt><dd>${p.age_min != null ? `${ago(p.age_min)} since first detected` : 'unknown'}</dd>
       <dt>Lineage</dt><dd>${esc(lin.length ? lin.join('; ') : 'no split or merge recorded')}</dd>
       ${flags.length ? `<dt>Flags</dt><dd>${esc(flags.join('; '))}</dd>` : ''}
       ${p.coverage_gaps ? `<dt>Gaps</dt><dd>${p.coverage_gaps} coverage gap(s) inside the band</dd>` : ''}
     </dl>
-    <p class="hint">${twoZone ? 'Peak and mean are over the band’s part inside the solid line only; beyond it the radar beam is above much of the snow, so those values are never used.'
+    <p class="hint">${twoZone ? 'Peak and mean are over the band’s part inside the training area only; beyond it the radar beam is above much of the snow, so those values are never used.'
       : whole ? 'Peak and mean are over the whole band outline.' : 'Peak and mean are over the band’s 7 measuring stations.'} Reflectivity is not a snowfall rate; it weakens with range as the beam rises above shallow snow.</p>`;
 }
 
@@ -1506,7 +1653,7 @@ function bandReport() {
     const members = p.display_group_members.map(m => currentBands(sc).find(f => f.properties.band_id === m)).filter(Boolean);
     const col = colourOf(p);
     return `<div class="closebar"><h3><span class="swatch" style="background:${col}"></span>Band ${esc(groupLabel(p))}</h3><button type="button" id="clear">Close</button></div>
-      <p>One band, joined through the zone beyond the solid line${p.display_group_join_held ? ' (join held from recent scans while the echo between the pieces is weak)' : ''}.
+      <p>One band, joined through the zone beyond the training area${p.display_group_join_held ? ' (join held from recent scans while the echo between the pieces is weak)' : ''}.
       It is tracked as ${members.length} pieces, west to east; each piece keeps its own identifier and its own forecast.</p>
       ${members.map(f => `<h3 class="piece">Piece ${esc(labelOf(f.properties.band_id))}</h3>${bandFacts(f.properties, parseBandId(f.properties.band_id))}
         <h3 class="piece sub">How ${esc(labelOf(f.properties.band_id))} is forecast to move</h3>${forecastTable(f.properties.band_id, f.properties)}`).join('')}`;
@@ -1521,7 +1668,7 @@ function farOnlyReport() {
   if (!f) return '<p class="hint">That object is not in the scan shown.</p><button type="button" id="clear">Close</button>';
   const p = f.properties, b = p.far_beam_agl_km || [];
   const az = p.orientation_deg;
-  return `<div class="closebar"><h3><span class="swatch" style="background:${FAR_ONLY_COLOUR}"></span>Seen only beyond the solid line</h3><button type="button" id="clear">Close</button></div>
+  return `<div class="closebar"><h3><span class="swatch" style="background:${FAR_ONLY_COLOUR}"></span>Seen only beyond the training area</h3><button type="button" id="clear">Close</button></div>
     <dl class="facts">
       <dt>Lake</dt><dd>${esc(lakeName(p.lake))}</dd>
       <dt>Length</dt><dd>${p.length_km != null ? `${r1(p.length_km)} km` : 'unknown'}</dd>
@@ -1530,7 +1677,7 @@ function farOnlyReport() {
       <dt>Strength</dt><dd>not available: the beam is above much of the snow here</dd>
       <dt>Identity</dt><dd>none: not tracked and not forecast</dd>
     </dl>
-    <p class="hint">${esc(p.review_note || '')} Hidden unless “Show objects seen only beyond the solid line” is on.</p>`;
+    <p class="hint">${esc(p.review_note || '')} Shown only while FAR OBJECTS is on.</p>`;
 }
 
 function renderDetails() {
@@ -1543,65 +1690,35 @@ function renderDetails() {
   const c = $('clear'); if (c) c.addEventListener('click', () => { S.band = null; S.point = null; S.farOnly = null; renderAll(); });
 }
 
-// ------------------------------------------------------------------ pointer input: pan, pinch, click
-const ptrs = new Map();
-let gesture = null;
-cv.addEventListener('pointerdown', e => {
-  cv.setPointerCapture(e.pointerId);
-  ptrs.set(e.pointerId, [e.offsetX, e.offsetY]);
-  gesture = { moved: false, start: [e.offsetX, e.offsetY], view: { ...S.view }, dist: null };
-  if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; gesture.dist = Math.hypot(a[0] - b[0], a[1] - b[1]); gesture.mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; gesture.moved = true; }
-});
-cv.addEventListener('pointermove', e => {
-  if (!ptrs.has(e.pointerId) || !gesture) return;
-  const prev = ptrs.get(e.pointerId);
-  ptrs.set(e.pointerId, [e.offsetX, e.offsetY]);
-  if (ptrs.size === 2 && gesture.dist) {
-    const [a, b] = [...ptrs.values()];
-    const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
-    zoomAt(d / gesture.dist, gesture.mid[0], gesture.mid[1]);
-    gesture.dist = d;
-    return;
-  }
-  if (Math.hypot(e.offsetX - gesture.start[0], e.offsetY - gesture.start[1]) > 6) gesture.moved = true;
-  if (gesture.moved) {
-    S.view.lon -= (e.offsetX - prev[0]) / (S.view.ppd * COS43);
-    S.view.lat += (e.offsetY - prev[1]) / S.view.ppd;
-    draw();
-  }
-});
-function endPtr(e) {
-  const g = gesture;
-  ptrs.delete(e.pointerId);
-  if (ptrs.size === 0) gesture = null;
-  if (e.type === 'pointerup' && g && !g.moved && ptrs.size === 0) clickAt(e.offsetX, e.offsetY);
-}
-cv.addEventListener('pointerup', endPtr);
-cv.addEventListener('pointercancel', endPtr);
-cv.addEventListener('wheel', e => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.offsetX, e.offsetY); }, { passive: false });
-cv.addEventListener('dblclick', e => zoomAt(1.6, e.offsetX, e.offsetY));
-
+// ------------------------------------------------------------------ map input: Leaflet pans and zooms (mouse, wheel,
+// pinch); a click or tap that is not a drag reaches clickAt with its map-container pixel (initMap)
 function clickAt(x, y) {
   if (!S.scene) return;
   for (const h of S.hits || []) {
     const r = h.rect;
-    if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) { S.band = h.id; S.point = null; S.farOnly = null; renderAll(); return; }
+    if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) { S.band = h.id; S.point = null; S.farOnly = null; renderAll(); showDetails(false); return; }
   }
   let best = null, bd = 9;            // close to a centerline selects the band; anywhere else is a point query
   for (const f of currentBands(S.scene)) {
     const d = Math.min(distToLinesPx(linesOf(f.properties.centerline), x, y), distToLinesPx(linesOf(f.properties.centerline_far), x, y));
     if (d < bd) { bd = d; best = f.properties.band_id; }
   }
-  if (best) { S.band = best; S.point = null; S.farOnly = null; renderAll(); return; }
+  if (best) { S.band = best; S.point = null; S.farOnly = null; renderAll(); showDetails(false); return; }
   if (S.showFarOnly) for (const f of farOnlyObjects(S.scene)) {
     const d = distToLinesPx(linesOf(f.properties.centerline), x, y);
     if (d < bd) { bd = d; best = f.properties.band_id; }
   }
-  if (best) { S.farOnly = best; S.band = null; S.point = null; renderAll(); return; }
+  if (best) { S.farOnly = best; S.band = null; S.point = null; renderAll(); showDetails(false); return; }
   const [lon, lat] = unpx(x, y);
   S.point = { lon, lat }; S.band = null; S.farOnly = null;
   renderAll();
-  if (window.innerWidth <= 900) $('details').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showDetails(true);
+}
+// bring the details into view: on a phone, scroll the page to them (a place only, as before); on a wide screen, scroll
+// the panel column so they are visible
+function showDetails(place) {
+  if (window.innerWidth <= 760) { if (place) $('p-details').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (S.showPanels) $('p-details').scrollIntoView({ behavior: 'auto', block: 'nearest' });   // at once: labels are placed clear of the panels, so they should not chase a smooth scroll
 }
 
 // ================================================================== CASES MODE (past storms) — begin
@@ -1753,20 +1870,20 @@ function casesDrawActual(sc) {
   for (const f of fcs) {
     const a = f.properties.verify && f.properties.verify.actual;
     if (!a) continue;
-    // outline: thin black dash-dot; centerline: a black line with a white core (neither is used for anything else)
+    // outline: thin white dash-dot; centerline: a white line with a dark core (neither is used for anything else)
     ctx.beginPath(); pathPolys(a.geometry);
-    ctx.setLineDash([10, 4, 2, 4]); ctx.lineWidth = 2; ctx.strokeStyle = '#0f172a'; ctx.stroke(); ctx.setLineDash([]);
+    ctx.setLineDash([10, 4, 2, 4]); ctx.lineWidth = 2; ctx.strokeStyle = '#f8fafc'; ctx.stroke(); ctx.setLineDash([]);
     ctx.beginPath(); pathLines(linesOf(a.centerline));
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 12; ctx.stroke();
-    ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 8; ctx.stroke();
-    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.strokeStyle = TEXT_HALO; ctx.lineWidth = 12; ctx.stroke();
+    ctx.strokeStyle = '#f8fafc'; ctx.lineWidth = 8; ctx.stroke();
+    ctx.strokeStyle = TEXT_HALO; ctx.lineWidth = 3; ctx.stroke();
     sampleLines(linesOf(a.centerline));
   }
   const sel = S.band && fcs.find(f => f.properties.band_id === S.band && f.properties.verify && f.properties.verify.actual);
   if (sel) S.deferred.push(() => {                  // a label for the selected band's actual position only
     const main = longestLine(linesOf(sel.properties.verify.actual.centerline));
-    if (main) badge(`${labelOf(sel.properties.band_id)} actual +${S.lead}`, px(...pointAlong(main, 0.3)), '#0f172a', 'fc', coversLine);
+    if (main) badge(`${labelOf(sel.properties.band_id)} actual +${S.lead}`, px(...pointAlong(main, 0.3)), '#f8fafc', 'fc', coversLine);
     flushBadges();
   });
 }
@@ -1800,7 +1917,7 @@ function casesLeadTable(sc, fx) {
   return `<table class="leads compact casestable"><caption>At +${S.lead} min · valid ${esc(valid)}</caption><thead><tr><th>Band</th><th>Still exists</th>` +
     `<th class="opt">Model: centerline</th>${C.showActual ? '<th>Off by: model</th><th>Off by: persistence</th>' : ''}</tr></thead><tbody>${rows.map(r => r.html).join('')}</tbody></table>` +
     casesOmittedNote(sc, fcs) +
-    (!C.showActual ? '' : `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a black line with a white core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`);
+    (!C.showActual ? '' : `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a white line with a dark core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`);
 }
 // the band report (Cases mode): for every lead, how far the model and persistence were from where the band actually was
 function casesBandVerify(bandId) {
@@ -1851,10 +1968,9 @@ function casesDates(m) {
   const f = s => new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' }).format(new Date(tIso(s)));
   return `${f(m.start_utc)} to ${f(m.end_utc)} UTC, ${new Date(tIso(m.start_utc)).getUTCFullYear()}`;
 }
-function casesModeText(modeEl, shownT) {
-  modeEl.innerHTML = esc('PAST STORM') + (C.man ? `<span class="long"> · ${esc(C.man.title)}</span>` : '') +
-    (isFinite(shownT) ? `<span class="long"> · ${esc(fmtDate(shownT))} UTC</span>` : '');
-  modeEl.className = 'mode cases';
+function casesModeText(shownT) {               // the pill; the storm's title is in the storm list, its date in the top bar
+  setPill('PAST STORM', 'hist');
+  $('mode').title = C.man ? `${C.man.title}${isFinite(shownT) ? ' · ' + fmtDate(shownT) + ' UTC' : ''}` : '';
 }
 function casesModelTime() {
   const m = C.man && C.man.model;
@@ -1884,7 +2000,7 @@ async function casesLoad(id) {
   S.index = casesIndex();
   S.follow = false; S.step = -1;
   rebuildSteps();
-  const sel = $('cases-select'); if (sel) sel.value = C.id;
+  const sel = $('cases-select'); if (sel) { sel.value = C.id; sel.title = C.man.title; }
   const q = new URLSearchParams(location.search); q.set('case', C.id);
   history.replaceState(null, '', `${location.pathname}?${q}`);
   try { localStorage.setItem('lakeband.case', C.id); } catch (_) { /* private mode: nothing remembered */ }
@@ -1906,35 +2022,26 @@ async function casesBoot() {
   } catch (e) { casesFail(e); }
 }
 function casesFail(e) {
-  $('banners').innerHTML = `<p class="banner bad"><strong>Cannot read the past storms.</strong>${esc(e.message || e)}.</p>`;
+  setAlert(`<p class="banner bad"><strong>Cannot read the past storms.</strong> ${esc(e.message || e)}.</p>`);
 }
 function casesUi() {
-  const line = document.querySelector('#top .titleline'), mode = $('mode');
-  if (!line || !mode) return;
-  const box = document.createElement('span');
-  box.className = 'casesbar';
   const go = q => { for (const k of ['t', 'band', 'pt', 'view', 'case']) q.delete(k); return q; };
+  const live = $('mode-live'), past = $('mode-cases');
+  live.classList.toggle('on', !CASES); past.classList.toggle('on', CASES);
+  live.setAttribute('aria-pressed', String(!CASES)); past.setAttribute('aria-pressed', String(CASES));
   if (!CASES) {
-    box.innerHTML = '<button type="button" id="cases-open" class="casesbtn">Past storms</button>';
-    line.insertBefore(box, mode.nextSibling);
-    $('cases-open').addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); q.set('case', ''); location.search = q.toString(); });
+    live.title = 'The newest scan'; past.title = 'Replay one of seven past storms';
+    live.addEventListener('click', () => { if (S.steps.length) setStep(S.steps.length - 1, true); });
+    past.addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); q.set('case', ''); location.search = q.toString(); });
     return;
   }
-  box.classList.add('on');
-  box.innerHTML = '<label class="casessel"><span class="long">Storm</span> <select id="cases-select" aria-label="Past storm"></select></label>' +
-    '<button type="button" id="cases-live" class="casesbtn">Back to live</button>';
-  line.insertBefore(box, mode.nextSibling);
-  $('cases-live').addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); const s = q.toString(); location.search = s ? '?' + s : ''; if (!s) location.href = location.pathname; });
+  live.title = 'Back to live';
+  live.addEventListener('click', () => { const q = go(new URLSearchParams(location.search)); const s = q.toString(); location.search = s ? '?' + s : ''; if (!s) location.href = location.pathname; });
+  $('cases-select').disabled = false;
   $('latest').textContent = 'End';
-  const pw = $('persistwrap');
-  if (pw) {
-    const lab = document.createElement('label');
-    lab.className = 'toggle'; lab.id = 'actualwrap';
-    lab.innerHTML = `<input type="checkbox" id="actual"${C.showActual ? ' checked' : ''}> Show where each band actually was
-      <span class="sub">The band LakeBand’s verification matched to it in the radar scan nearest the valid time: a black line with a white core.</span>`;
-    pw.after(lab);
-    $('actual').addEventListener('change', e => { C.showActual = e.target.checked; renderAll(); });
-  }
+  $('actualwrap').hidden = false;
+  $('actual').checked = C.showActual;
+  $('actual').addEventListener('change', e => { C.showActual = e.target.checked; renderAll(); });
 }
 function casesShotInfo() {
   const fcs = S.scene && S.lead ? forecastsAt(S.scene, S.lead) : [];
@@ -1942,7 +2049,7 @@ function casesShotInfo() {
     steps: S.steps.length, actual_drawn: C.showActual ? fcs.filter(f => f.properties.verify && f.properties.verify.actual).length : 0,
     forecasts: fcs.length, summary_rows: $('scorecard').hidden ? 0 : $('scorecard').querySelectorAll('tbody tr').length,
     chunks_loaded: C.chunks.size, scroll_width: document.documentElement.scrollWidth,
-    wider_than_screen: [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > Math.min(window.innerWidth, screen.width) + 0.5)
+    wider_than_screen: [...document.querySelectorAll('body *')].filter(e => !e.closest('#map') && e.getBoundingClientRect().right > Math.min(window.innerWidth, screen.width) + 0.5)
       .slice(0, 6).map(e => `${(e.closest('[id]') || {}).id || ''}>${e.tagName.toLowerCase()}${e.id ? '#' + e.id : ''}${e.className && typeof e.className === 'string' ? '.' + e.className.split(' ').join('.') : ''}`) };
 }
 // ================================================================== CASES MODE (past storms) — end
@@ -1985,14 +2092,17 @@ async function poll() {
       await setStep(keep ? S.steps.length - 1 : S.step, keep);
     } else renderHeader();
   } catch (e) {
-    $('banners').innerHTML = `<p class="banner bad"><strong>Cannot read ${BUNDLES ? 'the published files' : 'the run folder'}.</strong>${esc(e.message)}.${BUNDLES ? '' : ' Is app/serve.py running?'}</p>`;
+    setAlert(`<p class="banner bad"><strong>Cannot read ${BUNDLES ? 'the published files' : 'the run folder'}.</strong> ${esc(e.message)}.${BUNDLES ? '' : ' Is app/serve.py running?'}</p>`);
   }
 }
 function applyUrlView() {
   const v = params.get('view');
   if (v) { const [lon, lat, ppd] = v.split(',').map(Number); if ([lon, lat, ppd].every(isFinite)) S.view = { lon, lat, ppd }; }
 }
+// the floating layer toggles (right): red outline when on, as the QLCS viewer's
+function setToggle(id, on) { const b = $(id); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }
 async function start() {
+  initMap();
   buildLeadButtons();
   const lp = +params.get('lead');
   setLead(LEADS.includes(lp) ? lp : 0);
@@ -2001,23 +2111,49 @@ async function start() {
   $('play').addEventListener('click', togglePlay);
   $('persist').checked = S.showPersist;
   $('persist').addEventListener('change', e => { S.showPersist = e.target.checked; renderAll(); });
-  $('leadtable').addEventListener('click', e => { const b = e.target.closest('[data-band]'); if (b) { S.band = b.dataset.band; S.point = null; renderAll(); } });
-  $('trainarea').checked = S.showTrain;
-  $('trainarea').addEventListener('change', e => { S.showTrain = e.target.checked; renderAll(); });
-  $('faronly').checked = S.showFarOnly;
-  $('faronly').addEventListener('change', e => { S.showFarOnly = e.target.checked; if (!S.showFarOnly) S.farOnly = null; renderAll(); });
+  $('leadtable').addEventListener('click', e => { const b = e.target.closest('[data-band]'); if (b) { S.band = b.dataset.band; S.point = null; renderAll(); showDetails(false); } });
+  const toggles = [['tg-radar', 'showRadar'], ['tg-train', 'showTrain'], ['tg-far', 'showFarOnly'], ['tg-panels', 'showPanels']];
+  for (const [id, key] of toggles) {
+    setToggle(id, S[key]);
+    $(id).addEventListener('click', () => {
+      S[key] = !S[key]; setToggle(id, S[key]);
+      if (key === 'showFarOnly' && !S.showFarOnly) S.farOnly = null;
+      if (key === 'showPanels') document.body.classList.toggle('nopanels', !S.showPanels);
+      renderAll();
+    });
+  }
+  document.body.classList.toggle('nopanels', !S.showPanels);
   $('scrub').addEventListener('input', e => setStep(+e.target.value));
   $('prev').addEventListener('click', () => setStep(S.step - 1));
   $('next').addEventListener('click', () => setStep(S.step + 1));
   $('latest').addEventListener('click', () => setStep(S.steps.length - 1, true));
-  $('zoom-in').addEventListener('click', () => zoomAt(1.5, W / 2, H / 2));
-  $('zoom-out').addEventListener('click', () => zoomAt(1 / 1.5, W / 2, H / 2));
-  $('zoom-fit').addEventListener('click', () => { fitView(); draw(); });
-  window.addEventListener('resize', resize);
-  const [basemap, sites] = await Promise.all([getJSON('data/basemap.json').catch(() => null), getJSON('data/radars.json').catch(() => null)]);
+  // keys, as the QLCS viewer: left and right step through the scans, space plays the leads
+  document.addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey || !$('about').hidden) return;
+    if (e.target.closest && e.target.closest('input, select, textarea, button, summary, a')) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setStep(S.step - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); setStep(S.step + 1); }
+    else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+  });
+  // the floating panels move when the window resizes, the panel column scrolls or (phones) the page scrolls under the
+  // sticky top bar: labels are placed again clear of them
+  let relayout = 0;
+  const later = () => { if (!relayout) relayout = requestAnimationFrame(() => { relayout = 0; updateLayout(); if (LAYERS) LAYERS.over.redraw(); }); };
+  window.addEventListener('resize', later);
+  window.addEventListener('scroll', later, { passive: true });
+  $('panels').addEventListener('scroll', later, { passive: true });
+  const tick = () => { $('clock').textContent = `${new Date().toISOString().slice(11, 19)} UTC`; };
+  tick(); setInterval(tick, 1000);
+  const fontsReady = document.fonts ? Promise.race([document.fonts.load(`700 16px ${MONO}`), new Promise(r => setTimeout(r, 2000))]).catch(() => null) : null;
+  const [basemap, sites] = await Promise.all([getJSON('data/basemap.json').catch(() => null), getJSON('data/radars.json').catch(() => null), fontsReady]);
   S.basemap = basemap; S.sites = sites ? sites.sites : {};
-  resize();
-  casesUi();                                   // the Past storms button (live), or the storm list (Cases mode)
+  updateLayout();
+  const [w, e, s, n] = extentAll();                // both lakes until the first scan arrives
+  map.fitBounds([[s, w], [n, e]], { animate: false });
+  casesUi();
+  // tiles once the view is known: the first scan's bands (or ?view=) set it; a failed read leaves both lakes
+  const tilesOnce = () => { if (!S.tiles) { S.tiles = true; addTiles(); } };
+  const tilesSoon = setTimeout(tilesOnce, 4000);                                   // the LIVE and PAST STORMS buttons; the storm list in Cases mode
   if (CASES) await casesBoot(); else await poll();
   const tp = params.get('t');
   if (tp) {
@@ -2025,7 +2161,9 @@ async function start() {
     let k = 0; S.steps.forEach((s, i) => { if (s <= t) k = i; });
     await setStep(k, false);
   }
+  clearTimeout(tilesSoon); tilesOnce();
   if (!CASES) setInterval(poll, 30000);        // a past storm does not change: nothing to poll
+  if (document.fonts) document.fonts.ready.then(() => { updateLayout(); draw(); });
   document.body.dataset.ready = '1';
 }
 // for the screenshot tool (app/tools/shoot.mjs): what is on the screen, from the page's own state
