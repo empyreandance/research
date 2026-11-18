@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LakeBand</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script src="config.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac745e4de4a442a9bc0d94056b67e871"}'></script><!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+<header id="top">
+  <div class="titleline">
+    <strong class="product">LakeBand</strong>
+    <span id="mode" class="mode"></span>
+    <span id="updates" class="updates" hidden>Updates with every radar scan</span>
+    <strong class="experimental">Experimental. Not an official forecast.</strong>
+    <button type="button" id="about-open" class="about-open" aria-haspopup="dialog">About</button>
+  </div>
+  <div id="banners"></div>
+  <dl id="times" class="times">
+    <div><dt><span class="long">Radar scan</span><span class="short">Radar</span></dt><dd id="t-radar">loading</dd></div>
+    <div><dt><span class="long">Forecast issued</span><span class="short">Issued</span></dt><dd id="t-issued">loading</dd></div>
+    <div><dt><span class="long">Model input</span><span class="short">Model</span></dt><dd id="t-model">loading</dd></div>
+    <div><dt><span class="long">Valid</span><span class="short">Valid</span></dt><dd id="t-valid">loading</dd></div>
+  </dl>
+</header>
+
+<main id="layout">
+  <section id="mapwrap" aria-label="Map">
+    <canvas id="map"></canvas>
+    <div class="mapbuttons">
+      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zoom-fit">Fit</button>
+    </div>
+  </section>
+
+  <aside id="side">
+    <section class="block" aria-label="Forecast lead">
+      <div class="blockhead">
+        <h2>Forecast</h2>
+        <button type="button" id="play" class="wide">Play</button>
+      </div>
+      <div id="leads" class="segmented" role="group" aria-label="Lead time"></div>
+      <p id="leadnote" class="note"></p>
+      <label class="toggle" id="persistwrap" hidden><input type="checkbox" id="persist"> Compare with persistence
+        <span class="sub">Persistence: every band stays exactly where it is now. Drawn as a grey dotted line.</span></label>
+      <div id="leadtable"></div>
+    </section>
+
+    <section class="block" id="scorecard" aria-label="Scorecard" hidden></section>
+
+    <section class="block" id="zonekey" aria-label="Radar zones" hidden>
+      <div class="blockhead"><h2>Radar zones</h2></div>
+      <p class="note"><span class="key solid zone2"></span>Radar beam 2 km above the ground. Inside this line: normal confidence.</p>
+      <p class="note"><span class="key dashed zone3"></span>Radar beam 3 km above the ground.</p>
+      <p class="note"><strong>Lower confidence beyond the solid line.</strong> There the beam passes over much of a shallow
+        snowband, so echo looks weaker than it is. It is shown in grey <span class="key farecho"></span> without its
+        strength, and band parts there are drawn <span class="key dashed light"></span> dashed and lighter. A band’s
+        strength and its forecast come from its part inside the solid line only.</p>
+      <label class="toggle"><input type="checkbox" id="faronly"> Show objects seen only beyond the solid line
+        <span class="sub">About 1 in 3 is a real band (hand check of 48).</span></label>
+    </section>
+
+    <section class="block" aria-label="Time">
+      <div class="blockhead">
+        <h2>Time</h2>
+        <span id="steplabel" class="steplabel"></span>
+      </div>
+      <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Scan time">
+      <div class="steprow">
+        <button type="button" id="prev">&lsaquo; Earlier</button>
+        <button type="button" id="next">Later &rsaquo;</button>
+        <button type="button" id="latest">Latest</button>
+      </div>
+    </section>
+
+    <section class="block" id="details" aria-live="polite"></section>
+
+    <footer class="block foot">
+      <p><strong>Experimental. Not an official forecast.</strong> Radar reflectivity is not a snowfall rate.</p>
+      <p>Radar data: NOAA NEXRAD Level II. Lakes and borders: Natural Earth. Counties: US Census Bureau.</p>
+    </footer>
+  </aside>
+</main>
+<div id="about" class="about" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
+  <div class="about-box">
+    <button type="button" id="about-close" class="about-close" aria-label="Close">&times;</button>
+    <h2 id="about-title">LakeBand</h2>
+    <p>LakeBand forecasts where lake-effect snow bands off Lakes Erie and Ontario will move over the next three
+      hours. Each time a radar finishes a scan, it outlines every band it can see, then forecasts each band&rsquo;s
+      position from 15 minutes to 3 hours ahead. A neural network trained on ten winters of storms makes the
+      forecast from the band&rsquo;s recent motion on radar, HRRR winds and lake-effect ingredients, lake surface
+      temperatures, and the radar&rsquo;s own wind profile.</p>
+
+    <h3>How well it does</h3>
+    <p>LakeBand was graded once, on a winter it never saw during development (2019&ndash;20: 15 storms, 35,917
+      forecasts), against <em>persistence</em>: every band stays exactly where it is now. Persistence is hard to beat
+      in the first hours, because lake-effect bands often hold their position.</p>
+    <table class="about-table">
+      <tr><th>Lead</th><th>LakeBand</th><th>Persistence</th><th>Smaller error</th></tr>
+      <tr><td>30 min</td><td>9.1 km</td><td>13.1 km</td><td>30%</td></tr>
+      <tr><td>1 hour</td><td>15.4 km</td><td>19.8 km</td><td>22%</td></tr>
+      <tr><td>2 hours</td><td>22.3 km</td><td>27.2 km</td><td>18%</td></tr>
+      <tr><td>3 hours</td><td>26.7 km</td><td>31.6 km</td><td>16%</td></tr>
+    </table>
+    <p class="about-note">Average error in a band&rsquo;s forecast position.</p>
+    <p>When the wind shifts and bands swing, which is when persistence fails, the gain is larger: a 30% smaller
+      error at 2 hours (13.8 km against 19.8 km, 807 bands). LakeBand beat persistence in 12 of 14 groups of storms.</p>
+    <p>Forecasts update with every radar scan. The 3-hour forecast needs a later HRRR hour, so during the first half
+      of each hour it comes from a scan up to 30 minutes older, shown with its true valid time. The scorecard on the
+      page tracks the live forecasts against where the bands actually went.</p>
+
+    <h3>Reading the map</h3>
+    <p>Outlines show the bands on the latest scan and where each is forecast to be at the lead you choose; Play steps
+      through the leads. Persistence can be drawn beside them as a grey dotted line. The radar beam rises with
+      distance: past the solid zone line it passes over much of a shallow band, so echo there is drawn in grey and
+      bands are dashed and lighter.</p>
+
+    <h3>Important limitations</h3>
+    <p>LakeBand forecasts where existing bands go. It does not forecast how much snow falls or where new bands will
+      form, and radar reflectivity is not a snowfall rate. If a model input arrives late, the forecast falls back to
+      persistence and says so on the page.</p>
+
+    <p class="disclaimer">Personal research project by Alex Cooke. Not an official NWS/NOAA product. Experimental;
+      for research only. Data: NOAA NEXRAD Level II radar, NOAA HRRR, NOAA GLERL lake surface temperatures, and Iowa
+      Environmental Mesonet radar composites.</p>
+  </div>
+</div>
+<script src="app.js"></script>
+<script src="about.js"></script>
+</body>
+</html>
