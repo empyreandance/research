@@ -64,6 +64,7 @@ const S = {
   showFarOnly: params.get('faronly') === '1',            // objects seen only in the far zone: hidden by default
   showPersist: params.get('persist') === '1',            // persistence beside a model forecast: off by default
   showTrain: params.get('train') !== '0',                 // the training area's boundary: on by default
+  showRange: params.get('range') !== '0',                 // the forecast's uncertainty (80% range hatching): on by default
   showRadar: params.get('radar') !== '0',                 // the radar pictures: on by default
   showPanels: params.get('panels') !== '0',               // the panel column (wide screens): on by default
   mosaicIx: null, mosaicBounds: null,                     // the display mosaic (MRMS over the whole map; mosaic.py)
@@ -748,11 +749,7 @@ function paintOver(layer) {
     ctx.lineWidth = 1.8; ctx.setLineDash([10, 4, 2, 4]); ctx.stroke(); ctx.setLineDash([]);
   }
   if (sc) {
-    if (S.showTrain) {
-      // the training area: where LakeBand finds and forecasts bands; dashed, in a colour not in the band palette
-      ctx.beginPath(); pathLines(trainingAreaLines(sc));
-      strokeHalo(2.5, TRAIN_COLOUR, [9, 6], 1.5);
-    }
+    if (S.showTrain) strokeTrainingArea(sc);   // where LakeBand finds and forecasts bands; dashed, not a band colour
     drawSites(sc);
     drawBands(sc);
   }
@@ -834,6 +831,28 @@ function farEchoAt(sc, lon, lat) {         // presence only: the far image has o
 // run's latest.json) names one for every lake shown, else the outline worked out from the coverage files: the 2 km
 // beam limit AND the lake boxes' own edges, merged across the lakes. Drawn and labelled from here only.
 const TRAIN_COLOUR = '#fb923c', TRAIN_LABEL = '#fdba74';
+// The training area's outline as ONE closed line around both lakes' areas (owner, 17 Nov: "be sure to close border"):
+// each lake's own polygon outline is stroked with the other lakes' areas clipped out, so where the two lakes' areas
+// overlap (around Buffalo) the line neither doubles nor breaks. trainingAreaLines() below still places the label.
+function trainingGeoms(L) {
+  const fc = L && L.trainingArea && L.trainingArea.features ? L.trainingArea : (L && L.coverage);
+  return fc && fc.features ? fc.features.filter(f => f.geometry).map(f => f.geometry) : [];
+}
+function strokeTrainingArea(sc) {
+  const areas = S.lakes.filter(l => sc.lakes[l]).map(l => ({ lake: l, geoms: trainingGeoms(sc.lakes[l]) })).filter(a => a.geoms.length);
+  for (const a of areas) {
+    ctx.save();
+    const others = areas.filter(o => o.lake !== a.lake);
+    if (others.length) {                       // keep only what lies outside every other lake's area
+      ctx.beginPath(); ctx.rect(-50, -50, W + 100, H + 100);
+      for (const o of others) for (const g of o.geoms) pathPolys(g);
+      ctx.clip('evenodd');
+    }
+    ctx.beginPath(); for (const g of a.geoms) pathPolys(g);
+    strokeHalo(2.5, TRAIN_COLOUR, [9, 6], 1.5);
+    ctx.restore();
+  }
+}
 function trainingAreaLines(sc) {
   const shown = S.lakes.filter(l => sc.lakes[l]);
   if (shown.length && shown.every(l => sc.lakes[l].trainingArea && sc.lakes[l].trainingArea.features)) {
@@ -990,7 +1009,7 @@ function drawBands(sc) {
   for (const f of fcs) {
     const p = f.properties, col = colourOf(p);
     ctx.globalAlpha = p.probability && p.probability.exists != null && p.probability.exists < 0.5 ? 0.45 : 1;
-    if (envOf(p)) { ctx.beginPath(); pathPolys(envOf(p)); ctx.fillStyle = hatch(col); ctx.fill('evenodd'); }
+    if (S.showRange && envOf(p)) { ctx.beginPath(); pathPolys(envOf(p)); ctx.fillStyle = hatch(col); ctx.fill('evenodd'); }
     ctx.globalAlpha = 1;
   }
   for (const f of fcs) {
@@ -999,7 +1018,7 @@ function drawBands(sc) {
     ctx.globalAlpha = faint ? 0.5 : 1;
     ctx.beginPath(); pathPolys(f.geometry); strokeHalo(2.5, col, [10, 6], 2);
     const cl = linesOf(p.centerline);
-    ctx.beginPath(); pathLines(cl); strokeHalo(4, col, [14, 9], 3);
+    ctx.beginPath(); pathLines(cl); strokeHalo(2.5, col, [12, 8], 2);           // thinner (owner, 17 Nov): was 4 + 3
     ctx.globalAlpha = 1;
   }
   for (const f of bands) {
@@ -1007,13 +1026,13 @@ function drawBands(sc) {
     ctx.beginPath(); pathPolys(f.geometry); pathPolys(p.outline_far);
     strokeHalo(sel ? 4 : 2, OUTLINE, p.tier === 2 ? [7, 5] : [], 2);
     const cl = allCenterlines(p);
-    ctx.beginPath(); pathLines(cl); strokeHalo(sel ? 6 : 4.5, col, [], 3);
+    ctx.beginPath(); pathLines(cl); strokeHalo(sel ? 4 : 2.75, col, [], 2);   // thinner (owner, 17 Nov): was 4.5 / 6 + 3
     // a dot every 15 km along the centerline, as in the panels
     if (S.ppd > 120) for (const l of cl) {
       const total = lineKm([l]);
       for (let d = 15; d < total; d += 15) {
         const [x, y] = px(...pointAlong(l, d / total));
-        ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, 2.75, 0, 2 * Math.PI); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 1.25; ctx.strokeStyle = TEXT_HALO; ctx.stroke();
       }
     }
   }
@@ -1069,6 +1088,7 @@ function drawBands(sc) {
 
 function labelCorridor(fcs) {
   // one on-map label for the hatched region, on the widest visible range
+  if (!S.showRange) return;
   let best = null, area = 0;
   for (const f of fcs) for (const poly of polysOf(envOf(f.properties))) {
     const ring = poly[0]; if (!ring) continue;
@@ -1472,7 +1492,8 @@ function renderAll() {
   const fx = forecasterOf(S.scene);
   const who = fx.model ? `${esc(fx.label)} forecast` : 'forecast';
   $('leadnote').innerHTML = S.lead
-    ? `Minutes after issuance. <span class="key solid"></span>band now <span class="key dashed"></span>${who}, most likely <span class="key hatch"></span>${esc(envName(S.scene).long)}.` +
+    ? `Minutes after issuance. <span class="key solid"></span>band now <span class="key dashed"></span>${who}, most likely` +
+      (S.showRange ? ` <span class="key hatch"></span>${esc(envName(S.scene).long)}.` : '.') +
       (fx.comparison && S.showPersist ? ` <span class="key dotted"></span>persistence (lies on the band now).` : '') +
       (CASES ? casesLeadKey() : '')
     : 'Showing radar and bands now. Choose a lead to see each band’s forecast.';
@@ -2112,7 +2133,7 @@ async function start() {
   $('persist').checked = S.showPersist;
   $('persist').addEventListener('change', e => { S.showPersist = e.target.checked; renderAll(); });
   $('leadtable').addEventListener('click', e => { const b = e.target.closest('[data-band]'); if (b) { S.band = b.dataset.band; S.point = null; renderAll(); showDetails(false); } });
-  const toggles = [['tg-radar', 'showRadar'], ['tg-train', 'showTrain'], ['tg-far', 'showFarOnly'], ['tg-panels', 'showPanels']];
+  const toggles = [['tg-radar', 'showRadar'], ['tg-train', 'showTrain'], ['tg-range', 'showRange'], ['tg-far', 'showFarOnly'], ['tg-panels', 'showPanels']];
   for (const [id, key] of toggles) {
     setToggle(id, S[key]);
     $(id).addEventListener('click', () => {
