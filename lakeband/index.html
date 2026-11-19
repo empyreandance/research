@@ -71,6 +71,7 @@
         <p id="lg-far" class="lg-key" hidden><span class="sw far"></span><span><span class="long">beam 2&ndash;3 km up: echo seen, strength not shown</span><span class="short">beam 2&ndash;3 km: echo only</span></span></p>
       </div>
       <p id="lg-train" class="lg-key" hidden><span class="sw train"></span>training area</p>
+      <p id="lg-area" class="lg-key" hidden><span class="sw area"></span>not covered: Michigan and Canada</p>
     </div>
     <!-- band isolation mode (app.js, ISOLATE block): a frame round the map and a banner at its top -->
     <div id="iso-frame" class="iso-frame" hidden aria-hidden="true"></div>
@@ -121,7 +122,10 @@
         whole of both lakes, each forecast by a version of LakeBand trained without that storm; beyond the line those
         forecasts are not verified.</span><span id="mosaicnote" hidden> Beyond the line,
         the radar shown is the NOAA MRMS mosaic (each place seen by the lowest beam of the nearest radars).</span> The
-        TRAINING AREA button hides or shows the line.</p>
+        TRAINING AREA button hides or shows the line. Michigan and Canada are darkened: LakeBand does not cover them and
+        shows no band that lies mostly over them. Lake Erie and Lake Ontario are covered whole, on both sides of the
+        border, and a band mostly over the lakes or the US side is drawn whole, even where its end reaches into
+        Canada.</p>
     </section>
 
     <details class="panel verify" id="verifyblock">

@@ -139,11 +139,12 @@ function envName(sc) {
 const lakeName = l => ({ erie: 'Lake Erie', ontario: 'Lake Ontario' }[l] || l);
 function dupTracks(sc) {
   // track ids are numbered per lake (and possibly per tier): find ids used by more than one lake or tier
-  const seen = new Map();
+  const seen = new Map(), hid = ncHidden(sc);                             // Michigan and Canada: not shown, not counted
   for (const lake of S.lakes) {
     const L = sc && sc.lakes[lake]; if (!L) continue;
     const w = wideOf(L) || {};                                            // wide layer: W ids are numbered per lake too
     for (const fc of [L.bands, L.forecast, w.bands, w.forecast]) if (fc) for (const f of fc.features) {
+      if (hid.has(f.properties.band_id)) continue;
       const b = parseBandId(f.properties.band_id);
       if (!seen.has(b.track)) seen.set(b.track, new Set());
       seen.get(b.track).add(`${b.lake}|${b.tier}`);
@@ -446,8 +447,9 @@ function addTiles() {
 function initMap() {
   map = L.map('map', { zoomControl: false, attributionControl: false, keyboard: false, zoomSnap: 0.25, zoomDelta: 0.5,
     wheelPxPerZoomLevel: 80, minZoom: 5, maxZoom: 13, center: [42.75, -78.6], zoom: 7 });
-  // panes, bottom to top: tiles (200) < coverage mask < radar < place labels < LakeBand's drawing < Leaflet's controls
-  for (const [name, z] of [['lbUnder', 250], ['lbRadar', 300], ['lbLabels', 350], ['lbOver', 450]]) {
+  // panes, bottom to top: tiles (200) < coverage mask < radar < Michigan and Canada darkened < place labels <
+  // LakeBand's drawing < Leaflet's controls
+  for (const [name, z] of [['lbUnder', 250], ['lbRadar', 300], ['lbDim', 325], ['lbLabels', 350], ['lbOver', 450]]) {
     const p = map.createPane(name); p.style.zIndex = z; p.style.pointerEvents = 'none';
   }
   // bottom right: + and − above Fit (bottom corners stack the newest control on top)
@@ -464,7 +466,8 @@ function initMap() {
   new Fit().addTo(map);
   L.control.zoom({ position: 'bottomright' }).addTo(map);
   L.control.scale({ position: 'bottomleft', metric: true, imperial: false, maxWidth: 140 }).addTo(map);
-  LAYERS = { under: new CanvasLayer('lbUnder', paintUnder).addTo(map), over: new CanvasLayer('lbOver', paintOver).addTo(map) };
+  LAYERS = { under: new CanvasLayer('lbUnder', paintUnder).addTo(map), dim: new CanvasLayer('lbDim', paintDim).addTo(map),
+    over: new CanvasLayer('lbOver', paintOver).addTo(map) };
   map.on('click', e => clickAt(e.containerPoint.x, e.containerPoint.y));
   map.getPane('lbRadar').style.display = S.showRadar ? '' : 'none';
 }
@@ -727,6 +730,7 @@ function draw() {
   if (!map || !LAYERS) return;
   syncRadar(S.scene);
   LAYERS.under.redraw();
+  LAYERS.dim.redraw();
   LAYERS.over.redraw();
 }
 function paintUnder(layer) {
@@ -749,6 +753,76 @@ function paintUnder(layer) {
     for (const f of farFeatures(sc.lakes[lake], 'far')) { ctx.beginPath(); pathPolys(f.geometry); ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fill('evenodd'); }
   }
 }
+// ------------------------------------------------------------------ MICHIGAN AND CANADA (one block)
+// Owner, 19 Nov 2026: "I don't want anything in michigan or canada active. don't darken anything inland on the south
+// side of the lakes." data/not_covered.json (tools/site/make_not_covered.py) is Michigan and Canada, with Lake Huron,
+// Lake St Clair and the Detroit River, but not Lake Erie or Lake Ontario, which stay covered whole on both sides of
+// the border. The page darkens it (radar included; place names stay readable above it) and shows no band more than
+// half of whose outline lies in it: not the band, its forecasts, its label or its table row. A training band that such
+// a band had replaced is shown again, as the engine does when the replacing band belongs to another lake. A band
+// mostly over the lakes or the US side is drawn whole, even where its end reaches into the darkened area. Off in band
+// isolation mode, which shows nothing but the band. Each band is tested once: points 0.02 deg apart inside its
+// outline, each looked up in a 0.01 deg raster of the area drawn once at load (ncBuild).
+const NC = { mask: null, west: -86, north: 47, res: 0.01, w: 1300, h: 800, bands: new WeakMap(), scenes: new WeakMap() };
+const NC_DIM = 'rgba(0,0,0,0.7)';
+const ncShown = () => !!(S.notCovered && S.scene && !isoOn());
+function ncBuild(fc) {
+  if (!fc || !fc.features) return;
+  const c = document.createElement('canvas'); c.width = NC.w; c.height = NC.h;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  g.beginPath();
+  for (const f of fc.features) for (const poly of polysOf(f.geometry)) for (const ring of poly) {
+    ring.forEach(([lon, lat], i) => { const x = (lon - NC.west) / NC.res, y = (NC.north - lat) / NC.res; if (i) g.lineTo(x, y); else g.moveTo(x, y); });
+    g.closePath();
+  }
+  g.fillStyle = '#fff'; g.fill('evenodd');
+  const px = g.getImageData(0, 0, NC.w, NC.h).data, m = new Uint8Array(NC.w * NC.h);
+  for (let i = 0; i < m.length; i++) m[i] = px[i * 4 + 3] > 127 ? 1 : 0;
+  NC.mask = m;
+}
+function ncAt(lon, lat) {
+  const x = Math.floor((lon - NC.west) / NC.res), y = Math.floor((NC.north - lat) / NC.res);
+  return x >= 0 && y >= 0 && x < NC.w && y < NC.h && NC.mask[y * NC.w + x] === 1;
+}
+// true when more than half of the band's outline lies in Michigan or Canada
+function ncBand(f) {
+  if (!NC.mask || !f || !f.geometry) return false;
+  if (NC.bands.has(f)) return NC.bands.get(f);
+  let w = Infinity, s = Infinity, e = -Infinity, nn = -Infinity;
+  for (const poly of polysOf(f.geometry)) for (const [x, y] of poly[0] || []) { w = Math.min(w, x); e = Math.max(e, x); s = Math.min(s, y); nn = Math.max(nn, y); }
+  const step = 0.02;
+  let n = 0, k = 0;
+  for (let lat = s + step / 2; lat < nn; lat += step) for (let lon = w + step / 2; lon < e; lon += step) {
+    if (!inGeom(f.geometry, lon, lat)) continue;
+    n++; if (ncAt(lon, lat)) k++;
+  }
+  // a band smaller than the sampling step: its outline's corners
+  if (!n) for (const poly of polysOf(f.geometry)) for (const [lon, lat] of poly[0] || []) { n++; if (ncAt(lon, lat)) k++; }
+  const out = n > 0 && 2 * k > n;
+  NC.bands.set(f, out);
+  return out;
+}
+// the band ids of the scene that are not shown (training and wide layer alike)
+function ncHidden(sc) {
+  if (!sc || !NC.mask) return new Set();
+  if (NC.scenes.has(sc)) return NC.scenes.get(sc);
+  const ids = new Set();
+  for (const lake of S.lakes) {
+    const L = sc.lakes[lake]; if (!L) continue;
+    for (const f of (L.bands && L.bands.features) || []) if (ncBand(f)) ids.add(f.properties.band_id);
+    for (const f of wideBandFeatures(L)) if (ncBand(f)) ids.add(f.properties.band_id);
+  }
+  NC.scenes.set(sc, ids);
+  return ids;
+}
+function paintDim(layer) {
+  ctx = layer.ctx; syncProj();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
+  if (!ncShown()) return;
+  ctx.beginPath(); for (const f of S.notCovered.features) pathPolys(f.geometry);
+  ctx.fillStyle = NC_DIM; ctx.fill('evenodd');
+}
+// ------------------------------------------------------------------ MICHIGAN AND CANADA — end
 function paintOver(layer) {
   ctx = layer.ctx; syncProj();
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
@@ -934,11 +1008,11 @@ function drawSites(sc) {
 // every band on screen: the training layer's (unless a band mostly outside the training area replaces it) and the
 // wide layer's, drawn alike (WIDE LAYER block below)
 function currentBands(sc, all) {
-  const out = [];
+  const out = [], hid = ncHidden(sc);            // Michigan and Canada: not shown (MICHIGAN AND CANADA block)
   for (const lake of S.lakes) {
     const L = sc.lakes[lake], b = L && L.bands;
-    if (b) for (const f of b.features) if (trainingShown(L, f.properties.band_id)) out.push(f);
-    out.push(...wideBandFeatures(L));
+    if (b) for (const f of b.features) if (trainingShown(L, f.properties.band_id, hid) && !hid.has(f.properties.band_id)) out.push(f);
+    for (const f of wideBandFeatures(L)) if (!hid.has(f.properties.band_id)) out.push(f);
   }
   return all ? out : isoOnly(out);               // band isolation: that band only (ISOLATE block)
 }
@@ -1218,7 +1292,8 @@ function renderLegend(sc) {
   $('lg-radar').hidden = !S.showRadar;
   $('lg-far').hidden = !far;
   $('lg-train').hidden = !(sc && S.showTrain);
-  $('legend').hidden = $('lg-radar').hidden && $('lg-train').hidden;      // nothing to key: no empty box
+  $('lg-area').hidden = !ncShown();
+  $('legend').hidden = $('lg-radar').hidden && $('lg-train').hidden && $('lg-area').hidden;  // nothing to key: no empty box
 }
 S.deferred = [];
 
@@ -1784,21 +1859,23 @@ function showDetails(place) {
 //   wide.bands.extensions      parts of INSIDE bands only the wide layer can see; drawn as part of those bands
 // Every item is optional: a run without the wide layer (and every past storm) has none of it.
 const wideOf = L => (L && L.wide) || null;
-function trainingShown(L, bandId) {
-  const w = wideOf(L), tb = w && w.bands && w.bands.training_bands;
-  return !(tb && tb[bandId] && tb[bandId].shown === false);
+// `hidden`: band ids not shown (Michigan and Canada); a training band replaced by one of them is shown again
+function trainingShown(L, bandId, hidden) {
+  const w = wideOf(L), tb = w && w.bands && w.bands.training_bands, t = tb && tb[bandId];
+  return !(t && t.shown === false && !(hidden && t.superseded_by && hidden.has(t.superseded_by)));
 }
 const wideBandFeatures = L => { const w = wideOf(L); return (w && w.bands && w.bands.features) || []; };
 // every forecast feature of the scene (any lead): the training layer's (unless its band is replaced) and the wide layer's
 function forecastFeatures(sc, kind = 'forecast') {
   const out = [];
   if (!sc) return out;
+  const hid = ncHidden(sc);                      // Michigan and Canada: not shown (MICHIGAN AND CANADA block)
   for (const lake of S.lakes) {
     const L = sc.lakes[lake]; if (!L) continue;
     const fc = L[kind];
-    if (fc) for (const f of fc.features) if (trainingShown(L, f.properties.band_id)) out.push(f);
+    if (fc) for (const f of fc.features) if (trainingShown(L, f.properties.band_id, hid) && !hid.has(f.properties.band_id)) out.push(f);
     const w = wideOf(L), wf = w && (kind === 'persistence' ? w.persistence : w.forecast);
-    if (wf && wf.features) out.push(...wf.features);
+    if (wf && wf.features) for (const f of wf.features) if (!hid.has(f.properties.band_id)) out.push(f);
   }
   return isoOnly(out);                           // band isolation: that band's forecasts only (ISOLATE block)
 }
@@ -2584,8 +2661,9 @@ async function start() {
   const tick = () => { $('clock').textContent = `${new Date().toISOString().slice(11, 19)} UTC`; };
   tick(); setInterval(tick, 1000);
   const fontsReady = document.fonts ? Promise.race([document.fonts.load(`700 16px ${MONO}`), new Promise(r => setTimeout(r, 2000))]).catch(() => null) : null;
-  const [basemap, sites] = await Promise.all([getJSON('data/basemap.json').catch(() => null), getJSON('data/radars.json').catch(() => null), fontsReady]);
-  S.basemap = basemap; S.sites = sites ? sites.sites : {};
+  const [basemap, sites, area] = await Promise.all([getJSON('data/basemap.json').catch(() => null), getJSON('data/radars.json').catch(() => null),
+    getJSON('data/not_covered.json').catch(() => null), fontsReady]);
+  S.basemap = basemap; S.sites = sites ? sites.sites : {}; S.notCovered = area; ncBuild(area);
   updateLayout();
   const [w, e, s, n] = extentAll();                // both lakes until the first scan arrives
   map.fitBounds([[s, w], [n, e]], { animate: false });
