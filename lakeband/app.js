@@ -127,7 +127,7 @@ function envName(sc) {
   {
     for (const f of forecastFeatures(sc)) {
       const p = f.properties;
-      if (p.corridor_80) return { short: '80% range', map: '80% range', long: '80% range of where the band lands perpendicular to its axis; where its ends reach has no range (median forecast)' };
+      if (p.corridor_80) return { short: '80% range', map: '80% range', long: '80% range: 8 times in 10 the band lands inside the most likely outline or the hatching, measured perpendicular to its axis; where its ends reach has no range' };
       if (p.envelope) {
         const r = p.envelope_radius_km != null ? `±${r1(p.envelope_radius_km)} km` : '';
         return { short: 'envelope', map: `uncertainty envelope ${r}`.trim(), long: `uncertainty envelope ${r}${p.envelope_kind ? ' (' + p.envelope_kind + ')' : ''}` };
@@ -1026,7 +1026,14 @@ function drawBands(sc) {
   for (const f of fcs) {
     const p = f.properties, col = colourOf(p);
     ctx.globalAlpha = p.probability && p.probability.exists != null && p.probability.exists < 0.5 ? 0.45 : 1;
-    if (S.showRange && envOf(p)) { ctx.beginPath(); pathPolys(envOf(p)); ctx.fillStyle = hatch(col); ctx.fill('evenodd'); }
+    if (S.showRange && envOf(p)) {
+      // the hatching only beyond the most likely outline (owner, 18 Nov 2026): the outline is the most likely place, the
+      // hatching the rest of the 80% range; inside the outline nothing is shaded
+      ctx.save();
+      ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5); pathPolys(f.geometry); ctx.clip('evenodd');
+      ctx.beginPath(); pathPolys(envOf(p)); ctx.fillStyle = hatch(col); ctx.fill('evenodd');
+      ctx.restore();
+    }
     ctx.globalAlpha = 1;
   }
   for (const f of fcs) {

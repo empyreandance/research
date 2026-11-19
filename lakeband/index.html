@@ -59,7 +59,7 @@
       <button type="button" class="cbtn on" id="tg-train" aria-pressed="true"
         title="Show or hide the training area: the dashed line around where LakeBand was trained and graded">TRAINING AREA</button>
       <button type="button" class="cbtn on" id="tg-range" aria-pressed="true"
-        title="Show or hide the forecast's uncertainty: the hatched 80% range of each band's position perpendicular to its axis">UNCERTAINTY</button>
+        title="Show or hide the forecast's uncertainty: the hatching beyond each forecast outline, where else the band may land (80% range)">UNCERTAINTY</button>
       <button type="button" class="cbtn on" id="tg-panels" aria-pressed="true" title="Show or hide the side panels">PANELS</button>
     </div>
     <div id="legend" class="legend" aria-label="Map key">
@@ -117,9 +117,9 @@
       <p class="note">The dashed orange line marks the training area: where LakeBand was trained and graded, and where the
         lowest radar beam is under about 2 km. <span id="zk-live">LakeBand finds and forecasts bands over the whole of
         both lakes, inside the line and beyond it; its scores were measured inside it only.</span><span id="zk-cases"
-        hidden>Past storms from 2022 to 2024 are replayed by LakeBand&rsquo;s real-time engine on their own radar, with
-        bands over the whole of both lakes, each forecast by a version of LakeBand trained without that storm (not
-        verified beyond the line); for now the three earlier storms show bands inside the line only.</span><span id="mosaicnote" hidden> Beyond the line,
+        hidden>Past storms are replayed by LakeBand&rsquo;s real-time engine on their own radar, with bands over the
+        whole of both lakes, each forecast by a version of LakeBand trained without that storm; beyond the line those
+        forecasts are not verified.</span><span id="mosaicnote" hidden> Beyond the line,
         the radar shown is the NOAA MRMS mosaic (each place seen by the lowest beam of the nearest radars).</span> The
         TRAINING AREA button hides or shows the line.</p>
     </section>
@@ -171,15 +171,15 @@
       page tracks the live forecasts against where the bands actually went.</p>
 
     <h3>Past storms</h3>
-    <p>The Past storms button replays seven notable storms from the training winters. The four from 2022 to 2024 were
-      run through LakeBand&rsquo;s real-time engine on their own archived radar, scan by scan, as live: bands over the
-      whole of both lakes and a forecast at every scan. For now the three earlier storms (December 2016 to December
-      2017) show the bands inside the training area only, from an earlier replay. Every forecast comes from a
-      cross-validation version of LakeBand trained without that storm, so they show how the model does on weather it
-      has not seen; the live model trained on all of them. Inside the training area, under Verification, you can draw
-      each forecast beside where the band actually went; there, by LakeBand&rsquo;s own verification, the forecast
-      position error was 23&ndash;34% smaller than persistence at 1 and 2 hours. Forecasts beyond the dashed line are not
-      verified. The storms were picked for being notable, not as a test sample.</p>
+    <p>The Past storms button replays seven notable storms from the training winters. Each was run through
+      LakeBand&rsquo;s real-time engine on its own archived radar, scan by scan, as live: bands over the whole of both
+      lakes and a forecast at every scan. Every forecast comes from a cross-validation version of LakeBand trained
+      without that storm, so they show how the model does on weather it has not seen; the live model trained on all of
+      them. For the three storms before 2020 the model&rsquo;s weather inputs were rebuilt from the public archives,
+      as the live engine builds them. Inside the training area, under Verification, you can draw each forecast beside
+      where the band actually went; there, by LakeBand&rsquo;s own verification, the forecast position error was
+      23&ndash;34% smaller than persistence at 1 and 2 hours. Forecasts beyond the dashed line are not verified. The
+      storms were picked for being notable, not as a test sample.</p>
 
     <h3>Reading the map</h3>
     <p>Outlines show the bands on the latest scan and where each is forecast to be at the lead you choose; Play steps
