@@ -478,9 +478,10 @@ function updateLayout() {
   root.setProperty('--chrome-h', `${Math.ceil(hOf('top') + hOf('controls'))}px`);
   root.setProperty('--legend-h', `${Math.ceil(hOf('legend'))}px`);
   if (!map) return;
+  isoLayout();                                   // band isolation banner (ISOLATE block)
   const m = $('map').getBoundingClientRect();
   const els = [$('top'), $('controls'), $('toggles'), $('legend'), ...$('panels').children,
-    ...document.querySelectorAll('#map .leaflet-control')];
+    ...document.querySelectorAll('#map .leaflet-control'), $('iso-box')];
   S.blocked = [];
   for (const e of els) {
     if (!e || e.hidden) continue;
@@ -501,6 +502,8 @@ function freeArea() {
   if (wide && S.showPanels && pn.width && pn.right > m.left) x0 = Math.max(x0, pn.right - m.left);
   const tg = $('toggles').getBoundingClientRect();
   if (wide && tg.width) x1 = Math.min(x1, tg.left - m.left);
+  const ib = isoOn() && $('iso-box').getBoundingClientRect();          // band isolation banner (ISOLATE block)
+  if (ib && ib.height) y0 = Math.max(y0, ib.bottom - m.top);
   return { x0, y0, x1, y1 };
 }
 function extentAll() {
@@ -526,6 +529,7 @@ function bandsExtent() {
 }
 function fitView(toBands) {
   if (!map) return;
+  if (isoOn()) toBands = true;                   // band isolation: FIT returns to the band (ISOLATE block)
   const [w, e, s, n] = (toBands && bandsExtent()) || extentAll();
   const f = freeArea(), size = map.getSize();
   map.fitBounds([[s, w], [n, e]], { paddingTopLeft: [f.x0 + 12, f.y0 + 12],
@@ -731,7 +735,7 @@ function paintUnder(layer) {
   const sc = S.scene;
   // with the mosaic the radar covers the whole map. Without it (past storms, run folders): the land and water outside
   // radar coverage is darkened, and with the two-zone overlay the far zone (beam 2-3 km above ground) less so
-  if (!sc || !S.showRadar || (sc.mosaic && S.mosaicBounds)) return;
+  if (!sc || !S.showRadar || (sc.mosaic && S.mosaicBounds) || isoOn()) return;   // isolating: no other radar to mask
   ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'destination-out';
   const cut = g => { ctx.beginPath(); pathPolys(g); ctx.fill('evenodd'); };
@@ -802,6 +806,7 @@ function syncRadar(sc) {
     if (L.radar) want.set(lake, [L.radar.img, L.bounds, 2, 1]);
     if (L.radarFar && !mosaic) want.set(`${lake}:far`, [L.radarFar.img, L.bounds, 3, 0.6]);  // presence only, grey
   }
+  if (isoOn()) isoRadar(want, sc);               // band isolation: every picture clipped to the band (ISOLATE block)
   for (const [role, o] of [...OVERLAYS]) if (!want.has(role) || want.get(role)[0] !== o.img) { o.layer.remove(); OVERLAYS.delete(role); }
   for (const [role, [img, b, z, opacity]] of want) {
     if (OVERLAYS.has(role)) continue;
@@ -928,14 +933,14 @@ function drawSites(sc) {
 
 // every band on screen: the training layer's (unless a band mostly outside the training area replaces it) and the
 // wide layer's, drawn alike (WIDE LAYER block below)
-function currentBands(sc) {
+function currentBands(sc, all) {
   const out = [];
   for (const lake of S.lakes) {
     const L = sc.lakes[lake], b = L && L.bands;
     if (b) for (const f of b.features) if (trainingShown(L, f.properties.band_id)) out.push(f);
     out.push(...wideBandFeatures(L));
   }
-  return out;
+  return all ? out : isoOnly(out);               // band isolation: that band only (ISOLATE block)
 }
 function forecastsAt(sc, lead, kind = 'forecast') {
   return forecastFeatures(sc, kind).filter(f => f.properties.lead_min === lead);
@@ -1520,6 +1525,7 @@ function renderScorecard() {
 }
 
 function renderAll() {
+  isoSync();                                     // band isolation: find the band in the scan shown (ISOLATE block)
   const t = S.steps[S.step];
   const fx = forecasterOf(S.scene);
   const who = fx.model ? `${esc(fx.label)} forecast` : 'forecast';
@@ -1724,6 +1730,7 @@ function renderDetails() {
   else if (S.point) el.innerHTML = pointReport();
   else el.innerHTML = '<p class="hint">Tap the map at a place to see, for each lead, whether a band’s forecast covers it. Tap a band’s label or centerline for its details.</p>';
   const c = $('clear'); if (c) c.addEventListener('click', () => { S.band = null; S.point = null; renderAll(); });
+  isoDetails(el);                                // the Isolate button, or the isolated band's state (ISOLATE block)
 }
 
 // ------------------------------------------------------------------ map input: Leaflet pans and zooms (mouse, wheel,
@@ -1786,7 +1793,7 @@ function forecastFeatures(sc, kind = 'forecast') {
     const w = wideOf(L), wf = w && (kind === 'persistence' ? w.persistence : w.forecast);
     if (wf && wf.features) out.push(...wf.features);
   }
-  return out;
+  return isoOnly(out);                           // band isolation: that band's forecasts only (ISOLATE block)
 }
 // the parts of INSIDE bands only the wide layer sees, each given to a training band now on screen (`owner`)
 function extensionsOf(sc, bands) {
@@ -2267,6 +2274,219 @@ function casesShotInfo() {
 }
 // ================================================================== CASES MODE (past storms) — end
 
+// ================================================================== ISOLATE (band isolation mode) — begin
+// The owner's "isolate band" (18 Nov 2026): one band alone on the map, with only the radar inside its outline, kept
+// by its track id through the scans. Entered with the Isolate button in the band's Details, or ?isolate=<track id>
+// (B021, W028, B021-erie, B021-ontario-inland); left with SHOW ALL in the on-map banner, or Escape. While it is on:
+//   currentBands and forecastFeatures return that band's own (isoOnly), so every drawing, label, table and click sees
+//     only it, and its forecast at the chosen lead is drawn as before (the lead buttons and Play show its movement);
+//   every radar picture on screen (a lake's own, its far-zone echo, the MRMS mosaic) is cut to the band's outline, no
+//     margin (isoRadar, from syncRadar); the coverage mask is not drawn; the RADAR button still hides it all;
+//   stepping, Latest, Play and live polling keep the same track (isoSync, first thing in renderAll); a scan without it
+//     says so and keeps the mode on;
+//   Fit fits the band; the banner (BAND ISOLATION MODE, the band's name, SHOW ALL) and a frame round the map mark it,
+//     and entering and leaving are announced (aria-live).
+// Leaving puts back the view, the selection and the URL as they were. Nothing is fetched for it.
+const ISO = { on: false, track: null, lake: null, tier: null, id: null, fit: false, saved: null, was: null };
+const isoOn = () => ISO.on;
+const isoOnly = list => (ISO.on ? list.filter(f => f.properties.band_id === ISO.id) : list);
+// "B021", "W028-ontario", "B021 Erie inland", "erie|T2|B021": the track id, and the lake and tier when given
+function isoParse(text) {
+  let track = null, lake = null, tier = null;
+  for (const t of String(text || '').trim().split(/[\s|:,._/-]+/)) {
+    const l = t.toLowerCase();
+    if (l === 'erie' || l === 'ontario') lake = l;
+    else if (l === 'inland' || l === 't2') tier = 2;
+    else if (l === 't1') tier = 1;
+    else if (/^[a-z]\d+$/i.test(t)) track = t.toUpperCase();
+  }
+  return track ? { track, lake, tier } : null;
+}
+const isoToken = () => `${ISO.track}${ISO.lake ? '-' + ISO.lake : ''}${ISO.tier === 2 ? '-inland' : ''}`;
+function isoName() {
+  if (ISO.id) return labelOf(ISO.id);
+  return ISO.lake ? labelOf(`${ISO.lake}|T${ISO.tier || 1}|${ISO.track}`) : ISO.track + (ISO.tier === 2 ? ' inland' : '');
+}
+// the band of the scan shown with the isolated track id: same lake (once known), same tier preferred, else primary
+function isoMatch(sc) {
+  if (!sc) return null;
+  const all = currentBands(sc, true).filter(f => {
+    const b = parseBandId(f.properties.band_id);
+    return b.track === ISO.track && (!ISO.lake || b.lake === ISO.lake);
+  });
+  const tierOf = f => parseBandId(f.properties.band_id).tier;
+  return all.find(f => tierOf(f) === ISO.tier) || all.find(f => tierOf(f) === 1) || all[0] || null;
+}
+function isoSay(text) { const el = $('iso-live'); if (el) el.textContent = text; }
+function isoSync() {
+  if (!ISO.on) return;
+  const sc = S.scene, f = isoMatch(sc);
+  ISO.id = f ? f.properties.band_id : null;
+  if (f && !ISO.lake) ISO.lake = parseBandId(ISO.id).lake;
+  if (f && !S.point) S.band = ISO.id;
+  const name = isoName(), here = sc ? !!f : null;
+  $('iso-name').innerHTML = `<span class="swatch" style="background:${f ? colourOf(f.properties) : hashColour(name)}"></span>${esc(name)}`;
+  $('iso-note').textContent = here === false ? `${name} is not in this scan` : '';
+  $('iso-note').hidden = here !== false;
+  if (sc && here !== ISO.was) {                  // say what changed: entering, or the band leaving or coming back
+    const missing = here ? '' : ` ${name} is not in this scan.`;
+    isoSay(ISO.was === null ? `Band isolation mode on: ${name}. Only this band and the radar inside its outline are shown.${missing} Escape or Show all shows every band again.`
+      : here ? `${name} is in this scan.` : `${name} is not in this scan.`);
+    ISO.was = here;
+  }
+  isoLayout();
+  if (f && ISO.fit) { ISO.fit = false; fitView(true); }     // on entering (or once the band first shows): the band
+}
+function isoShow(on) {
+  $('iso-banner').hidden = !on; $('iso-frame').hidden = !on;
+  document.body.classList.toggle('isolating', on);
+}
+function isoUrl(on) {
+  const q = new URLSearchParams(location.search);
+  if (on) q.set('isolate', isoToken()); else q.delete('isolate');
+  const s = q.toString();
+  history.replaceState(null, '', `${location.pathname}${s ? '?' + s : ''}`);
+}
+function isoStart(spec, fromDetails) {
+  if (!ISO.on) ISO.saved = { view: S.view, band: S.band, point: S.point };
+  Object.assign(ISO, { on: true, track: spec.track, lake: spec.lake || null, tier: spec.tier || null, id: null, fit: true, was: null });
+  S.point = null;
+  isoShow(true);
+  renderAll();
+  isoUrl(true);
+  if (fromDetails && window.innerWidth <= 760) {   // phones: the map is above the panels; bring it into view
+    const top = $('mapwrap').getBoundingClientRect().top + window.scrollY - $('top').getBoundingClientRect().height;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+  }
+  if (fromDetails) $('iso-exit').focus({ preventScroll: true });
+}
+function isoEnter(bandId) {
+  const b = parseBandId(bandId);
+  isoStart({ track: b.track, lake: b.lake, tier: b.tier }, true);
+}
+function isoFromUrl() {
+  const spec = isoParse(params.get('isolate'));
+  if (spec) isoStart(spec, false);
+}
+function isoExit(restoreView = true) {
+  if (!ISO.on) return;
+  const name = isoName(), sv = ISO.saved || {};
+  Object.assign(ISO, { on: false, id: null, fit: false, saved: null, was: null });
+  isoShow(false);
+  isoUrl(false);
+  S.band = sv.band != null ? sv.band : null; S.point = sv.point || null;
+  if (restoreView) { if (sv.view) S.view = sv.view; else fitView(true); }
+  renderAll();
+  isoSay(`Band isolation mode off: every band and all the radar are shown again (was ${name}).`);
+  const back = document.querySelector('#details [data-iso="enter"]');
+  if (back && document.activeElement === document.body) back.focus({ preventScroll: true });
+}
+// the Details panel: an Isolate button beside Close; while isolating, Show all in its place, or why the band is missing
+const isoButton = (kind, name) => kind === 'enter'
+  ? `<button type="button" class="iso-btn" data-iso="enter" aria-label="Isolate ${esc(name)}: show only this band and the radar inside it">Isolate</button>`
+  : `<button type="button" class="iso-btn" data-iso="exit" aria-label="Show all bands and radar">Show all</button>`;
+function isoDetails(el) {
+  if (!S.scene) return;
+  if (ISO.on && !ISO.id && !S.point) {
+    const name = isoName();
+    el.innerHTML = `<div class="closebar"><h3>Band ${esc(name)}</h3><span class="cb-btns">${isoButton('exit')}</span></div>
+      <p>${esc(name)} is not in this scan.</p><p class="hint">Band isolation mode stays on: step to another scan to find it, or choose Show all.</p>`;
+    return;
+  }
+  const bar = el.querySelector('.closebar'), clear = $('clear');
+  if (!bar || !S.band || !clear) return;
+  const box = document.createElement('span'); box.className = 'cb-btns';
+  if (ISO.on) { if (S.band !== ISO.id) return; box.innerHTML = isoButton('exit'); clear.replaceWith(box); return; }
+  if (!currentBands(S.scene).some(f => f.properties.band_id === S.band)) return;   // a band not in the scan shown
+  box.innerHTML = isoButton('enter', labelOf(S.band));
+  clear.replaceWith(box); box.appendChild(clear);
+}
+// the banner's place: top centre of the part of the map between the panel column and the toggles (wide screens);
+// full width at the top of the map on phones (style.css). --iso-h moves the phone's toggles under it.
+function isoLayout() {
+  const bn = $('iso-banner');
+  if (!bn || bn.hidden || !map) return;
+  if (window.innerWidth <= 760) { bn.style.left = bn.style.right = ''; }
+  else {
+    const m = $('map').getBoundingClientRect(), pn = $('panels').getBoundingClientRect(), tg = $('toggles').getBoundingClientRect();
+    const x0 = S.showPanels && pn.width && pn.right > m.left ? pn.right - m.left : 0;
+    const x1 = tg.width ? tg.left - m.left : m.width;
+    bn.style.left = `${Math.round(x0 + 12)}px`; bn.style.right = `${Math.round(m.width - x1 + 12)}px`;
+  }
+  document.documentElement.style.setProperty('--iso-h', `${Math.ceil($('iso-box').getBoundingClientRect().height)}px`);
+}
+// every radar picture cut to the band's outline (its outline beyond 2 km beam height and the parts only the wide
+// layer sees included), no margin; pictures that do not reach the band are dropped. In the picture's own cells,
+// subdivided 4 x 4 so the cut follows the outline's edge, with rows in Web Mercator as the overlays (mercImage).
+const isoClips = new WeakMap();                  // picture -> { key: the band's outline object, out }
+function isoRadar(want, sc) {
+  const f = ISO.id && currentBands(sc)[0];
+  if (!f) { want.clear(); return; }
+  const geoms = [f.geometry, f.properties.outline_far, ...extensionsOf(sc, [f]).map(e => e.geometry)].filter(Boolean);
+  for (const [role, [img, b, z, opacity]] of [...want]) {
+    let c = isoClips.get(img);
+    if (!c || c.key !== f.geometry || c.n !== geoms.length) isoClips.set(img, c = { key: f.geometry, n: geoms.length, out: isoClip(img, b, geoms) });
+    if (c.out) want.set(role, [c.out.img, c.out.bounds, z, opacity]); else want.delete(role);
+  }
+}
+function isoClip(img, b, geoms) {
+  const [w, e, s, n] = boundsBox(b), iw = img.naturalWidth, ih = img.naturalHeight;
+  if (!iw || !ih) return null;
+  let bw = 180, be = -180, bs = 90, bn = -90;
+  for (const g of geoms) for (const poly of polysOf(g)) for (const [lon, lat] of poly[0] || []) {
+    bw = Math.min(bw, lon); be = Math.max(be, lon); bs = Math.min(bs, lat); bn = Math.max(bn, lat);
+  }
+  const Yn = mercY(n), Ys = mercY(s), K = 4;
+  const colOf = lon => (lon - w) / (e - w) * iw, rowOf = lat => (Yn - mercY(lat)) / (Yn - Ys) * ih;
+  const latOf = r => (2 * Math.atan(Math.exp(Yn - r / ih * (Yn - Ys))) - Math.PI / 2) / D2R;
+  const x0 = Math.max(0, Math.floor(colOf(bw))), x1 = Math.min(iw, Math.ceil(colOf(be)));
+  const r0 = Math.max(0, Math.floor(rowOf(bn))), r1 = Math.min(ih, Math.ceil(rowOf(bs)));
+  if (x1 <= x0 || r1 <= r0) return null;
+  const c = document.createElement('canvas'); c.width = (x1 - x0) * K; c.height = (r1 - r0) * K;
+  const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+  if (isMerc(b)) x.drawImage(img, x0, r0, x1 - x0, r1 - r0, 0, 0, c.width, c.height);
+  else for (let r = r0; r < r1; r++) {           // rows evenly spaced in latitude: picked row by row, as mercImage
+    const src = Math.min(ih - 1, Math.max(0, Math.floor((n - latOf(r + 0.5)) / (n - s) * ih)));
+    x.drawImage(img, x0, src, x1 - x0, 1, 0, (r - r0) * K, c.width, K);
+  }
+  const mask = document.createElement('canvas'); mask.width = c.width; mask.height = c.height;
+  const mx = mask.getContext('2d'); mx.fillStyle = '#000';
+  for (const g of geoms) {                       // each outline filled on its own, holes kept (even-odd)
+    mx.beginPath();
+    for (const poly of polysOf(g)) for (const ring of poly) {
+      ring.forEach(([lon, lat], i) => { const px_ = (colOf(lon) - x0) * K, py = (rowOf(lat) - r0) * K; i ? mx.lineTo(px_, py) : mx.moveTo(px_, py); });
+      mx.closePath();
+    }
+    mx.fill('evenodd');
+  }
+  x.globalCompositeOperation = 'destination-in'; x.drawImage(mask, 0, 0);
+  const out = new Image(); out.src = c.toDataURL();
+  return { img: out, bounds: { west: w + x0 / iw * (e - w), east: w + x1 / iw * (e - w), north: latOf(r0), south: latOf(r1),
+    projection: 'Web Mercator rows (EPSG:3857)' } };
+}
+function isoInfo() {
+  if (!ISO.on) return { on: false };
+  return { on: true, track: ISO.track, lake: ISO.lake, tier: ISO.tier, id: ISO.id, name: isoName(), url: params.get('isolate'),
+    banner: $('iso-box').innerText.replace(/\s+/g, ' ').trim(), note: $('iso-note').hidden ? '' : $('iso-note').textContent,
+    radar: [...OVERLAYS.keys()], bands_drawn: S.scene ? currentBands(S.scene).length : 0 };
+}
+$('iso-exit').addEventListener('click', () => isoExit());
+$('details').addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-iso]');
+  if (!b) return;
+  if (b.dataset.iso === 'enter') { if (S.band) isoEnter(S.band); } else isoExit();
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || !ISO.on || !$('about').hidden) return;    // About open: Escape closes it first (about.js)
+  e.preventDefault(); isoExit();
+});
+// leaving for the other mode (LIVE / PAST STORMS) or another storm: the band is not carried over
+document.addEventListener('click', e => {
+  if (ISO.on && e.target.closest && e.target.closest(CASES ? '#mode-live' : '#mode-cases')) isoUrl(false);
+}, true);
+document.addEventListener('change', e => { if (ISO.on && e.target.id === 'cases-select') isoExit(false); }, true);
+// ================================================================== ISOLATE — end
+
 // ------------------------------------------------------------------ polling and start
 async function poll() {
   try {
@@ -2373,6 +2593,7 @@ async function start() {
     let k = 0; S.steps.forEach((s, i) => { if (s <= t) k = i; });
     await setStep(k, false);
   }
+  isoFromUrl();                                  // ?isolate=<track id> (ISOLATE block)
   clearTimeout(tilesSoon); tilesOnce();
   if (!CASES) setInterval(poll, 30000);        // a past storm does not change: nothing to poll
   if (document.fonts) document.fonts.ready.then(() => { updateLayout(); draw(); });
@@ -2396,5 +2617,6 @@ window.__shotInfo = () => ({
   lead_rows: S.scene && S.lead ? forecastsAt(S.scene, S.lead).map(f => ({ id: f.properties.band_id,
     exists: f.properties.probability ? f.properties.probability.exists : null, source: f.properties.probability_source })) : [],
   cases: CASES ? casesShotInfo() : null,
+  isolate: isoInfo(),
 });
 start();

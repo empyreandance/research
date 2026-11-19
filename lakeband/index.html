@@ -72,6 +72,19 @@
       </div>
       <p id="lg-train" class="lg-key" hidden><span class="sw train"></span>training area</p>
     </div>
+    <!-- band isolation mode (app.js, ISOLATE block): a frame round the map and a banner at its top -->
+    <div id="iso-frame" class="iso-frame" hidden aria-hidden="true"></div>
+    <div id="iso-banner" class="iso-banner" hidden>
+      <div id="iso-box" class="iso-box" role="region" aria-label="Band isolation mode">
+        <div class="iso-row">
+          <span class="iso-title">BAND ISOLATION MODE</span>
+          <span id="iso-name" class="iso-name"></span>
+          <button type="button" id="iso-exit" class="iso-exit" title="Show every band and all the radar again (Escape)">SHOW ALL</button>
+        </div>
+        <span id="iso-note" class="iso-note" hidden></span>
+      </div>
+    </div>
+    <div id="iso-live" class="sr-only" aria-live="polite" role="status"></div>
   </section>
 
   <aside id="panels" aria-label="Forecast details">
@@ -174,7 +187,8 @@
       dashed line marks the training area, where the model was trained and graded and the lowest radar beam is under
       about 2 km; it can be switched off. Inside it you see the radar LakeBand read; beyond it, the NOAA MRMS mosaic
       (each place seen by the lowest beam of the nearest radars). Comparisons with persistence and the scorecard are
-      under Verification.</p>
+      under Verification. To follow one band, tap it and choose Isolate: the map then shows only that band, the radar
+      inside its outline and its forecast, scan after scan, until you choose Show all or press Escape.</p>
 
     <h3>Important limitations</h3>
     <p>LakeBand forecasts where existing bands go. It does not forecast how much snow falls or where new bands will

@@ -277,6 +277,37 @@ details.verify:not([open]) > summary h2, details.verify:not([open]) > summary::b
 .foot strong { color: var(--ink2); }
 .short { display: none; }
 
+/* ---------- band isolation mode (app.js, ISOLATE block): a teal frame round the map and a banner at its top, in the
+   page's own chrome (mono type, outlined controls); teal is none of the band colours, the training area's orange or
+   the page's red */
+:root { --iso: #2dd4bf; --iso-h: 0px; }
+.iso-frame { position: absolute; top: var(--chrome-h); left: 0; right: 0; bottom: 0; z-index: 999; pointer-events: none;
+  border: 5px solid var(--iso); box-shadow: inset 0 0 0 1px rgba(5, 7, 10, 0.8), inset 0 0 18px rgba(45, 212, 191, 0.25); }
+.iso-frame[hidden], .iso-banner[hidden] { display: none; }
+.iso-banner { position: absolute; top: calc(var(--chrome-h) + 12px); left: 0; right: 0; z-index: 1001;
+  display: flex; justify-content: center; pointer-events: none; }
+.iso-box { pointer-events: auto; max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 8px 10px 8px 16px; border: 2px solid var(--iso); border-radius: 6px;
+  background: rgba(6, 20, 20, 0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgba(5, 7, 10, 0.8), 0 6px 22px rgba(0, 0, 0, 0.55); font-family: var(--mono); }
+.iso-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px; }
+.iso-title { color: var(--iso); font-size: calc(12px * var(--k)); font-weight: 700; letter-spacing: 1.2px; white-space: nowrap; }
+.iso-name { color: #fff; font-size: calc(12px * var(--k)); font-weight: 700; white-space: nowrap; }
+.iso-name .swatch { width: calc(9px * var(--k)); height: calc(9px * var(--k)); margin-right: 7px; }
+.iso-note { text-align: center; color: var(--ink); font-size: calc(11px * var(--k)); font-weight: 600; }
+.iso-note[hidden] { display: none; }
+.iso-exit, .iso-btn { font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; border-radius: 4px;
+  border: 1px solid rgba(45, 212, 191, 0.6); background: rgba(45, 212, 191, 0.12); color: var(--iso); white-space: nowrap; }
+.iso-exit { font-size: calc(11px * var(--k)); font-weight: 700; padding: 5px 12px; min-height: calc(28px * var(--k)); }
+.iso-exit:hover, .iso-btn:hover { background: rgba(45, 212, 191, 0.24); color: #fff; border-color: var(--iso); }
+.iso-exit:focus-visible, .iso-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+#details .closebar .cb-btns { display: flex; gap: 6px; flex: 0 0 auto; }
+#details .closebar .iso-btn { font-size: calc(10px * var(--k)); padding: 3px 10px; color: var(--iso);
+  border-color: rgba(45, 212, 191, 0.6); background: rgba(45, 212, 191, 0.12); }
+#details .closebar .iso-btn:hover { color: #fff; border-color: var(--iso); background: rgba(45, 212, 191, 0.24); }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0; }
+
 /* ---------- About (the QLCS viewer's info box) */
 .about-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
   padding: 20px; background: rgba(0, 0, 0, 0.75); }
@@ -356,6 +387,13 @@ details.verify:not([open]) > summary h2, details.verify:not([open]) > summary::b
   .banner { padding: 6px 10px; }
   table.leads .opt { display: none; }
   table.leads th, table.leads td { padding: 4px 4px; }
+  /* band isolation: the banner across the top of the map, kept in view under the top bar while the map is; the
+     toggles move under it */
+  .iso-frame { top: 0; border-width: 4px; }
+  .iso-banner { position: sticky; top: var(--top-h); left: auto; right: auto; }
+  .iso-box { width: 100%; border-radius: 0; border-width: 0 0 2px; padding: 6px 10px; }
+  .iso-row { gap: 4px 10px; }
+  body.isolating .ctrl { top: calc(var(--iso-h) + 8px); }
   .about-overlay { padding: 0; align-items: stretch; }
   .about-box { max-height: none; min-height: 100%; border-radius: 0; padding: 20px 18px; }
   .about-table th, .about-table td { padding: 4px 4px; }
