@@ -127,7 +127,7 @@ function envName(sc) {
   {
     for (const f of forecastFeatures(sc)) {
       const p = f.properties;
-      if (p.corridor_80) return { short: '80% range', map: '80% range, sideways position only', long: '80% range for sideways position; widths and ends in it are the median forecast' };
+      if (p.corridor_80) return { short: '80% range', map: '80% range, perpendicular to the band\u2019s axis', long: '80% range of the band\u2019s position perpendicular to its axis; its length and widths are the median forecast' };
       if (p.envelope) {
         const r = p.envelope_radius_km != null ? `±${r1(p.envelope_radius_km)} km` : '';
         return { short: 'envelope', map: `uncertainty envelope ${r}`.trim(), long: `uncertainty envelope ${r}${p.envelope_kind ? ' (' + p.envelope_kind + ')' : ''}` };
@@ -1502,7 +1502,7 @@ function leadTable(sc, fx) {
   return `<table class="leads compact"><caption>At +${S.lead} min${esc(leadNote(forecastsAt(sc, S.lead)))}</caption><thead><tr><th>Band</th><th>Still exists</th>` +
     `<th>${fx.model ? esc(fx.label) : 'Forecast'}: centerline</th>${fx.comparison ? '<th>Persistence</th>' : ''}</tr></thead><tbody>` +
     rows.map(r => r.html).join('') + '</tbody></table>' +
-    `<p class="hint">Still exists: ${fx.model && !anyBase ? `the ${esc(fx.label)} model’s probability that the band is still there at +${S.lead} min` : '* training base rate, not a forecast for this band'}. Centerline: mean sideways move of the most likely forecast from where the band is now.${fx.sample && fx.sample.in_sample ? ' In-sample replay: not skill.' : ''}</p>`;
+    `<p class="hint">Still exists: ${fx.model && !anyBase ? `the ${esc(fx.label)} model’s probability that the band is still there at +${S.lead} min` : '* training base rate, not a forecast for this band'}. Centerline: how far the most likely forecast moves the band perpendicular to its axis, from where it is now (mean over 7 points along it).${fx.sample && fx.sample.in_sample ? ' In-sample replay: not skill.' : ''}</p>`;
 }
 // the running scorecard of the :00/:30 series (the official, scored forecasts), from status.json or the pointer
 function renderScorecard() {
@@ -1699,7 +1699,7 @@ function forecastTable(bandId, p) {
         <td>${esc(end(f.end_advance_km && f.end_advance_km.lake))}</td><td>${esc(end(f.end_advance_km && f.end_advance_km.inland))}</td>
         <td class="opt">${ex != null ? Math.round(ex * 100) + '%' : '—'}</td></tr>`;
     }).join('')}</tbody></table>
-    <p class="hint">Centerline: mean sideways shift over the 7 stations, by compass direction. Ends: + means the end extends, − means it retreats.${fcs[0].probability_source ? ` Exists: ${esc(fcs[0].probability_source)}.` : ''} Issued ${esc(fmtUTC(tIso(fcs[0].issuance_time)))}; model ${esc(fcs[0].model ? fcs[0].model.family + ' ' + (fcs[0].model.config || '') + (fcs[0].model.artifact_short_id ? ' (artifact ' + fcs[0].model.artifact_short_id + ')' : '') : 'unknown')}.${
+    <p class="hint">Centerline: mean shift perpendicular to the band’s axis over 7 points along it, by compass direction. Ends: how far each end moves along the axis; + means it extends, − means it retreats.${fcs[0].probability_source ? ` Exists: ${esc(fcs[0].probability_source)}.` : ''} Issued ${esc(fmtUTC(tIso(fcs[0].issuance_time)))}; model ${esc(fcs[0].model ? fcs[0].model.family + ' ' + (fcs[0].model.config || '') + (fcs[0].model.artifact_short_id ? ' (artifact ' + fcs[0].model.artifact_short_id + ')' : '') : 'unknown')}.${
       forecasterOf(sc).comparison ? ' Persistence, for comparison: 0 km and no change at every lead (the band stays where it is).' : ''}</p>`;
 }
 
