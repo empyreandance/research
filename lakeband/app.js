@@ -127,7 +127,7 @@ function envName(sc) {
   {
     for (const f of forecastFeatures(sc)) {
       const p = f.properties;
-      if (p.corridor_80) return { short: '80% range', map: '80% range, perpendicular to axis', long: '80% range of the band\u2019s position perpendicular to its axis; its length and widths are the median forecast' };
+      if (p.corridor_80) return { short: '80% range', map: '80% range', long: '80% range of where the band lands perpendicular to its axis; where its ends reach has no range (median forecast)' };
       if (p.envelope) {
         const r = p.envelope_radius_km != null ? `±${r1(p.envelope_radius_km)} km` : '';
         return { short: 'envelope', map: `uncertainty envelope ${r}`.trim(), long: `uncertainty envelope ${r}${p.envelope_kind ? ' (' + p.envelope_kind + ')' : ''}` };
