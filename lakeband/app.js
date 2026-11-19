@@ -1538,7 +1538,7 @@ function renderAll() {
   $('prev').disabled = S.step <= 0; $('next').disabled = S.step >= S.steps.length - 1; $('latest').disabled = S.step >= S.steps.length - 1;
   $('zonekey').hidden = !S.scene;
   $('mosaicnote').hidden = !(S.scene && S.scene.mosaic);
-  $('zk-live').hidden = CASES; $('zk-cases').hidden = !CASES;      // past storms: training-area bands only (CV runs)
+  $('zk-live').hidden = CASES; $('zk-cases').hidden = !CASES;      // past storms: both lakes too (cases/wide.py); CV forecasts
   renderHeader();
   renderScorecard();
   renderDetails();
@@ -1673,7 +1673,7 @@ function forecastTable(bandId, p) {
   const fcs = [];
   for (const f of forecastFeatures(sc)) if (f.properties.band_id === bandId) fcs.push(f.properties);
   fcs.sort((a, b) => a.lead_min - b.lead_min);
-  if (!fcs.length) return '<p class="hint">No forecast for this band in the forecast shown. Forecasts are issued at :00 and :30 for the bands of the newest scan; band identifiers can change between scans.</p>';
+  if (!fcs.length) return (CASES && casesNoForecast(bandId)) || '<p class="hint">No forecast for this band in the forecast shown. Forecasts are issued at :00 and :30 for the bands of the newest scan; band identifiers can change between scans.</p>';
   const az = p && p.frame ? p.frame.axis_azimuth_deg : null;
   const side = v => {
     if (v == null) return 'unknown';
@@ -1903,6 +1903,69 @@ async function casesMosaic(name) {
   const ab = ch.lines.get(name);
   return ab ? loadImage('data:image/png;base64,' + JSON.parse(ch.text.slice(ab[0], ab[1])).png) : null;
 }
+// frames format 2 (src/pilot/cases/replay.py, 18 Nov 2026): the storm replayed by the real-time engine itself, both
+// layers. A packed feature is {o: outline, p: its properties as the engine wrote them (slimmed), gp: other outlines,
+// gl: lines}; forecasts are per band {id, L: one feature per lead (its own issuance `iss`, the engine's verification
+// `v`), po/pc: persistence}; `w` holds the wide layer's bands beyond the training area (b), parts of inside bands only
+// it sees (x), training bands drawn as part of a band beyond the line (s) and its forecasts (f, not verified). Decoded
+// into the run folder's own shapes, so the page draws them exactly as live (the WIDE LAYER block included).
+function casesFeat(e, g, extra) {
+  const p = { ...e.p, ...extra };
+  for (const [k, v] of Object.entries(e.gl || {})) p[k] = casesLines(v);
+  for (const [k, v] of Object.entries(e.gp || {})) p[k] = casesRings(v, g);
+  return { type: 'Feature', geometry: casesRings(e.o, g), properties: p };
+}
+function casesForecasts(list, fx, g, scan, layer) {
+  if (!list || !fx) return { forecast: null, persistence: null };
+  const m = C.man.model, wide = layer === 'wide';
+  const tag = { family: m.family, config: `${m.config}, cross-validation version ${m.fold + 1} of ${m.folds}` };
+  const feats = [], pfeats = [];
+  for (const b of list) {
+    const po = casesRings(b.po, g), pc = casesLines(b.pc);
+    for (const e of b.L) {
+      const lead = e.p.lead_min, iss = e.p.iss;
+      const common = { ...scan, band_id: e.p.band_id, tier: e.p.tier, track_id: e.p.track_id, lead_min: lead,
+        issuance_time: iss, valid_time: casesIso(tIso(iss) + lead * 60000), display_group: e.p.display_group,
+        display_group_members: e.p.display_group_members, display_group_label: e.p.display_group_label,
+        ...(wide ? { layer: 'wide', training_area: false } : {}) };
+      const v = e.v || {};
+      feats.push(casesFeat(e, g, { ...common, model: tag, forecaster: 'model', shown_as: 'main',
+        degraded: !!(e.p.degraded_reasons || []).length,
+        verify: wide ? {} : { status: v.st || null, censor: v.cz || null, target: v.tg || null, model_km: v.em ?? null, persistence_km: v.ep ?? null } }));
+      if (po) pfeats.push({ type: 'Feature', geometry: po, properties: { ...common, centerline: pc, model: { family: 'persistence' },
+        forecaster: 'persistence', shown_as: 'comparison', probability_source: 'training base rate (not a forecast)', degraded_reasons: [] } });
+    }
+  }
+  const head = { type: 'FeatureCollection', ...scan, issuance_time: fx.iss, issue_kind: 'scan', scored: false,
+    ...Object.fromEntries(Object.entries(fx).filter(([k]) => /^lead\d+_/.test(k))), ...(wide ? { layer: 'wide', training_area: false } : {}) };
+  return { forecast: { ...head, forecaster: { family: m.family, config: m.config, role: 'cross_validation', label: m.label },
+      forecaster_used: fx.forecaster_used || `${m.family} ${m.config}`, fallback_reason: fx.fallback_reason || null,
+      degraded_reasons: fx.degraded_reasons || [], shown_as: 'main', features: feats },
+    persistence: pfeats.length ? { ...head, forecaster_used: 'persistence', shown_as: 'comparison', features: pfeats } : null };
+}
+function casesDecode2(fr, lake) {
+  const g = C.man.lake[lake].grid, gw = C.man.wide.grid[lake];
+  const scan = { lake, radar_scan_time: fr.t0, radar_scan_end: fr.t1 };
+  const fc = casesForecasts(fr.f, fr.fx, g, scan, 'training');
+  let wide = null;
+  if (fr.w) {
+    const wf = casesForecasts(fr.w.f, fr.w.fx, gw, scan, 'wide');
+    wide = { bands: { type: 'FeatureCollection', lake, layer: 'wide', radars_in_composite: fr.w.ri || [],
+        features: fr.w.b.map(e => casesFeat(e, gw, { ...scan, layer: 'wide', training_area: false })),
+        training_bands: Object.fromEntries(Object.entries(fr.w.s || {}).map(([b, by]) => [b, { training_area: true, shown: false, wide_band_id: by, superseded_by: by }])),
+        extensions: (fr.w.x || []).map(e => casesFeat(e, gw, { lake })) },
+      forecast: wf.forecast, persistence: wf.persistence };
+  }
+  return { name: fr.n, iss: fr.iss, png: fr.png, pf: fr.pf || null, wide,
+    bands: { type: 'FeatureCollection', lake, radars_in_composite: fr.radars, features: fr.b.map(e => casesFeat(e, g, scan)) },
+    forecast: fc.forecast, persistence: fc.persistence };
+}
+// a band beyond the training area with no forecast (the storms before 2020): why, for the band's details
+function casesNoForecast(bandId) {
+  const b = S.scene ? currentBands(S.scene).find(f => f.properties.band_id === bandId) : null;
+  const why = b && b.properties.no_forecast_reason;
+  return why ? `<p class="hint">${esc(why)}</p>` : '';
+}
 function casesFrame(lake, name) {
   const key = `${C.id}/${lake}/${name}`;
   if (C.frames.has(key)) { const v = C.frames.get(key); C.frames.delete(key); C.frames.set(key, v); return v; }
@@ -1910,7 +1973,9 @@ function casesFrame(lake, name) {
   if (k == null) return Promise.resolve(null);
   const p = casesChunk(k).then(ch => {
     const ab = ch.lines.get(`${lake}/${name}`);
-    return ab ? casesDecode(JSON.parse(ch.text.slice(ab[0], ab[1])), lake) : null;
+    if (!ab) return null;
+    const fr = JSON.parse(ch.text.slice(ab[0], ab[1]));
+    return fr.fmt === 2 ? casesDecode2(fr, lake) : casesDecode(fr, lake);
   }).catch(e => { C.frames.delete(key); throw e; });
   C.frames.set(key, p);
   while (C.frames.size > 160) C.frames.delete(C.frames.keys().next().value);
@@ -1979,16 +2044,23 @@ function casesIndex() {
 }
 function casesFixed(lake) {
   const L = C.man.lake[lake];
-  return { bounds: L.bounds, coverageFar: null,
+  const wg = C.man.wide && C.man.wide.grid && C.man.wide.grid[lake];          // the wide box, for Fit
+  const far = L.coverage_far ? { type: 'FeatureCollection', features: L.coverage_far.map(z => ({ type: 'Feature', geometry: casesRings(z.o, L.grid), properties: { lake, zone: z.zone } })) } : null;
+  return { bounds: L.bounds, coverageFar: far, coverageWide: wg ? { grid: wg } : null,
     coverage: { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: casesRings(L.coverage, L.grid), properties: { lake } }] } };
 }
 async function casesLake(lake, t, fixed) {
   const name = latestIn((S.index[lake] || {}).bands, t);
   const fr = name ? await casesFrame(lake, name).catch(() => null) : null;
   const radar = fr ? await cached(`cR/${C.id}/${lake}/${name}`, () => loadImage('data:image/png;base64,' + fr.png)).catch(() => null) : null;
+  const radarFar = fr && fr.pf ? await cached(`cF/${C.id}/${lake}/${name}`, () => loadImage('data:image/png;base64,' + fr.pf)).catch(() => null) : null;
   if (fr && fr.forecast) await casesAttachActual(lake, fr).catch(() => null);
-  return { ...fixed, bands: fr && fr.bands, radar, radarFar: null, forecast: fr && fr.forecast, persistence: fr && fr.persistence,
-    bundle: fr && { name, issuance_time: fr.iss, issue_kind: 'scan', forecast_from_scan: fr.bands.features.length ? fr.bands.features[0].properties.radar_scan_time : null },
+  const wide = (fr && fr.wide) || null;
+  // a scan whose only forecasts are beyond the training area: an empty training forecast with their issuance (as a live
+  // bundle has), so the times shown are theirs
+  const forecast = (fr && fr.forecast) || (wide && wide.forecast ? { ...wide.forecast, layer: undefined, features: [] } : null);
+  return { ...fixed, bands: fr && fr.bands, radar, radarFar, forecast, persistence: fr && fr.persistence, wide,
+    bundle: fr && { name, issuance_time: fr.iss || (wide && wide.forecast && wide.forecast.issuance_time) || null, issue_kind: 'scan', forecast_from_scan: fr.bands.features.length ? fr.bands.features[0].properties.radar_scan_time : null },
     stamps: { bs: name, rs: name, fs: name, ps: name } };
 }
 function casesDrawActual(sc) {
@@ -2025,8 +2097,10 @@ function casesWhy(v) {
 function casesLeadTable(sc, fx) {
   if (!sc || !S.lead) return '';
   const fcs = forecastsAt(sc, S.lead);
-  if (!fcs.length) { const why = leadOmitted(sc, S.lead); return `<p class="hint">${why ? `+${S.lead} min: not shown from this scan; ${esc(why)}.` : 'No band was forecast at this scan.'}</p>`; }
   const bands = currentBands(sc);
+  const nf = [...new Set(bands.map(b => b.properties.no_forecast_reason).filter(Boolean))];
+  const nfNote = nf.length ? `<p class="hint">${nf.map(esc).join(' ')}</p>` : '';
+  if (!fcs.length) { const why = leadOmitted(sc, S.lead); return `<p class="hint">${why ? `+${S.lead} min: not shown from this scan; ${esc(why)}.` : 'No band was forecast at this scan.'}</p>${nfNote}`; }
   const rows = fcs.map(f => {
     const p = f.properties, v = p.verify || {}, now = bands.find(b => b.properties.band_id === p.band_id);
     const az = now && now.properties.frame ? now.properties.frame.axis_azimuth_deg : null;
@@ -2037,13 +2111,14 @@ function casesLeadTable(sc, fx) {
     const better = v.model_km != null && v.persistence_km != null ? (v.model_km < v.persistence_km ? ' class="better"' : '') : '';
     return { ex: ex == null ? -1 : ex, html: `<tr><td><button type="button" class="linkish" data-band="${esc(p.band_id)}">${esc(labelOf(p.band_id, true))}</button></td>` +
       `<td>${ex != null ? Math.round(ex * 100) + '%' : '—'}</td><td class="opt">${esc(dir)}</td>` +
-      (!C.showActual ? '' : why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${better}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) + '</tr>' };
+      (!C.showActual ? '' : p.layer === 'wide' ? '<td colspan="2" class="why">beyond the training area: not verified</td>'
+        : why ? `<td colspan="2" class="why">${esc(why)}</td>` : `<td${better}>${esc(casesKm(v.model_km))}</td><td>${esc(casesKm(v.persistence_km))}</td>`) + '</tr>' };
   }).sort((a, b) => b.ex - a.ex);
   const valids = [...new Set(fcs.map(f => fmtUTC(tIso(f.properties.valid_time))))].sort();   // each lake's own issuance
   const valid = valids.length > 1 ? `${valids[0].replace(' UTC', '')}–${valids[valids.length - 1]}` : valids[0];
   return `<table class="leads compact casestable"><caption>At +${S.lead} min · valid ${esc(valid)}</caption><thead><tr><th>Band</th><th>Still exists</th>` +
     `<th class="opt">Model: centerline</th>${C.showActual ? '<th>Off by: model</th><th>Off by: persistence</th>' : ''}</tr></thead><tbody>${rows.map(r => r.html).join('')}</tbody></table>` +
-    casesOmittedNote(sc, fcs) +
+    casesOmittedNote(sc, fcs) + nfNote +
     (!C.showActual ? '' : `<p class="hint">Off by: distance between the forecast centerline and the centerline of the band LakeBand’s verification matched to it in the radar scan nearest the valid time (drawn as a white line with a dark core). Bold: the model was closer than persistence (the band left where it was). Band gone: no band was found there again.</p>`);
 }
 // the band report (Cases mode): for every lead, how far the model and persistence were from where the band actually was
@@ -2085,7 +2160,7 @@ function casesScorecard() {
     <p class="casestitle"><strong>${esc(m.title)}</strong><br><span class="hint">${esc(casesDates(m))} · ${esc(m.lakes.map(lakeName).join(' and '))}</span></p>
     <p class="note">${esc(m.description)}</p>
     <table class="leads compact"><thead><tr><th>Lead</th><th>Model</th><th>Persistence</th><th>Change</th><th class="opt">Forecasts / bands</th></tr></thead><tbody>${row(60)}${row(120)}</tbody></table>
-    <p class="hint">Mean position error of the band centerline over the whole storm: every forecast issued at a radar scan whose band was found again near the valid time, primary bands, both lakes. Persistence leaves the band where it was. Scored: ${esc(casesCounts(s))}. At +1 h the model was closer than persistence in ${h1.model_better_share != null ? Math.round(h1.model_better_share * 100) + '%' : '—'} of forecasts.</p>
+    <p class="hint">Mean position error of the band centerline over the whole storm: every forecast issued at a radar scan whose band was found again near the valid time, primary bands inside the training area, both lakes (forecasts beyond it are not verified). Persistence leaves the band where it was. Scored: ${esc(casesCounts(s))}. At +1 h the model was closer than persistence in ${h1.model_better_share != null ? Math.round(h1.model_better_share * 100) + '%' : '—'} of forecasts.</p>
     <p class="hint">${esc(m.model.note)}</p>`;
 }
 function casesCounts(s) {
@@ -2109,7 +2184,8 @@ function casesBanner() {
   return ['info', 'Past storm: cross-validation model.',
     `Forecasts here come from ${esc(m.label || 'a cross-validation version of LakeBand trained without this storm')} ` +
     `(${esc(m.family || '')} ${esc(m.config || '')}, version ${(m.fold ?? 0) + 1} of ${esc(m.folds ?? 5)}; this storm’s group ${esc(m.validation_group || '')} was left out of its training). ` +
-    `It is not the live model, which trained on every one of these storms. Each forecast can be checked against where the band actually went.`,
+    `It is not the live model, which trained on every one of these storms. Each forecast inside the dashed training-area line can be checked against where the band actually went. ` +
+    (C.man && C.man.wide ? (C.man.wide.model ? 'Forecasts of bands beyond it are not verified.' : esc(C.man.wide.no_forecast_reason)) : 'Bands beyond it are not in this storm’s data.'),
     'Model trained without this storm.'];
 }
 async function casesLoad(id) {
