@@ -1,15 +1,15 @@
 {
   "office": "LUB",
-  "product_id": "202611210419-KLUB-FXUS64-AFDLUB",
-  "afd_time": "2026-11-21T04:19:00Z",
+  "product_id": "202611211727-KLUB-FXUS64-AFDLUB",
+  "afd_time": "2026-11-21T17:27:00Z",
   "section_type": "long_term",
-  "updated": "2026-11-21T11:06:45.085613+00:00",
+  "updated": "2026-11-21T18:00:18.564352+00:00",
   "query_preview": "..\n(Sunday through next Friday) \nIssued at 1013 PM CST Fri Nov 20 2026\n\nDry and much cooler weather arrives Sunday and continues through the \nearly week period as a broad and chilly surface ridge axis extends \nfrom the Dakotas all the way into NW Texas. High temperatures on \nSunday are likely to be stuck in the 40s to low 50s with a brisk \nnorth wind continuing through early evening. Most of the forecast \narea is also expected to fall into the mid 20s to low 30s by Monday\nmorning, which will be the first freeze of the season for our southern\nand eastern zones. \n\nThe upper air pattern is progged to remain fairly progressive \nthrough most of the upcoming week, but neutral height tendencies and \na continuation of surface ridging over the central Great Plains is \ncurrently expected to keep high temperatures in the 40s or low 50s \neach day from Monday through at least Wednesday, which is about 10 \nto 15 degrees below normal. Overall, the forecast will favor \nmainly dry weather, but the progressive pattern aloft will still \nallow for a few opportunities for precipitation. The first of \nthese will come on Tuesday as a fast-moving trough axis passes \njust to our north. Model consensus is very poor at this lead time \nwhich results in very high forecast uncertainty later in the week,\nbut additional chances for precip are not completely out of the \nquestion Thursday and beyond.",
   "analogs": [
     {
-      "datetime_utc": "2011-07-29T17:38Z",
-      "source_file": "LUB_2011_29_1738.txt",
-      "similarity": 0.9657169580459595,
+      "datetime_utc": "2011-07-29T09:14Z",
+      "source_file": "LUB_2011_29_0914.txt",
+      "similarity": 0.965717077255249,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -50,7 +50,7 @@
     {
       "datetime_utc": "2018-09-07T05:25Z",
       "source_file": "LUB_2018_07_0525.txt",
-      "similarity": 0.9625847935676575,
+      "similarity": 0.9625847339630127,
       "label": "flood",
       "is_severe": false,
       "daily_breakdown": {
@@ -89,7 +89,7 @@
     {
       "datetime_utc": "2019-02-04T08:32Z",
       "source_file": "LUB_2019_04_0832.txt",
-      "similarity": 0.9611063003540039,
+      "similarity": 0.9611064195632935,
       "label": "quiet",
       "is_severe": false,
       "daily_breakdown": {
@@ -207,9 +207,9 @@
       }
     },
     {
-      "datetime_utc": "2010-06-03T13:01Z",
-      "source_file": "LUB_2010_03_1301.txt",
-      "similarity": 0.9590283632278442,
+      "datetime_utc": "2010-06-03T08:55Z",
+      "source_file": "LUB_2010_03_0855.txt",
+      "similarity": 0.9590282440185547,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -252,7 +252,7 @@
     {
       "datetime_utc": "2020-12-09T17:16Z",
       "source_file": "LUB_2020_09_1716.txt",
-      "similarity": 0.9565889835357666,
+      "similarity": 0.9565892219543457,
       "label": "winter",
       "is_severe": false,
       "daily_breakdown": {
@@ -291,9 +291,9 @@
       }
     },
     {
-      "datetime_utc": "2016-07-28T17:30Z",
-      "source_file": "LUB_2016_28_1730_1.txt",
-      "similarity": 0.9553821086883545,
+      "datetime_utc": "2016-07-28T11:44Z",
+      "source_file": "LUB_2016_28_1144.txt",
+      "similarity": 0.955382227897644,
       "label": "severe_wind",
       "is_severe": true,
       "daily_breakdown": {
@@ -334,9 +334,9 @@
       }
     },
     {
-      "datetime_utc": "2020-05-15T17:35Z",
-      "source_file": "LUB_2020_15_1735.txt",
-      "similarity": 0.953526496887207,
+      "datetime_utc": "2020-05-15T08:35Z",
+      "source_file": "LUB_2020_15_0835_1.txt",
+      "similarity": 0.9535263776779175,
       "label": "tornado",
       "is_severe": true,
       "daily_breakdown": {
@@ -382,8 +382,8 @@
       }
     },
     {
-      "datetime_utc": "2021-07-05T05:57Z",
-      "source_file": "LUB_2021_05_0557.txt",
+      "datetime_utc": "2021-07-04T18:55Z",
+      "source_file": "LUB_2021_04_1855.txt",
       "similarity": 0.9529016017913818,
       "label": "tornado",
       "is_severe": true,
@@ -391,17 +391,24 @@
         "0": {
           "label": "severe_wind",
           "counts": {
+            "severe_wind": 10,
+            "severe_hail": 1
+          }
+        },
+        "1": {
+          "label": "severe_wind",
+          "counts": {
             "severe_wind": 1,
             "flood": 3
           }
         },
-        "1": {
+        "2": {
           "label": "severe_hail",
           "counts": {
             "severe_hail": 1
           }
         },
-        "2": {
+        "3": {
           "label": "tornado",
           "counts": {
             "severe_hail": 1,
@@ -409,25 +416,18 @@
             "tornado": 1
           }
         },
-        "3": {
-          "label": "quiet",
-          "counts": {}
-        },
         "4": {
           "label": "quiet",
           "counts": {}
         },
         "5": {
-          "label": "severe_wind",
-          "counts": {
-            "severe_wind": 6
-          }
+          "label": "quiet",
+          "counts": {}
         },
         "6": {
           "label": "severe_wind",
           "counts": {
-            "severe_hail": 2,
-            "severe_wind": 1
+            "severe_wind": 6
           }
         }
       }
@@ -436,7 +436,7 @@
   "signal": {
     "level": "QUIET",
     "severe_fraction": 0.72,
-    "mean_similarity": 0.9470674133300782,
+    "mean_similarity": 0.9470674669742585,
     "base_rate": 0.5527251024117631,
     "signal_value": 0.16727489758823688,
     "percentile": 49,
@@ -445,8 +445,8 @@
     "n_total": 10,
     "n_severe_signal": 72,
     "n_total_signal": 100,
-    "product_id": "202611210419-KLUB-FXUS64-AFDLUB",
-    "afd_time": "2026-11-21T04:19:00Z",
-    "updated": "2026-11-21T11:06:45.085613+00:00"
+    "product_id": "202611211727-KLUB-FXUS64-AFDLUB",
+    "afd_time": "2026-11-21T17:27:00Z",
+    "updated": "2026-11-21T18:00:18.564352+00:00"
   }
 }
