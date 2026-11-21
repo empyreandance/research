@@ -1,7 +1,8 @@
 """
 Daily run: download NDFD apt forecast, compute today's max/min, regrid to
 climatology grid, compute apparent temperature CALENDAR anomaly per cell
-(days ahead/behind the climatological apparent-temperature schedule), and
+(calendar days warmer/colder than the climatological apparent-temperature
+schedule; positive = warmer, at every time of year), and
 render the result with MAX/MIN hatching for cells outside the climatological
 envelope.
 """
@@ -128,7 +129,14 @@ def regrid(src_lon, src_lat, src_data, target_lons, target_lats):
 
 
 def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
-    """For each cell, find days ahead/behind on the climatological apt schedule.
+    """For each cell, find how many calendar days warmer or colder than the
+    climatological apt schedule the forecast is.
+
+    The sign follows temperature, not calendar direction: positive = warmer
+    than normal, negative = colder than normal, at every time of year. (In
+    spring a warm day matches a LATER date and in fall an EARLIER one; both
+    come out positive.)
+
     Also return capped_max/capped_min booleans where the forecast exceeded the
     annual peak or fell below the annual trough of the climatology curve."""
     nlat, nlon = forecast_grid.shape
@@ -137,13 +145,6 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
     capped_min = np.zeros((nlat, nlon), dtype=bool)
     n_days = clim_normals.shape[0]
     d0 = (today_doy - 1) % n_days
-
-    def wrap(off):
-        if off > n_days // 2:
-            return off - n_days
-        if off < -(n_days // 2):
-            return off + n_days
-        return off
 
     for i in range(nlat):
         for j in range(nlon):
@@ -159,62 +160,52 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
             trough_day = int(np.argmin(curve))
             trough_v = curve[trough_day]
 
-            if fcst >= peak_v:
-                anomaly[i, j] = wrap(peak_day - d0)
-                capped_max[i, j] = True
-                continue
-            if fcst <= trough_v:
-                anomaly[i, j] = wrap(trough_day - d0)
-                capped_min[i, j] = True
-                continue
-
             if trough_day < peak_day:
                 ascending = (d0 >= trough_day) and (d0 <= peak_day)
             else:
                 ascending = (d0 >= trough_day) or (d0 <= peak_day)
 
-            today_normal = curve[d0]
-
-            if fcst >= today_normal:
-                if ascending:
-                    if d0 <= peak_day:
-                        search = list(range(d0, peak_day + 1))
-                    else:
-                        search = list(range(d0, n_days)) + list(range(0, peak_day + 1))
-                else:
-                    if peak_day <= d0:
-                        search = list(range(d0, peak_day - 1, -1))
-                    else:
-                        search = list(range(d0, -1, -1)) + list(range(n_days - 1, peak_day - 1, -1))
+            # Days from today to the peak and to the trough, walking along
+            # today's branch of the annual cycle.
+            if ascending:
+                days_to_peak = (peak_day - d0) % n_days
+                days_to_trough = (d0 - trough_day) % n_days
             else:
-                if ascending:
-                    if trough_day <= d0:
-                        search = list(range(d0, trough_day - 1, -1))
-                    else:
-                        search = list(range(d0, -1, -1)) + list(range(n_days - 1, trough_day - 1, -1))
-                else:
-                    if d0 <= trough_day:
-                        search = list(range(d0, trough_day + 1))
-                    else:
-                        search = list(range(d0, n_days)) + list(range(0, trough_day + 1))
+                days_to_peak = (d0 - peak_day) % n_days
+                days_to_trough = (trough_day - d0) % n_days
 
-            matched = None
-            for k in range(len(search) - 1):
-                d1 = search[k]
-                d2 = search[k + 1]
-                v1 = curve[d1] - fcst
-                v2 = curve[d2] - fcst
+            if fcst >= peak_v:
+                anomaly[i, j] = min(days_to_peak, n_days - days_to_peak)
+                capped_max[i, j] = True
+                continue
+            if fcst <= trough_v:
+                anomaly[i, j] = 0.0 - min(days_to_trough, n_days - days_to_trough)
+                capped_min[i, j] = True
+                continue
+
+            # Warmer than today's normal: walk toward the peak. Colder: walk
+            # toward the trough. Toward the peak is forward in the calendar
+            # on the ascending branch and backward on the descending branch.
+            warmer = fcst >= curve[d0]
+            n_steps = days_to_peak if warmer else days_to_trough
+            step = 1 if (ascending == warmer) else -1
+
+            distance = float(n_steps)
+            for k in range(n_steps):
+                v1 = curve[(d0 + step * k) % n_days] - fcst
+                v2 = curve[(d0 + step * (k + 1)) % n_days] - fcst
                 if v1 == 0:
-                    matched = float(d1)
+                    distance = float(k)
                     break
                 if v1 * v2 < 0:
-                    frac = abs(v1) / (abs(v1) + abs(v2))
-                    matched = d1 + frac * (1 if d2 > d1 else -1)
+                    distance = k + abs(v1) / (abs(v1) + abs(v2))
                     break
-            if matched is None:
-                matched = float(peak_day if fcst >= today_normal else trough_day)
 
-            anomaly[i, j] = wrap(matched - d0)
+            # Report the shorter way around the calendar so no value can
+            # exceed half a year (a few coastal cells have one long branch).
+            distance = min(distance, n_days - distance)
+
+            anomaly[i, j] = distance if warmer else 0.0 - distance
 
     return anomaly, capped_max, capped_min
 
@@ -314,7 +305,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     cbar_ax = fig.add_axes([0.15, 0.10, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
     cbar.set_ticks(np.arange(vmin, vmax + 1, tick_spacing))
-    cbar.set_label("Days Ahead (+) or Behind (\u2212) Normal Apparent Temperature Schedule",
+    cbar.set_label("Days Warmer (+) or Colder (\u2212) Than the Normal Apparent Temperature Schedule",
                    fontsize=11, fontweight="bold", labelpad=8)
     cbar.ax.tick_params(labelsize=10)
 
@@ -344,8 +335,8 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         subtitle = date_str
     else:
         title = f"Apparent Temperature Calendar Anomaly: {date_str}"
-        subtitle = ("How many days ahead or behind is each location's forecast "
-                    "apparent temperature compared to the normal schedule?")
+        subtitle = ("How many calendar days warmer or colder than normal is each "
+                    "location's forecast apparent temperature?")
     ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
     fig.text(0.5, 0.88, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")

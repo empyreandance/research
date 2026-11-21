@@ -2,7 +2,12 @@ name: Daily Apparent Temperature Map
 
 on:
   schedule:
-    - cron: "30 10 * * *"
+    # Scheduled for 02:30 UTC, 30 minutes after daily_temp_map.yml. GitHub
+    # starts scheduled jobs late on this repo (about 8.5 hours late in
+    # November 2026), so this lands near 11:00 UTC. The script maps the
+    # first UTC day with at least 8 forecast hours left, so it must start
+    # before 16:00 UTC to show the same day as the temperature map.
+    - cron: "30 2 * * *"
   workflow_dispatch:
 
 jobs:

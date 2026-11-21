@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-daily_run.py — Download today's forecast, compute "days ahead/behind," render the map.
+daily_run.py — Download today's forecast, compute "days warmer/colder," render the map.
 
 This script is the daily workhorse of the Temperature Calendar Map project.
 It runs once per day (either manually or via GitHub Actions) and produces a
-single PNG image showing how far ahead or behind the normal temperature
-schedule each part of the US is.
+single PNG image showing how many calendar days warmer or colder than the
+normal temperature schedule each part of the US is.
 
 Usage:
     python daily_run.py              # Normal run: download forecast, make map
@@ -18,6 +18,7 @@ What it does:
     2. Regrids it to match the climatology grid (0.25°)
     3. For each grid cell, finds what calendar date has that temperature
        as its normal high → computes the offset in days from today
+       (positive = warmer than normal, negative = colder, all year)
     4. Renders a color-coded map and saves it as a PNG
 """
 
@@ -108,12 +109,15 @@ def download_ndfd_maxt(cache_dir):
         return None
 
 
-def load_ndfd_forecast(grib_path):
+def load_ndfd_forecast(grib_path, run_date=None):
     """
-    Open the NDFD GRIB2 file and extract the first MaxT time step.
+    Open the NDFD GRIB2 file and extract the MaxT time step for run_date.
 
-    The GRIB2 file contains forecasts for multiple days. We want just
-    the first time step, which is today's forecast high temperature.
+    The GRIB2 file contains forecasts for multiple days. Each MaxT step
+    covers one daytime period and is stamped with the end of that period,
+    00Z on the following day. We pick the step whose period falls on
+    run_date, so the map's date and its forecast always agree. If no step
+    matches (or run_date is None), we fall back to the first step.
 
     The NDFD uses Fahrenheit natively for the US, so no unit conversion
     is needed — our climatology is also in Fahrenheit.
@@ -182,13 +186,26 @@ def load_ndfd_forecast(grib_path):
     data = ds[temp_var]
     print(f"  Variable '{temp_var}' dims: {data.dims}, shape: {data.shape}")
 
-    # If there are multiple time steps, take the first one
-    if "time" in data.dims:
-        data = data.isel(time=0)
-    elif "step" in data.dims:
-        data = data.isel(step=0)
-    elif "valid_time" in data.dims:
-        data = data.isel(valid_time=0)
+    # If there are multiple time steps, take the one for run_date.
+    # A MaxT step is stamped with the END of its daytime period (00Z the
+    # next day), so one second before that stamp falls on the forecast day.
+    step_dim = next((d for d in ("time", "step", "valid_time")
+                     if d in data.dims), None)
+    if step_dim is not None:
+        step_index = 0
+        if run_date is not None and "valid_time" in data.coords:
+            period_ends = np.atleast_1d(data["valid_time"].values)
+            period_days = (period_ends - np.timedelta64(1, "s")).astype("datetime64[D]")
+            matches = np.where(period_days == np.datetime64(run_date))[0]
+            if len(matches) > 0:
+                step_index = int(matches[0])
+            else:
+                print(f"  NOTE: no MaxT step for {run_date} in the file "
+                      f"(steps cover {period_days[0]} to {period_days[-1]}); "
+                      f"using the first step.")
+            print(f"  Using MaxT step {step_index} "
+                  f"(daytime period of {period_days[step_index]})")
+        data = data.isel({step_dim: step_index})
 
     temps = data.values
 
@@ -395,16 +412,22 @@ def regrid_to_climatology(fcst_lons, fcst_lats, fcst_temps, clim_lons, clim_lats
 
 def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
     """
-    For each grid cell, find how many days ahead or behind schedule the
-    forecast temperature is.
+    For each grid cell, find how many calendar days warmer or colder than
+    schedule the forecast temperature is.
 
     This is the core algorithm. For each cell:
       1. Look at the 365-day climatological normal curve
       2. Determine if today is on the ascending (warming) or descending
          (cooling) branch of the annual cycle
-      3. Find the date(s) on the SAME branch where the normal matches
-         the forecast temperature
-      4. Compute the offset: matched_date - today
+      3. Walk along the calendar on that branch, toward the annual peak if
+         the forecast is warmer than today's normal and toward the annual
+         trough if it is colder, until the normal matches the forecast
+      4. The anomaly is the number of days walked, signed by temperature:
+         positive = warmer than normal, negative = colder than normal
+
+    The sign follows temperature, not calendar direction. In spring a warm
+    day matches a LATER date and in fall it matches an EARLIER date; both
+    come out positive, so red always means warmer than normal.
 
     Parameters
     ----------
@@ -417,17 +440,25 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
 
     Returns
     -------
-    numpy.ndarray
-        2D array of day-offset anomalies, same shape as forecast_grid.
-        Positive = ahead of schedule (warmer), negative = behind (cooler).
+    tuple of (numpy.ndarray, numpy.ndarray, numpy.ndarray)
+        anomaly : 2D array of day offsets, same shape as forecast_grid.
+            Positive = warmer than normal, negative = colder than normal.
+        capped_max : 2D bool array, True where the forecast is at or above
+            the warmest normal of the year (the anomaly is pinned to the
+            distance to that date)
+        capped_min : 2D bool array, True where the forecast is at or below
+            the coldest normal of the year
     """
     print(f"Computing day-offset anomalies for day-of-year {today_doy}...")
 
     nlat, nlon = forecast_grid.shape
+    n_days = clim_normals.shape[0]
     anomaly = np.full((nlat, nlon), np.nan)
+    capped_max = np.zeros((nlat, nlon), dtype=bool)
+    capped_min = np.zeros((nlat, nlon), dtype=bool)
 
     # Today's index (0-based)
-    d0 = today_doy - 1  # Convert 1-based DOY to 0-based index
+    d0 = (today_doy - 1) % n_days  # Convert 1-based DOY to 0-based index
 
     for i in range(nlat):
         for j in range(nlon):
@@ -444,34 +475,12 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
                 continue
 
             # Find the annual peak (warmest normal day)
-            peak_day = np.argmax(curve)
+            peak_day = int(np.argmax(curve))
             peak_temp = curve[peak_day]
 
             # Find the annual trough (coldest normal day)
-            trough_day = np.argmin(curve)
+            trough_day = int(np.argmin(curve))
             trough_temp = curve[trough_day]
-
-            # If forecast exceeds the annual max normal, cap the anomaly
-            if fcst_t >= peak_temp:
-                # Temperature is warmer than any normal day — use peak offset
-                offset = peak_day - d0
-                # Handle year wraparound
-                if offset > 182:
-                    offset -= 365
-                elif offset < -182:
-                    offset += 365
-                anomaly[i, j] = offset
-                continue
-
-            # If forecast is below the annual min normal, cap it
-            if fcst_t <= trough_temp:
-                offset = trough_day - d0
-                if offset > 182:
-                    offset -= 365
-                elif offset < -182:
-                    offset += 365
-                anomaly[i, j] = offset
-                continue
 
             # Determine which branch of the annual cycle we're on.
             # Ascending = temperatures are generally rising (winter → summer)
@@ -481,90 +490,75 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
             else:
                 ascending = (d0 >= trough_day) or (d0 <= peak_day)
 
-            # Get today's normal temperature to determine search direction
-            today_normal = curve[d0]
-
-            if fcst_t >= today_normal:
-                # Warmer than normal → search FORWARD from today toward peak
-                # (how many days ahead of schedule?)
-                if ascending:
-                    # Forward means toward the peak
-                    if d0 <= peak_day:
-                        search_days = list(range(d0, peak_day + 1))
-                    else:
-                        search_days = (list(range(d0, 365)) +
-                                       list(range(0, peak_day + 1)))
-                else:
-                    # Descending branch, warmer than normal means search
-                    # BACKWARD toward the peak (we've already passed it)
-                    if peak_day <= d0:
-                        search_days = list(range(d0, peak_day - 1, -1))
-                    else:
-                        search_days = (list(range(d0, -1, -1)) +
-                                       list(range(364, peak_day - 1, -1)))
+            # Days from today to the peak and to the trough, walking along
+            # today's branch. On the ascending branch the peak is ahead of us
+            # and the trough behind; on the descending branch it is the other
+            # way around.
+            if ascending:
+                days_to_peak = (peak_day - d0) % n_days
+                days_to_trough = (d0 - trough_day) % n_days
             else:
-                # Cooler than normal → search BACKWARD from today toward trough
-                # (how many days behind schedule?)
-                if ascending:
-                    # Backward means toward the trough
-                    if trough_day <= d0:
-                        search_days = list(range(d0, trough_day - 1, -1))
-                    else:
-                        search_days = (list(range(d0, -1, -1)) +
-                                       list(range(364, trough_day - 1, -1)))
-                else:
-                    # Descending branch, cooler than normal means search
-                    # FORWARD toward the trough
-                    if d0 <= trough_day:
-                        search_days = list(range(d0, trough_day + 1))
-                    else:
-                        search_days = (list(range(d0, 365)) +
-                                       list(range(0, trough_day + 1)))
+                days_to_peak = (d0 - peak_day) % n_days
+                days_to_trough = (trough_day - d0) % n_days
+
+            # If the forecast is warmer than any normal day of the year, pin
+            # the anomaly to the distance to the peak and flag the cell.
+            if fcst_t >= peak_temp:
+                anomaly[i, j] = min(days_to_peak, n_days - days_to_peak)
+                capped_max[i, j] = True
+                continue
+
+            # If the forecast is colder than any normal day, pin it to the
+            # distance to the trough and flag the cell.
+            if fcst_t <= trough_temp:
+                anomaly[i, j] = 0.0 - min(days_to_trough, n_days - days_to_trough)
+                capped_min[i, j] = True
+                continue
+
+            # Warmer than today's normal → walk toward the peak.
+            # Colder → walk toward the trough.
+            today_normal = curve[d0]
+            warmer = fcst_t >= today_normal
+            n_steps = days_to_peak if warmer else days_to_trough
+
+            # Walking toward the peak is forward in the calendar on the
+            # ascending branch and backward on the descending branch; the
+            # trough is the reverse.
+            step = 1 if (ascending == warmer) else -1
 
             # Find the NEAREST crossing — the first place the curve hits
-            # the forecast temperature as we search outward from today.
-            matched_day = None
-            for k in range(len(search_days) - 1):
-                d1 = search_days[k]
-                d2 = search_days[k + 1]
-                v1 = curve[d1] - fcst_t
-                v2 = curve[d2] - fcst_t
+            # the forecast temperature as we walk outward from today.
+            # If there is none, the forecast is beyond the range of this
+            # branch and the endpoint (peak or trough) is the cap.
+            distance = float(n_steps)
+            for k in range(n_steps):
+                v1 = curve[(d0 + step * k) % n_days] - fcst_t
+                v2 = curve[(d0 + step * (k + 1)) % n_days] - fcst_t
 
                 if v1 == 0:
-                    matched_day = d1
+                    distance = float(k)
                     break
                 elif v1 * v2 < 0:
                     # Linear interpolation for fractional day
-                    frac = abs(v1) / (abs(v1) + abs(v2))
-                    matched_day = d1 + frac
+                    distance = k + abs(v1) / (abs(v1) + abs(v2))
                     break
 
-            if matched_day is None:
-                # No crossing found — forecast exceeds the range on this branch.
-                # Use the endpoint (peak or trough) as the cap.
-                if fcst_t >= today_normal:
-                    matched_day = peak_day
-                else:
-                    matched_day = trough_day
+            # A few coastal cells have one branch longer than half a year.
+            # Report the shorter way around the calendar so no value can
+            # exceed half a year.
+            distance = min(distance, n_days - distance)
 
-            # Compute offset from today
-            offset = matched_day - d0
-
-            # Handle year wraparound
-            if offset > 182:
-                offset -= 365
-            elif offset < -182:
-                offset += 365
-
-            anomaly[i, j] = offset
+            anomaly[i, j] = distance if warmer else 0.0 - distance
 
     valid_pct = 100 * np.sum(~np.isnan(anomaly)) / anomaly.size
     print(f"  Valid cells: {valid_pct:.0f}%")
     print(f"  Anomaly range: {np.nanmin(anomaly):.0f} to "
           f"{np.nanmax(anomaly):+.0f} days")
     print(f"  Mean anomaly: {np.nanmean(anomaly):+.1f} days")
+    print(f"  Cells above the yearly max normal: {capped_max.sum()}, "
+          f"below the yearly min normal: {capped_min.sum()}")
 
-    return anomaly
+    return anomaly, capped_max, capped_min
 
 
 # =============================================================================
@@ -572,14 +566,16 @@ def compute_day_anomaly(forecast_grid, clim_normals, today_doy):
 # =============================================================================
 
 def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
-               region_name=None, region_extent=None):
+               region_name=None, region_extent=None,
+               capped_max=None, capped_min=None):
     """
     Create a nice-looking map of the day-offset anomalies.
 
     Uses Cartopy for the map projection and Matplotlib for the rendering.
-    Grid cells are shaded with a diverging colormap: blue for "behind schedule"
-    (cooler than normal for this date) and red/orange for "ahead of schedule"
-    (warmer than normal).
+    Grid cells are shaded with a diverging colormap: blue for colder than
+    normal for this date and red/orange for warmer than normal, at every
+    time of year. Cells where the forecast is beyond the warmest or coldest
+    normal of the year (so the day count is pinned) are hatched.
 
     Parameters
     ----------
@@ -597,6 +593,10 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     region_extent : list, optional
         [west_lon, east_lon, south_lat, north_lat] for the regional crop.
         If None, uses the full CONUS extent.
+    capped_max, capped_min : numpy.ndarray, optional
+        2D bool arrays from compute_day_anomaly marking cells where the
+        forecast is above the yearly max normal / below the yearly min
+        normal. These are drawn as hatching.
     """
     is_regional = region_name is not None
 
@@ -658,8 +658,8 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
 
     # --- Build the colormap ---
     # Custom diverging colormap: blue → white → red/orange
-    # Blue = behind schedule (cooler than normal for this time of year)
-    # Red = ahead of schedule (warmer than normal)
+    # Blue = colder than normal for this time of year
+    # Red = warmer than normal
     colors_neg = [
         "#08306b",  # very dark blue (-45)
         "#2171b5",  # medium blue (-30)
@@ -734,6 +734,18 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         transform=ccrs.PlateCarree(),
         zorder=2.5
     )
+
+    # Hatch the cells where the forecast is outside the yearly range of
+    # normals. There the day count is pinned to the distance to the warmest
+    # or coldest normal date and cannot grow any further.
+    hatch_layers = []
+    for capped, hatch in [(capped_max, "///"), (capped_min, "\\\\\\")]:
+        if capped is not None and capped.any():
+            hatch_layers.append(ax.contourf(
+                lon2d, lat2d, capped.astype(float),
+                levels=[0.5, 1.5], hatches=[hatch], colors="none",
+                transform=ccrs.PlateCarree(), zorder=2.8,
+            ))
 
     # Label the contour lines
     clabels = ax.clabel(
@@ -817,7 +829,7 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
                 )
                 ax.add_patch(clip_patch)
 
-                for artist in [filled, lines]:
+                for artist in [filled, lines] + hatch_layers:
                     if hasattr(artist, 'collections'):
                         for col in artist.collections:
                             col.set_clip_path(clip_patch)
@@ -835,14 +847,14 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     # regardless of figure height
     fig_h = fig.get_figheight()
     if is_regional:
-        cbar_y = 0.75 / fig_h   # Colorbar ~0.75 inches from bottom
-        credit_y = 0.10 / fig_h  # Credit ~0.10 inches from bottom
+        cbar_y = 0.88 / fig_h    # Colorbar ~0.88 inches from bottom
+        legend_y = 0.16 / fig_h  # Hatch legend + credit ~0.16 inches from bottom
     else:
-        cbar_y = 0.08
-        credit_y = 0.01
+        cbar_y = 0.098
+        legend_y = 0.018
     cbar_ax = fig.add_axes([0.15, cbar_y, 0.70, 0.025])
     cbar = fig.colorbar(filled, cax=cbar_ax, orientation="horizontal")
-    cbar.set_label("Days Ahead (+) or Behind (−) Normal Temperature Schedule",
+    cbar.set_label("Days Warmer (+) or Colder (−) Than the Normal Temperature Schedule",
                    fontsize=11, fontweight="bold", labelpad=8)
     cbar.set_ticks(np.arange(vmin, vmax + 1, tick_spacing))
     cbar.ax.tick_params(labelsize=10)
@@ -854,8 +866,8 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
         subtitle = date_str
     else:
         title = f"Temperature Calendar Anomaly: {date_str}"
-        subtitle = ("How many days ahead or behind is each location's forecast high "
-                    "compared to the normal temperature schedule?")
+        subtitle = ("How many calendar days warmer or colder than normal is each "
+                    "location's forecast high?")
 
     ax.set_title(title, fontsize=16, fontweight="bold", pad=32)
     if is_regional:
@@ -865,9 +877,28 @@ def render_map(anomaly, clim_lons, clim_lats, run_date, output_path,
     fig.text(0.5, subtitle_y, subtitle, ha="center", fontsize=10, color="#555555",
              style="italic")
 
+    # --- Hatch legend (below the colorbar label) ---
+    # Swatch sizes are set in inches so they look the same on the national
+    # map and on the regional crops, whose figure heights differ.
+    from matplotlib.patches import Rectangle
+    fig_w = fig.get_figwidth()
+    swatch_w = 0.34 / fig_w
+    swatch_h = 0.11 / fig_h
+    for sx, sh, lbl in [
+        (0.29, "///", "Above climatological max"),
+        (0.555, "\\\\\\", "Below climatological min"),
+    ]:
+        fig.add_artist(Rectangle(
+            (sx, legend_y - swatch_h / 2), swatch_w, swatch_h,
+            transform=fig.transFigure,
+            facecolor="white", edgecolor="black", linewidth=0.5, hatch=sh,
+        ))
+        fig.text(sx + swatch_w + 0.005, legend_y, lbl,
+                 fontsize=8, va="center", ha="left")
+
     # --- Credit line ---
-    fig.text(0.5, credit_y, "Data: NWS NDFD / ACIS 1991-2020 Normals",
-             ha="center", fontsize=7, color="#999999")
+    fig.text(0.98, legend_y, "Data: NWS NDFD / ACIS 1991-2020 Normals",
+             ha="right", va="center", fontsize=7, color="#999999")
 
     # --- Save ---
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
@@ -1005,7 +1036,7 @@ def main():
         sys.exit(1)
 
     # 4. Load and parse the forecast
-    fcst_lons, fcst_lats, fcst_temps = load_ndfd_forecast(grib_path)
+    fcst_lons, fcst_lats, fcst_temps = load_ndfd_forecast(grib_path, run_date)
 
     # 5. Regrid forecast to climatology grid
     forecast_regridded = regrid_to_climatology(
@@ -1014,11 +1045,14 @@ def main():
     )
 
     # 6. Compute anomalies
-    anomaly = compute_day_anomaly(forecast_regridded, clim_normals, today_doy)
+    anomaly, capped_max, capped_min = compute_day_anomaly(
+        forecast_regridded, clim_normals, today_doy
+    )
 
     # 7. Render the national map at full 300 DPI
     latest_path = os.path.join(OUTPUT_DIR, "temp_anomaly_latest.png")
-    render_map(anomaly, clim_lons, clim_lats, run_date, latest_path)
+    render_map(anomaly, clim_lons, clim_lats, run_date, latest_path,
+               capped_max=capped_max, capped_min=capped_min)
 
     # 8. Create a lightweight archive copy (150 DPI JPEG, ~100-200 KB)
     # This is what the archive gallery page shows. Full-res PNGs are only
@@ -1057,7 +1091,8 @@ def main():
         render_map(
             anomaly, clim_lons, clim_lats, run_date, latest_region_path,
             region_name=region_info["name"],
-            region_extent=region_info["extent"]
+            region_extent=region_info["extent"],
+            capped_max=capped_max, capped_min=capped_min
         )
 
     # 10. Done!

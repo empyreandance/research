@@ -11,10 +11,15 @@ name: Daily Temperature Map
 
 on:
   schedule:
-    # Run at 10:00 UTC every day (7 AM Eastern / 4 AM Pacific).
-    # The NDFD forecast updates overnight, so by noon UTC the day's
-    # forecast is well-established.
-    - cron: "0 10 * * *"
+    # Scheduled for 02:00 UTC. GitHub starts scheduled jobs late on this
+    # repo (about 8.5 hours late in November 2026, and the delay has been
+    # growing), so this lands near 10:30 UTC (5:30 AM Eastern). The map is
+    # dated by the UTC day and uses the MaxT period for that same day, so
+    # it is correct whenever the job actually starts.
+    # Keep this and daily_apt_map.yml starting before 16:00 UTC: after that
+    # the apparent temperature map rolls to the next day and the two maps
+    # show different dates.
+    - cron: "0 2 * * *"
 
   # Allow manual triggering from the GitHub Actions tab
   workflow_dispatch:

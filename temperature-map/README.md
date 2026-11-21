@@ -1,6 +1,6 @@
 # Temperature Calendar Map
 
-A daily-updating map that shows how far "ahead" or "behind" schedule temperatures are across the US — not in degrees, but in **days**. If the forecast high for July 1 matches the normal high for July 15, that spot shows **+14** (two weeks ahead of schedule). Way more intuitive than "5 degrees above normal."
+A daily-updating map that shows how many calendar days warmer or colder than schedule temperatures are across the US — not in degrees, but in **days**. If the forecast high for July 1 matches the normal high for July 15, that spot shows **+14** (two weeks ahead of schedule). In fall, when normals are falling, a high for November 20 that matches the normal for October 20 shows **+30**. Positive (red) always means warmer than normal and negative (blue) always means colder. Hatching marks areas where the forecast is beyond the warmest or coldest normal of the year. Way more intuitive than "5 degrees above normal."
 
 ---
 
